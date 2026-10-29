@@ -11,6 +11,7 @@ import (
 	"github.com/pikipici/crypto-station/internal/db"
 	"github.com/pikipici/crypto-station/internal/ledger"
 	"github.com/pikipici/crypto-station/internal/price"
+	"github.com/pikipici/crypto-station/internal/risk"
 	"github.com/pikipici/crypto-station/internal/settings"
 
 	tgbot "github.com/go-telegram/bot"
@@ -46,12 +47,12 @@ func main() {
 
 	priceSvc := price.New(set, q)
 	ledgerSvc := ledger.New(pool, set)
-	deps := &bot.Deps{Q: q, Set: set, Price: priceSvc, Ledger: ledgerSvc, Mode: "sandbox"}
+	riskSvc := risk.New(q, set)
+	deps := &bot.Deps{Q: q, Set: set, Price: priceSvc, Ledger: ledgerSvc, Risk: riskSvc, Mode: "sandbox"}
 
-	slog.Info("crypto-station fase 1 start", "mode", "sandbox")
+	slog.Info("crypto-station fase 2 start", "mode", "sandbox")
 
 	if botToken == "" {
-		// Mode cek DB: pastikan settings kebaca, exit 0.
 		var n int
 		if err := pool.QueryRow(ctx, `select count(*) from settings`).Scan(&n); err != nil {
 			slog.Error("baca settings gagal", "err", err)
@@ -61,8 +62,8 @@ func main() {
 		return
 	}
 
-	// WS Binance jalan di background (best effort; gagal = harga basi, fail-closed).
-	// Kurs awal placeholder manual — nama sumber fix di Stage 0 (S0.2).
+	// WS Binance background (gagal = harga basi, fail-closed).
+	// Kurs placeholder manual — nama sumber fix di Stage 0 (S0.2).
 	priceSvc.SetFX(decimal.NewFromInt(16000), "manual-fase1")
 	go func() {
 		for {
