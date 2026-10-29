@@ -1,11 +1,11 @@
 # Crypto Station — Roadmap & Living Plan
 
-> Status: v0.6 — Fase 0 DONE (repo + VPS cbt-vps hijau), pola lokal-coding/VPS-eksekusi lock
+> Status: v0.7 — Fase 1 DONE (ledger + price live + /harga + /saldo real, 7 tests hijau)
 > Owner: user + hermes
-> Last updated: 2026-10-29
+> Last updated: 2026-10-30
 
 ## Daftar Isi
-- [0. Locked Decisions](#0-locked-decisions-v06)
+- [0. Locked Decisions](#0-locked-decisions-v07)
 - [1. Goal](#1-goal)
 - [2. Target Users](#2-target-users)
 - [3. Stage Model & Gate](#3-stage-model--gate)
@@ -20,12 +20,12 @@
 - [12. Roadmap](#12-roadmap)
 - [13. Unit Economics](#13-unit-economics)
 - [14. Risks](#14-risks)
-- [15. Open Decisions Tersisa (v0.6)](#15-open-decisions-tersisa-v06)
+- [15. Open Decisions Tersisa (v0.7)](#15-open-decisions-tersisa-v07)
 - [16. Deploy Strategy](#16-deploy-strategy)
 - [17. Implementation Notes](#17-implementation-notes)
 - [18. Current Next Step](#18-current-next-step)
 
-## 0. Locked Decisions (v0.6)
+## 0. Locked Decisions (v0.7)
 
 | # | Keputusan | Pilihan |
 |---|-----------|---------|
@@ -53,6 +53,8 @@
 | 21 | Blueprint arsitektur | **Bab 11 LOCK v0.5** — service, kontrak, alur end-to-end, pola error/retry/idempotency, konvensi kode. Pengembangan ngikut blueprint, bukan ngasal |
 | 22 | Pola kerja lokal-VPS | **Lokal D:\Program\project-1 coding + git doang (nol runtime). Eksekusi (build/test/migrate/run) di cbt-vps (43.134.111.212, ubuntu, key).** Ngikut pola LMS. Password tidak disimpan di plan/repo/memory |
 | 23 | VPS + Fase 0 DONE | **cbt-vps: Ubuntu 24.04, Go 1.27.3, Postgres 16 (port 5432), tz Asia/Jakarta, role cs + db cryptostation + pgcrypto, goose v3.28.0 + sqlc v1.29.0.** Repo: go.mod min 1.26, migrasi 000001 (users+settings 16 seed), skeleton /start /saldo private-chat-only. Smoke: migrate v1 + build + cek DB exit 0. Commit 8cd6ec3. Gotcha: migrasi goose wajib `-- +goose Up` |
+| 24 | Fase 1 DONE | **Migrasi 000002 (ledger_accounts/journals/entries/wallets/price_snapshots). sqlc pgx/v5 + numeric→decimal. Settings cache+Reload. PriceService WS bookTicker gabungan + fail-closed + guard bid<=ask. Ledger GrantSandbox idempotent + Reconcile + WIBToday. Bot /start (create+grant) /saldo (real+valuasi bid) /harga. 7 tests hijau (4 price + 3 ledger), commit 8561ffb.** Gotcha: encoding/json Go case-insensitive — key qty B/A nimpa key harga b/a kalau field qty tidak dideklarasikan. Parser wajib deklarasikan BidQty/AskQty terpisah. WS live verified: BNB 705.62/705.63, ETH 2264.99, SOL 96.49 |
+| 25 | internal/db generated | **internal/db/ hasil sqlc generate TIDAK di-commit (regenerasi di VPS tiap sync).** db/schema/ juga generated. Yang di-commit: db/queries/*.sql + migrasi + sqlc.yaml |
 
 ## 1. Goal
 
@@ -467,7 +469,7 @@ Estimasi kasar, kerja santai, +buffer. Kalibrasi ulang setelah Fase 0.
 
 **Stage 1 — Sandbox (±3–4 minggu)**
 - Fase 0 — ✅ DONE 2026-10-29 (repo Go 1.27.3, skeleton /start /saldo, migrasi 000001 users+settings, smoke cbt-vps hijau, commit 8cd6ec3). Skema ledger full + templat jurnal lanjut Fase 1
-- Fase 1 — ledger double-entry + limit + harga Binance + kurs 1 sumber + staleness fail-closed + /harga (4–5 hari)
+- Fase 1 — ✅ DONE 2026-10-30 (migrasi 000002 ledger full, PriceService WS live + fail-closed, settings cache, GrantSandbox idempotent + Reconcile, /harga + /saldo real, 7 tests hijau, commit 8561ffb). Kurs masih manual-fase1 (nama sumber fix Stage 0)
 - Fase 2 — beli/jual + quote mengikat + dua jenis pause + /beli /jual /riwayat (4–5 hari)
 - Fase 3 — admin allowlist + /setspread /setlimit /pause /broadcast + audit + RiskEvents + rekonsiliasi harian (3–4 hari)
 - Fase 4 — trial sandbox terbatas, ukur slippage, tuning spread, cek exit criteria (1–2 minggu)
@@ -513,9 +515,11 @@ Harus kejawab angka: berapa trade/bulan biar impas, dan eksposur max yang ketaha
 - **Secret bocor:** env saja, bukan repo
 - **Limit sandbox terbawa ke produksi:** batas eksposur Stage 2 harus di-set ulang, tidak disalin
 
-## 15. Open Decisions Tersisa (v0.6)
+## 15. Open Decisions Tersisa (v0.7)
 
-Ditutup di v0.6, jangan dibuka lagi tanpa alasan di bawah:
+Ditutup di v0.7, jangan dibuka lagi tanpa alasan di bawah:
+
+- **Generated code (#25):** internal/db + db/schema regenerasi di VPS, tidak di-commit
 
 - **Pola kerja (#22):** lokal coding + git, eksekusi cbt-vps. Password tidak disimpan di mana-mana
 
@@ -555,12 +559,19 @@ Masih terbuka:
 
 ## 18. Current Next Step
 
-**v0.6 siap dikerjakan.** Fase 0 DONE, pola lokal-VPS lock.
+**v0.7 siap dikerjakan.** Fase 1 DONE, 7 tests hijau.
 
-1. Fix username bot di BotFather (urut: @cryptostationbot → @cryptostation_bot → @cryptostationid_bot, cadangan StasiunKripto). Token dibutuhin Fase 1 buat smoke long-poll
-2. Stage 0 jalan manual (STAGE0.md): tanya gateway, sumber kurs, model stok, unit economics → hasil masuk v0.7
-3. Gas Fase 1: skema ledger full (bab 8.3) + PriceService WS bookTicker + kurs 1 sumber + staleness fail-closed + /harga
+1. Fix username bot di BotFather (urut: @cryptostationbot → @cryptostation_bot → @cryptostationid_bot, cadangan StasiunKripto). Token dibutuhin Fase 2 buat smoke long-poll /beli /jual
+2. Stage 0 jalan manual (STAGE0.md): tanya gateway, sumber kurs, model stok, unit economics → hasil masuk v0.8
+3. Gas Fase 2: tabel quotes + ExecuteTrade atomik + RiskService dua jenis pause + /beli /jual /riwayat + test double-tap
 4. Jangan mulai pembayaran asli, sumber kurs kedua, atau enforcement mule/sybil sebelum gate Stage 2
+
+### Changelog v0.6 → v0.7
+
+- **Fase 1 DONE (baru #24):** migrasi 000002 + PriceService WS live + GrantSandbox idempotent + Reconcile + /harga + /saldo real, 7 tests hijau (commit 8561ffb). Roadmap Fase 1 ditandai DONE
+- **Generated code (baru #25):** internal/db + db/schema tidak di-commit, regenerasi di VPS tiap sync
+- **Gotcha parser:** encoding/json case-insensitive (B nimpa b) — wajib field Qty terpisah + guard bid<=ask + test regresi
+- Kurs manual-fase1 dicatat eksplisit (nama sumber fix Stage 0, bukan sekarang)
 
 ### Changelog v0.5 → v0.6
 
