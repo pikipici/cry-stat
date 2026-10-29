@@ -1,11 +1,11 @@
 # Crypto Station — Roadmap & Living Plan
 
-> Status: v0.5 — blueprint arsitektur lock (bab 11), stack sinkron Lampiran A
+> Status: v0.6 — Fase 0 DONE (repo + VPS cbt-vps hijau), pola lokal-coding/VPS-eksekusi lock
 > Owner: user + hermes
 > Last updated: 2026-10-29
 
 ## Daftar Isi
-- [0. Locked Decisions](#0-locked-decisions-v05)
+- [0. Locked Decisions](#0-locked-decisions-v06)
 - [1. Goal](#1-goal)
 - [2. Target Users](#2-target-users)
 - [3. Stage Model & Gate](#3-stage-model--gate)
@@ -20,12 +20,12 @@
 - [12. Roadmap](#12-roadmap)
 - [13. Unit Economics](#13-unit-economics)
 - [14. Risks](#14-risks)
-- [15. Open Decisions Tersisa (v0.5)](#15-open-decisions-tersisa-v05)
+- [15. Open Decisions Tersisa (v0.6)](#15-open-decisions-tersisa-v06)
 - [16. Deploy Strategy](#16-deploy-strategy)
 - [17. Implementation Notes](#17-implementation-notes)
 - [18. Current Next Step](#18-current-next-step)
 
-## 0. Locked Decisions (v0.5)
+## 0. Locked Decisions (v0.6)
 
 | # | Keputusan | Pilihan |
 |---|-----------|---------|
@@ -51,6 +51,8 @@
 | 19 | Norek | **Multi rekening + cooling-off.** Durasi di Settings. Bukan lock 1 norek/user |
 | 20 | Tech stack | **Go 1.27.3 (go.mod min 1.26) + Postgres + pgx/v5 + sqlc + goose v3 + go-telegram/bot v1.27.0 + shopspring/decimal + coder/websocket.** Detail lock di Lampiran A. Buka lagi hanya kalau ada versi mati saat Fase 0 dimulai |
 | 21 | Blueprint arsitektur | **Bab 11 LOCK v0.5** — service, kontrak, alur end-to-end, pola error/retry/idempotency, konvensi kode. Pengembangan ngikut blueprint, bukan ngasal |
+| 22 | Pola kerja lokal-VPS | **Lokal D:\Program\project-1 coding + git doang (nol runtime). Eksekusi (build/test/migrate/run) di cbt-vps (43.134.111.212, ubuntu, key).** Ngikut pola LMS. Password tidak disimpan di plan/repo/memory |
+| 23 | VPS + Fase 0 DONE | **cbt-vps: Ubuntu 24.04, Go 1.27.3, Postgres 16 (port 5432), tz Asia/Jakarta, role cs + db cryptostation + pgcrypto, goose v3.28.0 + sqlc v1.29.0.** Repo: go.mod min 1.26, migrasi 000001 (users+settings 16 seed), skeleton /start /saldo private-chat-only. Smoke: migrate v1 + build + cek DB exit 0. Commit 8cd6ec3. Gotcha: migrasi goose wajib `-- +goose Up` |
 
 ## 1. Goal
 
@@ -464,7 +466,7 @@ Estimasi kasar, kerja santai, +buffer. Kalibrasi ulang setelah Fase 0.
 - Boleh paralel dengan Fase 0. Jangan paralel dengan pembayaran asli
 
 **Stage 1 — Sandbox (±3–4 minggu)**
-- Fase 0 — repo Go, skeleton /start /saldo, skema ledger + templat jurnal (1–2 hari)
+- Fase 0 — ✅ DONE 2026-10-29 (repo Go 1.27.3, skeleton /start /saldo, migrasi 000001 users+settings, smoke cbt-vps hijau, commit 8cd6ec3). Skema ledger full + templat jurnal lanjut Fase 1
 - Fase 1 — ledger double-entry + limit + harga Binance + kurs 1 sumber + staleness fail-closed + /harga (4–5 hari)
 - Fase 2 — beli/jual + quote mengikat + dua jenis pause + /beli /jual /riwayat (4–5 hari)
 - Fase 3 — admin allowlist + /setspread /setlimit /pause /broadcast + audit + RiskEvents + rekonsiliasi harian (3–4 hari)
@@ -511,9 +513,11 @@ Harus kejawab angka: berapa trade/bulan biar impas, dan eksposur max yang ketaha
 - **Secret bocor:** env saja, bukan repo
 - **Limit sandbox terbawa ke produksi:** batas eksposur Stage 2 harus di-set ulang, tidak disalin
 
-## 15. Open Decisions Tersisa (v0.5)
+## 15. Open Decisions Tersisa (v0.6)
 
-Ditutup di v0.5, jangan dibuka lagi tanpa alasan di bawah:
+Ditutup di v0.6, jangan dibuka lagi tanpa alasan di bawah:
+
+- **Pola kerja (#22):** lokal coding + git, eksekusi cbt-vps. Password tidak disimpan di mana-mana
 
 - **Nama (#0):** Crypto Station. Sisa username fix di BotFather
 - **Stack (#20):** Go 1.27.3 + pgx/v5 + sqlc + goose v3 + go-telegram/bot v1.27.0 + decimal + coder/websocket (sinkron Lampiran A). Buka lagi hanya kalau ada versi mati saat Fase 0 dimulai
@@ -532,8 +536,8 @@ Masih terbuka:
 
 ## 16. Deploy Strategy
 
-- Dev: long-polling di lokal/VPS, tanpa HTTPS
-- Stage 1: 1 VPS + Postgres + systemd, satu binary, webhook Telegram via HTTPS (nginx/Caddy), secret token wajib
+- Dev: long-polling dari cbt-vps (tanpa HTTPS). Lokal nol runtime
+- Stage 1: cbt-vps (Ubuntu 24.04, Go 1.27.3, Postgres 16 port 5432, tz Asia/Jakarta) + systemd, satu binary, webhook Telegram via HTTPS (Caddy 443), secret token wajib. DB `cryptostation`, role `cs`
 - Stage 2: + webhook provider via HTTPS, alert (rekonsiliasi gagal, eksposur, webhook invalid, sumber kurs mati), backup DB terjadwal
 - Env: BOT_TOKEN, WEBHOOK_SECRET, DATABASE_URL, ADMIN_TELEGRAM_IDS. PROVIDER_KEY baru Stage 2. Tidak masuk repo
 
@@ -551,11 +555,19 @@ Masih terbuka:
 
 ## 18. Current Next Step
 
-**v0.5 siap dikerjakan.** Blueprint arsitektur lock, stack sinkron Lampiran A.
+**v0.6 siap dikerjakan.** Fase 0 DONE, pola lokal-VPS lock.
 
-1. Fix username bot di BotFather (urut: @cryptostationbot → @cryptostation_bot → @cryptostationid_bot, cadangan StasiunKripto). Tidak menahan yang lain
-2. Gas Stage 0 (tanya gateway, pilih sumber kurs, pilih model stok uang asli) paralel dengan Fase 0 (repo Go 1.27.3, skeleton, skema ledger, mock payments — ngikut bab 11.6)
-3. Jangan mulai pembayaran asli, sumber kurs kedua, atau enforcement mule/sybil sebelum gate Stage 2
+1. Fix username bot di BotFather (urut: @cryptostationbot → @cryptostation_bot → @cryptostationid_bot, cadangan StasiunKripto). Token dibutuhin Fase 1 buat smoke long-poll
+2. Stage 0 jalan manual (STAGE0.md): tanya gateway, sumber kurs, model stok, unit economics → hasil masuk v0.7
+3. Gas Fase 1: skema ledger full (bab 8.3) + PriceService WS bookTicker + kurs 1 sumber + staleness fail-closed + /harga
+4. Jangan mulai pembayaran asli, sumber kurs kedua, atau enforcement mule/sybil sebelum gate Stage 2
+
+### Changelog v0.5 → v0.6
+
+- **Fase 0 DONE (baru #23):** repo Go 1.27.3 + migrasi 000001 + skeleton /start /saldo + smoke cbt-vps hijau (commit 8cd6ec3). Roadmap Fase 0 ditandai DONE
+- **Pola kerja (baru #22):** lokal coding + git, eksekusi cbt-vps, ngikut LMS. Password tidak disimpan di plan/repo/memory
+- **Deploy (bab 16):** generik 1 VPS → konkret cbt-vps (Ubuntu 24.04, Go 1.27.3, Postgres 16:5432, Asia/Jakarta, db cryptostation/role cs)
+- Stage 0 pack (STAGE0.md) dicatat sebagai kerja paralel manual, hasilnya masuk v0.7
 
 ### Changelog v0.4 → v0.5
 
