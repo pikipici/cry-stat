@@ -5,10 +5,18 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"time"
 
-	"github.com/go-telegram/bot"
+	"github.com/pikipici/crypto-station/internal/bot"
+	"github.com/pikipici/crypto-station/internal/db"
+	"github.com/pikipici/crypto-station/internal/ledger"
+	"github.com/pikipici/crypto-station/internal/price"
+	"github.com/pikipici/crypto-station/internal/settings"
+
+	tgbot "github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/shopspring/decimal"
 )
 
 func main() {
@@ -16,7 +24,7 @@ func main() {
 	defer stop()
 
 	databaseURL := mustEnv("DATABASE_URL")
-	botToken := os.Getenv("BOT_TOKEN") // boleh kosong di Fase 0 (mode no-bot, cek DB doang)
+	botToken := os.Getenv("BOT_TOKEN") // kosong = mode cek DB saja
 
 	pool, err := pgxpool.New(ctx, databaseURL)
 	if err != nil {
@@ -28,50 +36,56 @@ func main() {
 		slog.Error("ping db gagal", "err", err)
 		os.Exit(1)
 	}
-	// Fase 0: pastikan settings ke-seed (migrasi goose jalan terpisah)
-	var n int
-	if err := pool.QueryRow(ctx, `select count(*) from settings`).Scan(&n); err != nil {
-		slog.Error("baca settings gagal (migrasi belum jalan?)", "err", err)
+
+	q := db.New(pool)
+	set := settings.New(q)
+	if err := set.Reload(ctx); err != nil {
+		slog.Error("load settings gagal", "err", err)
 		os.Exit(1)
 	}
-	slog.Info("crypto-station fase 0 start", "settings_rows", n)
+
+	priceSvc := price.New(set, q)
+	ledgerSvc := ledger.New(pool, set)
+	deps := &bot.Deps{Q: q, Set: set, Price: priceSvc, Ledger: ledgerSvc, Mode: "sandbox"}
+
+	slog.Info("crypto-station fase 1 start", "mode", "sandbox")
 
 	if botToken == "" {
-		slog.Info("BOT_TOKEN kosong — mode cek DB saja, exit 0")
+		// Mode cek DB: pastikan settings kebaca, exit 0.
+		var n int
+		if err := pool.QueryRow(ctx, `select count(*) from settings`).Scan(&n); err != nil {
+			slog.Error("baca settings gagal", "err", err)
+			os.Exit(1)
+		}
+		slog.Info("BOT_TOKEN kosong — mode cek DB saja", "settings_rows", n)
 		return
 	}
 
-	opts := []bot.Option{
-		bot.WithDefaultHandler(func(ctx context.Context, b *bot.Bot, upd *models.Update) {
-			if upd.Message == nil {
+	// WS Binance jalan di background (best effort; gagal = harga basi, fail-closed).
+	// Kurs awal placeholder manual — nama sumber fix di Stage 0 (S0.2).
+	priceSvc.SetFX(decimal.NewFromInt(16000), "manual-fase1")
+	go func() {
+		for {
+			err := priceSvc.RunWS(ctx, price.CombinedStreamURL())
+			slog.Warn("ws binance putus (harga jadi basi)", "err", err)
+			select {
+			case <-ctx.Done():
 				return
+			case <-time.After(5 * time.Second):
 			}
-			// Fase 0: private-chat only (bab 11.5). Group/channel diabaikan.
-			if upd.Message.Chat.Type != "private" {
-				return
-			}
-			switch upd.Message.Text {
-			case "/start":
-				b.SendMessage(ctx, &bot.SendMessageParams{
-					ChatID: upd.Message.Chat.ID,
-					Text:   "Selamat datang di Crypto Station (SIMULASI).\nPakai /saldo untuk cek saldo sandbox kamu.",
-				})
-			case "/saldo":
-				var balance int64 = 1000000 // Fase 0: placeholder, ledger asli Fase 1
-				b.SendMessage(ctx, &bot.SendMessageParams{
-					ChatID: upd.Message.Chat.ID,
-					Text:   "Saldo sandbox (SIMULASI): Rp1.000.000\n_ ledger asli masuk Fase 1 _",
-				})
-				_ = balance
-			}
+		}
+	}()
+
+	b, err := tgbot.New(botToken, tgbot.WithDefaultHandler(
+		func(ctx context.Context, b *tgbot.Bot, upd *models.Update) {
+			bot.Handle(ctx, b, upd, deps)
 		}),
-	}
-	// Long-poll buat dev (bab 11: webhook prod nanti). Worker default 1, biarkan 1.
-	b, err := bot.New(botToken, opts...)
+	)
 	if err != nil {
 		slog.Error("init bot gagal", "err", err)
 		os.Exit(1)
 	}
+	// Long-poll dev. Worker default 1, biarkan 1 (konkurensi uang di Postgres).
 	b.Start(ctx)
 }
 
