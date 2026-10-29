@@ -177,8 +177,7 @@ func TestSellFlow(t *testing.T) {
 	uid := tradeUser(t, svc, db.New(svc.pool))
 	// Beli dulu 400rb.
 	qr, _ := svc.CreateQuote(ctx, uid, "buy", "SOL", 400000, testSnap())
-	tr1, err := svc.ExecuteTrade(ctx, uid, qr.ID)
-	if err != nil {
+	if _, err := svc.ExecuteTrade(ctx, uid, qr.ID); err != nil {
 		t.Fatalf("buy: %v", err)
 	}
 	// Jual balik: amount IDR dihitung dari units yang dipunya x bid.
