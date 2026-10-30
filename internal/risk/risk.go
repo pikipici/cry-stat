@@ -63,8 +63,9 @@ func (s *Service) CheckBeforeExecute(ctx context.Context, asset, side string) er
 	return s.CheckBeforeQuote(ctx, asset, side)
 }
 
-// overExposure: |net| > limit → true. Net = terjual − terbeli (units house).
-// Posisi negatif besar = house sudah kasih banyak coin = eksposur.
+// overExposure: net < -limit → true. Net = terjual − terbeli (units house).
+// FIX debug #5: hanya net NEGATIF (house short, coin keluar ke user) yang dipause.
+// Net positif (house long karena user jual) = aman, bahkan mengurangi eksposur.
 func (s *Service) overExposure(ctx context.Context, asset string) (bool, error) {
 	rows, err := s.q.NetPositionByAsset(ctx)
 	if err != nil {
@@ -77,8 +78,7 @@ func (s *Service) overExposure(ctx context.Context, asset string) (bool, error) 
 		}
 	}
 	limit := s.set.Decimal("exposure_limit_" + strings.ToLower(asset))
-	// Eksposur = house short (net negatif, coin keluar ke user). Bandingkan abs.
-	return net.Abs().GreaterThan(limit), nil
+	return net.LessThan(limit.Neg()), nil
 }
 
 // RecordEvent: tulis RiskEvents (Stage 1: catat saja, belum hukum).

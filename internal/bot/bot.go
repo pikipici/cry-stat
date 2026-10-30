@@ -313,8 +313,10 @@ func handleCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d
 	chatID := cb.Message.Message.Chat.ID
 	msgID := cb.Message.Message.ID
 	if !ok {
-		// Batal: tandai quote expired (best effort) + edit pesan.
-		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Quote dibatalkan. /batal juga bisa."})
+		// FIX debug #6: Batal via tombol WAJIB expire quote itu (sebelumnya cuma edit pesan,
+		// quote tetap active 30 detik — inkonsisten dengan /batal).
+		_, _ = d.Q.ExpireUserQuotes(ctx, uid)
+		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Quote dibatalkan."})
 		return
 	}
 	// Confirm → cek risk ulang (30 detik bisa berubah) → eksekusi atomik.

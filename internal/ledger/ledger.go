@@ -51,7 +51,8 @@ func timeWIB(layout string) string {
 
 // GrantSandbox: kasih modal virtual ke user baru (jurnal grant, bukan update lepas).
 // Kaki jurnal (templat bab 8.2, arah grant): house:cash −X, user IDR +X. Sum per aset = 0.
-// Idempotent per user: kalau wallet IDR sudah ada isinya, kembalikan tanpa jurnal baru.
+// Idempotent: cek ADA jurnal grant untuk user (FIX debug #4 — sebelumnya cek balance nonzero,
+// user yang ALL-IN sampai 0 lalu /start lagi dapat grant dobel).
 func (s *Service) GrantSandbox(ctx context.Context, userID int64, amountIDR int64) error {
 	amount := decimal.NewFromInt(amountIDR)
 	tx, err := s.pool.Begin(ctx)
@@ -68,11 +69,12 @@ func (s *Service) GrantSandbox(ctx context.Context, userID int64, amountIDR int6
 	if u.Status == "blocked" {
 		return ErrUserBlocked
 	}
-	// Idempotent: sudah pernah grant = wallet IDR nonzero → skip.
-	if w, err := q.GetWallet(ctx, db.GetWalletParams{UserID: userID, Asset: "IDR"}); err == nil && !w.Balance.IsZero() {
-		return tx.Commit(ctx)
-	} else if err != nil && !errors.Is(err, pgx.ErrNoRows) {
+	var granted int
+	if err := tx.QueryRow(ctx, `SELECT COUNT(*) FROM journals WHERE type='grant' AND ref_table='users' AND ref_id=$1`, userID).Scan(&granted); err != nil {
 		return err
+	}
+	if granted > 0 {
+		return tx.Commit(ctx)
 	}
 	j, err := q.CreateJournal(ctx, db.CreateJournalParams{
 		Type:     "grant",
@@ -119,14 +121,27 @@ func (s *Service) Balances(ctx context.Context, userID int64) (map[string]decima
 
 // Reconcile: sum jurnal per (owner,aset) == sum cache wallets per (user,aset) untuk akun user.
 // Selisih ≠ 0 → error (pemanggil: alert + pause beli+jual, bab 8.1).
+// FIX debug #2: dua query dibaca DALAM 1 tx (repeatable read) supaya trade yang commit
+// di antara dua query tidak menimbulkan false positive selisih.
 func (s *Service) Reconcile(ctx context.Context) error {
-	q := db.New(s.pool)
+	tx, err := s.pool.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
+	if _, err := tx.Exec(ctx, `SET TRANSACTION ISOLATION LEVEL REPEATABLE READ`); err != nil {
+		return err
+	}
+	q := db.New(s.pool).WithTx(tx)
 	sums, err := q.SumLedgerByOwnerAsset(ctx)
 	if err != nil {
 		return err
 	}
 	wallets, err := q.SumWalletsByUserAsset(ctx)
 	if err != nil {
+		return err
+	}
+	if err := tx.Commit(ctx); err != nil {
 		return err
 	}
 	truth := map[string]decimal.Decimal{}

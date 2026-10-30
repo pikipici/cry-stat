@@ -42,6 +42,7 @@ type Service struct {
 
 	mu    sync.RWMutex
 	ticks map[string]tick // key: BNB/ETH/SOL (upper)
+	lastSnap map[string]time.Time // throttle audit price_snapshots
 
 	fxMu     sync.RWMutex
 	fxRate   decimal.Decimal
@@ -51,7 +52,7 @@ type Service struct {
 }
 
 func New(set *settings.Service, q *db.Queries) *Service {
-	return &Service{set: set, q: q, ticks: map[string]tick{}}
+	return &Service{set: set, q: q, ticks: map[string]tick{}, lastSnap: map[string]time.Time{}}
 }
 
 func ValidAsset(a string) bool {
@@ -199,12 +200,47 @@ func (s *Service) handleMessage(msg []byte) {
 	s.ticks[asset] = tick{bestBid: bid, bestAsk: ask, at: time.Now()}
 	s.mu.Unlock()
 
-	// Snapshot best-effort untuk audit (jangan gagalkan tick kalau DB lambat).
-	if s.q != nil {
-		if snap, err := s.Snapshot(asset); err == nil {
-			_ = snap
-		}
+	// Audit harga: tulis price_snapshots, throttle 1/menit per coin (FIX debug #1:
+	// sebelumnya snap dihitung lalu dibuang, tabel audit kosong permanen).
+	s.throttledSnapshot(asset)
+}
+
+// throttledSnapshot: tulis snapshot audit maksimal 1x per menit per coin (best effort).
+func (s *Service) throttledSnapshot(asset string) {
+	if s.q == nil {
+		return
 	}
+	s.mu.Lock()
+	last, ok := s.lastSnap[asset]
+	if ok && time.Since(last) < time.Minute {
+		s.mu.Unlock()
+		return
+	}
+	s.mu.Unlock()
+	snap, err := s.Snapshot(asset)
+	if err != nil {
+		return
+	}
+	spreadBuy := s.set.Spread(strings.ToLower(asset), "buy")
+	spreadSell := s.set.Spread(strings.ToLower(asset), "sell")
+	_, err = s.q.InsertPriceSnapshot(context.Background(), db.InsertPriceSnapshotParams{
+		Asset:         asset,
+		BinancePrice:  snap.BinanceUSDT,
+		SpreadBuy:     spreadBuy,
+		SpreadSell:    spreadSell,
+		Ask:           snap.Ask,
+		Bid:           snap.Bid,
+		RateUsdtIdr:   snap.Rate,
+		RateSource:    snap.RateSource,
+		RateAgeMs:     snap.RateAgeMs,
+		PriceAgeMs:    snap.PriceAgeMs,
+	})
+	if err != nil {
+		return
+	}
+	s.mu.Lock()
+	s.lastSnap[asset] = time.Now()
+	s.mu.Unlock()
 }
 
 // CombinedStreamURL default Binance spot (plan Lampiran A.6).

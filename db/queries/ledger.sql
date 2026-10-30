@@ -28,6 +28,10 @@ FROM ledger_entries WHERE journal_id = $1 GROUP BY asset;
 -- name: GetWallet :one
 SELECT user_id, asset, balance FROM wallets WHERE user_id = $1 AND asset = $2;
 
+-- Kunci row wallet sebelum cek saldo (FIX debug #3: cegah overspend dua quote paralel).
+-- name: GetWalletForUpdate :one
+SELECT user_id, asset, balance FROM wallets WHERE user_id = $1 AND asset = $2 FOR UPDATE;
+
 -- name: UpsertWalletBalance :one
 INSERT INTO wallets (user_id, asset, balance) VALUES ($1, $2, $3)
 ON CONFLICT (user_id, asset) DO UPDATE SET balance = EXCLUDED.balance, updated_at = now()

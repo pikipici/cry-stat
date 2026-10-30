@@ -212,3 +212,139 @@ func TestBelowMinimum(t *testing.T) {
 		t.Fatalf("mau ErrBelowMinimum, dapat %v", err)
 	}
 }
+
+// FIX debug #3 (+ expire-otomatis): quote baru meng-expire quote lama.
+// A dibuat lalu B dibuat → A expired, eksekusi A = ErrQuoteUsed, B sukses.
+// Ini lapisan pertama anti-overspend (satu quote hidup per user).
+// Lapisan kedua = FOR UPDATE di ExecuteTrade (antisipasi dua quote hidup via race DB).
+func TestParallelDifferentQuotesNoOverspend(t *testing.T) {
+	svc, q, _ := tradeDeps(t)
+	ctx := context.Background()
+	uid := mkTradeUser(t, svc, q, 1000000)
+	a, err := svc.CreateQuote(ctx, uid, "buy", "SOL", 600000, testSnap())
+	if err != nil {
+		t.Fatalf("quote A: %v", err)
+	}
+	b, err := svc.CreateQuote(ctx, uid, "buy", "SOL", 600000, testSnap())
+	if err != nil {
+		t.Fatalf("quote B: %v", err)
+	}
+	// A sudah expired oleh B → eksekusi A gagal, B sukses.
+	if _, err := svc.ExecuteTrade(ctx, uid, a.ID); !errors.Is(err, ErrQuoteUsed) {
+		t.Fatalf("quote lama mau ErrQuoteUsed, dapat %v", err)
+	}
+	if _, err := svc.ExecuteTrade(ctx, uid, b.ID); err != nil {
+		t.Fatalf("quote baru: %v", err)
+	}
+	bal, _ := svc.Balances(ctx, uid)
+	if !bal["IDR"].Equal(decimal.NewFromInt(400000)) {
+		t.Fatalf("IDR=%s, mau 400000 (cuma 1 trade jalan)", bal["IDR"])
+	}
+}
+
+// FIX debug #3 (lapisan lock): dua quote ACTIVE sekaligus (insert langsung, bypass
+// expire-otomatis) dieksekusi paralel → 1 sukses + 1 ErrNoBalance, saldo tidak minus.
+// Tanpa FOR UPDATE, dua-duanya baca cache cukup dan dua-duanya lolos (overspend).
+func TestParallelActiveQuotesLock(t *testing.T) {
+	svc, q, _ := tradeDeps(t)
+	ctx := context.Background()
+	uid := mkTradeUser(t, svc, q, 1000000)
+	snap := testSnap()
+	mk := func(amount int64) int64 {
+		t.Helper()
+		var id int64
+		err := svc.pool.QueryRow(ctx, `INSERT INTO quotes
+		  (user_id, side, asset, amount_idr, quoted_units, bid, ask, mid, spread_used,
+		   rate_usdt_idr, rate_source, expires_at)
+		  VALUES ($1,'buy','SOL',$2,$3,$4,$5,$6,0.01,16000,'test', now() + interval '30 seconds')
+		  RETURNING id`,
+			uid, amount,
+			decimal.NewFromInt(amount).Div(snap.Ask).Round(18),
+			snap.Bid, snap.Ask, snap.Mid).Scan(&id)
+		if err != nil {
+			t.Fatalf("insert quote: %v", err)
+		}
+		return id
+	}
+	a, b := mk(600000), mk(600000)
+	var wg sync.WaitGroup
+	res := make([]error, 2)
+	wg.Add(2)
+	go func() { defer wg.Done(); _, res[0] = svc.ExecuteTrade(ctx, uid, a) }()
+	go func() { defer wg.Done(); _, res[1] = svc.ExecuteTrade(ctx, uid, b) }()
+	wg.Wait()
+	ok, fail := 0, 0
+	for _, e := range res {
+		if e == nil {
+			ok++
+		} else if errors.Is(e, ErrNoBalance) || errors.Is(e, ErrQuoteUsed) {
+			fail++
+		} else {
+			t.Fatalf("error tak terduga: %v", e)
+		}
+	}
+	if ok != 1 || fail != 1 {
+		t.Fatalf("mau 1 sukses + 1 gagal, dapat ok=%d gagal=%d (%v)", ok, fail, res)
+	}
+	bal, _ := svc.Balances(ctx, uid)
+	if bal["IDR"].IsNegative() {
+		t.Fatalf("saldo minus! IDR=%s", bal["IDR"])
+	}
+	if err := svc.Reconcile(ctx); err != nil {
+		t.Fatalf("reconcile: %v", err)
+	}
+}
+
+// FIX debug #4: grant tidak dobel walau balance 0 (user ALL-IN lalu /start lagi).
+func TestGrantNoDoubleAfterZero(t *testing.T) {
+	svc, q, _ := tradeDeps(t)
+	ctx := context.Background()
+	uid := mkTradeUser(t, svc, q, 100000)
+	// Habiskan: beli 50000 x2 = 100rb → IDR 0.
+	for i := 0; i < 2; i++ {
+		qr, err := svc.CreateQuote(ctx, uid, "buy", "SOL", 50000, testSnap())
+		if err != nil {
+			t.Fatalf("quote %d: %v", i, err)
+		}
+		if _, err := svc.ExecuteTrade(ctx, uid, qr.ID); err != nil {
+			t.Fatalf("execute %d: %v", i, err)
+		}
+	}
+	bal, _ := svc.Balances(ctx, uid)
+	if !bal["IDR"].IsZero() {
+		t.Fatalf("IDR=%s, mau 0", bal["IDR"])
+	}
+	// /start lagi → grant harus DITOLAK (sudah pernah grant).
+	if err := svc.GrantSandbox(ctx, uid, 1000000); err != nil {
+		t.Fatalf("grant ulang error: %v", err)
+	}
+	bal2, _ := svc.Balances(ctx, uid)
+	if !bal2["IDR"].IsZero() {
+		t.Fatalf("grant dobel! IDR=%s setelah grant ulang", bal2["IDR"])
+	}
+}
+
+// FIX debug #7: quote beli melebihi saldo ditolak di awal (bukan pas confirm).
+func TestQuoteInsufficientUpfront(t *testing.T) {
+	svc, _, _ := tradeDeps(t)
+	ctx := context.Background()
+	uid := tradeUser(t, svc, db.New(svc.pool)) // 1jt
+	if _, err := svc.CreateQuote(ctx, uid, "buy", "SOL", 9000000, testSnap()); !errors.Is(err, ErrNoBalance) {
+		t.Fatalf("mau ErrNoBalance di awal, dapat %v", err)
+	}
+}
+
+func mkTradeUser(t *testing.T, svc *Service, q *db.Queries, grant int64) int64 {
+	t.Helper()
+	u, err := q.CreateUser(context.Background(), db.CreateUserParams{
+		TelegramID: time.Now().UnixNano()%10000000000 + int64(os.Getpid()%100000),
+		Mode:       "sandbox",
+	})
+	if err != nil {
+		t.Fatalf("create user: %v", err)
+	}
+	if err := svc.GrantSandbox(context.Background(), u.ID, grant); err != nil {
+		t.Fatalf("grant: %v", err)
+	}
+	return u.ID
+}

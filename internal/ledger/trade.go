@@ -73,11 +73,17 @@ func (s *Service) CreateQuote(ctx context.Context, userID int64, side, asset str
 	defer tx.Rollback(ctx)
 	q := db.New(s.pool).WithTx(tx)
 
-	// Expire quote active lama user biar cuma 1 yang hidup (confirm selalu ke yang terbaru).
-	if _, err := q.ActiveQuoteForUser(ctx, userID); err == nil {
-		_ = err
+	// FIX debug #7: cek cepat saldo beli di awal (non-lock, best effort UX) — gagal di sini
+	// lebih jelas daripada gagal pas confirm. Lock beneran tetap di ExecuteTrade.
+	// Jual tidak dicek di sini (units tergantung bid yang bisa geser; cek di ExecuteTrade).
+	if side == "buy" {
+		if w, err := q.GetWallet(ctx, db.GetWalletParams{UserID: userID, Asset: "IDR"}); err != nil || w.Balance.LessThan(decimal.NewFromInt(amountIDR)) {
+			return QuoteResult{}, ErrNoBalance
+		}
 	}
-	// Tandai semua active lain jadi expired (best effort dalam tx yang sama).
+
+	// FIX debug #9: expire quote active lama user biar cuma 1 yang hidup.
+	// (Sebelumnya ada panggilan ActiveQuoteForUser yang hasilnya dibuang — dead code, dihapus.)
 	_, _ = tx.Exec(ctx, `UPDATE quotes SET status='expired' WHERE user_id=$1 AND status='active'`, userID)
 
 	row, err := q.CreateQuote(ctx, db.CreateQuoteParams{
@@ -102,7 +108,7 @@ func (s *Service) CreateQuote(ctx context.Context, userID int64, side, asset str
 	if err := tx.Commit(ctx); err != nil {
 		return QuoteResult{}, err
 	}
-	return QuoteResult{ID: row.ID, Side: side, Asset: asset, AmountIDR: amountIDR, Units: units, Price: px, ExpiresAt: expires}, nil
+	return QuoteResult{ID: row.ID, Side: side, Asset: asset, AmountIDR: amountIDR, Units: units, Price: px, ExpiresAt: expires, FeeNote: "tanpa fee di sandbox"}, nil
 }
 
 // TradeResult: hasil eksekusi.
@@ -150,8 +156,9 @@ func (s *Service) ExecuteTrade(ctx context.Context, userID, quoteID int64) (Trad
 	if side == "buy" {
 		priceUsed, midUsed = cq.Ask, cq.Mid
 		pnl = cq.Ask.Sub(cq.Mid).Mul(units).Round(18)
-		// Cek saldo IDR cukup (baca cache dalam tx; validasi final = jurnal).
-		w, err := q.GetWallet(ctx, db.GetWalletParams{UserID: userID, Asset: "IDR"})
+		// FIX debug #3: kunci row wallet (FOR UPDATE) sebelum cek — dua quote beda yang
+		// dieksekusi paralel sekarang antre di lock yang sama, tidak bisa dua-duanya lolos.
+		w, err := q.GetWalletForUpdate(ctx, db.GetWalletForUpdateParams{UserID: userID, Asset: "IDR"})
 		if err != nil || w.Balance.LessThan(amount) {
 			return TradeResult{}, ErrNoBalance
 		}
@@ -164,7 +171,7 @@ func (s *Service) ExecuteTrade(ctx context.Context, userID, quoteID int64) (Trad
 	} else {
 		priceUsed, midUsed = cq.Bid, cq.Mid
 		pnl = cq.Mid.Sub(cq.Bid).Mul(units).Round(18)
-		w, err := q.GetWallet(ctx, db.GetWalletParams{UserID: userID, Asset: asset})
+		w, err := q.GetWalletForUpdate(ctx, db.GetWalletForUpdateParams{UserID: userID, Asset: asset})
 		if err != nil || w.Balance.LessThan(units) {
 			return TradeResult{}, ErrNoBalance
 		}
