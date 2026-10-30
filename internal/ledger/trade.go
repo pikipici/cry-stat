@@ -111,6 +111,74 @@ func (s *Service) CreateQuote(ctx context.Context, userID int64, side, asset str
 	return QuoteResult{ID: row.ID, Side: side, Asset: asset, AmountIDR: amountIDR, Units: units, Price: px, ExpiresAt: expires, FeeNote: "tanpa fee di sandbox"}, nil
 }
 
+// CreateQuoteUnits: varian jual-SEMUA — units dibawa langsung dari saldo wallet
+// (tanpa roundtrip units→IDR→units yang bisa quoting di atas saldo mikroskopis).
+// amountIDR = units×bid dibulatkan 0 (untuk display + jurnal IDR).
+// Caller WAJIB ambil units dari Balances (bukan hitung ulang dari IDR).
+func (s *Service) CreateQuoteUnits(ctx context.Context, userID int64, asset string, units decimal.Decimal, snap price.Snapshot) (QuoteResult, error) {
+	asset = strings.ToUpper(asset)
+	if !price.ValidAsset(asset) {
+		return QuoteResult{}, fmt.Errorf("coin tidak dikenal")
+	}
+	if units.LessThanOrEqual(decimal.Zero) {
+		return QuoteResult{}, ErrBelowMinimum
+	}
+	// Cek cepat saldo (non-lock, best effort UX). Lock beneran di ExecuteTrade.
+	if w, err := db.New(s.pool).GetWallet(ctx, db.GetWalletParams{UserID: userID, Asset: asset}); err != nil || w.Balance.LessThan(units) {
+		return QuoteResult{}, ErrNoBalance
+	}
+	px := snap.Bid
+	spread := s.set.Spread(strings.ToLower(asset), "sell")
+	units = units.Round(18)
+	amountIDR := units.Mul(px).Round(0).IntPart()
+	if amountIDR < s.set.Int64("min_buy_idr") {
+		return QuoteResult{}, fmt.Errorf("%w: minimum Rp%s", ErrBelowMinimum, s.set.MustString("min_buy_idr"))
+	}
+	lockSecs := s.set.Int64("quote_lock_seconds")
+	expires := time.Now().Add(time.Duration(lockSecs) * time.Second)
+
+	tx, err := s.pool.Begin(ctx)
+	if err != nil {
+		return QuoteResult{}, err
+	}
+	defer tx.Rollback(ctx)
+	q := db.New(s.pool).WithTx(tx)
+
+	// Expire quote active lama user biar cuma 1 yang hidup (sama kayak CreateQuote).
+	_, _ = tx.Exec(ctx, `UPDATE quotes SET status='expired' WHERE user_id=$1 AND status='active'`, userID)
+
+	row, err := q.CreateQuote(ctx, db.CreateQuoteParams{
+		UserID:      userID,
+		Side:        "sell",
+		Asset:       asset,
+		AmountIdr:   amountIDR,
+		QuotedUnits: units,
+		Bid:         snap.Bid,
+		Ask:         snap.Ask,
+		Mid:         snap.Mid,
+		SpreadUsed:  spread,
+		RateUsdtIdr: snap.Rate,
+		RateSource:  snap.RateSource,
+		RateAgeMs:   snap.RateAgeMs,
+		PriceAgeMs:  snap.PriceAgeMs,
+		ExpiresAt:   pgtype.Timestamptz{Time: expires, Valid: true},
+	})
+	if err != nil {
+		return QuoteResult{}, err
+	}
+	if err := tx.Commit(ctx); err != nil {
+		return QuoteResult{}, err
+	}
+	return QuoteResult{ID: row.ID, Side: "sell", Asset: asset, AmountIDR: amountIDR, Units: units, Price: px, ExpiresAt: expires, FeeNote: "tanpa fee di sandbox"}, nil
+}
+
+// dustTolerance: toleransi debu pembulatan jual (1e-6 coin). Quote units yang
+// melebihi saldo dalam batas ini dianggap sama dengan saldo (clamp, bukan tolak).
+// Di atas itu = ErrNoBalance beneran (bukan artefak rounding).
+func dustTolerance() decimal.Decimal {
+	return decimal.NewFromFloat(0.000001)
+}
+
 // TradeResult: hasil eksekusi.
 type TradeResult struct {
 	TradeID   int64
@@ -170,11 +238,20 @@ func (s *Service) ExecuteTrade(ctx context.Context, userID, quoteID int64) (Trad
 		}
 	} else {
 		priceUsed, midUsed = cq.Bid, cq.Mid
-		pnl = cq.Mid.Sub(cq.Bid).Mul(units).Round(18)
 		w, err := q.GetWalletForUpdate(ctx, db.GetWalletForUpdateParams{UserID: userID, Asset: asset})
-		if err != nil || w.Balance.LessThan(units) {
+		if err != nil {
 			return TradeResult{}, ErrNoBalance
 		}
+		if w.Balance.LessThan(units) {
+			// Dust clamp: kelebihan dalam 1e-6 = artefak rounding → pakai saldo pas.
+			// Di atas itu = saldo beneran kurang → tolak.
+			if over := units.Sub(w.Balance); over.LessThanOrEqual(dustTolerance()) {
+				units = w.Balance
+			} else {
+				return TradeResult{}, ErrNoBalance
+			}
+		}
+		pnl = cq.Mid.Sub(cq.Bid).Mul(units).Round(18)
 		legs = []leg{
 			{owner: userOwner(userID), asset: asset, amount: units.Neg()},
 			{owner: houseOwner("inventory"), asset: asset, amount: units},

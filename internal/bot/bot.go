@@ -31,6 +31,7 @@ type Deps struct {
 	Admin  *admin.Service
 	Trial  *trial.Service
 	Limiter *RateLimiter
+	Session *Sessions // state multi-step T1-button (nil = dimatikan)
 	Mode   string // sandbox / real (Fase 1-4: selalu sandbox)
 }
 
@@ -65,18 +66,47 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 		return
 	}
 	text := strings.TrimSpace(upd.Message.Text)
+	// T1-button: kalau lagi nunggu nominal DAN teks bukan tombol menu,
+	// perlakukan sebagai input nominal (sebelum parsing slash).
+	if d.Session != nil {
+		if st := d.Session.Get(upd.Message.From.ID); st.Step != StepIdle && MatchButton(text) == "" && !strings.HasPrefix(strings.ToLower(text), "/") {
+			handleAmountInput(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, text, st, d)
+			return
+		}
+	}
 	fields := strings.Fields(text)
 	if len(fields) == 0 {
 		return
 	}
 	cmd := strings.ToLower(fields[0])
+	// T1-button: teks menu tanpa slash dipetakan ke perintah yang sama.
+	if btn := MatchButton(cmd); btn != "" && !strings.HasPrefix(cmd, "/") {
+		switch btn {
+		case BtnHarga:
+			cmd = "/harga"
+		case BtnSaldo:
+			cmd = "/saldo"
+		case BtnBeli:
+			cmd = "/beli"
+		case BtnJual:
+			cmd = "/jual"
+		case BtnRiwayat:
+			cmd = "/riwayat"
+		case BtnBatal:
+			cmd = "/batal"
+		}
+		// Input nyasar saat await nominal tapi user tap menu = reset state + layani menu.
+		if d.Session != nil {
+			d.Session.Clear(upd.Message.From.ID)
+		}
+	}
 	rest := []string{}
 	if len(fields) > 1 {
 		rest = fields[1:]
 	}
 	switch cmd {
 	case "/start":
-		reply(ctx, b, upd.Message.Chat.ID, start(ctx, upd.Message.From.ID, d))
+		replyMenu(ctx, b, upd.Message.Chat.ID, start(ctx, upd.Message.From.ID, d))
 	case "/saldo":
 		reply(ctx, b, upd.Message.Chat.ID, saldo(ctx, upd.Message.From.ID, d))
 	case "/harga":
@@ -106,7 +136,7 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 	case "/approve":
 		reply(ctx, b, upd.Message.Chat.ID, "Belum ada withdraw di sandbox (Stage 2).")
 	default:
-		reply(ctx, b, upd.Message.Chat.ID, "Perintah tidak dikenal. Coba /start, /saldo, /harga, /beli, /jual, /riwayat.")
+		reply(ctx, b, upd.Message.Chat.ID, "Perintah tidak dikenal. Tap tombol di bawah atau coba /start, /saldo, /harga, /beli, /jual, /riwayat.")
 	}
 }
 
@@ -226,6 +256,23 @@ func reply(ctx context.Context, b *bot.Bot, chatID int64, text string) {
 	_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID, Text: text})
 }
 
+// replyMenu: sama kayak reply tapi sekalian pasang keyboard permanen T1-button.
+func replyMenu(ctx context.Context, b *bot.Bot, chatID int64, text string) {
+	_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID, Text: text, ReplyMarkup: MainMenu()})
+}
+
+// sendCoinPicker: kirim inline pilih coin untuk side buy/sell.
+func sendCoinPicker(ctx context.Context, b *bot.Bot, chatID int64, side string) {
+	verb := "Beli"
+	if side == "sell" {
+		verb = "Jual"
+	}
+	_, _ = b.SendMessage(ctx, &bot.SendMessageParams{
+		ChatID: chatID, Text: verb + " coin apa?",
+		ReplyMarkup: CoinPicker(side),
+	})
+}
+
 func userID(ctx context.Context, d *Deps, telegramID int64) (int64, string) {
 	u, err := d.Q.GetUserByTelegramID(ctx, telegramID)
 	if err != nil {
@@ -254,10 +301,10 @@ func start(ctx context.Context, telegramID int64, d *Deps) string {
 			if err := d.Ledger.GrantSandbox(ctx, nu.ID, d.Set.Int64("sandbox_starting_balance_idr")); err != nil {
 				return "Akun jadi, tapi grant saldo gagal. Coba /saldo."
 			}
-			return "Selamat datang di Crypto Station (SIMULASI).\n" +
-				"Modal sandbox Rp1.000.000 sudah masuk.\n" +
-				"Pakai /harga untuk cek harga, /saldo untuk cek saldo.\n" +
-				"Beli: /beli SOL 200000 — Jual: /jual SOL 100000 atau /jual SOL ALL"
+		return "Selamat datang di Crypto Station (SIMULASI).\n" +
+			"Modal sandbox Rp1.000.000 sudah masuk.\n" +
+			"Tap tombol di bawah: Harga / Saldo / Beli / Jual / Riwayat.\n" +
+			"Slash tetap bisa: /harga /saldo /beli SOL 200000 /jual SOL ALL"
 		}
 	}
 	if st := u.Status; st == "blocked" {
@@ -361,6 +408,11 @@ func beli(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []stri
 		reply(ctx, b, chatID, need)
 		return
 	}
+	// T1-button: tap Beli tanpa arg = kirim picker coin (bukan error format).
+	if len(rest) == 0 {
+		sendCoinPicker(ctx, b, chatID, "buy")
+		return
+	}
 	asset, amount, all, errText := parseTradeArgs(rest)
 	if errText != "" {
 		reply(ctx, b, chatID, errText)
@@ -379,35 +431,55 @@ func jual(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []stri
 		reply(ctx, b, chatID, need)
 		return
 	}
+	// T1-button: tap Jual tanpa arg = kirim picker coin (bukan error format).
+	if len(rest) == 0 {
+		sendCoinPicker(ctx, b, chatID, "sell")
+		return
+	}
 	asset, amount, all, errText := parseTradeArgs(rest)
 	if errText != "" {
 		reply(ctx, b, chatID, errText)
 		return
 	}
 	if all {
-		// ALL = seluruh valuasi coin ke IDR pakai bid saat ini.
-		bal, err := d.Ledger.Balances(ctx, uid)
-		if err != nil {
-			reply(ctx, b, chatID, "Gagal baca saldo, coba lagi.")
-			return
-		}
-		units := bal[asset]
-		if units.IsZero() || units.IsNegative() {
-			reply(ctx, b, chatID, "Tidak ada "+asset+" untuk dijual.")
-			return
-		}
-		snap, err := d.Price.Snapshot(asset)
-		if err != nil {
-			reply(ctx, b, chatID, "Harga basi ("+errMsg(err)+"), coba lagi.")
-			return
-		}
-		amount = units.Mul(snap.Bid).Round(0).IntPart()
-		if amount <= 0 {
-			reply(ctx, b, chatID, "Nilai terlalu kecil untuk dijual.")
-			return
-		}
+		// FIX trial-live #1: ALL bawa units langsung dari saldo (CreateQuoteUnits),
+		// bukan roundtrip IDR. Double-rounding lama quoting +1.4e-7 di atas saldo.
+		sellAllFlow(ctx, b, chatID, telegramID, uid, asset, d)
+		return
 	}
 	quoteFlow(ctx, b, chatID, telegramID, uid, "sell", asset, amount, d)
+}
+
+// sellAllFlow: jual SEMUA units dari saldo (tanpa muter IDR).
+func sellAllFlow(ctx context.Context, b *bot.Bot, chatID, telegramID, uid int64, asset string, d *Deps) {
+	if err := d.Risk.CheckBeforeQuote(ctx, asset, "sell"); err != nil {
+		_ = d.Risk.RecordEvent(ctx, uid, true, telegramID, "quote_rejected", "sell "+asset+": "+err.Error())
+		reply(ctx, b, chatID, "Tidak bisa kasih quote: "+riskMsg(err))
+		return
+	}
+	bal, err := d.Ledger.Balances(ctx, uid)
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal baca saldo, coba lagi.")
+		return
+	}
+	units := bal[asset]
+	if units.IsZero() || units.IsNegative() {
+		reply(ctx, b, chatID, "Tidak ada "+asset+" untuk dijual.")
+		return
+	}
+	snap, err := d.Price.Snapshot(asset)
+	if err != nil {
+		reply(ctx, b, chatID, "Harga basi ("+errMsg(err)+"), coba lagi.")
+		return
+	}
+	qr, err := d.Ledger.CreateQuoteUnits(ctx, uid, asset, units, snap)
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal bikin quote: "+err.Error())
+		return
+	}
+	lockSecs := d.Set.Int64("quote_lock_seconds")
+	text := fmt.Sprintf("Jual %s Rp%s\nDapat: %s %s\nHarga lock %d detik. Confirm?", asset, formatIDR(decimal.NewFromInt(qr.AmountIDR)), qr.Units.String(), asset, lockSecs)
+	_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID, Text: text, ReplyMarkup: QuoteKeyboard(qr.ID)})
 }
 
 // quoteFlow: risk-check → snapshot fail-closed → simpan quote → inline confirm/cancel.
@@ -433,19 +505,18 @@ func quoteFlow(ctx context.Context, b *bot.Bot, chatID, telegramID, uid int64, s
 	}
 	lockSecs := d.Set.Int64("quote_lock_seconds")
 	text := fmt.Sprintf("%s %s Rp%s\nDapat: %s %s\nHarga lock %d detik. Confirm?", verb, asset, formatIDR(decimal.NewFromInt(amount)), qr.Units.String(), asset, lockSecs)
-	kb := &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
-		{
-			{Text: "Confirm", CallbackData: fmt.Sprintf("q:%d:ok", qr.ID)},
-			{Text: "Batal", CallbackData: fmt.Sprintf("q:%d:no", qr.ID)},
-		},
-	}}
-	_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID, Text: text, ReplyMarkup: kb})
+	_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID, Text: text, ReplyMarkup: QuoteKeyboard(qr.ID)})
 }
 
 func handleCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d *Deps) {
 	// Jawab callback dulu biar spinner hilang.
 	_, _ = b.AnswerCallbackQuery(ctx, &bot.AnswerCallbackQueryParams{CallbackQueryID: cb.ID})
 	data := cb.Data
+	// T1-button: callback flow t:* ditangani terpisah (pilih coin / sellall / cancel).
+	if strings.HasPrefix(data, "t:") {
+		handleFlowCallback(ctx, b, cb, d)
+		return
+	}
 	var qid int64
 	var ok bool
 	if _, err := fmt.Sscanf(data, "q:%d:ok", &qid); err == nil {
@@ -488,7 +559,7 @@ func handleCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d
 	if tr.Side == "sell" {
 		verb = "Jual"
 	}
-	text := fmt.Sprintf("%s sukses (SIMULASI): %s %s = Rp%s.\nCek /saldo, riwayat di /riwayat.", verb, tr.Units.String(), tr.Asset, formatIDR(decimal.NewFromInt(tr.AmountIDR)))
+	text := successHint(verb, tr.Units.String(), tr.Asset, tr.AmountIDR)
 	_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: text})
 }
 
@@ -505,7 +576,7 @@ func riwayat(ctx context.Context, telegramID int64, d *Deps) string {
 		return "Gagal baca riwayat, coba lagi."
 	}
 	if len(rows) == 0 {
-		return "Belum ada transaksi. Mulai dengan /beli SOL 50000"
+		return "Belum ada transaksi. Tap Beli buat mulai (contoh: beli SOL 50000)"
 	}
 	var sb strings.Builder
 	sb.WriteString("10 transaksi terakhir (SIMULASI):\n")
@@ -526,6 +597,9 @@ func batal(ctx context.Context, telegramID int64, d *Deps) string {
 	}
 	if uid == 0 {
 		return "Belum terdaftar. Kirim /start dulu."
+	}
+	if d.Session != nil {
+		d.Session.Clear(telegramID)
 	}
 	if err := expireActive(ctx, d, uid); err != nil {
 		return "Gagal membatalkan, coba lagi."
