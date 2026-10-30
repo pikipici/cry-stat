@@ -1,11 +1,11 @@
 # Crypto Station — Roadmap & Living Plan
 
-> Status: v0.9 — Debug pass Fase 1+2 (10 temuan → 9 fix + 1 catat, 19 tests hijau)
+> Status: v0.10 — Stage 1 kode SELESAI (Fase 0-4, 29 tests hijau). Trial live + Stage 0 nunggu user
 > Owner: user + hermes
 > Last updated: 2026-10-30
 
 ## Daftar Isi
-- [0. Locked Decisions](#0-locked-decisions-v09)
+- [0. Locked Decisions](#0-locked-decisions-v010)
 - [1. Goal](#1-goal)
 - [2. Target Users](#2-target-users)
 - [3. Stage Model & Gate](#3-stage-model--gate)
@@ -20,12 +20,12 @@
 - [12. Roadmap](#12-roadmap)
 - [13. Unit Economics](#13-unit-economics)
 - [14. Risks](#14-risks)
-- [15. Open Decisions Tersisa (v0.9)](#15-open-decisions-tersisa-v09)
+- [15. Open Decisions Tersisa (v0.10)](#15-open-decisions-tersisa-v010)
 - [16. Deploy Strategy](#16-deploy-strategy)
 - [17. Implementation Notes](#17-implementation-notes)
 - [18. Current Next Step](#18-current-next-step)
 
-## 0. Locked Decisions (v0.9)
+## 0. Locked Decisions (v0.10)
 
 | # | Keputusan | Pilihan |
 |---|-----------|---------|
@@ -59,6 +59,9 @@
 | 27 | Pola git VPS | **VPS /home/ubuntu/crypto-station = clone dari bare (bukan tar-sync). Deploy: push origin+server → fetch origin + reset --hard.** Bare HEAD = main. Backup tar lama di crypto-station-tar-backup (boleh hapus) |
 | 28 | Debug pass Fase 1+2 | **10 temuan → 9 fix + 1 catat (head f0223ca). Wajib: snapshot audit ditulis+throttle, reconcile 1 tx repeatable, lock wallet FOR UPDATE, grant by jurnal, exposure short-only, batal expire, cek saldo awal, dead code, FeeNote. Catat Fase 4: refreshWalletCache O(n). 19 tests hijau (13 ledger + 4 price + 2 risk).** Gotcha: ExpireUserQuotes return 1 value; CreateQuote baru expire lama (test lock pakai insert langsung) |
 | 29 | refreshWalletCache O(n) | **DICATAT buat Fase 4: scan semua jurnal per trade, melambat seiring tumbuh. Fix = query filter owner di SQL. Sekarang jangan disentuh** |
+| 30 | Fase 3 DONE | **Migrasi 000004 (admin_audit + rate_limit + allowlist). Admin allowlist env+settings, Deny tercatat. SetSpread/SetLimit(14-key whitelist)/Pause(off/exposure/spike_stale) + audit + Reload. Rate limit message+callback + RiskEvent. Job reconcile/jam → gagal = pause 3 coin. /approve stub jujur (Stage 2). 27 tests hijau (head 7899e07)** |
+| 31 | Fase 4 parsial DONE | **Migrasi 000005 (exposure_snapshots + warn threshold). Trial service: SnapshotExposure + Report (/trial: reconcile + quote status + quote age + rejects + exposure). /broadcast beneran + /trial admin. Job exposure/10 mnt. TRIAL.md checklist T1-T4. 29 tests hijau (head 05695ad). Trial LIVE nunggu token (T1-T4 manual) + exit criteria 7 hari** |
+| 32 | Stage 1 kode selesai | **Fase 0-4 kode sandbox komplit. Sisa manual user: (1) token bot + trial live TRIAL.md, (2) Stage 0 STAGE0.md (gateway/kurs/stok). Baru setelah itu gate Stage 2 bisa dinilai** |
 
 ## 1. Goal
 
@@ -475,8 +478,8 @@ Estimasi kasar, kerja santai, +buffer. Kalibrasi ulang setelah Fase 0.
 - Fase 0 — ✅ DONE 2026-10-29 (repo Go 1.27.3, skeleton /start /saldo, migrasi 000001 users+settings, smoke cbt-vps hijau, commit 8cd6ec3). Skema ledger full + templat jurnal lanjut Fase 1
 - Fase 1 — ✅ DONE 2026-10-30 (migrasi 000002 ledger full, PriceService WS live + fail-closed, settings cache, GrantSandbox idempotent + Reconcile, /harga + /saldo real, 7 tests hijau, commit 8561ffb). Kurs masih manual-fase1 (nama sumber fix Stage 0)
 - Fase 2 — ✅ DONE 2026-10-30 (migrasi 000003 quotes/trades/risk_events, CreateQuote + ExecuteTrade atomik, RiskService 2 pause, /beli /jual ALL + inline confirm + /riwayat + /batal, 13 tests hijau, head fbc4456)
-- Fase 3 — admin allowlist + /setspread /setlimit /pause /broadcast + audit + RiskEvents + rekonsiliasi harian (3–4 hari)
-- Fase 4 — trial sandbox terbatas, ukur slippage, tuning spread, cek exit criteria (1–2 minggu)
+- Fase 3 — ✅ DONE 2026-10-30 (migrasi 000004 admin_audit, allowlist env+settings, /setspread /setlimit /pause + audit, rate limit, job rekonsiliasi, 27 tests hijau, head 7899e07)
+- Fase 4 — ✅ PARSIAL 2026-10-30 (migrasi 000005 exposure_snapshots, trial report + /broadcast + /trial, job exposure, TRIAL.md, 29 tests hijau, head 05695ad). Trial LIVE nunggu token (T1-T4 + exit criteria 7 hari)
 
 **Stage 2 — Real-money (setelah gate lolos; ±3–4 minggu)**
 - Fase 5 — topup QRIS + webhook idempotent + paid_late exact-match + /topup (5–7 hari)
@@ -519,9 +522,12 @@ Harus kejawab angka: berapa trade/bulan biar impas, dan eksposur max yang ketaha
 - **Secret bocor:** env saja, bukan repo
 - **Limit sandbox terbawa ke produksi:** batas eksposur Stage 2 harus di-set ulang, tidak disalin
 
-## 15. Open Decisions Tersisa (v0.9)
+## 15. Open Decisions Tersisa (v0.10)
 
-Ditutup di v0.9, jangan dibuka lagi tanpa alasan di bawah:
+Ditutup di v0.10, jangan dibuka lagi tanpa alasan di bawah:
+
+- **Fase 3+4 (#30, #31):** kode done, trial live nunggu token
+- **Stage 1 selesai (#32):** sisa manual user (token + Stage 0), baru gate Stage 2
 
 - **Debug pass (#28):** 10 temuan → 9 fix + 1 catat (#29). Test 19 hijau
 - **refreshWalletCache O(n) (#29):** fix di Fase 4, jangan sekarang
@@ -568,12 +574,21 @@ Masih terbuka:
 
 ## 18. Current Next Step
 
-**v0.9 siap dikerjakan.** Debug pass hijau, 19 tests.
+**v0.10 — Stage 1 kode SELESAI (29 tests hijau). Bola di tangan user.**
 
-1. Fix username bot di BotFather. Token dibutuhin Fase 3 buat smoke long-poll + admin commands
-2. Stage 0 jalan manual (STAGE0.md): tanya gateway, sumber kurs, model stok, unit economics → hasil masuk v0.10
-3. Gas Fase 3: admin allowlist + /setspread /setlimit /pause /broadcast + audit + job rekonsiliasi
-4. Jangan mulai pembayaran asli, sumber kurs kedua, atau enforcement mule/sybil sebelum gate Stage 2
+Manual user (tidak bisa gua kerjain):
+1. Fix username bot di BotFather → BOT_TOKEN → trial live TRIAL.md (T1-T4) → exit criteria 7 hari
+2. Stage 0 (STAGE0.md): tanya gateway, sumber kurs, model stok, unit economics → hasil masuk v0.11
+
+Setelah dua itu kelar → nilai gate Stage 2 → gas Fase 5 (topup QRIS).
+
+Jangan mulai pembayaran asli, sumber kurs kedua, atau enforcement mule/sybil sebelum gate Stage 2.
+
+### Changelog v0.9 → v0.10
+
+- **Fase 3 DONE (baru #30):** migrasi 000004 + admin allowlist/audit + rate limit + job reconcile, 27 tests hijau (head 7899e07). Roadmap Fase 3 DONE
+- **Fase 4 parsial DONE (baru #31):** migrasi 000005 + trial report/broadcast + TRIAL.md, 29 tests hijau (head 05695ad). Trial live nunggu token
+- **Stage 1 selesai (baru #32):** kode sandbox komplit Fase 0-4. Sisa manual user eksplisit
 
 ### Changelog v0.8 → v0.9
 
