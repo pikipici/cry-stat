@@ -27,11 +27,31 @@ func (r *RateLimiter) SetLimit(n int) {
 }
 
 // Allow: true = boleh jalan. False = rate limited (catat RiskEvent di caller).
+// FIX debug #10: cleanup entry basi tiap panggil (cap map) — sebelumnya entry per ID
+// menumpuk selamanya termasuk attacker sekali-kirim (memory leak lambat).
 func (r *RateLimiter) Allow(id int64) bool {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	now := time.Now()
 	cut := now.Add(-time.Minute)
+	// Cleanup global cap: buang ID yang semua hit-nya basi (maks 5000 ID).
+	if len(r.hits) > 5000 {
+		for k, hs := range r.hits {
+			fresh := false
+			for _, t := range hs {
+				if t.After(cut) {
+					fresh = true
+					break
+				}
+			}
+			if !fresh {
+				delete(r.hits, k)
+			}
+			if len(r.hits) <= 4000 {
+				break
+			}
+		}
+	}
 	hs := r.hits[id]
 	keep := hs[:0]
 	for _, t := range hs {

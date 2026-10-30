@@ -98,7 +98,12 @@ func (s *Service) Snapshot(asset string) (Snapshot, error) {
 		return Snapshot{}, ErrSourceDown
 	}
 	priceAge := time.Since(t.at)
-	if priceAge.Milliseconds() > s.set.Int64("staleness_coin_ms") {
+	// FIX debug #17: jangan panic kalau key hilang — tolak quote dengan pesan jelas.
+	staleCoin, err := s.set.SafeInt64("staleness_coin_ms")
+	if err != nil {
+		return Snapshot{}, ErrSourceDown
+	}
+	if priceAge.Milliseconds() > staleCoin {
 		return Snapshot{}, ErrStaleCoin
 	}
 	s.fxMu.RLock()
@@ -108,13 +113,23 @@ func (s *Service) Snapshot(asset string) (Snapshot, error) {
 		return Snapshot{}, ErrSourceDown
 	}
 	rateAge := time.Since(fxAt)
-	if rateAge.Milliseconds() > s.set.Int64("staleness_fx_ms") {
+	staleFX, err := s.set.SafeInt64("staleness_fx_ms")
+	if err != nil {
+		return Snapshot{}, ErrSourceDown
+	}
+	if rateAge.Milliseconds() > staleFX {
 		return Snapshot{}, ErrStaleFX
 	}
 	midUSDT := t.bestBid.Add(t.bestAsk).Div(decimal.NewFromInt(2))
 	midIDR := midUSDT.Mul(fx)
-	spreadBuy := s.set.Spread(strings.ToLower(asset), "buy")
-	spreadSell := s.set.Spread(strings.ToLower(asset), "sell")
+	spreadBuy, err := s.set.SafeSpread(strings.ToLower(asset), "buy")
+	if err != nil {
+		return Snapshot{}, ErrSourceDown
+	}
+	spreadSell, err := s.set.SafeSpread(strings.ToLower(asset), "sell")
+	if err != nil {
+		return Snapshot{}, ErrSourceDown
+	}
 	one := decimal.NewFromInt(1)
 	return Snapshot{
 		Mid:         midIDR,

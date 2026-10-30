@@ -60,3 +60,10 @@ func TestReportRuns(t *testing.T) {
 	}
 	t.Logf("\n%s", rep)
 }
+
+func TestSlippageReportRuns(t *testing.T) {
+	svc, _ := trialDeps(t)
+	rep := svc.SlippageReport(context.Background(), 10)
+	// Belum ada trade atau sudah ada — dua-duanya valid, yang penting tidak error.
+	t.Logf("\n%s", rep)
+}

@@ -14,6 +14,7 @@ import (
 	"github.com/pikipici/crypto-station/internal/settings"
 
 	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/shopspring/decimal"
 )
 
 type Service struct {
@@ -85,9 +86,6 @@ func (s *Service) Audit(ctx context.Context, telegramID int64, action string, ta
 	return err
 }
 
-// SpreadKeys: spread_buy_<coin> / spread_sell_<coin> (desimal, misal 0.01).
-var spreadCoins = []string{"bnb", "eth", "sol"}
-
 // SetSpread: ubah spread 1 coin 1 side. Return before/after untuk audit.
 func (s *Service) SetSpread(ctx context.Context, adminID int64, coin, side, val string) (before, after string, err error) {
 	coin = strings.ToLower(coin)
@@ -102,9 +100,11 @@ func (s *Service) SetSpread(ctx context.Context, adminID int64, coin, side, val 
 	if err != nil || f < 0 || f > 0.1 {
 		return "", "", fmt.Errorf("spread harus angka 0–0.1 (misal 0.01 = 1%%)")
 	}
+	// FIX debug #1: normalisasi via decimal (float 0.008 aman, tapi 0.1+epsilon float
+	// bisa lolos/tewas di border). Format konsisten tanpa notasi ilmiah.
+	after = decimal.NewFromFloat(f).Round(6).String()
 	key := "spread_" + side + "_" + coin
 	before, _ = s.set.Get(key)
-	after = strconv.FormatFloat(f, 'f', -1, 64)
 	row, err := s.q.UpsertSetting(ctx, db.UpsertSettingParams{Key: key, Value: after, UpdatedBy: pgtype.Int8{Int64: adminID, Valid: true}})
 	if err != nil {
 		return "", "", err
@@ -166,6 +166,8 @@ func (s *Service) SetLimit(ctx context.Context, adminID int64, key, val string) 
 }
 
 // Pause kinds: "" (jalan) | "exposure" (beli saja stop) | "spike_stale" (semua stop).
+// FIX debug #12: adminID 0 = system (job reconcile) — audit action prefix "system:" agar
+// jejak jelas, bukan admin fiktif.
 func (s *Service) Pause(ctx context.Context, adminID int64, coin, kind string) (before, after string, err error) {
 	coin = strings.ToLower(coin)
 	if coin != "bnb" && coin != "eth" && coin != "sol" {
@@ -187,6 +189,10 @@ func (s *Service) Pause(ctx context.Context, adminID int64, coin, kind string) (
 	if err := s.set.Reload(ctx); err != nil {
 		return "", "", err
 	}
-	_ = s.Audit(ctx, adminID, "pause", 0, false, key+"="+before, key+"="+row.Value)
+	action := "pause"
+	if adminID == 0 {
+		action = "system:pause"
+	}
+	_ = s.Audit(ctx, adminID, action, 0, false, key+"="+before, key+"="+row.Value)
 	return before, row.Value, nil
 }

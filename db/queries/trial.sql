@@ -25,3 +25,11 @@ SELECT kind, COUNT(*)::BIGINT AS n FROM risk_events GROUP BY kind ORDER BY n DES
 
 -- name: CountQuotesByStatus :many
 SELECT status, COUNT(*)::BIGINT AS n FROM quotes GROUP BY status;
+
+-- Slippage real per trade: (price_used - mid_used) / mid_used (signed).
+-- FIX debug #8: data sudah ada di trades tapi tidak pernah dihitung.
+-- name: TradeSlippage :many
+SELECT id, side, asset,
+  CASE WHEN mid_used = 0 THEN 0::NUMERIC(36,18)
+       ELSE ((price_used - mid_used) / mid_used)::NUMERIC(36,18) END AS slip_pct
+FROM trades ORDER BY id DESC LIMIT $1;

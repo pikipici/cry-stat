@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/pikipici/crypto-station/internal/admin"
 	"github.com/pikipici/crypto-station/internal/db"
@@ -151,6 +152,13 @@ func adminLimit(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest 
 		reply(ctx, b, chatID, "Gagal: "+err.Error())
 		return
 	}
+	// FIX debug #2: sinkronkan limiter in-memory — /setlimit rate_limit_per_min
+	// sebelumnya cuma ubah cache settings, limiter tetap pakai angka lama sampai restart.
+	if rest[0] == "rate_limit_per_min" {
+		if n, err := strconv.ParseInt(after, 10, 64); err == nil && n > 0 {
+			d.Limiter.SetLimit(int(n))
+		}
+	}
 	reply(ctx, b, chatID, rest[0]+": "+before+" → "+after)
 }
 
@@ -180,7 +188,7 @@ func adminTrial(ctx context.Context, b *bot.Bot, chatID, telegramID int64, d *De
 		reply(ctx, b, chatID, "Bukan admin.")
 		return
 	}
-	reply(ctx, b, chatID, d.Trial.Report(ctx))
+	reply(ctx, b, chatID, d.Trial.Report(ctx)+"\n\n"+d.Trial.SlippageReport(ctx, 10))
 }
 
 func adminBroadcast(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []string, d *Deps) {
@@ -199,6 +207,8 @@ func adminBroadcast(ctx context.Context, b *bot.Bot, chatID, telegramID int64, r
 		return
 	}
 	sent, failed := 0, 0
+	// FIX debug #15: jeda 40ms per pesan (~25 msg/detik, di bawah flood limit ~30/detik).
+	// Tanpa jeda, broadcast ke ratusan user kena 429 dan sisanya gagal.
 	for _, id := range ids {
 		_, err := b.SendMessage(ctx, &bot.SendMessageParams{ChatID: id, Text: msg})
 		if err != nil {
@@ -206,6 +216,7 @@ func adminBroadcast(ctx context.Context, b *bot.Bot, chatID, telegramID int64, r
 		} else {
 			sent++
 		}
+		time.Sleep(40 * time.Millisecond)
 	}
 	_ = d.Admin.Audit(ctx, telegramID, "broadcast", 0, false, fmt.Sprintf("target=%d", len(ids)), fmt.Sprintf("sent=%d failed=%d", sent, failed))
 	reply(ctx, b, chatID, fmt.Sprintf("Broadcast: %d terkirim, %d gagal (dari %d user).", sent, failed, len(ids)))
@@ -229,18 +240,25 @@ func userID(ctx context.Context, d *Deps, telegramID int64) (int64, string) {
 func start(ctx context.Context, telegramID int64, d *Deps) string {
 	u, err := d.Q.GetUserByTelegramID(ctx, telegramID)
 	if err != nil {
-		// User baru → buat + grant modal sandbox (idempotent di GrantSandbox).
+		// FIX debug #16: race dua /start paralel → salah satu kena unique violation.
+		// Ambil existing (dibuat request lain) lalu lanjut, jangan "gagal bikin akun".
 		nu, err := d.Q.CreateUser(ctx, db.CreateUserParams{TelegramID: telegramID, Mode: "sandbox"})
 		if err != nil {
-			return "Gagal bikin akun, coba /start lagi."
+			u2, err2 := d.Q.GetUserByTelegramID(ctx, telegramID)
+			if err2 != nil {
+				return "Gagal bikin akun, coba /start lagi."
+			}
+			u = u2
+			_ = nu
+		} else {
+			if err := d.Ledger.GrantSandbox(ctx, nu.ID, d.Set.Int64("sandbox_starting_balance_idr")); err != nil {
+				return "Akun jadi, tapi grant saldo gagal. Coba /saldo."
+			}
+			return "Selamat datang di Crypto Station (SIMULASI).\n" +
+				"Modal sandbox Rp1.000.000 sudah masuk.\n" +
+				"Pakai /harga untuk cek harga, /saldo untuk cek saldo.\n" +
+				"Beli: /beli SOL 200000 — Jual: /jual SOL 100000 atau /jual SOL ALL"
 		}
-		if err := d.Ledger.GrantSandbox(ctx, nu.ID, d.Set.Int64("sandbox_starting_balance_idr")); err != nil {
-			return "Akun jadi, tapi grant saldo gagal. Coba /saldo."
-		}
-		return "Selamat datang di Crypto Station (SIMULASI).\n" +
-			"Modal sandbox Rp1.000.000 sudah masuk.\n" +
-			"Pakai /harga untuk cek harga, /saldo untuk cek saldo.\n" +
-			"Beli: /beli SOL 200000 — Jual: /jual SOL 100000 atau /jual SOL ALL"
 	}
 	if st := u.Status; st == "blocked" {
 		return "Akun diblokir. Hubungi admin."

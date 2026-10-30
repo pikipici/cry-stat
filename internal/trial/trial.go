@@ -39,9 +39,11 @@ func (s *Service) SnapshotExposure(ctx context.Context) error {
 	for _, a := range []string{"BNB", "ETH", "SOL"} {
 		limit := s.set.Decimal("exposure_limit_" + strings.ToLower(a))
 		n := net[a]
+		// FIX debug #6: signed (bukan Abs) — negatif = house short (eksposur),
+		// positif = house long (aman). Tampilan Report yang ubah jadi persen.
 		used := decimal.Zero
 		if !limit.IsZero() {
-			used = n.Abs().Div(limit)
+			used = n.Div(limit)
 		}
 		if _, err := s.q.InsertExposureSnapshot(ctx, db.InsertExposureSnapshotParams{
 			Asset: a, NetPosition: n, LimitUsed: used,
@@ -101,16 +103,31 @@ func (s *Service) Report(ctx context.Context) string {
 		}
 	}
 
-	// 5. Exposure terakhir.
+	// 5. Exposure terakhir (signed: negatif = house short = eksposur).
 	for _, a := range []string{"BNB", "ETH", "SOL"} {
 		if e, err := s.q.LatestExposure(ctx, a); err == nil {
-			fmt.Fprintf(&sb, "Exposure %s: %s (limit %.0f%%)\n", a, e.NetPosition.String(), pct(e.LimitUsed))
+			fmt.Fprintf(&sb, "Exposure %s: %s (limit %s%%)\n", a, e.NetPosition.String(), e.LimitUsed.Mul(decimal.NewFromInt(100)).Round(1).String())
 		}
 	}
 	return strings.TrimRight(sb.String(), "\n")
 }
 
-func pct(d decimal.Decimal) float64 {
-	f, _ := d.Mul(decimal.NewFromInt(100)).Float64()
-	return f
+// SlippageReport: (price_used - mid_used)/mid_used per trade terakhir.
+// FIX debug #8: datanya sudah ada di trades (price_used, mid_used) tapi tidak pernah
+// dihitung — report cuma tampil quote age (proxy). Sekarang slippage beneran.
+func (s *Service) SlippageReport(ctx context.Context, limit int32) string {
+	rows, err := s.q.TradeSlippage(ctx, limit)
+	if err != nil {
+		return "Slippage: gagal baca (" + err.Error() + ")"
+	}
+	if len(rows) == 0 {
+		return "Slippage: belum ada trade"
+	}
+	var sb strings.Builder
+	sb.WriteString("Slippage (price vs mid):\n")
+	for _, r := range rows {
+		fmt.Fprintf(&sb, "#%d %s %s: %s%%\n", r.ID, r.Side, r.Asset,
+			r.SlipPct.Mul(decimal.NewFromInt(100)).Round(3).String())
+	}
+	return strings.TrimRight(sb.String(), "\n")
 }

@@ -67,7 +67,38 @@ func (s *Service) Decimal(key string) decimal.Decimal {
 	return d
 }
 
+// FIX debug #17: varian aman (return error, bukan panic) untuk path quote.
+// Satu key hilang/rusak tidak boleh crash seluruh bot.
+func (s *Service) SafeDecimal(key string) (decimal.Decimal, error) {
+	v, ok := s.Get(key)
+	if !ok {
+		return decimal.Zero, fmt.Errorf("settings: key %q belum di-seed", key)
+	}
+	d, err := decimal.NewFromString(v)
+	if err != nil {
+		return decimal.Zero, fmt.Errorf("settings: key %q bukan decimal: %v", key, err)
+	}
+	return d, nil
+}
+
+func (s *Service) SafeInt64(key string) (int64, error) {
+	v, ok := s.Get(key)
+	if !ok {
+		return 0, fmt.Errorf("settings: key %q belum di-seed", key)
+	}
+	n, err := strconv.ParseInt(v, 10, 64)
+	if err != nil {
+		return 0, fmt.Errorf("settings: key %q bukan int: %v", key, err)
+	}
+	return n, nil
+}
+
 // Spread per coin+side dari settings (spread_buy_bnb, dst).
 func (s *Service) Spread(asset, side string) decimal.Decimal {
 	return s.Decimal(fmt.Sprintf("spread_%s_%s", side, asset))
+}
+
+// SafeSpread: varian aman untuk path quote (FIX debug #17).
+func (s *Service) SafeSpread(asset, side string) (decimal.Decimal, error) {
+	return s.SafeDecimal(fmt.Sprintf("spread_%s_%s", side, asset))
 }

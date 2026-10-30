@@ -68,8 +68,6 @@ func main() {
 	}
 
 	// WS Binance background (gagal = harga basi, fail-closed).
-	// Kurs placeholder manual — nama sumber fix di Stage 0 (S0.2).
-	priceSvc.SetFX(decimal.NewFromInt(16000), "manual-fase1")
 	go func() {
 		for {
 			err := priceSvc.RunWS(ctx, price.CombinedStreamURL())
@@ -78,6 +76,35 @@ func main() {
 			case <-ctx.Done():
 				return
 			case <-time.After(5 * time.Second):
+			}
+		}
+	}()
+
+	// FIX debug #14 (blocker trial live): kurs USDT/IDR harus di-refresh berkala.
+	// Sebelumnya SetFX cuma sekali di start → setelah 60 detik SEMUA quote ditolak
+	// ErrStaleFX selamanya. Sekarang refresh tiap 30 detik dari sumber yang sama.
+	// Nama sumber fix di Stage 0 (S0.2); fungsi fetch diganti tanpa ubah pemanggil.
+	fxFetch := func(ctx context.Context) (decimal.Decimal, string, error) {
+		return fetchManualFX(ctx)
+	}
+	refreshFX := func() {
+		rate, src, err := fxFetch(ctx)
+		if err != nil {
+			slog.Warn("refresh kurs gagal (kurs lama dipakai sampai basi)", "err", err)
+			return
+		}
+		priceSvc.SetFX(rate, src)
+	}
+	refreshFX()
+	go func() {
+		t := time.NewTicker(30 * time.Second)
+		defer t.Stop()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-t.C:
+				refreshFX()
 			}
 		}
 	}()
@@ -95,6 +122,8 @@ func main() {
 				if err := ledgerSvc.Reconcile(ctx); err != nil {
 					slog.Error("rekonsiliasi GAGAL — pause semua coin", "err", err)
 					for _, c := range []string{"bnb", "eth", "sol"} {
+						// FIX debug #12: adminID 0 = system (bukan admin fiktif).
+						// Audit before/after eksplisit agar jejak jelas di admin_audit.
 						_, _, _ = adminSvc.Pause(ctx, 0, c, "spike_stale")
 					}
 				}
