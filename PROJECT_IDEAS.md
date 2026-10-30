@@ -1,11 +1,11 @@
 # Crypto Station — Roadmap & Living Plan
 
-> Status: v0.10 — Stage 1 kode SELESAI (Fase 0-4, 29 tests hijau). Trial live + Stage 0 nunggu user
+> Status: v0.11 — Debug Fase 3+4 (17 temuan → 15 fix, kurs blocker clear, 30 tests hijau)
 > Owner: user + hermes
 > Last updated: 2026-10-30
 
 ## Daftar Isi
-- [0. Locked Decisions](#0-locked-decisions-v010)
+- [0. Locked Decisions](#0-locked-decisions-v011)
 - [1. Goal](#1-goal)
 - [2. Target Users](#2-target-users)
 - [3. Stage Model & Gate](#3-stage-model--gate)
@@ -20,12 +20,12 @@
 - [12. Roadmap](#12-roadmap)
 - [13. Unit Economics](#13-unit-economics)
 - [14. Risks](#14-risks)
-- [15. Open Decisions Tersisa (v0.10)](#15-open-decisions-tersisa-v010)
+- [15. Open Decisions Tersisa (v0.11)](#15-open-decisions-tersisa-v011)
 - [16. Deploy Strategy](#16-deploy-strategy)
 - [17. Implementation Notes](#17-implementation-notes)
 - [18. Current Next Step](#18-current-next-step)
 
-## 0. Locked Decisions (v0.10)
+## 0. Locked Decisions (v0.11)
 
 | # | Keputusan | Pilihan |
 |---|-----------|---------|
@@ -62,6 +62,8 @@
 | 30 | Fase 3 DONE | **Migrasi 000004 (admin_audit + rate_limit + allowlist). Admin allowlist env+settings, Deny tercatat. SetSpread/SetLimit(14-key whitelist)/Pause(off/exposure/spike_stale) + audit + Reload. Rate limit message+callback + RiskEvent. Job reconcile/jam → gagal = pause 3 coin. /approve stub jujur (Stage 2). 27 tests hijau (head 7899e07)** |
 | 31 | Fase 4 parsial DONE | **Migrasi 000005 (exposure_snapshots + warn threshold). Trial service: SnapshotExposure + Report (/trial: reconcile + quote status + quote age + rejects + exposure). /broadcast beneran + /trial admin. Job exposure/10 mnt. TRIAL.md checklist T1-T4. 29 tests hijau (head 05695ad). Trial LIVE nunggu token (T1-T4 manual) + exit criteria 7 hari** |
 | 32 | Stage 1 kode selesai | **Fase 0-4 kode sandbox komplit. Sisa manual user: (1) token bot + trial live TRIAL.md, (2) Stage 0 STAGE0.md (gateway/kurs/stok). Baru setelah itu gate Stage 2 bisa dinilai** |
+| 33 | Debug pass Fase 3+4 | **17 temuan → 15 fix + 2 catat (head 5b5c8f2). BLOCKER CLEAR: kurs refresher 30s Indodax (sebelumnya basi permanen >60s). Wajib: limiter sync, slippage real di /trial, signed exposure, spread decimal, limiter cap, start race, broadcast 40ms, system:pause audit, SafeDecimal path quote. Catat: import order (kosmetik), graceful shutdown OK. FX verified 18149. 30 tests hijau** |
+| 34 | Kurs sementara Indodax | **USDT/IDR dari Indodax public ticker (tanpa key), refresh 30s, fetchManualFX di cmd/bot/fx.go. Nama sumber FINAL fix Stage 0 (S0.2) — ganti isi fungsi tanpa ubah pemanggil** |
 
 ## 1. Goal
 
@@ -522,9 +524,12 @@ Harus kejawab angka: berapa trade/bulan biar impas, dan eksposur max yang ketaha
 - **Secret bocor:** env saja, bukan repo
 - **Limit sandbox terbawa ke produksi:** batas eksposur Stage 2 harus di-set ulang, tidak disalin
 
-## 15. Open Decisions Tersisa (v0.10)
+## 15. Open Decisions Tersisa (v0.11)
 
-Ditutup di v0.10, jangan dibuka lagi tanpa alasan di bawah:
+Ditutup di v0.11, jangan dibuka lagi tanpa alasan di bawah:
+
+- **Debug Fase 3+4 (#33):** 17 temuan → 15 fix + 2 catat. 30 tests hijau
+- **Kurs sementara (#34):** Indodax, final fix Stage 0
 
 - **Fase 3+4 (#30, #31):** kode done, trial live nunggu token
 - **Stage 1 selesai (#32):** sisa manual user (token + Stage 0), baru gate Stage 2
@@ -574,15 +579,20 @@ Masih terbuka:
 
 ## 18. Current Next Step
 
-**v0.10 — Stage 1 kode SELESAI (29 tests hijau). Bola di tangan user.**
+**v0.11 — Debug Fase 3+4 hijau (30 tests). Kurs blocker clear, trial live SIAP.**
 
 Manual user (tidak bisa gua kerjain):
 1. Fix username bot di BotFather → BOT_TOKEN → trial live TRIAL.md (T1-T4) → exit criteria 7 hari
-2. Stage 0 (STAGE0.md): tanya gateway, sumber kurs, model stok, unit economics → hasil masuk v0.11
+2. Stage 0 (STAGE0.md): tanya gateway, sumber kurs (final ganti Indodax sementara), model stok, unit economics → hasil masuk v0.12
 
 Setelah dua itu kelar → nilai gate Stage 2 → gas Fase 5 (topup QRIS).
 
 Jangan mulai pembayaran asli, sumber kurs kedua, atau enforcement mule/sybil sebelum gate Stage 2.
+
+### Changelog v0.10 → v0.11
+
+- **Debug Fase 3+4 (baru #33):** audit baris-per-baris → 17 temuan → 15 fix + 2 catat (head 5b5c8f2). Blocker: kurs refresher 30s. 30 tests hijau (6 admin + 2 bot + 13 ledger + 4 price + 2 risk + 3 trial)
+- **Kurs sementara (baru #34):** Indodax USDT/IDR public, fetchManualFX, verified 18149. Final fix Stage 0
 
 ### Changelog v0.9 → v0.10
 
