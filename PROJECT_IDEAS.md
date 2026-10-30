@@ -588,7 +588,7 @@ Masih terbuka:
 - **Fase 0 DONE (baru #23):** repo Go 1.27.3 + migrasi 000001 + skeleton /start /saldo + smoke cbt-vps hijau (commit 8cd6ec3). Roadmap Fase 0 ditandai DONE
 - **Pola kerja (baru #22):** lokal coding + git, eksekusi cbt-vps, ngikut LMS. Password tidak disimpan di plan/repo/memory
 - **Deploy (bab 16):** generik 1 VPS → konkret cbt-vps (Ubuntu 24.04, Go 1.27.3, Postgres 16:5432, Asia/Jakarta, db cryptostation/role cs)
-- Stage 0 pack (STAGE0.md) dicatat sebagai kerja paralel manual, hasilnya masuk v0.7
+- Stage 0 pack (STAGE0.md) dicatat sebagai kerja paralel manual, hasilnya masuk v0.9 (belum masuk per v0.8)
 
 ### Changelog v0.4 → v0.5
 
