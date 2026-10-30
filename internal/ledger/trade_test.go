@@ -154,7 +154,7 @@ func TestBuyInsufficientBalance(t *testing.T) {
 	svc, _, _ := tradeDeps(t)
 	ctx := context.Background()
 	uid := tradeUser(t, svc, db.New(svc.pool))
-	// Saldo 1jt, coba beli 950rb x2 (quote kedua dieksekusi setelah saldo habis sebagian).
+	// Saldo 1jt, beli 950rb sukses (sisa 50rb).
 	qr, err := svc.CreateQuote(ctx, uid, "buy", "SOL", 950000, testSnap())
 	if err != nil {
 		t.Fatalf("quote: %v", err)
@@ -162,12 +162,9 @@ func TestBuyInsufficientBalance(t *testing.T) {
 	if _, err := svc.ExecuteTrade(ctx, uid, qr.ID); err != nil {
 		t.Fatalf("execute 1: %v", err)
 	}
-	qr2, err := svc.CreateQuote(ctx, uid, "buy", "SOL", 500000, testSnap())
-	if err != nil {
-		t.Fatalf("quote 2: %v", err)
-	}
-	if _, err := svc.ExecuteTrade(ctx, uid, qr2.ID); !errors.Is(err, ErrNoBalance) {
-		t.Fatalf("mau ErrNoBalance, dapat %v", err)
+	// FIX debug #7: quote kedua (500rb > sisa 50rb) DITOLAK di awal, bukan pas execute.
+	if _, err := svc.CreateQuote(ctx, uid, "buy", "SOL", 500000, testSnap()); !errors.Is(err, ErrNoBalance) {
+		t.Fatalf("mau ErrNoBalance di awal, dapat %v", err)
 	}
 }
 
