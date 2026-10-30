@@ -1,11 +1,11 @@
 # Crypto Station — Roadmap & Living Plan
 
-> Status: v0.8 — Fase 2 DONE (quote mengikat + trade atomik + 2 pause + /beli /jual, 13 tests hijau)
+> Status: v0.9 — Debug pass Fase 1+2 (10 temuan → 9 fix + 1 catat, 19 tests hijau)
 > Owner: user + hermes
 > Last updated: 2026-10-30
 
 ## Daftar Isi
-- [0. Locked Decisions](#0-locked-decisions-v08)
+- [0. Locked Decisions](#0-locked-decisions-v09)
 - [1. Goal](#1-goal)
 - [2. Target Users](#2-target-users)
 - [3. Stage Model & Gate](#3-stage-model--gate)
@@ -20,12 +20,12 @@
 - [12. Roadmap](#12-roadmap)
 - [13. Unit Economics](#13-unit-economics)
 - [14. Risks](#14-risks)
-- [15. Open Decisions Tersisa (v0.8)](#15-open-decisions-tersisa-v08)
+- [15. Open Decisions Tersisa (v0.9)](#15-open-decisions-tersisa-v09)
 - [16. Deploy Strategy](#16-deploy-strategy)
 - [17. Implementation Notes](#17-implementation-notes)
 - [18. Current Next Step](#18-current-next-step)
 
-## 0. Locked Decisions (v0.8)
+## 0. Locked Decisions (v0.9)
 
 | # | Keputusan | Pilihan |
 |---|-----------|---------|
@@ -57,6 +57,8 @@
 | 25 | internal/db generated | **internal/db/ hasil sqlc generate TIDAK di-commit (regenerasi di VPS tiap sync).** db/schema/ juga generated. Yang di-commit: db/queries/*.sql + migrasi + sqlc.yaml |
 | 26 | Fase 2 DONE | **Migrasi 000003 (quotes/trades/risk_events + seed exposure_limit). CreateQuote (minimum + expire lama + lock 30s) + ExecuteTrade (lock user → consume atomik → cek saldo → jurnal 4 kaki → cache → trades row, 1 tx). RiskService 2 pause (exposure=tolak beli, spike_stale=tolak semua) + overExposure + RecordEvent. Bot /beli /jual (ALL) + inline Confirm/Batal + /riwayat + /batal. Risk check 2x. 13 tests hijau (9 ledger + 4 price), head fbc4456.** Fix: AmountIdr, dust 1e-6, tr1 unused |
 | 27 | Pola git VPS | **VPS /home/ubuntu/crypto-station = clone dari bare (bukan tar-sync). Deploy: push origin+server → fetch origin + reset --hard.** Bare HEAD = main. Backup tar lama di crypto-station-tar-backup (boleh hapus) |
+| 28 | Debug pass Fase 1+2 | **10 temuan → 9 fix + 1 catat (head f0223ca). Wajib: snapshot audit ditulis+throttle, reconcile 1 tx repeatable, lock wallet FOR UPDATE, grant by jurnal, exposure short-only, batal expire, cek saldo awal, dead code, FeeNote. Catat Fase 4: refreshWalletCache O(n). 19 tests hijau (13 ledger + 4 price + 2 risk).** Gotcha: ExpireUserQuotes return 1 value; CreateQuote baru expire lama (test lock pakai insert langsung) |
+| 29 | refreshWalletCache O(n) | **DICATAT buat Fase 4: scan semua jurnal per trade, melambat seiring tumbuh. Fix = query filter owner di SQL. Sekarang jangan disentuh** |
 
 ## 1. Goal
 
@@ -517,9 +519,12 @@ Harus kejawab angka: berapa trade/bulan biar impas, dan eksposur max yang ketaha
 - **Secret bocor:** env saja, bukan repo
 - **Limit sandbox terbawa ke produksi:** batas eksposur Stage 2 harus di-set ulang, tidak disalin
 
-## 15. Open Decisions Tersisa (v0.8)
+## 15. Open Decisions Tersisa (v0.9)
 
-Ditutup di v0.8, jangan dibuka lagi tanpa alasan di bawah:
+Ditutup di v0.9, jangan dibuka lagi tanpa alasan di bawah:
+
+- **Debug pass (#28):** 10 temuan → 9 fix + 1 catat (#29). Test 19 hijau
+- **refreshWalletCache O(n) (#29):** fix di Fase 4, jangan sekarang
 
 - **Pola git VPS (#27):** clone dari bare, fetch + reset --hard. Tar-sync pensiun
 
@@ -563,12 +568,18 @@ Masih terbuka:
 
 ## 18. Current Next Step
 
-**v0.8 siap dikerjakan.** Fase 2 DONE, 13 tests hijau.
+**v0.9 siap dikerjakan.** Debug pass hijau, 19 tests.
 
 1. Fix username bot di BotFather. Token dibutuhin Fase 3 buat smoke long-poll + admin commands
-2. Stage 0 jalan manual (STAGE0.md): tanya gateway, sumber kurs, model stok, unit economics → hasil masuk v0.9
+2. Stage 0 jalan manual (STAGE0.md): tanya gateway, sumber kurs, model stok, unit economics → hasil masuk v0.10
 3. Gas Fase 3: admin allowlist + /setspread /setlimit /pause /broadcast + audit + job rekonsiliasi
 4. Jangan mulai pembayaran asli, sumber kurs kedua, atau enforcement mule/sybil sebelum gate Stage 2
+
+### Changelog v0.8 → v0.9
+
+- **Debug pass (baru #28):** audit baris-per-baris Fase 1+2 → 10 temuan → 9 fix (snapshot audit+throttle, reconcile tx, lock wallet, grant by jurnal, exposure short-only, batal expire, cek saldo awal, dead code, FeeNote). 19 tests hijau (head f0223ca)
+- **Catat Fase 4 (baru #29):** refreshWalletCache O(n) — jangan disentuh sekarang
+- Stage 0 hasil digeser ke v0.10 (belum masuk)
 
 ### Changelog v0.7 → v0.8
 
