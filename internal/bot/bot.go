@@ -10,6 +10,7 @@ import (
 
 	"github.com/pikipici/crypto-station/internal/admin"
 	"github.com/pikipici/crypto-station/internal/db"
+	"github.com/pikipici/crypto-station/internal/trial"
 	"github.com/pikipici/crypto-station/internal/ledger"
 	"github.com/pikipici/crypto-station/internal/price"
 	"github.com/pikipici/crypto-station/internal/risk"
@@ -27,13 +28,14 @@ type Deps struct {
 	Ledger *ledger.Service
 	Risk   *risk.Service
 	Admin  *admin.Service
+	Trial  *trial.Service
 	Limiter *RateLimiter
-	Mode   string // sandbox / real (Fase 1-3: selalu sandbox)
+	Mode   string // sandbox / real (Fase 1-4: selalu sandbox)
 }
 
 func Route() []string {
 	return []string{"/start", "/saldo", "/harga", "/beli", "/jual", "/riwayat", "/batal",
-		"/setspread", "/setlimit", "/pause", "/broadcast", "/approve"}
+		"/setspread", "/setlimit", "/pause", "/broadcast", "/trial", "/approve"}
 }
 
 // Handle: dispatcher tunggal (dipanggil dari default handler main).
@@ -97,7 +99,9 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 	case "/pause":
 		adminPause(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
 	case "/broadcast":
-		reply(ctx, b, upd.Message.Chat.ID, "Broadcast butuh daftar user — masuk Fase 4 (butuh iterasi semua user).")
+		adminBroadcast(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
+	case "/trial":
+		adminTrial(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
 	case "/approve":
 		reply(ctx, b, upd.Message.Chat.ID, "Belum ada withdraw di sandbox (Stage 2).")
 	default:
@@ -169,6 +173,42 @@ func adminPause(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest 
 		return
 	}
 	reply(ctx, b, chatID, "Pause "+rest[0]+": "+before+" → "+after)
+}
+
+func adminTrial(ctx context.Context, b *bot.Bot, chatID, telegramID int64, d *Deps) {
+	if !needAdmin(ctx, telegramID, "trial", d) {
+		reply(ctx, b, chatID, "Bukan admin.")
+		return
+	}
+	reply(ctx, b, chatID, d.Trial.Report(ctx))
+}
+
+func adminBroadcast(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []string, d *Deps) {
+	if !needAdmin(ctx, telegramID, "broadcast", d) {
+		reply(ctx, b, chatID, "Bukan admin.")
+		return
+	}
+	if len(rest) == 0 {
+		reply(ctx, b, chatID, "Format: /broadcast pesan maintenance ...")
+		return
+	}
+	msg := "[Crypto Station] " + strings.Join(rest, " ")
+	ids, err := d.Q.ListActiveTelegramIDs(ctx)
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal ambil daftar user: "+err.Error())
+		return
+	}
+	sent, failed := 0, 0
+	for _, id := range ids {
+		_, err := b.SendMessage(ctx, &bot.SendMessageParams{ChatID: id, Text: msg})
+		if err != nil {
+			failed++
+		} else {
+			sent++
+		}
+	}
+	_ = d.Admin.Audit(ctx, telegramID, "broadcast", 0, false, fmt.Sprintf("target=%d", len(ids)), fmt.Sprintf("sent=%d failed=%d", sent, failed))
+	reply(ctx, b, chatID, fmt.Sprintf("Broadcast: %d terkirim, %d gagal (dari %d user).", sent, failed, len(ids)))
 }
 
 func reply(ctx context.Context, b *bot.Bot, chatID int64, text string) {

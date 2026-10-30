@@ -14,6 +14,7 @@ import (
 	"github.com/pikipici/crypto-station/internal/price"
 	"github.com/pikipici/crypto-station/internal/risk"
 	"github.com/pikipici/crypto-station/internal/settings"
+	"github.com/pikipici/crypto-station/internal/trial"
 
 	tgbot "github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
@@ -50,10 +51,11 @@ func main() {
 	ledgerSvc := ledger.New(pool, set)
 	riskSvc := risk.New(q, set)
 	adminSvc := admin.New(q, set)
+	trialSvc := trial.New(q, set, ledgerSvc)
 	limiter := bot.NewRateLimiter(int(set.Int64("rate_limit_per_min")))
-	deps := &bot.Deps{Q: q, Set: set, Price: priceSvc, Ledger: ledgerSvc, Risk: riskSvc, Admin: adminSvc, Limiter: limiter, Mode: "sandbox"}
+	deps := &bot.Deps{Q: q, Set: set, Price: priceSvc, Ledger: ledgerSvc, Risk: riskSvc, Admin: adminSvc, Trial: trialSvc, Limiter: limiter, Mode: "sandbox"}
 
-	slog.Info("crypto-station fase 3 start", "mode", "sandbox")
+	slog.Info("crypto-station fase 4 start", "mode", "sandbox")
 
 	if botToken == "" {
 		var n int
@@ -95,6 +97,22 @@ func main() {
 					for _, c := range []string{"bnb", "eth", "sol"} {
 						_, _, _ = adminSvc.Pause(ctx, 0, c, "spike_stale")
 					}
+				}
+			}
+		}
+	}()
+
+	// Job exposure snapshots (Fase 4): tiap 10 menit tulis posisi house.
+	go func() {
+		t := time.NewTicker(10 * time.Minute)
+		defer t.Stop()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-t.C:
+				if err := trialSvc.SnapshotExposure(ctx); err != nil {
+					slog.Warn("exposure snapshot gagal", "err", err)
 				}
 			}
 		}
