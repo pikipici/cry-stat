@@ -579,11 +579,13 @@ Masih terbuka:
 
 ## 18. Current Next Step
 
-**v0.11 — Debug Fase 3+4 hijau (30 tests). Kurs blocker clear, trial live SIAP.**
+**v0.11 — STOP, lanjut nanti. Posisi tersimpan.**
 
-Manual user (tidak bisa gua kerjain):
+Terakhir: debug Fase 3+4 hijau (30 tests, head 5b5c8f2), plan v0.11 (head 8f8fe45).
+
+Lanjut nanti mulai dari manual user:
 1. Fix username bot di BotFather → BOT_TOKEN → trial live TRIAL.md (T1-T4) → exit criteria 7 hari
-2. Stage 0 (STAGE0.md): tanya gateway, sumber kurs (final ganti Indodax sementara), model stok, unit economics → hasil masuk v0.12
+2. Stage 0 (STAGE0.md): tanya gateway, sumber kurs final, model stok, unit economics → hasil masuk v0.12
 
 Setelah dua itu kelar → nilai gate Stage 2 → gas Fase 5 (topup QRIS).
 
