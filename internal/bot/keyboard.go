@@ -41,7 +41,7 @@ func CoinPicker(side string) *models.InlineKeyboardMarkup {
 			{Text: "SOL", CallbackData: fmt.Sprintf("t:%s:SOL", side)},
 		},
 		{
-			{Text: "Batal", CallbackData: "t:cancel"},
+			{Text: "❌ Batal", CallbackData: "t:cancel"},
 		},
 	}}
 }
@@ -51,10 +51,10 @@ func CoinPicker(side string) *models.InlineKeyboardMarkup {
 func SellAmountPicker(coin string) *models.InlineKeyboardMarkup {
 	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
 		{
-			{Text: "Jual SEMUA", CallbackData: fmt.Sprintf("t:sellall:%s", coin)},
+			{Text: "💰 Jual SEMUA", CallbackData: fmt.Sprintf("t:sellall:%s", coin)},
 		},
 		{
-			{Text: "Batal", CallbackData: "t:cancel"},
+			{Text: "❌ Batal", CallbackData: "t:cancel"},
 		},
 	}}
 }
@@ -63,8 +63,8 @@ func SellAmountPicker(coin string) *models.InlineKeyboardMarkup {
 func QuoteKeyboard(quoteID int64) *models.InlineKeyboardMarkup {
 	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
 		{
-			{Text: "Confirm", CallbackData: fmt.Sprintf("q:%d:ok", quoteID)},
-			{Text: "Batal", CallbackData: fmt.Sprintf("q:%d:no", quoteID)},
+			{Text: "✅ Confirm", CallbackData: fmt.Sprintf("q:%d:ok", quoteID)},
+			{Text: "❌ Batal", CallbackData: fmt.Sprintf("q:%d:no", quoteID)},
 		},
 	}}
 }
