@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/pikipici/crypto-station/internal/bot"
+	"github.com/pikipici/crypto-station/internal/admin"
 	"github.com/pikipici/crypto-station/internal/db"
 	"github.com/pikipici/crypto-station/internal/ledger"
 	"github.com/pikipici/crypto-station/internal/price"
@@ -48,9 +49,11 @@ func main() {
 	priceSvc := price.New(set, q)
 	ledgerSvc := ledger.New(pool, set)
 	riskSvc := risk.New(q, set)
-	deps := &bot.Deps{Q: q, Set: set, Price: priceSvc, Ledger: ledgerSvc, Risk: riskSvc, Mode: "sandbox"}
+	adminSvc := admin.New(q, set)
+	limiter := bot.NewRateLimiter(int(set.Int64("rate_limit_per_min")))
+	deps := &bot.Deps{Q: q, Set: set, Price: priceSvc, Ledger: ledgerSvc, Risk: riskSvc, Admin: adminSvc, Limiter: limiter, Mode: "sandbox"}
 
-	slog.Info("crypto-station fase 2 start", "mode", "sandbox")
+	slog.Info("crypto-station fase 3 start", "mode", "sandbox")
 
 	if botToken == "" {
 		var n int
@@ -73,6 +76,26 @@ func main() {
 			case <-ctx.Done():
 				return
 			case <-time.After(5 * time.Second):
+			}
+		}
+	}()
+
+	// Job rekonsiliasi harian (Fase 3): tiap 1 jam cek, selisih → pause semua coin.
+	// Interval pendek di sandbox biar gampang diobservasi; prod nanti via cron/systemd timer.
+	go func() {
+		t := time.NewTicker(time.Hour)
+		defer t.Stop()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-t.C:
+				if err := ledgerSvc.Reconcile(ctx); err != nil {
+					slog.Error("rekonsiliasi GAGAL — pause semua coin", "err", err)
+					for _, c := range []string{"bnb", "eth", "sol"} {
+						_, _, _ = adminSvc.Pause(ctx, 0, c, "spike_stale")
+					}
+				}
 			}
 		}
 	}()

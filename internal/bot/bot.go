@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/pikipici/crypto-station/internal/admin"
 	"github.com/pikipici/crypto-station/internal/db"
 	"github.com/pikipici/crypto-station/internal/ledger"
 	"github.com/pikipici/crypto-station/internal/price"
@@ -25,17 +26,25 @@ type Deps struct {
 	Price  *price.Service
 	Ledger *ledger.Service
 	Risk   *risk.Service
-	Mode   string // sandbox / real (Fase 1-2: selalu sandbox)
+	Admin  *admin.Service
+	Limiter *RateLimiter
+	Mode   string // sandbox / real (Fase 1-3: selalu sandbox)
 }
 
 func Route() []string {
-	return []string{"/start", "/saldo", "/harga", "/beli", "/jual", "/riwayat", "/batal"}
+	return []string{"/start", "/saldo", "/harga", "/beli", "/jual", "/riwayat", "/batal",
+		"/setspread", "/setlimit", "/pause", "/broadcast", "/approve"}
 }
 
 // Handle: dispatcher tunggal (dipanggil dari default handler main).
 func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 	// Callback inline (confirm/cancel quote).
 	if upd.CallbackQuery != nil {
+		// Rate limit juga untuk callback (anti double-tap spam).
+		if !d.Limiter.Allow(upd.CallbackQuery.From.ID) {
+			_, _ = b.AnswerCallbackQuery(ctx, &bot.AnswerCallbackQueryParams{CallbackQueryID: upd.CallbackQuery.ID, Text: "Kebanyakan, tunggu sebentar."})
+			return
+		}
 		handleCallback(ctx, b, upd.CallbackQuery, d)
 		return
 	}
@@ -44,6 +53,12 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 	}
 	// Private-chat only (bab 11.5). Group/channel diabaikan diam-diam.
 	if upd.Message.Chat.Type != "private" {
+		return
+	}
+	// Rate limit per akun (angka di settings rate_limit_per_min).
+	if !d.Limiter.Allow(upd.Message.From.ID) {
+		_ = d.Risk.RecordEvent(ctx, 0, false, upd.Message.From.ID, "rate_limited", upd.Message.Text)
+		reply(ctx, b, upd.Message.Chat.ID, "Kebanyakan perintah, tunggu sebentar.")
 		return
 	}
 	text := strings.TrimSpace(upd.Message.Text)
@@ -75,9 +90,85 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 		reply(ctx, b, upd.Message.Chat.ID, riwayat(ctx, upd.Message.From.ID, d))
 	case "/batal":
 		reply(ctx, b, upd.Message.Chat.ID, batal(ctx, upd.Message.From.ID, d))
+	case "/setspread":
+		adminSpread(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
+	case "/setlimit":
+		adminLimit(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
+	case "/pause":
+		adminPause(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
+	case "/broadcast":
+		reply(ctx, b, upd.Message.Chat.ID, "Broadcast butuh daftar user — masuk Fase 4 (butuh iterasi semua user).")
+	case "/approve":
+		reply(ctx, b, upd.Message.Chat.ID, "Belum ada withdraw di sandbox (Stage 2).")
 	default:
 		reply(ctx, b, upd.Message.Chat.ID, "Perintah tidak dikenal. Coba /start, /saldo, /harga, /beli, /jual, /riwayat.")
 	}
+}
+
+// --- Admin commands (allowlist saja, selain itu tolak + catat) ---
+
+func needAdmin(ctx context.Context, telegramID int64, action string, d *Deps) bool {
+	if d.Admin.IsAdmin(telegramID) {
+		return true
+	}
+	_ = d.Admin.Deny(ctx, telegramID, action)
+	_ = d.Risk.RecordEvent(ctx, 0, false, telegramID, "admin_deny", action)
+	return false
+}
+
+func adminSpread(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []string, d *Deps) {
+	if !needAdmin(ctx, telegramID, "setspread", d) {
+		reply(ctx, b, chatID, "Bukan admin.")
+		return
+	}
+	if len(rest) < 3 {
+		reply(ctx, b, chatID, "Format: /setspread SOL buy 0.008")
+		return
+	}
+	before, after, err := d.Admin.SetSpread(ctx, telegramID, rest[0], rest[1], rest[2])
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal: "+err.Error())
+		return
+	}
+	reply(ctx, b, chatID, "Spread "+rest[0]+" "+rest[1]+": "+before+" → "+after)
+}
+
+func adminLimit(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []string, d *Deps) {
+	if !needAdmin(ctx, telegramID, "setlimit", d) {
+		reply(ctx, b, chatID, "Bukan admin.")
+		return
+	}
+	if len(rest) < 2 {
+		reply(ctx, b, chatID, "Format: /setlimit min_buy_idr 25000")
+		return
+	}
+	before, after, err := d.Admin.SetLimit(ctx, telegramID, rest[0], rest[1])
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal: "+err.Error())
+		return
+	}
+	reply(ctx, b, chatID, rest[0]+": "+before+" → "+after)
+}
+
+func adminPause(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []string, d *Deps) {
+	if !needAdmin(ctx, telegramID, "pause", d) {
+		reply(ctx, b, chatID, "Bukan admin.")
+		return
+	}
+	if len(rest) < 1 {
+		reply(ctx, b, chatID, "Format: /pause SOL exposure | /pause SOL spike_stale | /pause SOL off")
+		return
+	}
+	kind := "exposure"
+	if len(rest) > 1 {
+		kind = rest[1]
+	}
+	before, after, err := d.Admin.Pause(ctx, telegramID, rest[0], kind)
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal: "+err.Error())
+		return
+	}
+	reply(ctx, b, chatID, "Pause "+rest[0]+": "+before+" → "+after)
 }
 
 func reply(ctx context.Context, b *bot.Bot, chatID int64, text string) {
