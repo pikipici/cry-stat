@@ -11,11 +11,11 @@ import (
 
 	"github.com/pikipici/crypto-station/internal/admin"
 	"github.com/pikipici/crypto-station/internal/db"
-	"github.com/pikipici/crypto-station/internal/trial"
 	"github.com/pikipici/crypto-station/internal/ledger"
 	"github.com/pikipici/crypto-station/internal/price"
 	"github.com/pikipici/crypto-station/internal/risk"
 	"github.com/pikipici/crypto-station/internal/settings"
+	"github.com/pikipici/crypto-station/internal/trial"
 
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
@@ -23,21 +23,21 @@ import (
 )
 
 type Deps struct {
-	Q      *db.Queries
-	Set    *settings.Service
-	Price  *price.Service
-	Ledger *ledger.Service
-	Risk   *risk.Service
-	Admin  *admin.Service
-	Trial  *trial.Service
+	Q       *db.Queries
+	Set     *settings.Service
+	Price   *price.Service
+	Ledger  *ledger.Service
+	Risk    *risk.Service
+	Admin   *admin.Service
+	Trial   *trial.Service
 	Limiter *RateLimiter
 	Session *Sessions // state multi-step T1-button (nil = dimatikan)
-	Mode   string // sandbox / real (Fase 1-4: selalu sandbox)
+	Mode    string    // sandbox / real (Fase 1-4: selalu sandbox)
 }
 
 func Route() []string {
 	return []string{"/start", "/saldo", "/harga", "/beli", "/jual", "/riwayat", "/batal",
-		"/setspread", "/setlimit", "/pause", "/broadcast", "/trial", "/approve"}
+		"/admin", "/setspread", "/setlimit", "/pause", "/broadcast", "/trial", "/approve"}
 }
 
 // Handle: dispatcher tunggal (dipanggil dari default handler main).
@@ -66,12 +66,20 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 		return
 	}
 	text := strings.TrimSpace(upd.Message.Text)
+	// T2-button: session admin aktif = tangani dulu (allowlist di dalam).
 	// T1-button: kalau lagi nunggu nominal DAN teks bukan tombol menu,
 	// perlakukan sebagai input nominal (sebelum parsing slash).
 	if d.Session != nil {
 		if st := d.Session.Get(upd.Message.From.ID); st.Step != StepIdle && MatchButton(text) == "" && !strings.HasPrefix(strings.ToLower(text), "/") {
-			handleAmountInput(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, text, st, d)
-			return
+			switch st.Step {
+			case StepAdminSpread, StepAdminLimit, StepAdminBroadcast:
+				if handleAdminInput(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, text, st, d) {
+					return
+				}
+			default:
+				handleAmountInput(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, text, st, d)
+				return
+			}
 		}
 	}
 	fields := strings.Fields(text)
@@ -94,6 +102,8 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 			cmd = "/riwayat"
 		case BtnBatal:
 			cmd = "/batal"
+		case BtnAdmin:
+			cmd = "/admin"
 		}
 		// Input nyasar saat await nominal tapi user tap menu = reset state + layani menu.
 		if d.Session != nil {
@@ -106,7 +116,8 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 	}
 	switch cmd {
 	case "/start":
-		replyMenu(ctx, b, upd.Message.Chat.ID, start(ctx, upd.Message.From.ID, d))
+		startText := start(ctx, upd.Message.From.ID, d)
+		_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: upd.Message.Chat.ID, Text: startText, ReplyMarkup: MainMenuFor(d.Admin.IsAdmin(upd.Message.From.ID))})
 	case "/saldo":
 		reply(ctx, b, upd.Message.Chat.ID, saldo(ctx, upd.Message.From.ID, d))
 	case "/harga":
@@ -133,6 +144,8 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 		adminBroadcast(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
 	case "/trial":
 		adminTrial(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
+	case "/admin":
+		adminPanel(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
 	case "/approve":
 		reply(ctx, b, upd.Message.Chat.ID, "Belum ada withdraw di sandbox (Stage 2).")
 	default:
@@ -149,6 +162,16 @@ func needAdmin(ctx context.Context, telegramID int64, action string, d *Deps) bo
 	_ = d.Admin.Deny(ctx, telegramID, action)
 	_ = d.Risk.RecordEvent(ctx, 0, false, telegramID, "admin_deny", action)
 	return false
+}
+
+// adminPanel: buka panel inline admin (allowlist saja).
+// User biasa tap tombol Admin (kalau tahu teksnya) = "Bukan admin" + deny-audit.
+func adminPanel(ctx context.Context, b *bot.Bot, chatID, telegramID int64, d *Deps) {
+	if !needAdmin(ctx, telegramID, "panel", d) {
+		reply(ctx, b, chatID, "Bukan admin.")
+		return
+	}
+	_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID, Text: "Panel admin (SIMULASI):", ReplyMarkup: AdminPanel()})
 }
 
 func adminSpread(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []string, d *Deps) {
@@ -230,11 +253,15 @@ func adminBroadcast(ctx context.Context, b *bot.Bot, chatID, telegramID int64, r
 		reply(ctx, b, chatID, "Format: /broadcast pesan maintenance ...")
 		return
 	}
-	msg := "[Crypto Station] " + strings.Join(rest, " ")
+	reply(ctx, b, chatID, doBroadcast(ctx, b, telegramID, strings.Join(rest, " "), d))
+}
+
+// doBroadcast: kirim ke semua user aktif + audit. Dipakai slash + button.
+func doBroadcast(ctx context.Context, b *bot.Bot, telegramID int64, text string, d *Deps) string {
+	msg := "[Crypto Station] " + text
 	ids, err := d.Q.ListActiveTelegramIDs(ctx)
 	if err != nil {
-		reply(ctx, b, chatID, "Gagal ambil daftar user: "+err.Error())
-		return
+		return "Gagal ambil daftar user: " + err.Error()
 	}
 	sent, failed := 0, 0
 	// FIX debug #15: jeda 40ms per pesan (~25 msg/detik, di bawah flood limit ~30/detik).
@@ -249,7 +276,7 @@ func adminBroadcast(ctx context.Context, b *bot.Bot, chatID, telegramID int64, r
 		time.Sleep(40 * time.Millisecond)
 	}
 	_ = d.Admin.Audit(ctx, telegramID, "broadcast", 0, false, fmt.Sprintf("target=%d", len(ids)), fmt.Sprintf("sent=%d failed=%d", sent, failed))
-	reply(ctx, b, chatID, fmt.Sprintf("Broadcast: %d terkirim, %d gagal (dari %d user).", sent, failed, len(ids)))
+	return fmt.Sprintf("Broadcast: %d terkirim, %d gagal (dari %d user).", sent, failed, len(ids))
 }
 
 func reply(ctx context.Context, b *bot.Bot, chatID int64, text string) {
@@ -301,10 +328,10 @@ func start(ctx context.Context, telegramID int64, d *Deps) string {
 			if err := d.Ledger.GrantSandbox(ctx, nu.ID, d.Set.Int64("sandbox_starting_balance_idr")); err != nil {
 				return "Akun jadi, tapi grant saldo gagal. Coba /saldo."
 			}
-		return "Selamat datang di Crypto Station (SIMULASI).\n" +
-			"Modal sandbox Rp1.000.000 sudah masuk.\n" +
-			"Tap tombol di bawah: Harga / Saldo / Beli / Jual / Riwayat.\n" +
-			"Slash tetap bisa: /harga /saldo /beli SOL 200000 /jual SOL ALL"
+			return "Selamat datang di Crypto Station (SIMULASI).\n" +
+				"Modal sandbox Rp1.000.000 sudah masuk.\n" +
+				"Tap tombol di bawah: Harga / Saldo / Beli / Jual / Riwayat.\n" +
+				"Slash tetap bisa: /harga /saldo /beli SOL 200000 /jual SOL ALL"
 		}
 	}
 	if st := u.Status; st == "blocked" {
@@ -515,6 +542,11 @@ func handleCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d
 	// T1-button: callback flow t:* ditangani terpisah (pilih coin / sellall / cancel).
 	if strings.HasPrefix(data, "t:") {
 		handleFlowCallback(ctx, b, cb, d)
+		return
+	}
+	// T2-button: callback admin a:* (allowlist dicek di dalam).
+	if strings.HasPrefix(data, "a:") {
+		handleAdminCallback(ctx, b, cb, d)
 		return
 	}
 	var qid int64

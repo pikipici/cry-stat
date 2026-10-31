@@ -14,9 +14,12 @@ import (
 type Step string
 
 const (
-	StepIdle      Step = ""
-	StepAwaitBuy  Step = "await_buy_amount"  // sudah pilih coin buy, nunggu nominal
-	StepAwaitSell Step = "await_sell_amount" // sudah pilih coin sell, nunggu nominal atau SEMUA
+	StepIdle           Step = ""
+	StepAwaitBuy       Step = "await_buy_amount"  // sudah pilih coin buy, nunggu nominal
+	StepAwaitSell      Step = "await_sell_amount" // sudah pilih coin sell, nunggu nominal atau SEMUA
+	StepAdminSpread    Step = "admin_spread"      // sudah pilih coin+side spread, nunggu angka 0-0.1
+	StepAdminLimit     Step = "admin_limit"       // sudah pilih key limit, nunggu nilai
+	StepAdminBroadcast Step = "admin_broadcast"   // nunggu teks broadcast
 )
 
 // SessionTimeout: state hangus setelah ini (suruh tap Beli/Jual lagi).
@@ -24,7 +27,8 @@ const SessionTimeout = 120 * time.Second
 
 type Session struct {
 	Step      Step
-	Coin      string // BNB/ETH/SOL
+	Coin      string // BNB/ETH/SOL (T1 + admin spread/pause)
+	Extra     string // T1: kosong. Admin: side (buy/sell) / key limit
 	UpdatedAt time.Time
 }
 
@@ -105,6 +109,8 @@ func MatchButton(text string) string {
 		return BtnRiwayat
 	case "batal", "/batal":
 		return BtnBatal
+	case "admin", "/admin":
+		return BtnAdmin
 	}
 	return ""
 }

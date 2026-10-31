@@ -17,9 +17,110 @@ const (
 	BtnJual    = "Jual"
 	BtnRiwayat = "Riwayat"
 	BtnBatal   = "Batal"
+	BtnAdmin   = "Admin"
 )
 
+// AdminPanel: inline panel admin (dibuka via /admin atau tombol Admin).
+// Semua callback prefix a: — handler wajib cek allowlist dulu.
+func AdminPanel() *models.InlineKeyboardMarkup {
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
+		{
+			{Text: "📊 Spread", CallbackData: "a:spread"},
+			{Text: "🔢 Limit", CallbackData: "a:limit"},
+		},
+		{
+			{Text: "⏸️ Pause", CallbackData: "a:pause"},
+			{Text: "📢 Broadcast", CallbackData: "a:broadcast"},
+		},
+		{
+			{Text: "🧪 Trial", CallbackData: "a:trial"},
+		},
+		{
+			{Text: "❌ Tutup", CallbackData: "a:close"},
+		},
+	}}
+}
+
+// AdminCoinPicker: pilih coin untuk spread/pause. use = "spread" | "pause".
+func AdminCoinPicker(use string) *models.InlineKeyboardMarkup {
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
+		{
+			{Text: "BNB", CallbackData: fmt.Sprintf("a:%s:BNB", use)},
+			{Text: "ETH", CallbackData: fmt.Sprintf("a:%s:ETH", use)},
+			{Text: "SOL", CallbackData: fmt.Sprintf("a:%s:SOL", use)},
+		},
+		{
+			{Text: "❌ Batal", CallbackData: "a:close"},
+		},
+	}}
+}
+
+// AdminSidePicker: pilih sisi spread untuk coin. Callback a:spreadside:SOL:buy.
+func AdminSidePicker(coin string) *models.InlineKeyboardMarkup {
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
+		{
+			{Text: "Buy", CallbackData: fmt.Sprintf("a:spreadside:%s:buy", coin)},
+			{Text: "Sell", CallbackData: fmt.Sprintf("a:spreadside:%s:sell", coin)},
+		},
+		{
+			{Text: "❌ Batal", CallbackData: "a:close"},
+		},
+	}}
+}
+
+// AdminPausePicker: pilih jenis pause untuk coin. Callback a:pausekind:SOL:exposure.
+func AdminPausePicker(coin string) *models.InlineKeyboardMarkup {
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
+		{
+			{Text: "▶️ Off (jalan)", CallbackData: fmt.Sprintf("a:pausekind:%s:off", coin)},
+		},
+		{
+			{Text: "⏸️ Exposure (stop beli)", CallbackData: fmt.Sprintf("a:pausekind:%s:exposure", coin)},
+		},
+		{
+			{Text: "⛔ Spike/Stale (stop semua)", CallbackData: fmt.Sprintf("a:pausekind:%s:spike_stale", coin)},
+		},
+		{
+			{Text: "❌ Batal", CallbackData: "a:close"},
+		},
+	}}
+}
+
+// AdminLimitPicker: pilih key limit (whitelist sama kayak SetLimit).
+// Callback a:limitkey:<key>.
+var adminLimitKeys = []string{
+	"min_buy_idr",
+	"min_topup_idr",
+	"min_withdraw_idr",
+	"daily_topup_limit_idr",
+	"daily_withdraw_limit_idr",
+	"withdraw_approval_threshold_idr",
+	"quote_lock_seconds",
+	"staleness_coin_ms",
+	"staleness_fx_ms",
+	"rate_limit_per_min",
+	"exposure_limit_bnb",
+	"exposure_limit_eth",
+	"exposure_limit_sol",
+}
+
+func AdminLimitPicker() *models.InlineKeyboardMarkup {
+	rows := [][]models.InlineKeyboardButton{}
+	for i := 0; i < len(adminLimitKeys); i += 2 {
+		row := []models.InlineKeyboardButton{
+			{Text: adminLimitKeys[i], CallbackData: "a:limitkey:" + adminLimitKeys[i]},
+		}
+		if i+1 < len(adminLimitKeys) {
+			row = append(row, models.InlineKeyboardButton{Text: adminLimitKeys[i+1], CallbackData: "a:limitkey:" + adminLimitKeys[i+1]})
+		}
+		rows = append(rows, row)
+	}
+	rows = append(rows, []models.InlineKeyboardButton{{Text: "❌ Batal", CallbackData: "a:close"}})
+	return &models.InlineKeyboardMarkup{InlineKeyboard: rows}
+}
+
 // MainMenu: keyboard permanen bawah. Resize + persistent.
+// Baris Admin dirender terpisah via MainMenuFor (admin-only).
 func MainMenu() *models.ReplyKeyboardMarkup {
 	return &models.ReplyKeyboardMarkup{
 		Keyboard: [][]models.KeyboardButton{
@@ -27,6 +128,23 @@ func MainMenu() *models.ReplyKeyboardMarkup {
 			{{Text: BtnBeli}, {Text: BtnJual}},
 			{{Text: BtnRiwayat}, {Text: BtnBatal}},
 		},
+		ResizeKeyboard: true,
+		IsPersistent:   true,
+	}
+}
+
+// MainMenuFor: menu user + baris Admin kalau isAdmin. User biasa tidak lihat tombol Admin.
+func MainMenuFor(isAdmin bool) *models.ReplyKeyboardMarkup {
+	kb := [][]models.KeyboardButton{
+		{{Text: BtnHarga}, {Text: BtnSaldo}},
+		{{Text: BtnBeli}, {Text: BtnJual}},
+		{{Text: BtnRiwayat}, {Text: BtnBatal}},
+	}
+	if isAdmin {
+		kb = append(kb, []models.KeyboardButton{{Text: BtnAdmin}})
+	}
+	return &models.ReplyKeyboardMarkup{
+		Keyboard:       kb,
 		ResizeKeyboard: true,
 		IsPersistent:   true,
 	}

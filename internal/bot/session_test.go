@@ -39,6 +39,7 @@ func TestMatchButton(t *testing.T) {
 		"Jual": BtnJual, "/jual": BtnJual,
 		"Riwayat": BtnRiwayat, "/riwayat": BtnRiwayat,
 		"Batal": BtnBatal, "/batal": BtnBatal,
+		"Admin": BtnAdmin, "/admin": BtnAdmin,
 		"halo": "", "50000": "", "/setspread": "",
 	}
 	for in, want := range cases {
@@ -70,6 +71,33 @@ func TestSessionsTimeout(t *testing.T) {
 func TestKeyboardsNotNil(t *testing.T) {
 	if MainMenu() == nil || CoinPicker("buy") == nil || SellAmountPicker("SOL") == nil || QuoteKeyboard(1) == nil {
 		t.Fatal("keyboard builder mengembalikan nil")
+	}
+	if MainMenuFor(false) == nil || MainMenuFor(true) == nil {
+		t.Fatal("MainMenuFor nil")
+	}
+	if len(MainMenuFor(false).Keyboard) != 3 {
+		t.Fatalf("menu user harus 3 baris, dapat %d", len(MainMenuFor(false).Keyboard))
+	}
+	if len(MainMenuFor(true).Keyboard) != 4 {
+		t.Fatalf("menu admin harus 4 baris, dapat %d", len(MainMenuFor(true).Keyboard))
+	}
+	if MainMenuFor(true).Keyboard[3][0].Text != BtnAdmin {
+		t.Fatalf("baris admin salah: %q", MainMenuFor(true).Keyboard[3][0].Text)
+	}
+	if AdminPanel() == nil || AdminCoinPicker("spread") == nil || AdminSidePicker("SOL") == nil || AdminPausePicker("SOL") == nil || AdminLimitPicker() == nil {
+		t.Fatal("keyboard admin nil")
+	}
+	if got := AdminCoinPicker("pause").InlineKeyboard[0][2].CallbackData; got != "a:pause:SOL" {
+		t.Fatalf("callback admin coin salah: %q", got)
+	}
+	if got := AdminSidePicker("SOL").InlineKeyboard[0][0].CallbackData; got != "a:spreadside:SOL:buy" {
+		t.Fatalf("callback spreadside salah: %q", got)
+	}
+	if got := AdminPausePicker("ETH").InlineKeyboard[1][0].CallbackData; got != "a:pausekind:ETH:exposure" {
+		t.Fatalf("callback pausekind salah: %q", got)
+	}
+	if got := AdminLimitPicker().InlineKeyboard[0][0].CallbackData; got != "a:limitkey:min_buy_idr" {
+		t.Fatalf("callback limitkey salah: %q", got)
 	}
 	if got := CoinPicker("sell").InlineKeyboard[0][2].CallbackData; got != "t:sell:SOL" {
 		t.Fatalf("callback coin salah: %q", got)
