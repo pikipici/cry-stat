@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/pikipici/crypto-station/internal/admin"
+	"github.com/pikipici/crypto-station/internal/chain"
 	"github.com/pikipici/crypto-station/internal/db"
 	"github.com/pikipici/crypto-station/internal/ledger"
 	"github.com/pikipici/crypto-station/internal/price"
@@ -30,13 +31,14 @@ type Deps struct {
 	Risk    *risk.Service
 	Admin   *admin.Service
 	Trial   *trial.Service
+	Chain   *chain.Service // pintu on-chain Fase 8 (mock di sandbox)
 	Limiter *RateLimiter
 	Session *Sessions // state multi-step T1-button (nil = dimatikan)
 	Mode    string    // sandbox / real (Fase 1-4: selalu sandbox)
 }
 
 func Route() []string {
-	return []string{"/start", "/saldo", "/harga", "/beli", "/jual", "/riwayat", "/batal",
+	return []string{"/start", "/saldo", "/harga", "/beli", "/jual", "/alamat", "/cekdeposit", "/status", "/riwayat", "/batal",
 		"/admin", "/setspread", "/setlimit", "/pause", "/broadcast", "/trial", "/approve"}
 }
 
@@ -146,6 +148,12 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 		adminTrial(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
 	case "/admin":
 		adminPanel(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
+	case "/alamat":
+		alamatCmd(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
+	case "/status":
+		statusCmd(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
+	case "/cekdeposit":
+		reply(ctx, b, upd.Message.Chat.ID, "Deposit on-chain = Fase 9. Sekarang fokus beli + auto-kirim dulu.")
 	case "/approve":
 		reply(ctx, b, upd.Message.Chat.ID, "Belum ada withdraw di sandbox (Stage 2).")
 	default:
@@ -355,23 +363,19 @@ func saldo(ctx context.Context, telegramID int64, d *Deps) string {
 	var sb strings.Builder
 	sb.WriteString("Saldo sandbox (SIMULASI):\n")
 	sb.WriteString("IDR: Rp" + formatIDR(bal["IDR"]) + "\n")
-	for _, a := range price.Assets {
-		sb.WriteString(a + ": " + bal[a].String() + "\n")
-	}
-	// Valuasi pakai bid terakhir yang tidak basi (bab 7.1). Basi = tampil "harga basi".
-	total := bal["IDR"]
-	for _, a := range price.Assets {
-		if bal[a].IsZero() {
-			continue
+	// Fase 8 transit: coin tidak ngendap — tampilkan payout terakhir, bukan valuasi.
+	prows, err := d.Q.RecentPayoutsByUser(ctx, db.RecentPayoutsByUserParams{UserID: uid, Limit: 3})
+	if err == nil && len(prows) > 0 {
+		sb.WriteString("Terkirim:\n")
+		for _, r := range prows {
+			tx := ""
+			if r.TxHash.Valid {
+				tx = " tx " + r.TxHash.String
+			}
+			fmt.Fprintf(&sb, "%s %s → %s (%s)%s\n", r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), r.Status, tx)
 		}
-		snap, err := d.Price.Snapshot(a)
-		if err != nil {
-			fmt.Fprintf(&sb, "(%s harga basi — tidak ikut valuasi)\n", a)
-			continue
-		}
-		total = total.Add(bal[a].Mul(snap.Bid))
 	}
-	sb.WriteString("Total valuasi: Rp" + formatIDR(total))
+	sb.WriteString("Beli = otomatis dikirim ke wallet lu (/alamat buat daftar).")
 	return sb.String()
 }
 
@@ -449,7 +453,8 @@ func beli(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []stri
 		reply(ctx, b, chatID, "ALL hanya untuk jual. Beli pakai nominal: /beli SOL 200000")
 		return
 	}
-	quoteFlow(ctx, b, chatID, telegramID, uid, "buy", asset, amount, d)
+	// Fase 8 transit: buy wajib alamat + fee + auto-kirim (bukan masuk saldo).
+	quoteFlowBuy(ctx, b, chatID, telegramID, uid, asset, amount, d)
 }
 
 func jual(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []string, d *Deps) {
@@ -585,6 +590,20 @@ func handleCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d
 	if err != nil {
 		msg := tradeErrMsg(err)
 		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: msg})
+		return
+	}
+	// Fase 8 transit: buy sukses → payout mock otomatis (txhash MOCK-xxx).
+	if tr.Side == "buy" {
+		tx, perr := d.Chain.Payout(ctx, uid, tr.TradeID, tr.Asset, tr.Units, tr.FeeUnits, tr.ToAddress)
+		if perr != nil {
+			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID,
+				Text: fmt.Sprintf("Beli tercatat tapi kirim gagal: %s\nIDR tidak hilang — hubungi admin.", perr.Error())})
+			return
+		}
+		net, _ := chain.NetworkFor(tr.Asset)
+		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID,
+			Text: fmt.Sprintf("Terkirim (SIMULASI): %s %s → %s (%s)\ntx %s\nCek /status, riwayat di /riwayat.",
+				tr.SentUnits.String(), tr.Asset, shortAddr(tr.ToAddress), net, tx)})
 		return
 	}
 	verb := "Beli"

@@ -103,10 +103,129 @@ func handleAmountInput(ctx context.Context, b *bot.Bot, chatID, telegramID int64
 	if d.Session != nil {
 		d.Session.Clear(telegramID)
 	}
+	// Fase 8 transit: buy via quoteFlowBuy (alamat + fee + kirim).
+	if side == "buy" {
+		quoteFlowBuy(ctx, b, chatID, telegramID, uid, st.Coin, amount, d)
+		return
+	}
 	quoteFlow(ctx, b, chatID, telegramID, uid, side, st.Coin, amount, d)
 }
 
 // successHint: teks sukses trade pakai hint button (slash tetap disebut sekali).
 func successHint(verb, units, asset string, amountIDR int64) string {
 	return fmt.Sprintf("%s sukses (SIMULASI): %s %s = Rp%s.\nCek Saldo, riwayat di Riwayat.", verb, units, asset, formatIDR(decimal.NewFromInt(amountIDR)))
+}
+
+// alamatCmd: /alamat BNB 0x... — simpan 1 alamat per coin (validasi format).
+func alamatCmd(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []string, d *Deps) {
+	uid, need := needUser(ctx, telegramID, d)
+	if need != "" {
+		reply(ctx, b, chatID, need)
+		return
+	}
+	if len(rest) < 2 {
+		// Tampilkan alamat tersimpan.
+		rows, err := d.Q.ListWalletAddresses(ctx, uid)
+		if err != nil {
+			reply(ctx, b, chatID, "Gagal baca alamat, coba lagi.")
+			return
+		}
+		if len(rows) == 0 {
+			reply(ctx, b, chatID, "Belum ada alamat. Format: /alamat BNB 0x... (ETH sama, SOL base58). 1 coin = 1 network tetap.")
+			return
+		}
+		var sb strings.Builder
+		sb.WriteString("Alamat tersimpan:\n")
+		for _, r := range rows {
+			fmt.Fprintf(&sb, "%s (%s): %s\n", r.Asset, r.Network, r.Address)
+		}
+		reply(ctx, b, chatID, strings.TrimRight(sb.String(), "\n"))
+		return
+	}
+	coin := strings.ToUpper(strings.TrimSpace(rest[0]))
+	addr := strings.TrimSpace(rest[1])
+	if err := chain.ValidateAddress(coin, addr); err != nil {
+		reply(ctx, b, chatID, "Alamat tidak valid: "+err.Error())
+		return
+	}
+	net, _ := chain.NetworkFor(coin)
+	row, err := d.Q.UpsertWalletAddress(ctx, db.UpsertWalletAddressParams{UserID: uid, Asset: coin, Address: addr, Network: net})
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal simpan alamat: "+err.Error())
+		return
+	}
+	_ = d.Admin.Audit(ctx, telegramID, "alamat", uid, true, coin+"=(kosong)", coin+"="+row.Address)
+	reply(ctx, b, chatID, fmt.Sprintf("Alamat %s (%s) tersimpan: %s\nBeli sekarang otomatis dikirim ke sini.", coin, net, row.Address))
+}
+
+// statusCmd: /status — payout terakhir user (txhash + status).
+func statusCmd(ctx context.Context, b *bot.Bot, chatID, telegramID int64, d *Deps) {
+	uid, need := needUser(ctx, telegramID, d)
+	if need != "" {
+		reply(ctx, b, chatID, need)
+		return
+	}
+	rows, err := d.Q.RecentPayoutsByUser(ctx, db.RecentPayoutsByUserParams{UserID: uid, Limit: 5})
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal baca status, coba lagi.")
+		return
+	}
+	if len(rows) == 0 {
+		reply(ctx, b, chatID, "Belum ada pengiriman. Beli dulu, koin otomatis dikirim.")
+		return
+	}
+	var sb strings.Builder
+	sb.WriteString("Pengiriman terakhir:\n")
+	for _, r := range rows {
+		tx := "(tanpa tx)"
+		if r.TxHash.Valid {
+			tx = r.TxHash.String
+		}
+		fmt.Fprintf(&sb, "%s %s → %s\ntx %s (%s)\n", r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), tx, r.Status)
+	}
+	reply(ctx, b, chatID, strings.TrimRight(sb.String(), "\n"))
+}
+
+func shortAddr(a string) string {
+	if len(a) <= 14 {
+		return a
+	}
+	return a[:8] + "..." + a[len(a)-4:]
+}
+
+// quoteFlowBuy: buy transit Fase 8 — wajib alamat, fee mock, quote 3 baris,
+// confirm → ExecuteTrade → payout mock → txhash.
+func quoteFlowBuy(ctx context.Context, b *bot.Bot, chatID, telegramID, uid int64, asset string, amount int64, d *Deps) {
+	// Wajib alamat tersimpan.
+	addrRow, err := d.Q.GetWalletAddress(ctx, db.GetWalletAddressParams{UserID: uid, Asset: asset})
+	if err != nil {
+		reply(ctx, b, chatID, "Belum ada alamat "+asset+". Daftarin dulu: /alamat "+asset+" <wallet lu>")
+		return
+	}
+	if err := d.Risk.CheckBeforeQuote(ctx, asset, "buy"); err != nil {
+		_ = d.Risk.RecordEvent(ctx, uid, true, telegramID, "quote_rejected", "buy "+asset+": "+err.Error())
+		reply(ctx, b, chatID, "Tidak bisa kasih quote: "+riskMsg(err))
+		return
+	}
+	snap, err := d.Price.Snapshot(asset)
+	if err != nil {
+		reply(ctx, b, chatID, "Harga basi ("+errMsg(err)+"), coba lagi.")
+		return
+	}
+	fee, err := d.Chain.EstimateFee(ctx, asset)
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal estimasi fee: "+err.Error())
+		return
+	}
+	qr, err := d.Ledger.CreateQuoteBuy(ctx, uid, asset, amount, fee, addrRow.Address, snap)
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal bikin quote: "+err.Error())
+		return
+	}
+	net, _ := chain.NetworkFor(asset)
+	lockSecs := d.Set.Int64("quote_lock_seconds")
+	text := fmt.Sprintf("Beli %s Rp%s\nDapat: %s %s (fee %s)\nTerkirim ke %s (%s)\nHarga lock %d detik. Confirm?",
+		asset, formatIDR(decimal.NewFromInt(amount)), qr.SentUnits.String(), asset, qr.FeeUnits.String(),
+		shortAddr(qr.ToAddress), net, lockSecs)
+	_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID, Text: text, ReplyMarkup: QuoteKeyboard(qr.ID)})
 }

@@ -7,8 +7,9 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/pikipici/crypto-station/internal/bot"
 	"github.com/pikipici/crypto-station/internal/admin"
+	"github.com/pikipici/crypto-station/internal/bot"
+	"github.com/pikipici/crypto-station/internal/chain"
 	"github.com/pikipici/crypto-station/internal/db"
 	"github.com/pikipici/crypto-station/internal/ledger"
 	"github.com/pikipici/crypto-station/internal/price"
@@ -52,8 +53,9 @@ func main() {
 	riskSvc := risk.New(q, set)
 	adminSvc := admin.New(q, set)
 	trialSvc := trial.New(q, set, ledgerSvc)
+	chainSvc := chain.New(pool, q, set)
 	limiter := bot.NewRateLimiter(int(set.Int64("rate_limit_per_min")))
-	deps := &bot.Deps{Q: q, Set: set, Price: priceSvc, Ledger: ledgerSvc, Risk: riskSvc, Admin: adminSvc, Trial: trialSvc, Limiter: limiter, Session: bot.NewSessions(), Mode: "sandbox"}
+	deps := &bot.Deps{Q: q, Set: set, Price: priceSvc, Ledger: ledgerSvc, Risk: riskSvc, Admin: adminSvc, Trial: trialSvc, Chain: chainSvc, Limiter: limiter, Session: bot.NewSessions(), Mode: "sandbox"}
 
 	slog.Info("crypto-station fase 4 start", "mode", "sandbox")
 
