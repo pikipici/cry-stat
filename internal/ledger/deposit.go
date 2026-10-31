@@ -39,7 +39,7 @@ func (s *Service) MockDeposit(ctx context.Context, userID int64, asset string, u
 	}
 	// Idempotent: tx sudah ada = kembalikan yang lama.
 	if d, err := db.New(s.pool).GetDepositByTx(ctx, txHash); err == nil {
-		return DepositResult{DepositID: d.ID, Asset: d.Asset, Units: d.Units, AmountIDR: d.CreditedIdr.Int64}, nil
+		return DepositResult{DepositID: d.ID, Asset: d.Asset, Units: d.Units, AmountIDR: d.CreditedIdr}, nil
 	}
 	// Nilai IDR = units × bid − fee mock (sama kayak payout, arah kebalik).
 	fee, _ := s.set.SafeDecimal("fee_mock_" + strings.ToLower(asset))
@@ -77,7 +77,7 @@ func (s *Service) MockDeposit(ctx context.Context, userID int64, asset string, u
 	if err != nil {
 		// Race: orang lain insert duluan → ambil yang ada.
 		if d, err2 := db.New(s.pool).GetDepositByTx(ctx, txHash); err2 == nil {
-			return DepositResult{DepositID: d.ID, Asset: d.Asset, Units: d.Units, AmountIDR: d.CreditedIdr.Int64}, nil
+			return DepositResult{DepositID: d.ID, Asset: d.Asset, Units: d.Units, AmountIDR: d.CreditedIdr}, nil
 		}
 		return DepositResult{}, err
 	}
