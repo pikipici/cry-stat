@@ -15,6 +15,7 @@ import (
 // Quote units HARUS sama persis dengan saldo (bukan roundtrip IDR).
 // Sisa SOL setelah jual < dust 1e-6, reconcile tetap 0.
 func TestSellAllUnitsExact(t *testing.T) {
+	t.Skip("pivot transit v0.12: tidak ada saldo coin, ALL mati")
 	svc, _, _ := tradeDeps(t)
 	ctx := context.Background()
 	uid := tradeUser(t, svc, db.New(svc.pool))
@@ -54,6 +55,7 @@ func TestSellAllUnitsExact(t *testing.T) {
 // tetap bisa dieksekusi via clamp, bukan ErrNoBalance.
 // Timpa via SQL langsung (test-only, tidak ada query prod untuk ini).
 func TestSellDustClamp(t *testing.T) {
+	t.Skip("pivot transit v0.12: tidak ada saldo coin, clamp sell-bandar mati")
 	svc, _, _ := tradeDeps(t)
 	ctx := context.Background()
 	uid := tradeUser(t, svc, db.New(svc.pool))
@@ -82,6 +84,7 @@ func TestSellDustClamp(t *testing.T) {
 // TestSellRealShort: jual melebihi saldo 1 SOL beneran = tetap ErrNoBalance
 // (dust clamp tidak boleh menutupi kekurangan saldo asli).
 func TestSellRealShort(t *testing.T) {
+	t.Skip("pivot transit v0.12: tidak ada saldo coin")
 	svc, _, _ := tradeDeps(t)
 	ctx := context.Background()
 	uid := tradeUser(t, svc, db.New(svc.pool))

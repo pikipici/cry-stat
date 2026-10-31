@@ -82,8 +82,9 @@ func TestBuySuccess(t *testing.T) {
 		t.Fatalf("trade units nol")
 	}
 	bal, _ := svc.Balances(ctx, uid)
-	if !bal["SOL"].Equal(tr.Units) {
-		t.Fatalf("saldo SOL=%s, trade=%s", bal["SOL"], tr.Units)
+	// Fase 8 transit: coin TIDAK ngendap di user (langsung dikirim).
+	if !bal["SOL"].IsZero() {
+		t.Fatalf("saldo SOL=%s, mau 0 (transit)", bal["SOL"])
 	}
 	wantIDR := decimal.NewFromInt(800000)
 	if !bal["IDR"].Equal(wantIDR) {
@@ -169,6 +170,9 @@ func TestBuyInsufficientBalance(t *testing.T) {
 }
 
 func TestSellFlow(t *testing.T) {
+	// PIVOT v0.12: jual-bandar dari saldo coin DIBATALKAN (transit — coin tidak ngendap).
+	// Jual = deposit on-chain (Fase 9). Test ini diganti transit_test.go + Fase 9.
+	t.Skip("pivot transit: tidak ada saldo coin, jual = Fase 9")
 	svc, _, _ := tradeDeps(t)
 	ctx := context.Background()
 	uid := tradeUser(t, svc, db.New(svc.pool))

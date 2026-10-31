@@ -7,6 +7,9 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/pikipici/crypto-station/internal/chain"
+	"github.com/pikipici/crypto-station/internal/db"
+
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
 	"github.com/shopspring/decimal"
@@ -212,7 +215,7 @@ func quoteFlowBuy(ctx context.Context, b *bot.Bot, chatID, telegramID, uid int64
 		reply(ctx, b, chatID, "Harga basi ("+errMsg(err)+"), coba lagi.")
 		return
 	}
-	fee, err := d.Chain.EstimateFee(ctx, asset)
+	fee, err := d.Chain.EstimateFee(asset)
 	if err != nil {
 		reply(ctx, b, chatID, "Gagal estimasi fee: "+err.Error())
 		return
