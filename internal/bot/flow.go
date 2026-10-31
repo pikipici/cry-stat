@@ -35,6 +35,28 @@ func handleFlowCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuer
 		_ = d.Q.ExpireUserQuotes(ctx, uid)
 		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Dibatalkan."})
 		return
+	case "addr":
+		// Fase 8: daftar alamat — t:addr:SOL → session await addr → user ketik alamat.
+		if len(parts) != 3 {
+			return
+		}
+		coin := strings.ToUpper(parts[2])
+		if coin != "BNB" && coin != "ETH" && coin != "SOL" {
+			return
+		}
+		if d.Session != nil {
+			d.Session.Set(cb.From.ID, Session{Step: StepAwaitAddr, Coin: coin})
+		}
+		net, _ := chain.NetworkFor(coin)
+		hint := "0x + 40 hex"
+		if net == "SOL" {
+			hint = "base58 32–44 char"
+		}
+		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{
+			ChatID: chatID, MessageID: msgID,
+			Text: fmt.Sprintf("Ketik alamat %s lu (%s, %s):", coin, net, hint),
+		})
+		return
 	case "buy", "sell":
 		if len(parts) != 3 {
 			return
@@ -82,12 +104,32 @@ func handleFlowCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuer
 	}
 }
 
-// handleAmountInput: user lagi await nominal dan mengetik angka.
+// handleAmountInput: user lagi await nominal/alamat dan mengetik.
 // st = session fresh (sudah dicek timeout oleh caller).
 func handleAmountInput(ctx context.Context, b *bot.Bot, chatID, telegramID int64, text string, st Session, d *Deps) {
 	uid, need := needUser(ctx, telegramID, d)
 	if need != "" {
 		reply(ctx, b, chatID, need)
+		return
+	}
+	// Fase 8: await alamat — validasi + simpan (bukan parse nominal).
+	if st.Step == StepAwaitAddr {
+		addr := strings.TrimSpace(text)
+		if err := chain.ValidateAddress(st.Coin, addr); err != nil {
+			reply(ctx, b, chatID, "Alamat tidak valid: "+err.Error()+"\nCoba lagi atau tap Batal.")
+			return
+		}
+		if d.Session != nil {
+			d.Session.Clear(telegramID)
+		}
+		net, _ := chain.NetworkFor(st.Coin)
+		row, err := d.Q.UpsertWalletAddress(ctx, db.UpsertWalletAddressParams{UserID: uid, Asset: st.Coin, Address: addr, Network: net})
+		if err != nil {
+			reply(ctx, b, chatID, "Gagal simpan alamat: "+err.Error())
+			return
+		}
+		_ = d.Admin.Audit(ctx, telegramID, "alamat", uid, true, st.Coin+"=(kosong)", st.Coin+"="+row.Address)
+		reply(ctx, b, chatID, fmt.Sprintf("Alamat %s (%s) tersimpan.\nBeli sekarang otomatis dikirim ke sini.", st.Coin, net))
 		return
 	}
 	amount, ok := ParseNominal(text)
@@ -127,22 +169,27 @@ func alamatCmd(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest [
 		return
 	}
 	if len(rest) < 2 {
-		// Tampilkan alamat tersimpan.
-		rows, err := d.Q.ListWalletAddresses(ctx, uid)
-		if err != nil {
-			reply(ctx, b, chatID, "Gagal baca alamat, coba lagi.")
+		// T1-button Fase 8: tap Alamat tanpa arg = picker coin (bukan list teks).
+		// List teks tetap via /alamat list.
+		if len(rest) == 1 && strings.ToLower(rest[0]) == "list" {
+			rows, err := d.Q.ListWalletAddresses(ctx, uid)
+			if err != nil {
+				reply(ctx, b, chatID, "Gagal baca alamat, coba lagi.")
+				return
+			}
+			if len(rows) == 0 {
+				reply(ctx, b, chatID, "Belum ada alamat. Tap Alamat → pilih coin → ketik wallet lu.")
+				return
+			}
+			var sb strings.Builder
+			sb.WriteString("Alamat tersimpan:\n")
+			for _, r := range rows {
+				fmt.Fprintf(&sb, "%s (%s): %s\n", r.Asset, r.Network, r.Address)
+			}
+			reply(ctx, b, chatID, strings.TrimRight(sb.String(), "\n"))
 			return
 		}
-		if len(rows) == 0 {
-			reply(ctx, b, chatID, "Belum ada alamat. Format: /alamat BNB 0x... (ETH sama, SOL base58). 1 coin = 1 network tetap.")
-			return
-		}
-		var sb strings.Builder
-		sb.WriteString("Alamat tersimpan:\n")
-		for _, r := range rows {
-			fmt.Fprintf(&sb, "%s (%s): %s\n", r.Asset, r.Network, r.Address)
-		}
-		reply(ctx, b, chatID, strings.TrimRight(sb.String(), "\n"))
+		_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID, Text: "Daftarin alamat wallet apa?", ReplyMarkup: AddrCoinPicker()})
 		return
 	}
 	coin := strings.ToUpper(strings.TrimSpace(rest[0]))

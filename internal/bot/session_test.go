@@ -39,6 +39,8 @@ func TestMatchButton(t *testing.T) {
 		"Jual": BtnJual, "/jual": BtnJual,
 		"Riwayat": BtnRiwayat, "/riwayat": BtnRiwayat,
 		"Batal": BtnBatal, "/batal": BtnBatal,
+		"Alamat": BtnAlamat, "/alamat": BtnAlamat,
+		"Status": BtnStatus, "/status": BtnStatus,
 		"Admin": BtnAdmin, "/admin": BtnAdmin,
 		"halo": "", "50000": "", "/setspread": "",
 	}
@@ -75,14 +77,20 @@ func TestKeyboardsNotNil(t *testing.T) {
 	if MainMenuFor(false) == nil || MainMenuFor(true) == nil {
 		t.Fatal("MainMenuFor nil")
 	}
-	if len(MainMenuFor(false).Keyboard) != 3 {
-		t.Fatalf("menu user harus 3 baris, dapat %d", len(MainMenuFor(false).Keyboard))
+	if len(MainMenuFor(false).Keyboard) != 4 {
+		t.Fatalf("menu user harus 4 baris, dapat %d", len(MainMenuFor(false).Keyboard))
 	}
-	if len(MainMenuFor(true).Keyboard) != 4 {
-		t.Fatalf("menu admin harus 4 baris, dapat %d", len(MainMenuFor(true).Keyboard))
+	if len(MainMenuFor(true).Keyboard) != 5 {
+		t.Fatalf("menu admin harus 5 baris, dapat %d", len(MainMenuFor(true).Keyboard))
 	}
-	if MainMenuFor(true).Keyboard[3][0].Text != BtnAdmin {
-		t.Fatalf("baris admin salah: %q", MainMenuFor(true).Keyboard[3][0].Text)
+	if MainMenuFor(true).Keyboard[4][0].Text != BtnAdmin {
+		t.Fatalf("baris admin salah: %q", MainMenuFor(true).Keyboard[4][0].Text)
+	}
+	if AddrCoinPicker() == nil {
+		t.Fatal("AddrCoinPicker nil")
+	}
+	if got := AddrCoinPicker().InlineKeyboard[0][2].CallbackData; got != "t:addr:SOL" {
+		t.Fatalf("callback addr salah: %q", got)
 	}
 	if AdminPanel() == nil || AdminCoinPicker("spread") == nil || AdminSidePicker("SOL") == nil || AdminPausePicker("SOL") == nil || AdminLimitPicker() == nil {
 		t.Fatal("keyboard admin nil")

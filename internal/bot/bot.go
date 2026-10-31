@@ -104,6 +104,10 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 			cmd = "/riwayat"
 		case BtnBatal:
 			cmd = "/batal"
+		case BtnAlamat:
+			cmd = "/alamat"
+		case BtnStatus:
+			cmd = "/status"
 		case BtnAdmin:
 			cmd = "/admin"
 		}

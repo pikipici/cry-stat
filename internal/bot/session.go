@@ -17,6 +17,7 @@ const (
 	StepIdle           Step = ""
 	StepAwaitBuy       Step = "await_buy_amount"  // sudah pilih coin buy, nunggu nominal
 	StepAwaitSell      Step = "await_sell_amount" // sudah pilih coin sell, nunggu nominal atau SEMUA
+	StepAwaitAddr      Step = "await_addr"        // sudah pilih coin alamat, nunggu string alamat
 	StepAdminSpread    Step = "admin_spread"      // sudah pilih coin+side spread, nunggu angka 0-0.1
 	StepAdminLimit     Step = "admin_limit"       // sudah pilih key limit, nunggu nilai
 	StepAdminBroadcast Step = "admin_broadcast"   // nunggu teks broadcast
@@ -109,6 +110,10 @@ func MatchButton(text string) string {
 		return BtnRiwayat
 	case "batal", "/batal":
 		return BtnBatal
+	case "alamat", "/alamat":
+		return BtnAlamat
+	case "status", "/status":
+		return BtnStatus
 	case "admin", "/admin":
 		return BtnAdmin
 	}

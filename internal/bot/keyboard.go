@@ -17,6 +17,8 @@ const (
 	BtnJual    = "Jual"
 	BtnRiwayat = "Riwayat"
 	BtnBatal   = "Batal"
+	BtnAlamat  = "Alamat"
+	BtnStatus  = "Status"
 	BtnAdmin   = "Admin"
 )
 
@@ -139,6 +141,7 @@ func MainMenuFor(isAdmin bool) *models.ReplyKeyboardMarkup {
 		{{Text: BtnHarga}, {Text: BtnSaldo}},
 		{{Text: BtnBeli}, {Text: BtnJual}},
 		{{Text: BtnRiwayat}, {Text: BtnBatal}},
+		{{Text: BtnAlamat}, {Text: BtnStatus}},
 	}
 	if isAdmin {
 		kb = append(kb, []models.KeyboardButton{{Text: BtnAdmin}})
@@ -148,6 +151,20 @@ func MainMenuFor(isAdmin bool) *models.ReplyKeyboardMarkup {
 		ResizeKeyboard: true,
 		IsPersistent:   true,
 	}
+}
+
+// AddrCoinPicker: pilih coin buat daftarin alamat. Callback t:addr:SOL.
+func AddrCoinPicker() *models.InlineKeyboardMarkup {
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
+		{
+			{Text: "BNB (BSC)", CallbackData: "t:addr:BNB"},
+			{Text: "ETH (ERC20)", CallbackData: "t:addr:ETH"},
+			{Text: "SOL", CallbackData: "t:addr:SOL"},
+		},
+		{
+			{Text: "❌ Batal", CallbackData: "t:cancel"},
+		},
+	}}
 }
 
 // CoinPicker: inline pilih coin untuk side buy/sell. Callback: t:buy:SOL / t:sell:ETH.
