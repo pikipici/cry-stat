@@ -157,7 +157,7 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 	case "/status":
 		statusCmd(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
 	case "/cekdeposit":
-		reply(ctx, b, upd.Message.Chat.ID, "Deposit on-chain = Fase 9. Sekarang fokus beli + auto-kirim dulu.")
+		cekdepositCmd(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
 	case "/approve":
 		reply(ctx, b, upd.Message.Chat.ID, "Belum ada withdraw di sandbox (Stage 2).")
 	default:
@@ -472,6 +472,9 @@ func jual(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []stri
 		sendCoinPicker(ctx, b, chatID, "sell")
 		return
 	}
+	// Fase 9: jual slash langsung = arahin ke flow deposit (bandar mati).
+	reply(ctx, b, chatID, "Jual sekarang via deposit: tap Jual → pilih coin → kirim ke alamat deposit → tap simulasi masuk.")
+	return
 	asset, amount, all, errText := parseTradeArgs(rest)
 	if errText != "" {
 		reply(ctx, b, chatID, errText)

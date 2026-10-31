@@ -34,3 +34,11 @@ VALUES ($1,$2,$3,$4,$5) RETURNING id, created_at;
 -- name: InsertFloatSnapshot :one
 INSERT INTO float_snapshots (asset, float_balance, float_min)
 VALUES ($1,$2,$3) RETURNING id, created_at;
+
+-- name: GetDepositByTx :one
+SELECT id, user_id, asset, from_address, tx_hash, units, confirms, required_confirms, status, credited_idr, created_at
+FROM deposits WHERE tx_hash=$1;
+
+-- name: RecentDepositsByUser :many
+SELECT id, user_id, asset, from_address, tx_hash, units, confirms, required_confirms, status, credited_idr, created_at
+FROM deposits WHERE user_id=$1 ORDER BY id DESC LIMIT $2;

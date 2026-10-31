@@ -203,3 +203,17 @@ func QuoteKeyboard(quoteID int64) *models.InlineKeyboardMarkup {
 		},
 	}}
 }
+
+// DepositSimPicker: Fase 9 — simulasi kirim masuk + nominal pilih.
+// Callback t:depsim:SOL:50000 (units IDR mock).
+func DepositSimPicker(coin string) *models.InlineKeyboardMarkup {
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
+		{
+			{Text: "Rp50rb masuk", CallbackData: fmt.Sprintf("t:depsim:%s:50000", coin)},
+			{Text: "Rp100rb masuk", CallbackData: fmt.Sprintf("t:depsim:%s:100000", coin)},
+		},
+		{
+			{Text: "❌ Batal", CallbackData: "t:cancel"},
+		},
+	}}
+}

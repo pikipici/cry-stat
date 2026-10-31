@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/pikipici/crypto-station/internal/chain"
 	"github.com/pikipici/crypto-station/internal/db"
@@ -57,6 +58,39 @@ func handleFlowCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuer
 			Text: fmt.Sprintf("Ketik alamat %s lu (%s, %s):", coin, net, hint),
 		})
 		return
+	case "depsim":
+		// Fase 9: simulasi deposit masuk — t:depsim:SOL:50000.
+		// Units mock = nominal IDR / bid (arah kebalik payout).
+		if len(parts) != 4 {
+			return
+		}
+		coin := strings.ToUpper(parts[2])
+		if coin != "BNB" && coin != "ETH" && coin != "SOL" {
+			return
+		}
+		amount, ok := ParseNominal(parts[3])
+		if !ok || amount <= 0 {
+			return
+		}
+		if d.Session != nil {
+			d.Session.Clear(cb.From.ID)
+		}
+		snap, err := d.Price.Snapshot(coin)
+		if err != nil {
+			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Harga basi (" + errMsg(err) + "), coba lagi."})
+			return
+		}
+		// Units = amount / bid (mock kirim masuk senilai IDR itu).
+		units := decimal.NewFromInt(amount).Div(snap.Bid).Round(18)
+		txHash := fmt.Sprintf("MOCK-DEP-%d-%d", uid, time.Now().Unix())
+		dep, err := d.Ledger.MockDeposit(ctx, uid, coin, units, txHash, snap)
+		if err != nil {
+			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Deposit gagal: " + err.Error()})
+			return
+		}
+		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID,
+			Text: fmt.Sprintf("Deposit masuk (SIMULASI): %s %s\ntx %s\nIDR +%s. Cek /saldo.", dep.Units.String(), dep.Asset, txHash, formatIDR(decimal.NewFromInt(dep.AmountIDR)))})
+		return
 	case "buy", "sell":
 		if len(parts) != 3 {
 			return
@@ -73,11 +107,16 @@ func handleFlowCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuer
 			d.Session.Set(cb.From.ID, Session{Step: step, Coin: coin})
 		}
 		if parts[1] == "sell" {
-			// Jual: kasih opsi SEMUA + ketik nominal.
+			// Fase 9: jual = deposit on-chain (bukan nominal/ALL).
+			// Tampilkan alamat deposit + tombol simulasi kirim masuk.
+			depAddr, _ := d.Set.Get("deposit_address_" + strings.ToLower(coin))
+			if depAddr == "" {
+				depAddr = "MOCK-DEPOSIT-" + coin
+			}
 			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{
 				ChatID: chatID, MessageID: msgID,
-				Text:        fmt.Sprintf("Jual %s: tap tombol atau ketik nominal IDR (min %s).", coin, d.Set.MustString("min_buy_idr")),
-				ReplyMarkup: SellAmountPicker(coin),
+				Text:        fmt.Sprintf("Jual %s:\n1. Kirim %s dari wallet lu ke:\n%s\n2. Tap tombol di bawah buat simulasi kirim masuk (sandbox).", coin, coin, depAddr),
+				ReplyMarkup: DepositSimPicker(coin),
 			})
 			return
 		}
@@ -241,6 +280,30 @@ func shortAddr(a string) string {
 		return a
 	}
 	return a[:8] + "..." + a[len(a)-4:]
+}
+
+// cekdepositCmd: /cekdeposit — deposit terakhir user.
+func cekdepositCmd(ctx context.Context, b *bot.Bot, chatID, telegramID int64, d *Deps) {
+	uid, need := needUser(ctx, telegramID, d)
+	if need != "" {
+		reply(ctx, b, chatID, need)
+		return
+	}
+	rows, err := d.Q.RecentDepositsByUser(ctx, db.RecentDepositsByUserParams{UserID: uid, Limit: 5})
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal baca deposit, coba lagi.")
+		return
+	}
+	if len(rows) == 0 {
+		reply(ctx, b, chatID, "Belum ada deposit. Tap Jual → pilih coin → kirim ke alamat deposit.")
+		return
+	}
+	var sb strings.Builder
+	sb.WriteString("Deposit terakhir:\n")
+	for _, r := range rows {
+		fmt.Fprintf(&sb, "%s %s → IDR +%s (%s)\ntx %s\n", r.Asset, r.Units.String(), formatIDR(decimal.NewFromInt(r.CreditedIdr)), r.Status, r.TxHash)
+	}
+	reply(ctx, b, chatID, strings.TrimRight(sb.String(), "\n"))
 }
 
 // quoteFlowBuy: buy transit Fase 8 — wajib alamat, fee mock, quote 3 baris,
