@@ -157,7 +157,8 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 	case "/status":
 		statusCmd(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
 	case "/cekdeposit":
-		cekdepositCmd(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
+		// Fase 9: gabung ke Status (1 pantau semua). Slash tetap jalan buat kompat.
+		statusCmd(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
 	case "/approve":
 		reply(ctx, b, upd.Message.Chat.ID, "Belum ada withdraw di sandbox (Stage 2).")
 	default:
@@ -474,19 +475,6 @@ func jual(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []stri
 	}
 	// Fase 9: jual slash langsung = arahin ke flow deposit (bandar mati).
 	reply(ctx, b, chatID, "Jual sekarang via deposit: tap Jual → pilih coin → kirim ke alamat deposit → tap simulasi masuk.")
-	return
-	asset, amount, all, errText := parseTradeArgs(rest)
-	if errText != "" {
-		reply(ctx, b, chatID, errText)
-		return
-	}
-	if all {
-		// FIX trial-live #1: ALL bawa units langsung dari saldo (CreateQuoteUnits),
-		// bukan roundtrip IDR. Double-rounding lama quoting +1.4e-7 di atas saldo.
-		sellAllFlow(ctx, b, chatID, telegramID, uid, asset, d)
-		return
-	}
-	quoteFlow(ctx, b, chatID, telegramID, uid, "sell", asset, amount, d)
 }
 
 // sellAllFlow: jual SEMUA units dari saldo (tanpa muter IDR).

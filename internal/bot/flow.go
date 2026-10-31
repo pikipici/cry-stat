@@ -249,30 +249,36 @@ func alamatCmd(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest [
 	reply(ctx, b, chatID, fmt.Sprintf("Alamat %s (%s) tersimpan: %s\nBeli sekarang otomatis dikirim ke sini.", coin, net, row.Address))
 }
 
-// statusCmd: /status — payout terakhir user (txhash + status).
+// statusCmd: /status — payout + deposit terakhir user (1 pantau semua, Fase 9).
 func statusCmd(ctx context.Context, b *bot.Bot, chatID, telegramID int64, d *Deps) {
 	uid, need := needUser(ctx, telegramID, d)
 	if need != "" {
 		reply(ctx, b, chatID, need)
 		return
 	}
-	rows, err := d.Q.RecentPayoutsByUser(ctx, db.RecentPayoutsByUserParams{UserID: uid, Limit: 5})
-	if err != nil {
-		reply(ctx, b, chatID, "Gagal baca status, coba lagi.")
-		return
-	}
-	if len(rows) == 0 {
-		reply(ctx, b, chatID, "Belum ada pengiriman. Beli dulu, koin otomatis dikirim.")
-		return
-	}
 	var sb strings.Builder
-	sb.WriteString("Pengiriman terakhir:\n")
-	for _, r := range rows {
-		tx := "(tanpa tx)"
-		if r.TxHash.Valid {
-			tx = r.TxHash.String
+	sb.WriteString("Status terakhir:\n")
+	prows, perr := d.Q.RecentPayoutsByUser(ctx, db.RecentPayoutsByUserParams{UserID: uid, Limit: 3})
+	if perr == nil && len(prows) > 0 {
+		sb.WriteString("Terkirim:\n")
+		for _, r := range prows {
+			tx := "(tanpa tx)"
+			if r.TxHash.Valid {
+				tx = r.TxHash.String
+			}
+			fmt.Fprintf(&sb, "%s %s → %s\ntx %s (%s)\n", r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), tx, r.Status)
 		}
-		fmt.Fprintf(&sb, "%s %s → %s\ntx %s (%s)\n", r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), tx, r.Status)
+	}
+	drows, derr := d.Q.RecentDepositsByUser(ctx, db.RecentDepositsByUserParams{UserID: pgtype.Int8{Int64: uid, Valid: true}, Limit: 3})
+	if derr == nil && len(drows) > 0 {
+		sb.WriteString("Deposit masuk:\n")
+		for _, r := range drows {
+			fmt.Fprintf(&sb, "%s %s → IDR +%s (%s)\ntx %s\n", r.Asset, r.Units.String(), formatIDR(decimal.NewFromInt(r.CreditedIdr)), r.Status, r.TxHash)
+		}
+	}
+	if (perr != nil || len(prows) == 0) && (derr != nil || len(drows) == 0) {
+		reply(ctx, b, chatID, "Belum ada pengiriman/deposit. Beli dulu (otomatis dikirim), jual via deposit.")
+		return
 	}
 	reply(ctx, b, chatID, strings.TrimRight(sb.String(), "\n"))
 }
@@ -282,30 +288,6 @@ func shortAddr(a string) string {
 		return a
 	}
 	return a[:8] + "..." + a[len(a)-4:]
-}
-
-// cekdepositCmd: /cekdeposit — deposit terakhir user.
-func cekdepositCmd(ctx context.Context, b *bot.Bot, chatID, telegramID int64, d *Deps) {
-	uid, need := needUser(ctx, telegramID, d)
-	if need != "" {
-		reply(ctx, b, chatID, need)
-		return
-	}
-	rows, err := d.Q.RecentDepositsByUser(ctx, db.RecentDepositsByUserParams{UserID: pgtype.Int8{Int64: uid, Valid: true}, Limit: 5})
-	if err != nil {
-		reply(ctx, b, chatID, "Gagal baca deposit, coba lagi.")
-		return
-	}
-	if len(rows) == 0 {
-		reply(ctx, b, chatID, "Belum ada deposit. Tap Jual → pilih coin → kirim ke alamat deposit.")
-		return
-	}
-	var sb strings.Builder
-	sb.WriteString("Deposit terakhir:\n")
-	for _, r := range rows {
-		fmt.Fprintf(&sb, "%s %s → IDR +%s (%s)\ntx %s\n", r.Asset, r.Units.String(), formatIDR(decimal.NewFromInt(r.CreditedIdr)), r.Status, r.TxHash)
-	}
-	reply(ctx, b, chatID, strings.TrimRight(sb.String(), "\n"))
 }
 
 // quoteFlowBuy: buy transit Fase 8 — wajib alamat, fee mock, quote 3 baris,
