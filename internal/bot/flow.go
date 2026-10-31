@@ -11,6 +11,8 @@ import (
 	"github.com/pikipici/crypto-station/internal/chain"
 	"github.com/pikipici/crypto-station/internal/db"
 
+	"github.com/jackc/pgx/v5/pgtype"
+
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
 	"github.com/shopspring/decimal"
@@ -289,7 +291,7 @@ func cekdepositCmd(ctx context.Context, b *bot.Bot, chatID, telegramID int64, d 
 		reply(ctx, b, chatID, need)
 		return
 	}
-	rows, err := d.Q.RecentDepositsByUser(ctx, db.RecentDepositsByUserParams{UserID: uid, Limit: 5})
+	rows, err := d.Q.RecentDepositsByUser(ctx, db.RecentDepositsByUserParams{UserID: pgtype.Int8{Int64: uid, Valid: true}, Limit: 5})
 	if err != nil {
 		reply(ctx, b, chatID, "Gagal baca deposit, coba lagi.")
 		return
