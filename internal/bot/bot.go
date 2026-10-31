@@ -463,8 +463,7 @@ func beli(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []stri
 }
 
 func jual(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []string, d *Deps) {
-	uid, need := needUser(ctx, telegramID, d)
-	if need != "" {
+	if _, need := needUser(ctx, telegramID, d); need != "" {
 		reply(ctx, b, chatID, need)
 		return
 	}
