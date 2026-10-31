@@ -38,7 +38,7 @@ type Deps struct {
 }
 
 func Route() []string {
-	return []string{"/start", "/saldo", "/harga", "/beli", "/jual", "/alamat", "/cekdeposit", "/status", "/riwayat", "/batal",
+	return []string{"/start", "/saldo", "/harga", "/beli", "/jual", "/alamat", "/cekdeposit", "/status", "/menu", "/kembali", "/riwayat", "/batal",
 		"/admin", "/setspread", "/setlimit", "/pause", "/broadcast", "/trial", "/approve"}
 }
 
@@ -108,6 +108,10 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 			cmd = "/alamat"
 		case BtnStatus:
 			cmd = "/status"
+		case BtnMenu:
+			cmd = "/menu"
+		case BtnKembali:
+			cmd = "/kembali"
 		case BtnAdmin:
 			cmd = "/admin"
 		}
@@ -156,6 +160,18 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 		alamatCmd(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
 	case "/status":
 		statusCmd(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
+	case "/menu":
+		// Submenu Akun (clear state nyasar, pasang keyboard Akun).
+		if d.Session != nil {
+			d.Session.Clear(upd.Message.From.ID)
+		}
+		_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: upd.Message.Chat.ID, Text: "Menu Akun:", ReplyMarkup: AccountMenuFor(d.Admin.IsAdmin(upd.Message.From.ID))})
+	case "/kembali":
+		// Balik ke menu utama.
+		if d.Session != nil {
+			d.Session.Clear(upd.Message.From.ID)
+		}
+		_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: upd.Message.Chat.ID, Text: "Menu utama:", ReplyMarkup: MainMenuFor(d.Admin.IsAdmin(upd.Message.From.ID))})
 	case "/cekdeposit":
 		// Fase 9: gabung ke Status (1 pantau semua). Slash tetap jalan buat kompat.
 		statusCmd(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
@@ -343,8 +359,8 @@ func start(ctx context.Context, telegramID int64, d *Deps) string {
 			}
 			return "Selamat datang di Crypto Station (SIMULASI).\n" +
 				"Modal sandbox Rp1.000.000 sudah masuk.\n" +
-				"Tap tombol di bawah: Harga / Saldo / Beli / Jual / Riwayat.\n" +
-				"Slash tetap bisa: /harga /saldo /beli SOL 200000 /jual SOL ALL"
+				"Tap Beli / Jual / Harga di bawah. Tap Menu buat Saldo, Riwayat, Status, Alamat.\n" +
+				"Beli otomatis dikirim ke wallet lu — daftarin dulu via Menu → Alamat."
 		}
 	}
 	if st := u.Status; st == "blocked" {

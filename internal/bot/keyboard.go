@@ -19,6 +19,8 @@ const (
 	BtnBatal   = "Batal"
 	BtnAlamat  = "Alamat"
 	BtnStatus  = "Status"
+	BtnMenu    = "Menu"
+	BtnKembali = "Kembali"
 	BtnAdmin   = "Admin"
 )
 
@@ -135,13 +137,29 @@ func MainMenu() *models.ReplyKeyboardMarkup {
 	}
 }
 
-// MainMenuFor: menu user + baris Admin kalau isAdmin. User biasa tidak lihat tombol Admin.
+// MainMenuFor: menu UTAMA ramping (v0.12-ux) — Beli Jual Harga Menu (+ Admin).
+// Submenu Akun (Saldo Riwayat Status Alamat) dibuka via tombol Menu.
 func MainMenuFor(isAdmin bool) *models.ReplyKeyboardMarkup {
 	kb := [][]models.KeyboardButton{
-		{{Text: BtnHarga}, {Text: BtnSaldo}},
 		{{Text: BtnBeli}, {Text: BtnJual}},
-		{{Text: BtnRiwayat}, {Text: BtnBatal}},
-		{{Text: BtnAlamat}, {Text: BtnStatus}},
+		{{Text: BtnHarga}, {Text: BtnMenu}},
+	}
+	if isAdmin {
+		kb = append(kb, []models.KeyboardButton{{Text: BtnAdmin}})
+	}
+	return &models.ReplyKeyboardMarkup{
+		Keyboard:       kb,
+		ResizeKeyboard: true,
+		IsPersistent:   true,
+	}
+}
+
+// AccountMenuFor: submenu Akun — Saldo Riwayat Status Alamat + Kembali (+ Admin).
+func AccountMenuFor(isAdmin bool) *models.ReplyKeyboardMarkup {
+	kb := [][]models.KeyboardButton{
+		{{Text: BtnSaldo}, {Text: BtnRiwayat}},
+		{{Text: BtnStatus}, {Text: BtnAlamat}},
+		{{Text: BtnKembali}},
 	}
 	if isAdmin {
 		kb = append(kb, []models.KeyboardButton{{Text: BtnAdmin}})

@@ -114,6 +114,10 @@ func MatchButton(text string) string {
 		return BtnAlamat
 	case "status", "/status":
 		return BtnStatus
+	case "menu", "/menu":
+		return BtnMenu
+	case "kembali", "/kembali":
+		return BtnKembali
 	case "admin", "/admin":
 		return BtnAdmin
 	}
