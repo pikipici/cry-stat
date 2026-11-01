@@ -1,8 +1,8 @@
 # Crypto Station — Roadmap & Living Plan
 
-> Status: v0.12 — PIVOT transit + auto-kirim on-chain (bukan bandar custodial)
+> Status: v0.12-done — Fase 8+9 transit LIVE (41 tests hijau, DB v8, bot active)
 > Owner: user + hermes
-> Last updated: 2026-10-31
+> Last updated: 2026-11-01
 
 ## PIVOT v0.12 (baca dulu sebelum bab lain)
 
@@ -21,7 +21,9 @@ Implikasi:
 - Kirim on-chain NAIK dari pasca-MVP ke inti Stage 2 (Fase 8-9 baru).
 - Yang tetap kepake 100%: price engine, quote lock 30s, ledger double-entry,
   rate limit, allowlist/audit, tombol T1/T2, reconcile (diperluas on-chain).
-- T2-button trial di-HOLD sampai v0.12 dikunci (jangan ngetes barang mau dirombak).
+- Menu UX berlapis (v0.12-ux): utama = Beli/Jual/Harga/Menu, submenu Akun =
+  Saldo/Riwayat/Status/Alamat, Batal contextual (inline quote, bukan permanen).
+- Status gabung payout + deposit (1 pantau semua). /cekdeposit redirect ke Status.
 
 ## Daftar Isi
 - [PIVOT v0.12](#pivot-v012-baca-dulu-sebelum-bab-lain)
@@ -40,7 +42,7 @@ Implikasi:
 - [12. Roadmap](#12-roadmap)
 - [13. Unit Economics](#13-unit-economics)
 - [14. Risks](#14-risks)
-- [15. Open Decisions Tersisa (v0.11)](#15-open-decisions-tersisa-v011)
+- [15. Open Decisions Tersisa (v0.12)](#15-open-decisions-tersisa-v012)
 - [16. Deploy Strategy](#16-deploy-strategy)
 - [17. Implementation Notes](#17-implementation-notes)
 - [18. Current Next Step](#18-current-next-step)
@@ -90,6 +92,8 @@ Implikasi:
 | 38 | Hot-wallet + node (BARU v0.12) | **Sistem pegang hot-wallet float per coin + 1 node provider per chain (nama fix Stage 0).** Float minimum di Settings; di bawahnya = pause beli. Isi ulang = transfer manual owner + jurnal. Rekonsiliasi = jurnal vs saldo chain (bukan cuma internal). Key hot-wallet di env HSM/KMS eventually — MVP di env file 600, TIDAK di repo |
 | 39 | Fee network di quote (BARU v0.12) | **Estimasi fee per network di Settings (di-refresh job, bukan hardcode).** Quote beli tampil 3 baris: harga coin + fee kirim + total IDR. Fee > 20% nominal = tolak quote ("nominal terlalu kecil untuk fee"). Sandbox pakai fee mock tetap per coin |
 | 40 | Riwayat = kirim, bukan valuasi (BARU v0.12) | **/saldo = IDR + daftar payout terakhir (coin, units terkirim, txhash, status).** Tidak ada total valuasi portofolio, tidak ada tombol ALL. /riwayat = 10 payout/deposit terakhir + txhash/confirm count |
+| 41 | Menu UX berlapis (BARU v0.12-ux) | **Utama = Beli/Jual/Harga/Menu (+ Admin). Submenu Akun = Saldo/Riwayat/Status/Alamat + Kembali.** Batal = contextual (inline quote/picker + /batal), bukan tombol permanen. Alasan: 9 tombol flat bikin awam bingung; navigasi hafal posisi, aksi dibantu icon inline |
+| 42 | Status 1 pantau (BARU v0.12) | **/status + tombol Status = payout + deposit sekaligus.** /cekdeposit redirect ke Status (kompat slash). Menu tidak nambah |
 
 ## 1. Goal
 
@@ -560,8 +564,8 @@ Estimasi kasar, kerja santai, +buffer. Kalibrasi ulang setelah Fase 0.
 - Fase 2 — ✅ DONE 2026-10-30 (migrasi 000003 quotes/trades/risk_events, CreateQuote + ExecuteTrade atomik, RiskService 2 pause, /beli /jual ALL + inline confirm + /riwayat + /batal, 13 tests hijau, head fbc4456)
 - Fase 3 — ✅ DONE 2026-10-30 (migrasi 000004 admin_audit, allowlist env+settings, /setspread /setlimit /pause + audit, rate limit, job rekonsiliasi, 27 tests hijau, head 7899e07)
 - Fase 4 — ✅ PARSIAL 2026-10-30 (migrasi 000005 exposure_snapshots, trial report + /broadcast + /trial, job exposure, TRIAL.md, 29 tests hijau, head 05695ad). Trial LIVE: T1 slash 6/6 ✅, bug ALL #1 ketemu + fix, T1-button + T2-button dikode (head a8a43d9), trial button HOLD nunggu v0.12
-- Fase 8 (v0.12) — chain mock + /alamat + quote 3 baris + payout mock + jurnal transit (3–4 hari)
-- Fase 9 (v0.12) — deposit mock + /jual deposit + /cekdeposit + /status + float mock + ALL mati (3–4 hari)
+- Fase 8 — ✅ DONE 2026-10-31 (migrasi 000006 chain transit: wallet_addresses/payouts/deposits/chain_events/float + quotes fee_units/to_address. internal/chain mock: validate/format per network, fee_mock_*, payout MOCK-tx idempotent. CreateQuoteBuy + jurnal transit house:float/fee-collect, coin user NOL. Bot: /alamat + daftar inline t:addr + beli wajib alamat + quote 3 baris + txhash + /status. Trial live: alamat valid/invalid ✅, beli 50rb → MOCK-175 ✅, saldo transit ✅. Head caf4d63/bb9770a/b7b610b)
+- Fase 9 — ✅ DONE 2026-11-01 (migrasi 000007 credited_idr + 000008 journal types payout/deposit/float-in. MockDeposit idempotent-by-tx + jurnal float/IDR + FloatStatus. Bot: Jual = deposit address + simulasi masuk t:depsim, Status gabung payout+deposit, /cekdeposit redirect, jual-bandar mati total. Menu UX berlapis (#41) + Status 1 pantau (#42). 41 tests hijau, DB v8, head 5ed66f7)
 
 **Stage 2 — Real-money (setelah gate lolos; ±4–5 minggu)**
 - Fase 5 — topup QRIS + webhook idempotent + paid_late exact-match + /topup (5–7 hari)
@@ -613,12 +617,14 @@ gas spike 5x + 3 payout unknown nyangkut bareng.
 
 Ditutup di v0.12, jangan dibuka lagi tanpa alasan di bawah:
 
-- **PIVOT transit (#35–40):** bandar custodial v0.11 DIBATALKAN. Beli = auto-kirim ke wallet user, jual = deposit on-chain, fee network user, hot-wallet float, 1 coin = 1 network tetap. T2-button trial HOLD sampai v0.12 dikunci
+- **PIVOT transit (#35–40):** bandar custodial v0.11 DIBATALKAN. Beli = auto-kirim ke wallet user, jual = deposit on-chain, fee network user, hot-wallet float, 1 coin = 1 network tetap
+- **Fase 8 DONE (2026-10-31):** chain mock + alamat + quote 3 baris + payout mock + jurnal transit. Trial live ✅ (MOCK-175). Head caf4d63/bb9770a/b7b610b
+- **Fase 9 DONE (2026-11-01):** deposit mock + jual deposit + Status gabung + jual-bandar mati + menu UX berlapis (#41) + Status 1 pantau (#42). 41 tests hijau, DB v8, head 5ed66f7
 - **Debug Fase 3+4 (#33):** 17 temuan → 15 fix + 2 catat. 30 tests hijau
 - **Kurs sementara (#34):** Indodax, final fix Stage 0
 
-- **T1 slash live (#T1):** 6/6 ✅ (@cryptostationonly_bot). Bug ALL #1 (double-rounding +1.4e-7) ketemu → fix CreateQuoteUnits + dust clamp
-- **T1/T2 button dikode:** head a8a43d9. Trial button HOLD nunggu v0.12
+- **T1 slash live (#T1):** 6/6 ✅ (@cryptostationonly_bot). Bug ALL #1 (double-rounding +1.4e-7) ketemu → fix CreateQuoteUnits + dust clamp (kedaluwarsa v0.12: ALL mati total)
+- **T2 slash:** BELUM trial (kalah prioritas sama pivot). T2-button dikode (head a8a43d9) tapi lawan model bandar — perlu trial ulang lawan transit
 
 Masih terbuka:
 
@@ -652,22 +658,28 @@ Masih terbuka:
 
 ## 18. Current Next Step
 
-**v0.12 — PIVOT dikunci di plan, kode BELUM ikut. Posisi tersimpan.**
+**v0.12-done — Fase 8+9 transit LIVE. Posisi tersimpan.**
 
-Terakhir: plan v0.12 (pivot transit + auto-kirim, #35–40, Fase 8-9-10). Kode masih
-v0.11-bandar (head a8a43d9, bot live, T1 slash 6/6 ✅, trial button HOLD).
+Terakhir: head 5ed66f7 (menu berlapis), DB v8, bot active, 41 tests hijau 0 fail.
+Fase 8 trial live ✅ (alamat + payout MOCK-175 + saldo transit). Fase 9 kode live,
+trial deposit (Jual → depsim → Status) + trial menu berlapis BELUM jalan.
 
 Lanjut nanti (urut):
-1. User review + kunci v0.12 (atau revisi dulu kalau ada yang salah)
-2. Fase 8: chain mock + /alamat + quote 3 baris + payout mock + jurnal transit
-3. Fase 9: deposit mock + /jual deposit + /cekdeposit + /status + float mock + ALL mati
-4. Trial button ulang (T1 + T2) lawan model transit
-5. Stage 0 (STAGE0.md revisi): gateway + node + float + fee network + unit economics
+1. Trial Fase 9 live: Jual → SOL → Rp50rb masuk → Saldo → Status (gabung payout+deposit)
+2. Trial menu berlapis: /start → Menu → Saldo → Kembali → Beli (quote ✅❌)
+3. Trial T2 ulang lawan transit (setspread/setlimit/pause/trial/broadcast)
+4. Stage 0 (STAGE0.md revisi): gateway + node + float + fee network + unit economics
    → hasil masuk v0.13
 
 Setelah gate Stage 2 centang semua → Fase 5-7 (fiat) + Fase 10 (chain beneran).
 
 Jangan mulai payments/chain asli, kurs kedua, atau enforcement mule/sybil sebelum gate.
+
+### Changelog v0.12 → v0.12-done
+
+- **Fase 8 DONE:** migrasi 000006 + internal/chain mock + CreateQuoteBuy + jurnal transit + /alamat + quote 3 baris + payout MOCK-tx. Trial live ✅ (heads caf4d63/bb9770a/b7b610b)
+- **Fase 9 DONE:** migrasi 000007 + 000008 + MockDeposit idempotent + jual deposit + Status gabung + jual-bandar mati + menu UX berlapis (#41) + Status 1 pantau (#42). 41 tests hijau, DB v8 (head 5ed66f7)
+- **Sell-bandar DIHAPUS:** ALL/SELL units, dust clamp, TestSellFlow + sellall (skip pivot), kode unreachable dibersihkan
 
 ### Changelog v0.11 → v0.12
 
