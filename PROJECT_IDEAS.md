@@ -1,6 +1,6 @@
 # Crypto Station — Roadmap & Living Plan
 
-> Status: v0.13-done — Stok mock-ready LIVE (45 tests hijau, DB v9, tombol admin 📦, admin 7254686681)
+> Status: v0.14-admin-wallet DONE — Panel Wallet & Aset + Transaksi LIVE di workspace (62 tests hijau, DB v10, deposit idempotent, feed gabungan)
 > Owner: user + hermes
 > Last updated: 2026-11-02
 
@@ -121,6 +121,7 @@ Implikasi:
 | 40 | Riwayat = kirim, bukan valuasi (BARU v0.12) | **/saldo = IDR + daftar payout terakhir (coin, units terkirim, txhash, status).** Tidak ada total valuasi portofolio, tidak ada tombol ALL. /riwayat = 10 payout/deposit terakhir + txhash/confirm count |
 | 41 | Menu UX berlapis (BARU v0.12-ux) | **Utama = Beli/Jual/Harga/Menu (+ Admin). Submenu Akun = Saldo/Riwayat/Status/Alamat + Kembali.** Batal = contextual (inline quote/picker + /batal), bukan tombol permanen. Alasan: 9 tombol flat bikin awam bingung; navigasi hafal posisi, aksi dibantu icon inline |
 | 42 | Status 1 pantau (BARU v0.12) | **/status + tombol Status = payout + deposit sekaligus.** /cekdeposit redirect ke Status (kompat slash). Menu tidak nambah |
+| 49 | Wallet & Aset + Transaksi (BARU v0.14) | **Panel admin Wallet & Aset (Ringkasan/Deposit/Float/Fee/Hot) + Transaksi (feed gabungan + detail).** Deposit stok via pending-row preview + Confirm idempotent (tx_ref UNIQUE). Feed = STOCK_IN/PAYOUT_OUT/USER_DEPOSIT_IN merge-sort. Semua layar SIMULASI + WIB, bukan on-chain. Tombol Stok lama diabsorpsi (a:stock:* kompatibel). DB v10 |
 
 ## 1. Goal
 
@@ -610,6 +611,7 @@ Estimasi kasar, kerja santai, +buffer. Kalibrasi ulang setelah Fase 0.
 - Fase 8 — ✅ DONE 2026-10-31 (migrasi 000006 chain transit: wallet_addresses/payouts/deposits/chain_events/float + quotes fee_units/to_address. internal/chain mock: validate/format per network, fee_mock_*, payout MOCK-tx idempotent. CreateQuoteBuy + jurnal transit house:float/fee-collect, coin user NOL. Bot: /alamat + daftar inline t:addr + beli wajib alamat + quote 3 baris + txhash + /status. Trial live: alamat valid/invalid ✅, beli 50rb → MOCK-175 ✅, saldo transit ✅. Head caf4d63/bb9770a/b7b610b)
 - Fase 9 — ✅ DONE 2026-11-01 (migrasi 000007 credited_idr + 000008 journal types payout/deposit/float-in. MockDeposit idempotent-by-tx + jurnal float/IDR + FloatStatus. Bot: Jual = deposit address + simulasi masuk t:depsim, Status gabung payout+deposit, /cekdeposit redirect, jual-bandar mati total. Menu UX berlapis (#41) + Status 1 pantau (#42). 41 tests hijau, DB v8, head 5ed66f7)
 - Stok v0.13 — ✅ DONE 2026-11-02 (migrasi 000009 hot_address_*. FloatTopup + guard float + SetFloat/SetFee/SetHotAddress + /setfloat /setfee /sethot /floattopup /float + tombol 📦 Stok + trial float. 45 tests hijau, DB v9, heads 31d14a4/08c123d/2f3d7a1). Admin live 7254686681, bot binary 22:54
+- Wallet v0.14 — ✅ DONE 2026-11-02 (migrasi 000010 admin_stock_deposits + 11 sqlc queries. RecordAdminStockDeposit idempotent + internal/adminwallet summary+feed + bot panel Wallet & Aset/Transaksi + flow preview-Confirm + audit. 62 tests hijau 0 fail, vet bersih, build+smoke exit 0, DB v10. Heads 94e620f/24afdfd/b9b1fe5/57c597b/a2832cb/2d43306. Workspace-verified, bot workspace belum restart, trial manual Bagian 10 plan pending)
 
 **Stage 2 — Real-money (setelah gate lolos; ±4–5 minggu)**
 - Fase 5 — topup QRIS + webhook idempotent + paid_late exact-match + /topup (5–7 hari)
@@ -710,26 +712,35 @@ Masih terbuka:
 
 ## 18. Current Next Step
 
-**v0.13-done — Stok mock-ready + tombol admin LIVE. Posisi tersimpan.**
+**v0.14-admin-wallet DONE — Panel Wallet & Aset + Transaksi terverifikasi di workspace. Belum deploy live.**
 
-Kode: heads 31d14a4 (stok) + 08c123d (fix guard) + 2f3d7a1 (tombol 📦).
-DB v9 (000009 hot_address_*), 45 tests hijau 0 fail, smoke exit 0.
-Bot binary 22:54 jalan (systemd-run --user, PID 1457593, sandbox).
-Admin live: 7254686681 satu-satunya. Panel ada 📦 Stok (lihat/float/fee/hot/topup).
+Kode: heads 94e620f (T2 migrasi+query) + 24afdfd (T3 ledger) + b9b1fe5 (T4+T5 service+feed) + 57c597b/a2832cb (fixup pgtype+import) + 2d43306 (T6+T7 bot flow+views).
+DB v10 (000010 admin_stock_deposits), 62 tests hijau 0 fail (24 test funcs, subtests Michał), vet bersih, build + smoke exit 0.
+Bot workspace belum di-restart (binary lama masih v0.13-done). Panel baru (Wallet & Aset + Transaksi) aktif setelah restart workspace.
+Admin live: 7254686681 satu-satunya. Semua layar baru berlabel SIMULASI, bukan saldo on-chain.
+
+Yang DONE v0.14 (workspace-verified, bukan live):
+- Migrasi 000010: tabel admin_stock_deposits (tx_ref UNIQUE idempotency, journal_id UNIQUE, status pending_confirm/recorded_mock/cancelled/failed)
+- Ledger RecordAdminStockDeposit idempotent (double-confirm = 1 jurnal, AlreadyDone=true)
+- Asset summary 3 coin (AMAN/TIPIS, estimasi IDR fail-closed, tanpa fallback)
+- Activity feed gabungan STOCK_IN/PAYOUT_OUT/USER_DEPOSIT_IN + detail per kind
+- Bot: panel Wallet & Aset (Ringkasan/Deposit/Float/Fee/Hot) + Transaksi (10/25 + detail), flow units → ref → preview → Confirm, audit stockdeposit
+- Tombol Stok lama diabsorpsi (callback a:stock:* tetap kompatibel)
 
 Lanjut nanti (urut):
-1. Owner bikin hot BARU manual (seed baru offline, catat 2 alamat publik EVM + SOL) → /sethot-in
-2. Trial Fase 9 live: Jual → SOL → Rp50rb masuk → Saldo → Status (gabung payout+deposit)
-3. Trial tombol 📦 Stok live: Lihat stok → Isi float → Float min → Fee → Hot
+1. Restart bot WORKSPACE biar panel baru hidup → trial Bagian 10 plan (18 langkah: ringkasan, deposit SOL, double-tap, feed, detail, beli+jual mock muncul)
+2. Owner bikin hot BARU manual (seed baru offline, catat 2 alamat publik EVM + SOL) → /sethot-in
+3. Trial Fase 9 live: Jual → SOL → Rp50rb masuk → Saldo → Status (gabung payout+deposit)
 4. Trial T2 ulang lawan transit (setspread/setlimit/pause/trial/broadcast)
 5. Bikin unit systemd permanen cs-bot.service (open-11) sebelum trial panjang
 6. Stage 0: gateway (QRIS dulu) + node + float + fee network + norek bank (#45-open-9) + unit economics
-   → hasil masuk v0.14
+   → hasil masuk v0.15
 
 Setelah gate Stage 2 centang semua → Fase 5 (QRIS) → stabil 2–4 minggu →
 Fase 5b (bank manual) + Fase 6–7 (fiat) + Fase 10 (chain beneran, key hot masuk).
 
 Jangan mulai payments/chain asli, kurs kedua, atau enforcement mule/sybil sebelum gate.
+Jangan deploy/restart LIVE tanpa persetujuan eksplisit user.
 
 ### Changelog v0.13 → v0.13-done
 
