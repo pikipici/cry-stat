@@ -8,6 +8,11 @@ VALUES ($1, $2, $3) RETURNING id, created_at;
 SELECT id, asset, net_position, limit_used, created_at
 FROM exposure_snapshots WHERE asset = $1 ORDER BY created_at DESC LIMIT 1;
 
+-- Float snapshot terakhir per coin (sistem stok v0.13, ganti fokus exposure bandar).
+-- name: LatestFloat :one
+SELECT id, asset, float_balance, float_min, created_at
+FROM float_snapshots WHERE asset = $1 ORDER BY created_at DESC LIMIT 1;
+
 -- Semua telegram_id user aktif (untuk /broadcast).
 -- name: ListActiveTelegramIDs :many
 SELECT telegram_id FROM users WHERE status = 'active' ORDER BY id;

@@ -52,6 +52,13 @@ GROUP BY a.owner, e.asset;
 SELECT user_id, asset, SUM(balance)::NUMERIC(36,18) AS total
 FROM wallets GROUP BY user_id, asset;
 
+-- Float house per coin (sistem stok v0.13): total house:float dari jurnal.
+-- Dipakai risk guard (float tipis = pause beli) + FloatStatus (tanpa query mentah).
+-- name: HouseFloatByAsset :one
+SELECT COALESCE(SUM(e.amount),0)::NUMERIC(36,18) AS total
+FROM ledger_entries e JOIN ledger_accounts a ON a.id = e.account_id
+WHERE a.owner = 'house:float' AND e.asset = $1;
+
 -- Users: lock + reset limit harian (WIB dihitung di service).
 
 -- name: GetUserForUpdate :one

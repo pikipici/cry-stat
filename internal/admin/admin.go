@@ -165,6 +165,95 @@ func (s *Service) SetLimit(ctx context.Context, adminID int64, key, val string) 
 	return before, row.Value, nil
 }
 
+// SetFloat: ubah float_min_<coin> tanpa restart. Return before/after untuk audit.
+func (s *Service) SetFloat(ctx context.Context, adminID int64, coin, val string) (before, after string, err error) {
+	coin = strings.ToLower(coin)
+	if coin != "bnb" && coin != "eth" && coin != "sol" {
+		return "", "", fmt.Errorf("coin harus bnb/eth/sol")
+	}
+	f, err := strconv.ParseFloat(strings.TrimSpace(val), 64)
+	if err != nil || f < 0 {
+		return "", "", fmt.Errorf("float min harus angka >= 0 (units coin)")
+	}
+	after = decimal.NewFromFloat(f).String()
+	key := "float_min_" + coin
+	before, _ = s.set.Get(key)
+	row, err := s.q.UpsertSetting(ctx, db.UpsertSettingParams{Key: key, Value: after, UpdatedBy: pgtype.Int8{Int64: adminID, Valid: true}})
+	if err != nil {
+		return "", "", err
+	}
+	if err := s.set.Reload(ctx); err != nil {
+		return "", "", err
+	}
+	_ = s.Audit(ctx, adminID, "setfloat", 0, false, key+"="+before, key+"="+row.Value)
+	return before, row.Value, nil
+}
+
+// SetFee: ubah fee_mock_<coin> tanpa restart. Return before/after untuk audit.
+func (s *Service) SetFee(ctx context.Context, adminID int64, coin, val string) (before, after string, err error) {
+	coin = strings.ToLower(coin)
+	if coin != "bnb" && coin != "eth" && coin != "sol" {
+		return "", "", fmt.Errorf("coin harus bnb/eth/sol")
+	}
+	v := strings.TrimSpace(val)
+	f, err := strconv.ParseFloat(v, 64)
+	if err != nil || f < 0 {
+		return "", "", fmt.Errorf("fee harus angka >= 0 (units coin)")
+	}
+	after = decimal.NewFromFloat(f).String()
+	key := "fee_mock_" + coin
+	before, _ = s.set.Get(key)
+	row, err := s.q.UpsertSetting(ctx, db.UpsertSettingParams{Key: key, Value: after, UpdatedBy: pgtype.Int8{Int64: adminID, Valid: true}})
+	if err != nil {
+		return "", "", err
+	}
+	if err := s.set.Reload(ctx); err != nil {
+		return "", "", err
+	}
+	_ = s.Audit(ctx, adminID, "setfee", 0, false, key+"="+before, key+"="+row.Value)
+	return before, row.Value, nil
+}
+
+// SetHotAddress: catat alamat hot PUBLIK per coin (mock-ready, tanpa key).
+// Validasi format ikut chain.ValidateAddress — tapi admin package tidak import chain
+// (hindari cycle) → validasi ringan di sini: EVM 0x+40hex, SOL 32–44 base58, atau MOCK-*.
+func (s *Service) SetHotAddress(ctx context.Context, adminID int64, coin, addr string) (before, after string, err error) {
+	coin = strings.ToLower(coin)
+	if coin != "bnb" && coin != "eth" && coin != "sol" {
+		return "", "", fmt.Errorf("coin harus bnb/eth/sol")
+	}
+	addr = strings.TrimSpace(addr)
+	if addr == "" {
+		return "", "", fmt.Errorf("alamat kosong")
+	}
+	if !strings.HasPrefix(addr, "MOCK-") {
+		if coin == "sol" {
+			if len(addr) < 32 || len(addr) > 44 {
+				return "", "", fmt.Errorf("alamat SOL harus 32–44 char base58")
+			}
+		} else {
+			if len(addr) != 42 || !strings.HasPrefix(addr, "0x") {
+				return "", "", fmt.Errorf("alamat EVM harus 0x + 40 hex")
+			}
+			for _, c := range addr[2:] {
+				if !((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')) {
+					return "", "", fmt.Errorf("alamat EVM mengandung char bukan hex")
+				}
+			}
+		}
+	}
+	key := "hot_address_" + coin
+	before, _ = s.set.Get(key)
+	row, err := s.q.UpsertSetting(ctx, db.UpsertSettingParams{Key: key, Value: addr, UpdatedBy: pgtype.Int8{Int64: adminID, Valid: true}})
+	if err != nil {
+		return "", "", err
+	}
+	if err := s.set.Reload(ctx); err != nil {
+		return "", "", err
+	}
+	_ = s.Audit(ctx, adminID, "sethot", 0, false, key+"="+before, key+"="+row.Value)
+	return before, row.Value, nil
+}
 // Pause kinds: "" (jalan) | "exposure" (beli saja stop) | "spike_stale" (semua stop).
 // FIX debug #12: adminID 0 = system (job reconcile) — audit action prefix "system:" agar
 // jejak jelas, bukan admin fiktif.

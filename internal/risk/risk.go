@@ -54,6 +54,14 @@ func (s *Service) CheckBeforeQuote(ctx context.Context, asset, side string) erro
 		if over {
 			return ErrBuyPausedExposure
 		}
+		// v0.13 stok: float hot di bawah min = pause beli (jual tetap boleh, nambah float).
+		thin, err := s.floatThin(ctx, asset)
+		if err != nil {
+			return err
+		}
+		if thin {
+			return ErrBuyPausedExposure
+		}
 	}
 	return nil
 }
@@ -79,6 +87,20 @@ func (s *Service) overExposure(ctx context.Context, asset string) (bool, error) 
 	}
 	limit := s.set.Decimal("exposure_limit_" + strings.ToLower(asset))
 	return net.LessThan(limit.Neg()), nil
+}
+
+// floatThin: float house di bawah float_min = true (beli stop, jual tetap jalan).
+// Float = HouseFloatByAsset (sqlc, total house:float dari jurnal — mock-ready, tanpa chain).
+func (s *Service) floatThin(ctx context.Context, asset string) (bool, error) {
+	bal, err := s.q.HouseFloatByAsset(ctx, strings.ToUpper(asset))
+	if err != nil {
+		return false, err
+	}
+	min, err := s.set.SafeDecimal("float_min_" + strings.ToLower(asset))
+	if err != nil {
+		return false, nil // min belum diset = anggap cukup
+	}
+	return bal.LessThan(min), nil
 }
 
 // RecordEvent: tulis RiskEvents (Stage 1: catat saja, belum hukum).

@@ -27,6 +27,7 @@ func New(q *db.Queries, set *settings.Service, ledgerSvc *ledger.Service) *Servi
 }
 
 // SnapshotExposure: tulis posisi house per coin + limit_used. Dipanggil job berkala.
+// v0.13: SEKALIGUS tulis float_snapshots (float aktual vs min) — sistem stok.
 func (s *Service) SnapshotExposure(ctx context.Context) error {
 	rows, err := s.q.NetPositionByAsset(ctx)
 	if err != nil {
@@ -47,6 +48,16 @@ func (s *Service) SnapshotExposure(ctx context.Context) error {
 		}
 		if _, err := s.q.InsertExposureSnapshot(ctx, db.InsertExposureSnapshotParams{
 			Asset: a, NetPosition: n, LimitUsed: used,
+		}); err != nil {
+			return err
+		}
+		// v0.13 stok: float aktual dari jurnal + min dari settings.
+		bal, min, err := s.ledger.FloatStatus(ctx, a)
+		if err != nil {
+			return err
+		}
+		if _, err := s.q.InsertFloatSnapshot(ctx, db.InsertFloatSnapshotParams{
+			Asset: a, FloatBalance: bal, FloatMin: min,
 		}); err != nil {
 			return err
 		}
@@ -107,6 +118,21 @@ func (s *Service) Report(ctx context.Context) string {
 	for _, a := range []string{"BNB", "ETH", "SOL"} {
 		if e, err := s.q.LatestExposure(ctx, a); err == nil {
 			fmt.Fprintf(&sb, "Exposure %s: %s (limit %s%%)\n", a, e.NetPosition.String(), e.LimitUsed.Mul(decimal.NewFromInt(100)).Round(1).String())
+		}
+	}
+
+	// 6. Float stok terakhir (v0.13): saldo hot vs min + alamat hot.
+	for _, a := range []string{"BNB", "ETH", "SOL"} {
+		if f, err := s.q.LatestFloat(ctx, a); err == nil {
+			status := "OK"
+			if f.FloatBalance.LessThan(f.FloatMin) {
+				status = "TIPIS (beli pause)"
+			}
+			hot := ""
+			if v, ok := s.set.Get("hot_address_" + strings.ToLower(a)); ok {
+				hot = v
+			}
+			fmt.Fprintf(&sb, "Float %s: %s / min %s [%s] hot=%s\n", a, f.FloatBalance.String(), f.FloatMin.String(), status, hot)
 		}
 	}
 	return strings.TrimRight(sb.String(), "\n")

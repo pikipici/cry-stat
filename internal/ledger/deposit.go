@@ -115,17 +115,10 @@ func (s *Service) MockDeposit(ctx context.Context, userID int64, asset string, u
 }
 
 // FloatStatus: float mock per coin vs minimum (buat pause beli + /trial).
+// Float = HouseFloatByAsset (sqlc — tanpa query mentah, regenerasi di VPS).
 func (s *Service) FloatStatus(ctx context.Context, asset string) (bal, min decimal.Decimal, err error) {
 	asset = strings.ToUpper(asset)
-	// Float mock = total house:float dari jurnal (tanpa chain beneran).
-	row := s.pool.QueryRow(ctx, `SELECT COALESCE(SUM(e.amount),0) FROM ledger_entries e
-	  JOIN ledger_accounts a ON a.id=e.account_id
-	  WHERE a.owner='house:float' AND e.asset=$1`, asset)
-	var sumStr string
-	if err := row.Scan(&sumStr); err != nil {
-		return decimal.Zero, decimal.Zero, err
-	}
-	bal, err = decimal.NewFromString(sumStr)
+	bal, err = db.New(s.pool).HouseFloatByAsset(ctx, asset)
 	if err != nil {
 		return decimal.Zero, decimal.Zero, err
 	}

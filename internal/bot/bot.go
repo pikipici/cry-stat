@@ -38,8 +38,8 @@ type Deps struct {
 }
 
 func Route() []string {
-	return []string{"/start", "/saldo", "/harga", "/beli", "/jual", "/alamat", "/cekdeposit", "/status", "/menu", "/kembali", "/riwayat", "/batal",
-		"/admin", "/setspread", "/setlimit", "/pause", "/broadcast", "/trial", "/approve"}
+	return []string{"/start", "/saldo", "/harga", "/beli", "/jual", "/alamat", "/cekdeposit", "/status", "/menu", "/kembali", "/riwayat", "/batal", "/float",
+		"/admin", "/setspread", "/setlimit", "/setfloat", "/setfee", "/sethot", "/floattopup", "/pause", "/broadcast", "/trial", "/approve"}
 }
 
 // Handle: dispatcher tunggal (dipanggil dari default handler main).
@@ -148,6 +148,16 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 		adminSpread(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
 	case "/setlimit":
 		adminLimit(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
+	case "/setfloat":
+		adminFloat(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
+	case "/setfee":
+		adminFee(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
+	case "/sethot":
+		adminHot(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
+	case "/floattopup":
+		adminFloatTopup(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
+	case "/float":
+		adminFloatStatus(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, d)
 	case "/pause":
 		adminPause(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, rest, d)
 	case "/broadcast":
@@ -263,6 +273,106 @@ func adminPause(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest 
 		return
 	}
 	reply(ctx, b, chatID, "Pause "+rest[0]+": "+before+" → "+after)
+}
+
+// Sistem stok v0.13 (admin saja): /setfloat /setfee /sethot /floattopup /float.
+func adminFloat(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []string, d *Deps) {
+	if !needAdmin(ctx, telegramID, "setfloat", d) {
+		reply(ctx, b, chatID, "Bukan admin.")
+		return
+	}
+	if len(rest) < 2 {
+		reply(ctx, b, chatID, "Format: /setfloat SOL 100")
+		return
+	}
+	before, after, err := d.Admin.SetFloat(ctx, telegramID, rest[0], rest[1])
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal: "+err.Error())
+		return
+	}
+	reply(ctx, b, chatID, "Float min "+strings.ToUpper(rest[0])+": "+before+" → "+after)
+}
+
+func adminFee(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []string, d *Deps) {
+	if !needAdmin(ctx, telegramID, "setfee", d) {
+		reply(ctx, b, chatID, "Bukan admin.")
+		return
+	}
+	if len(rest) < 2 {
+		reply(ctx, b, chatID, "Format: /setfee SOL 0.00001")
+		return
+	}
+	before, after, err := d.Admin.SetFee(ctx, telegramID, rest[0], rest[1])
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal: "+err.Error())
+		return
+	}
+	reply(ctx, b, chatID, "Fee "+strings.ToUpper(rest[0])+": "+before+" → "+after)
+}
+
+func adminHot(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []string, d *Deps) {
+	if !needAdmin(ctx, telegramID, "sethot", d) {
+		reply(ctx, b, chatID, "Bukan admin.")
+		return
+	}
+	if len(rest) < 2 {
+		reply(ctx, b, chatID, "Format: /sethot SOL <alamat>")
+		return
+	}
+	before, after, err := d.Admin.SetHotAddress(ctx, telegramID, rest[0], rest[1])
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal: "+err.Error())
+		return
+	}
+	reply(ctx, b, chatID, "Hot "+strings.ToUpper(rest[0])+": "+before+" → "+after)
+}
+
+func adminFloatTopup(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []string, d *Deps) {
+	if !needAdmin(ctx, telegramID, "floattopup", d) {
+		reply(ctx, b, chatID, "Bukan admin.")
+		return
+	}
+	if len(rest) < 2 {
+		reply(ctx, b, chatID, "Format: /floattopup SOL 100 (catat transfer cold→hot)")
+		return
+	}
+	amt, err := decimal.NewFromString(strings.TrimSpace(rest[1]))
+	if err != nil || amt.LessThanOrEqual(decimal.Zero) {
+		reply(ctx, b, chatID, "Gagal: units harus angka positif")
+		return
+	}
+	res, err := d.Ledger.FloatTopup(ctx, rest[0], amt)
+	if err != nil {
+		reply(ctx, b, chatID, "Gagal: "+err.Error())
+		return
+	}
+	_ = d.Admin.Audit(ctx, telegramID, "floattopup", 0, false, res.Asset+"=+0", res.Asset+"=+"+res.Units.String())
+	bal, min, _ := d.Ledger.FloatStatus(ctx, res.Asset)
+	reply(ctx, b, chatID, fmt.Sprintf("Float %s +%s (jurnal #%d). Saldo: %s / min %s",
+		res.Asset, res.Units.String(), res.JournalID, bal.String(), min.String()))
+}
+
+func adminFloatStatus(ctx context.Context, b *bot.Bot, chatID, telegramID int64, d *Deps) {
+	if !needAdmin(ctx, telegramID, "float", d) {
+		reply(ctx, b, chatID, "Bukan admin.")
+		return
+	}
+	var sb strings.Builder
+	sb.WriteString("Stok hot (SIMULASI):\n")
+	for _, a := range []string{"BNB", "ETH", "SOL"} {
+		bal, min, err := d.Ledger.FloatStatus(ctx, a)
+		if err != nil {
+			fmt.Fprintf(&sb, "%s: gagal baca (%v)\n", a, err)
+			continue
+		}
+		status := "OK"
+		if bal.LessThan(min) {
+			status = "TIPIS (beli pause)"
+		}
+		hot, _ := d.Set.Get("hot_address_" + strings.ToLower(a))
+		fmt.Fprintf(&sb, "%s: %s / min %s [%s]\nhot: %s\n", a, bal.String(), min.String(), status, hot)
+	}
+	reply(ctx, b, chatID, strings.TrimRight(sb.String(), "\n"))
 }
 
 func adminTrial(ctx context.Context, b *bot.Bot, chatID, telegramID int64, d *Deps) {
