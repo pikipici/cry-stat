@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
+	"github.com/shopspring/decimal"
 )
 
 // handleAdminCallback: inline a:* — spread/limit/pause/broadcast/trial/close.
@@ -65,6 +66,31 @@ func handleAdminCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQue
 		text := d.Trial.Report(ctx) + "\n\n" + d.Trial.SlippageReport(ctx, 10)
 		_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID, Text: text})
 		return
+	case "panel":
+		clearSess()
+		edit("Panel admin (SIMULASI):", AdminPanel())
+		return
+	case "stock":
+		// a:stock = menu aksi; a:stock:lihat = tampil stok; a:stock:float/fee/hot/topup = pilih coin.
+		if len(parts) == 2 {
+			edit("Stok hot (SIMULASI) — mau apa?", AdminStockPicker())
+			return
+		}
+		if len(parts) == 3 && parts[2] == "lihat" {
+			clearSess()
+			_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID, Text: stockText(ctx, d)})
+			edit("Stok hot (SIMULASI) — mau apa?", AdminStockPicker())
+			return
+		}
+		if len(parts) == 3 {
+			aksi := parts[2]
+			if aksi != "float" && aksi != "fee" && aksi != "hot" && aksi != "topup" {
+				return
+			}
+			lbl := map[string]string{"float": "Float min", "fee": "Fee", "hot": "Alamat hot", "topup": "Isi float"}[aksi]
+			edit(lbl+" coin apa?", AdminStockCoinPicker(aksi))
+			return
+		}
 	}
 	// Sub-pick: a:spread:SOL / a:pause:SOL / a:limitkey:min_buy_idr
 	if len(parts) == 3 {
@@ -97,8 +123,36 @@ func handleAdminCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQue
 		}
 	}
 	// Sub-pick 4 segmen: a:spreadside:SOL:buy / a:pausekind:SOL:exposure
+	// + stok: a:stockfloat:SOL / a:stockfee:ETH / a:stockhot:SOL / a:stocktopup:BNB
 	if len(parts) == 4 {
 		switch parts[1] {
+		case "stockfloat", "stockfee", "stockhot", "stocktopup":
+			coin := strings.ToUpper(parts[3])
+			if coin != "BNB" && coin != "ETH" && coin != "SOL" {
+				return
+			}
+			aksi := map[string]string{"stockfloat": "float", "stockfee": "fee", "stockhot": "hot", "stocktopup": "topup"}[parts[1]]
+			prompt := ""
+			cur := ""
+			switch aksi {
+			case "float":
+				cur, _ = d.Set.Get("float_min_" + strings.ToLower(coin))
+				prompt = fmt.Sprintf("Float min %s sekarang: %s.\nKetik angka units baru (atau ⬅️ Stok):", coin, cur)
+			case "fee":
+				cur, _ = d.Set.Get("fee_mock_" + strings.ToLower(coin))
+				prompt = fmt.Sprintf("Fee %s sekarang: %s.\nKetik fee units baru (atau ⬅️ Stok):", coin, cur)
+			case "hot":
+				cur, _ = d.Set.Get("hot_address_" + strings.ToLower(coin))
+				prompt = fmt.Sprintf("Hot %s sekarang: %s.\nKetik alamat baru (atau ⬅️ Stok):", coin, cur)
+			case "topup":
+				bal, min, _ := d.Ledger.FloatStatus(ctx, coin)
+				prompt = fmt.Sprintf("Float %s: %s / min %s.\nKetik units isi ulang (catat transfer cold→hot) atau ⬅️ Stok:", coin, bal.String(), min.String())
+			}
+			if d.Session != nil {
+				d.Session.Set(cb.From.ID, Session{Step: StepAdminStock, Coin: coin, Extra: aksi})
+			}
+			edit(prompt, AdminStockCoinPicker(""))
+			return
 		case "spreadside":
 			coin := strings.ToUpper(parts[2])
 			side := strings.ToLower(parts[3])
@@ -187,6 +241,80 @@ func handleAdminInput(ctx context.Context, b *bot.Bot, chatID, telegramID int64,
 		}
 		reply(ctx, b, chatID, doBroadcast(ctx, b, telegramID, text, d))
 		return true
+	case StepAdminStock:
+		// Input stok: float/fee = angka, hot = alamat, topup = units.
+		val := strings.TrimSpace(text)
+		if d.Session != nil {
+			d.Session.Clear(telegramID)
+		}
+		if val == "" {
+			reply(ctx, b, chatID, "Nilai kosong. Buka /admin → 📦 Stok lagi.")
+			return true
+		}
+		switch st.Extra {
+		case "float":
+			before, after, err := d.Admin.SetFloat(ctx, telegramID, st.Coin, val)
+			if err != nil {
+				reply(ctx, b, chatID, "Gagal: "+err.Error())
+				return true
+			}
+			reply(ctx, b, chatID, fmt.Sprintf("Float min %s: %s → %s", st.Coin, before, after))
+			return true
+		case "fee":
+			before, after, err := d.Admin.SetFee(ctx, telegramID, st.Coin, val)
+			if err != nil {
+				reply(ctx, b, chatID, "Gagal: "+err.Error())
+				return true
+			}
+			reply(ctx, b, chatID, fmt.Sprintf("Fee %s: %s → %s", st.Coin, before, after))
+			return true
+		case "hot":
+			before, after, err := d.Admin.SetHotAddress(ctx, telegramID, st.Coin, val)
+			if err != nil {
+				reply(ctx, b, chatID, "Gagal: "+err.Error())
+				return true
+			}
+			reply(ctx, b, chatID, fmt.Sprintf("Hot %s: %s → %s", st.Coin, before, after))
+			return true
+		case "topup":
+			amt, err := decimal.NewFromString(val)
+			if err != nil || amt.LessThanOrEqual(decimal.Zero) {
+				reply(ctx, b, chatID, "Units harus angka positif (misal 100).")
+				return true
+			}
+			res, err := d.Ledger.FloatTopup(ctx, st.Coin, amt)
+			if err != nil {
+				reply(ctx, b, chatID, "Gagal: "+err.Error())
+				return true
+			}
+			_ = d.Admin.Audit(ctx, telegramID, "floattopup", 0, false, res.Asset+"=+0", res.Asset+"=+"+res.Units.String())
+			bal, min, _ := d.Ledger.FloatStatus(ctx, res.Asset)
+			reply(ctx, b, chatID, fmt.Sprintf("Float %s +%s (jurnal #%d). Saldo: %s / min %s",
+				res.Asset, res.Units.String(), res.JournalID, bal.String(), min.String()))
+			return true
+		}
+		reply(ctx, b, chatID, "Aksi stok tidak dikenal. Buka /admin → 📦 Stok lagi.")
+		return true
 	}
 	return false
+}
+
+// stockText: ringkasan stok 3 coin (dipakai tombol Lihat stok + /float).
+func stockText(ctx context.Context, d *Deps) string {
+	var sb strings.Builder
+	sb.WriteString("Stok hot (SIMULASI):\n")
+	for _, a := range []string{"BNB", "ETH", "SOL"} {
+		bal, min, err := d.Ledger.FloatStatus(ctx, a)
+		if err != nil {
+			fmt.Fprintf(&sb, "%s: gagal baca (%v)\n", a, err)
+			continue
+		}
+		status := "OK"
+		if bal.LessThan(min) {
+			status = "TIPIS (beli pause)"
+		}
+		hot, _ := d.Set.Get("hot_address_" + strings.ToLower(a))
+		fmt.Fprintf(&sb, "%s: %s / min %s [%s]\nhot: %s\n", a, bal.String(), min.String(), status, hot)
+	}
+	return strings.TrimRight(sb.String(), "\n")
 }

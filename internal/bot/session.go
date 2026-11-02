@@ -21,6 +21,7 @@ const (
 	StepAdminSpread    Step = "admin_spread"      // sudah pilih coin+side spread, nunggu angka 0-0.1
 	StepAdminLimit     Step = "admin_limit"       // sudah pilih key limit, nunggu nilai
 	StepAdminBroadcast Step = "admin_broadcast"   // nunggu teks broadcast
+	StepAdminStock     Step = "admin_stock"       // sudah pilih aksi stok + coin, nunggu nilai
 )
 
 // SessionTimeout: state hangus setelah ini (suruh tap Beli/Jual lagi).

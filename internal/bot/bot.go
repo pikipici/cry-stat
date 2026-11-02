@@ -74,7 +74,7 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 	if d.Session != nil {
 		if st := d.Session.Get(upd.Message.From.ID); st.Step != StepIdle && MatchButton(text) == "" && !strings.HasPrefix(strings.ToLower(text), "/") {
 			switch st.Step {
-			case StepAdminSpread, StepAdminLimit, StepAdminBroadcast:
+			case StepAdminSpread, StepAdminLimit, StepAdminBroadcast, StepAdminStock:
 				if handleAdminInput(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, text, st, d) {
 					return
 				}
@@ -357,22 +357,7 @@ func adminFloatStatus(ctx context.Context, b *bot.Bot, chatID, telegramID int64,
 		reply(ctx, b, chatID, "Bukan admin.")
 		return
 	}
-	var sb strings.Builder
-	sb.WriteString("Stok hot (SIMULASI):\n")
-	for _, a := range []string{"BNB", "ETH", "SOL"} {
-		bal, min, err := d.Ledger.FloatStatus(ctx, a)
-		if err != nil {
-			fmt.Fprintf(&sb, "%s: gagal baca (%v)\n", a, err)
-			continue
-		}
-		status := "OK"
-		if bal.LessThan(min) {
-			status = "TIPIS (beli pause)"
-		}
-		hot, _ := d.Set.Get("hot_address_" + strings.ToLower(a))
-		fmt.Fprintf(&sb, "%s: %s / min %s [%s]\nhot: %s\n", a, bal.String(), min.String(), status, hot)
-	}
-	reply(ctx, b, chatID, strings.TrimRight(sb.String(), "\n"))
+	reply(ctx, b, chatID, stockText(ctx, d))
 }
 
 func adminTrial(ctx context.Context, b *bot.Bot, chatID, telegramID int64, d *Deps) {

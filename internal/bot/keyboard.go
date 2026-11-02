@@ -37,6 +37,7 @@ func AdminPanel() *models.InlineKeyboardMarkup {
 			{Text: "📢 Broadcast", CallbackData: "a:broadcast"},
 		},
 		{
+			{Text: "📦 Stok", CallbackData: "a:stock"},
 			{Text: "🧪 Trial", CallbackData: "a:trial"},
 		},
 		{
@@ -86,6 +87,41 @@ func AdminPausePicker(coin string) *models.InlineKeyboardMarkup {
 		},
 		{
 			{Text: "❌ Batal", CallbackData: "a:close"},
+		},
+	}}
+}
+
+// AdminStockPicker: pilih aksi stok. Callback a:stock:<aksi>.
+// Aksi: lihat | float | fee | hot | topup.
+func AdminStockPicker() *models.InlineKeyboardMarkup {
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
+		{
+			{Text: "📦 Lihat stok", CallbackData: "a:stock:lihat"},
+		},
+		{
+			{Text: "📉 Float min", CallbackData: "a:stock:float"},
+			{Text: "⛽ Fee", CallbackData: "a:stock:fee"},
+		},
+		{
+			{Text: "🏦 Alamat hot", CallbackData: "a:stock:hot"},
+			{Text: "➕ Isi float", CallbackData: "a:stock:topup"},
+		},
+		{
+			{Text: "⬅️ Panel", CallbackData: "a:panel"},
+		},
+	}}
+}
+
+// AdminStockCoinPicker: pilih coin untuk aksi stok. Callback a:stock<aksi>:<COIN>.
+func AdminStockCoinPicker(aksi string) *models.InlineKeyboardMarkup {
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
+		{
+			{Text: "BNB", CallbackData: fmt.Sprintf("a:stock%s:BNB", aksi)},
+			{Text: "ETH", CallbackData: fmt.Sprintf("a:stock%s:ETH", aksi)},
+			{Text: "SOL", CallbackData: fmt.Sprintf("a:stock%s:SOL", aksi)},
+		},
+		{
+			{Text: "⬅️ Stok", CallbackData: "a:stock"},
 		},
 	}}
 }
