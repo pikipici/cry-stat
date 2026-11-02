@@ -18,7 +18,18 @@ import (
 )
 
 // handleWalletCallback hanya mengorkestrasi service; seluruh mutasi saldo tetap di ledger.
+// Allowlist utama dicek di handleAdminCallback sebelum delegasi ke sini.
+// Decision check di bawah adalah defense-in-depth (diuji di wallet_sender_test.go).
 func handleWalletCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d *Deps, parts []string) {
+	dec := decideWalletCallback(cb.Data, d.Admin.IsAdmin(cb.From.ID), d.Wallet != nil && d.Q != nil && d.Ledger != nil)
+	if dec.policy == "deny" {
+		_ = d.Admin.Deny(ctx, cb.From.ID, dec.denyReason)
+		liveWalletSender{b: b}.answerDenied(ctx, cb.ID)
+		return
+	}
+	if dec.policy == "silent" {
+		return
+	}
 	chatID, msgID := cb.Message.Message.Chat.ID, cb.Message.Message.ID
 	edit := func(text string, markup *models.InlineKeyboardMarkup) {
 		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: text, ReplyMarkup: markup})
@@ -221,18 +232,7 @@ func handleWalletConfirm(ctx context.Context, b *bot.Bot, chatID, telegramID, id
 	}
 	res, err := d.Ledger.RecordAdminStockDeposit(ctx, ledger.RecordStockDepositInput{AdminTelegramID: telegramID, Asset: row.Asset, Units: row.Units, ToAddress: row.ToAddress, TxRef: row.TxRef})
 	if err != nil {
-		switch {
-		case errors.Is(err, ledger.ErrStockDepositRefConflict):
-			reply(ctx, b, chatID, "Reference ini sudah pernah digunakan untuk data lain. Gunakan reference transaksi yang benar atau hubungi operator.")
-		case errors.Is(err, ledger.ErrStockDepositCancelled):
-			reply(ctx, b, chatID, "Reference ini sebelumnya sudah dibatalkan dan tidak dapat digunakan ulang. Buat reference baru untuk pencatatan baru.")
-		case errors.Is(err, ledger.ErrStockDepositUnauthorized):
-			reply(ctx, b, chatID, "Deposit tidak ditemukan.")
-		case strings.Contains(err.Error(), "audit"):
-			reply(ctx, b, chatID, "Deposit belum dicatat karena sistem gagal menyimpan jejak audit. Saldo tidak berubah. Coba lagi.")
-		default:
-			reply(ctx, b, chatID, "Gagal mencatat deposit: "+err.Error())
-		}
+		reply(ctx, b, chatID, walletConfirmCopy(err))
 		return
 	}
 	if d.Session != nil {
