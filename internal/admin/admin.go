@@ -118,20 +118,20 @@ func (s *Service) SetSpread(ctx context.Context, adminID int64, coin, side, val 
 
 // LimitKeys yang boleh diubah via /setlimit (whitelist — bukan semua settings).
 var limitKeys = map[string]bool{
-	"daily_topup_limit_idr":         true,
-	"daily_withdraw_limit_idr":      true,
+	"daily_topup_limit_idr":           true,
+	"daily_withdraw_limit_idr":        true,
 	"withdraw_approval_threshold_idr": true,
-	"min_topup_idr":                 true,
-	"min_buy_idr":                   true,
-	"min_withdraw_idr":              true,
-	"quote_lock_seconds":            true,
-	"staleness_coin_ms":             true,
-	"staleness_fx_ms":               true,
-	"rate_limit_per_min":            true,
-	"exposure_limit_bnb":            true,
-	"exposure_limit_eth":            true,
-	"exposure_limit_sol":            true,
-	"admin_allowlist":               true,
+	"min_topup_idr":                   true,
+	"min_buy_idr":                     true,
+	"min_withdraw_idr":                true,
+	"quote_lock_seconds":              true,
+	"staleness_coin_ms":               true,
+	"staleness_fx_ms":                 true,
+	"rate_limit_per_min":              true,
+	"exposure_limit_bnb":              true,
+	"exposure_limit_eth":              true,
+	"exposure_limit_sol":              true,
+	"admin_allowlist":                 true,
 }
 
 // SetLimit: ubah angka kunci tanpa restart. Return before/after.
@@ -254,6 +254,7 @@ func (s *Service) SetHotAddress(ctx context.Context, adminID int64, coin, addr s
 	_ = s.Audit(ctx, adminID, "sethot", 0, false, key+"="+before, key+"="+row.Value)
 	return before, row.Value, nil
 }
+
 // Pause kinds: "" (jalan) | "exposure" (beli saja stop) | "spike_stale" (semua stop).
 // FIX debug #12: adminID 0 = system (job reconcile) — audit action prefix "system:" agar
 // jejak jelas, bukan admin fiktif.

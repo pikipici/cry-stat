@@ -25,15 +25,15 @@ func TestDecideWalletCallbackNonAdminDenied(t *testing.T) {
 
 func TestDecideWalletCallbackAdminRouting(t *testing.T) {
 	cases := map[string]string{
-		"a:wallet":         "menu",
-		"a:wallet:assets":  "assets",
-		"a:wallet:deposit": "deposit-picker",
-		"a:wdep:SOL":       "deposit-coin",
-		"a:wdepok:9":       "confirm",
-		"a:wdepno:9":       "cancel",
-		"a:activity":       "activity",
-		"a:activity:25":    "activity",
-		"a:act:STOCK_IN:2": "detail",
+		"a:wallet":           "menu",
+		"a:wallet:assets":    "assets",
+		"a:wallet:deposit":   "deposit-picker",
+		"a:wdep:SOL":         "deposit-coin",
+		"a:wdepok:9":         "confirm",
+		"a:wdepno:9":         "cancel",
+		"a:activity":         "activity",
+		"a:activity:25":      "activity",
+		"a:act:STOCK_IN:2":   "detail",
 		"a:act:PAYOUT_OUT:3": "detail",
 	}
 	for data, want := range cases {

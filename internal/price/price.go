@@ -33,15 +33,15 @@ var Assets = []string{"BNB", "ETH", "SOL"}
 // harga dari bookTicker: mid = (bestBid + bestAsk) / 2, sesuai plan 7.1 (harga_coin_usdt).
 type tick struct {
 	bestBid, bestAsk decimal.Decimal
-	at              time.Time
+	at               time.Time
 }
 
 type Service struct {
 	set *settings.Service
 	q   *db.Queries
 
-	mu    sync.RWMutex
-	ticks map[string]tick // key: BNB/ETH/SOL (upper)
+	mu       sync.RWMutex
+	ticks    map[string]tick      // key: BNB/ETH/SOL (upper)
 	lastSnap map[string]time.Time // throttle audit price_snapshots
 
 	fxMu     sync.RWMutex
@@ -239,16 +239,16 @@ func (s *Service) throttledSnapshot(asset string) {
 	spreadBuy := s.set.Spread(strings.ToLower(asset), "buy")
 	spreadSell := s.set.Spread(strings.ToLower(asset), "sell")
 	_, err = s.q.InsertPriceSnapshot(context.Background(), db.InsertPriceSnapshotParams{
-		Asset:         asset,
-		BinancePrice:  snap.BinanceUSDT,
-		SpreadBuy:     spreadBuy,
-		SpreadSell:    spreadSell,
-		Ask:           snap.Ask,
-		Bid:           snap.Bid,
-		RateUsdtIdr:   snap.Rate,
-		RateSource:    snap.RateSource,
-		RateAgeMs:     snap.RateAgeMs,
-		PriceAgeMs:    snap.PriceAgeMs,
+		Asset:        asset,
+		BinancePrice: snap.BinanceUSDT,
+		SpreadBuy:    spreadBuy,
+		SpreadSell:   spreadSell,
+		Ask:          snap.Ask,
+		Bid:          snap.Bid,
+		RateUsdtIdr:  snap.Rate,
+		RateSource:   snap.RateSource,
+		RateAgeMs:    snap.RateAgeMs,
+		PriceAgeMs:   snap.PriceAgeMs,
 	})
 	if err != nil {
 		return

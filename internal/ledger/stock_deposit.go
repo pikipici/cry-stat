@@ -40,7 +40,9 @@ func (e *StockDepositConflictError) Error() string {
 func (e *StockDepositConflictError) Unwrap() error { return ErrStockDepositRefConflict }
 
 // Is mempertahankan kecocokan sentinel saat error dibandingkan secara langsung.
-func (e *StockDepositConflictError) Is(target error) bool { return target == ErrStockDepositRefConflict }
+func (e *StockDepositConflictError) Is(target error) bool {
+	return target == ErrStockDepositRefConflict
+}
 
 // RecordStockDepositInput adalah data deposit stok manual admin yang dikonfirmasi.
 type RecordStockDepositInput struct {

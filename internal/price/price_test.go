@@ -18,8 +18,8 @@ func TestMidFormula(t *testing.T) {
 		t.Fatalf("midIDR salah: %s", midIDR)
 	}
 	one := decimal.NewFromInt(1)
-	ask := midIDR.Mul(one.Add(decimal.NewFromFloat(0.01)))   // 1.632.160
-	bid := midIDR.Mul(one.Sub(decimal.NewFromFloat(0.01)))   // 1.599.840
+	ask := midIDR.Mul(one.Add(decimal.NewFromFloat(0.01))) // 1.632.160
+	bid := midIDR.Mul(one.Sub(decimal.NewFromFloat(0.01))) // 1.599.840
 	if !ask.Equal(decimal.NewFromInt(1632160)) {
 		t.Fatalf("ask salah: %s", ask)
 	}
