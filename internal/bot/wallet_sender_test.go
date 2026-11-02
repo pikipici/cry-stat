@@ -69,7 +69,7 @@ func TestWalletConfirmCopyMapping(t *testing.T) {
 	if got := walletConfirmCopy(ledger.ErrStockDepositRefConflict); !strings.Contains(got, "sudah pernah digunakan untuk data lain") {
 		t.Fatalf("conflict copy salah: %q", got)
 	}
-	if got := walletConfirmCopy(ledger.StockDepositConflictError{Field: "units"}); !strings.Contains(got, "sudah pernah digunakan untuk data lain") {
+	if got := walletConfirmCopy(&ledger.StockDepositConflictError{Field: "units"}); !strings.Contains(got, "sudah pernah digunakan untuk data lain") {
 		t.Fatalf("conflict struct copy salah: %q", got)
 	}
 	if got := walletConfirmCopy(ledger.ErrStockDepositCancelled); !strings.Contains(got, "sudah dibatalkan") {
@@ -91,7 +91,7 @@ func TestWalletConfirmCopyMapping(t *testing.T) {
 
 func TestWalletConfirmCopyNoLeak(t *testing.T) {
 	// Conflict error tidak boleh mengandung payload lama.
-	err := ledger.StockDepositConflictError{Field: "to_address"}
+	err := &ledger.StockDepositConflictError{Field: "to_address"}
 	got := walletConfirmCopy(err)
 	for _, secret := range []string{"to_address", "MOCK-", "0x", "journal"} {
 		if strings.Contains(got, secret) {
