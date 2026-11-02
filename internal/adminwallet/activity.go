@@ -49,17 +49,17 @@ func (s *Service) ListRecent(ctx context.Context, limit int) ([]ActivityItem, er
 	items := make([]ActivityItem, 0, len(stocks)+len(payouts)+len(deposits))
 	for _, row := range stocks {
 		items = append(items, ActivityItem{Kind: KindStockIn, ID: row.ID, Asset: row.Asset,
-			Network: row.Network, Status: row.Status, TxRef: row.TxRef, Units: row.Units, CreatedAt: row.CreatedAt})
+			Network: row.Network, Status: row.Status, TxRef: row.TxRef, Units: row.Units, CreatedAt: row.CreatedAt.Time})
 	}
 	for _, row := range payouts {
 		items = append(items, ActivityItem{Kind: KindPayoutOut, ID: row.ID, Asset: row.Asset,
 			Network: row.Network, Status: row.Status, TxRef: textValue(row.TxHash), Units: row.Units,
-			UserID: int64Ptr(row.UserID), CreatedAt: row.CreatedAt})
+			UserID: int64Ptr(row.UserID), CreatedAt: row.CreatedAt.Time})
 	}
 	for _, row := range deposits {
 		items = append(items, ActivityItem{Kind: KindUserDepositIn, ID: row.ID, Asset: row.Asset,
 			Network: NetworkFor(row.Asset), Status: row.Status, TxRef: row.TxHash, Units: row.Units,
-			UserID: nullableInt64Ptr(row.UserID), CreatedAt: row.CreatedAt})
+			UserID: nullableInt64Ptr(row.UserID), CreatedAt: row.CreatedAt.Time})
 	}
 
 	sort.Slice(items, func(i, j int) bool {
@@ -89,7 +89,7 @@ func (s *Service) GetDetail(ctx context.Context, kind string, id int64) (Activit
 			return ActivityDetail{}, fmt.Errorf("detail deposit stok: %w", err)
 		}
 		return ActivityDetail{Item: ActivityItem{Kind: kind, ID: row.ID, Asset: row.Asset, Network: row.Network,
-			Status: row.Status, TxRef: row.TxRef, Units: row.Units, CreatedAt: row.CreatedAt},
+			Status: row.Status, TxRef: row.TxRef, Units: row.Units, CreatedAt: row.CreatedAt.Time},
 			ToAddress: row.ToAddress, JournalID: nullableInt64Ptr(row.JournalID), AdminTelegramID: int64Ptr(row.AdminTelegramID)}, nil
 	case KindPayoutOut:
 		row, err := s.q.GetPayoutAdminByID(ctx, id)
@@ -98,7 +98,7 @@ func (s *Service) GetDetail(ctx context.Context, kind string, id int64) (Activit
 		}
 		fee, sent := row.FeeUnits, row.SentUnits
 		return ActivityDetail{Item: ActivityItem{Kind: kind, ID: row.ID, Asset: row.Asset, Network: row.Network,
-			Status: row.Status, TxRef: textValue(row.TxHash), Units: row.Units, UserID: int64Ptr(row.UserID), CreatedAt: row.CreatedAt},
+			Status: row.Status, TxRef: textValue(row.TxHash), Units: row.Units, UserID: int64Ptr(row.UserID), CreatedAt: row.CreatedAt.Time},
 			FeeUnits: &fee, SentUnits: &sent, ToAddress: row.ToAddress}, nil
 	case KindUserDepositIn:
 		row, err := s.q.GetUserDepositAdminByID(ctx, id)
@@ -107,7 +107,7 @@ func (s *Service) GetDetail(ctx context.Context, kind string, id int64) (Activit
 		}
 		credited := row.CreditedIdr
 		return ActivityDetail{Item: ActivityItem{Kind: kind, ID: row.ID, Asset: row.Asset, Network: NetworkFor(row.Asset),
-			Status: row.Status, TxRef: row.TxHash, Units: row.Units, UserID: nullableInt64Ptr(row.UserID), CreatedAt: row.CreatedAt},
+			Status: row.Status, TxRef: row.TxHash, Units: row.Units, UserID: nullableInt64Ptr(row.UserID), CreatedAt: row.CreatedAt.Time},
 			CreditedIDR: &credited, FromAddress: row.FromAddress}, nil
 	default:
 		return ActivityDetail{}, fmt.Errorf("kind aktivitas tidak dikenal: %q", kind)
