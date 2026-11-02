@@ -8,6 +8,12 @@ VALUES ($1, $2, $3, $4, $5) RETURNING id, created_at;
 SELECT id, admin_telegram_id, action, target_id, before, after, created_at
 FROM admin_audit ORDER BY id DESC LIMIT $1;
 
+-- name: AdminAuditByActionTarget :many
+SELECT id, admin_telegram_id, action, target_id, before, after, created_at
+FROM admin_audit
+WHERE action = $1 AND target_id = $2
+ORDER BY id;
+
 -- Settings tulis (admin tanpa restart).
 
 -- name: UpsertSetting :one

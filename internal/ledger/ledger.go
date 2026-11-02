@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/pikipici/crypto-station/internal/db"
@@ -21,12 +22,21 @@ import (
 var ErrUserBlocked = errors.New("user diblokir")
 
 type Service struct {
-	pool *pgxpool.Pool
-	set  *settings.Service
+	pool               *pgxpool.Pool
+	set                *settings.Service
+	stockDepositHookMu sync.RWMutex
+	stockDepositHook   func(stage string) error
 }
 
 func New(pool *pgxpool.Pool, set *settings.Service) *Service {
 	return &Service{pool: pool, set: set}
+}
+
+// SetStockDepositTestHook installs a per-service failure seam for transaction tests.
+func (s *Service) SetStockDepositTestHook(hook func(stage string) error) {
+	s.stockDepositHookMu.Lock()
+	defer s.stockDepositHookMu.Unlock()
+	s.stockDepositHook = hook
 }
 
 func userOwner(id int64) string { return fmt.Sprintf("user:%d", id) }

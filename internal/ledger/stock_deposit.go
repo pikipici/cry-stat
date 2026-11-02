@@ -22,9 +22,6 @@ var (
 	ErrStockDepositCancelled = errors.New("stock deposit reference cancelled")
 	// ErrStockDepositUnauthorized menandakan TxRef milik admin lain.
 	ErrStockDepositUnauthorized = errors.New("stock deposit unauthorized")
-	// stockDepositTestHook adalah seam khusus test untuk membuktikan rollback.
-	// Nilainya nil pada production dan tidak memiliki wiring runtime.
-	stockDepositTestHook func(stage string) error
 )
 
 // StockDepositConflictError menjelaskan field identitas pertama yang tidak cocok.
@@ -55,14 +52,71 @@ type RecordStockDepositInput struct {
 
 // RecordStockDepositResult adalah hasil pencatatan deposit stok admin.
 type RecordStockDepositResult struct {
-	DepositID   int64
-	JournalID   int64
-	Asset       string
-	Network     string
-	Units       decimal.Decimal
-	TxRef       string
-	Balance     decimal.Decimal
-	AlreadyDone bool
+	DepositID        int64
+	JournalID        int64
+	Asset            string
+	Network          string
+	Units            decimal.Decimal
+	TxRef            string
+	Balance          decimal.Decimal
+	BalanceAvailable bool
+	AlreadyDone      bool
+}
+
+type StockDepositPreviewState string
+
+const (
+	StockDepositPreviewCreated          StockDepositPreviewState = "created"
+	StockDepositPreviewIdenticalPending StockDepositPreviewState = "identical_pending"
+	StockDepositPreviewAlreadyRecorded  StockDepositPreviewState = "already_recorded"
+	StockDepositPreviewCancelled        StockDepositPreviewState = "cancelled"
+	StockDepositPreviewConflict         StockDepositPreviewState = "conflict"
+	StockDepositPreviewUnauthorized     StockDepositPreviewState = "unauthorized"
+)
+
+type StockDepositPreviewResult struct {
+	State   StockDepositPreviewState
+	Deposit db.AdminStockDeposit
+}
+
+type stockDepositPreviewQueries interface {
+	CreatePendingAdminStockDeposit(context.Context, db.CreatePendingAdminStockDepositParams) (db.AdminStockDeposit, error)
+	GetAdminStockDepositByRef(context.Context, string) (db.AdminStockDeposit, error)
+}
+
+// CreateAdminStockDepositPreview owns duplicate-reference semantics. An identical pending row is reopened.
+func (s *Service) CreateAdminStockDepositPreview(ctx context.Context, in RecordStockDepositInput) (StockDepositPreviewResult, error) {
+	return createAdminStockDepositPreview(ctx, db.New(s.pool), in)
+}
+
+func createAdminStockDepositPreview(ctx context.Context, q stockDepositPreviewQueries, in RecordStockDepositInput) (StockDepositPreviewResult, error) {
+	in.Asset = strings.ToUpper(strings.TrimSpace(in.Asset))
+	in.ToAddress = strings.TrimSpace(in.ToAddress)
+	in.TxRef = strings.TrimSpace(in.TxRef)
+	dep, err := q.CreatePendingAdminStockDeposit(ctx, db.CreatePendingAdminStockDepositParams{AdminTelegramID: in.AdminTelegramID, Asset: in.Asset, Network: stockDepositNetwork(in.Asset), Units: in.Units, ToAddress: in.ToAddress, TxRef: in.TxRef})
+	if err == nil {
+		return StockDepositPreviewResult{State: StockDepositPreviewCreated, Deposit: dep}, nil
+	}
+	existing, lookupErr := q.GetAdminStockDepositByRef(ctx, in.TxRef)
+	if lookupErr != nil {
+		return StockDepositPreviewResult{}, err
+	}
+	if conflict := compareStockDepositIdentity(existing, in); conflict != nil {
+		if conflict.Field == "admin_telegram_id" {
+			return StockDepositPreviewResult{State: StockDepositPreviewUnauthorized}, nil
+		}
+		return StockDepositPreviewResult{State: StockDepositPreviewConflict}, nil
+	}
+	state := StockDepositPreviewConflict
+	switch existing.Status {
+	case "pending_confirm":
+		state = StockDepositPreviewIdenticalPending
+	case "recorded_mock":
+		state = StockDepositPreviewAlreadyRecorded
+	case "cancelled":
+		state = StockDepositPreviewCancelled
+	}
+	return StockDepositPreviewResult{State: state, Deposit: existing}, nil
 }
 
 // RecordAdminStockDeposit mencatat perpindahan stok cold→float secara idempotent oleh TxRef.
@@ -98,10 +152,10 @@ func (s *Service) RecordAdminStockDeposit(ctx context.Context, in RecordStockDep
 			continue
 		}
 		bal, err := db.New(s.pool).HouseFloatByAsset(ctx, res.Asset)
-		if err != nil {
-			return RecordStockDepositResult{}, fmt.Errorf("baca saldo float: %w", err)
+		if err == nil {
+			res.Balance = bal
+			res.BalanceAvailable = true
 		}
-		res.Balance = bal
 		return res, nil
 	}
 	return RecordStockDepositResult{}, fmt.Errorf("deposit stok bentrok, silakan ulangi")
@@ -166,7 +220,7 @@ func (s *Service) recordAdminStockDepositTx(ctx context.Context, in RecordStockD
 		return RecordStockDepositResult{}, false, fmt.Errorf("status deposit %q tidak dapat diproses", dep.Status)
 	}
 
-	if err := runStockDepositTestHook("before-journal"); err != nil {
+	if err := s.runStockDepositHook("before-journal"); err != nil {
 		return RecordStockDepositResult{}, false, err
 	}
 	j, err := q.CreateJournal(ctx, db.CreateJournalParams{
@@ -190,7 +244,7 @@ func (s *Service) recordAdminStockDepositTx(ctx context.Context, in RecordStockD
 			return RecordStockDepositResult{}, false, err
 		}
 	}
-	if err := runStockDepositTestHook("before-mark-recorded"); err != nil {
+	if err := s.runStockDepositHook("before-mark-recorded"); err != nil {
 		return RecordStockDepositResult{}, false, err
 	}
 	if _, err := q.MarkAdminStockDepositRecorded(ctx, db.MarkAdminStockDepositRecordedParams{
@@ -198,7 +252,7 @@ func (s *Service) recordAdminStockDepositTx(ctx context.Context, in RecordStockD
 	}); err != nil {
 		return RecordStockDepositResult{}, false, err
 	}
-	if err := runStockDepositTestHook("before-audit"); err != nil {
+	if err := s.runStockDepositHook("before-audit"); err != nil {
 		return RecordStockDepositResult{}, false, fmt.Errorf("insert audit success: %w", err)
 	}
 	if _, err := q.InsertAdminAudit(ctx, db.InsertAdminAuditParams{
@@ -210,7 +264,7 @@ func (s *Service) recordAdminStockDepositTx(ctx context.Context, in RecordStockD
 	}); err != nil {
 		return RecordStockDepositResult{}, false, fmt.Errorf("insert audit success: %w", err)
 	}
-	if err := runStockDepositTestHook("before-commit"); err != nil {
+	if err := s.runStockDepositHook("before-commit"); err != nil {
 		return RecordStockDepositResult{}, false, err
 	}
 	if err := tx.Commit(ctx); err != nil {
@@ -254,7 +308,7 @@ func (s *Service) CancelAdminStockDeposit(ctx context.Context, depositID, adminT
 	if _, err := q.MarkAdminStockDepositCancelled(ctx, dep.ID); err != nil {
 		return err
 	}
-	if err := runStockDepositTestHook("before-audit"); err != nil {
+	if err := s.runStockDepositHook("before-audit"); err != nil {
 		return fmt.Errorf("insert audit cancel: %w", err)
 	}
 	if _, err := q.InsertAdminAudit(ctx, db.InsertAdminAuditParams{
@@ -266,17 +320,20 @@ func (s *Service) CancelAdminStockDeposit(ctx context.Context, depositID, adminT
 	}); err != nil {
 		return fmt.Errorf("insert audit cancel: %w", err)
 	}
-	if err := runStockDepositTestHook("before-commit"); err != nil {
+	if err := s.runStockDepositHook("before-commit"); err != nil {
 		return err
 	}
 	return tx.Commit(ctx)
 }
 
-func runStockDepositTestHook(stage string) error {
-	if stockDepositTestHook == nil {
+func (s *Service) runStockDepositHook(stage string) error {
+	s.stockDepositHookMu.RLock()
+	hook := s.stockDepositHook
+	s.stockDepositHookMu.RUnlock()
+	if hook == nil {
 		return nil
 	}
-	return stockDepositTestHook(stage)
+	return hook(stage)
 }
 
 func shortStockDepositRef(ref string) string {

@@ -9,7 +9,6 @@ import (
 
 	"github.com/pikipici/crypto-station/internal/adminwallet"
 	"github.com/pikipici/crypto-station/internal/chain"
-	"github.com/pikipici/crypto-station/internal/db"
 	"github.com/pikipici/crypto-station/internal/ledger"
 
 	"github.com/go-telegram/bot"
@@ -21,18 +20,21 @@ import (
 // Allowlist utama dicek di handleAdminCallback sebelum delegasi ke sini.
 // Decision check di bawah adalah defense-in-depth (diuji di wallet_sender_test.go).
 func handleWalletCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d *Deps, parts []string) {
+	sender := liveWalletSender{b: b}
 	dec := decideWalletCallback(cb.Data, d.Admin.IsAdmin(cb.From.ID), d.Wallet != nil && d.Q != nil && d.Ledger != nil)
-	if dec.policy == "deny" {
-		_ = d.Admin.Deny(ctx, cb.From.ID, dec.denyReason)
-		liveWalletSender{b: b}.answerDenied(ctx, cb.ID)
+	chatID, msgID := cb.Message.Message.Chat.ID, cb.Message.Message.ID
+	if routeWalletMutationCallback(ctx, sender, dec, cb.ID, chatID, msgID, cb.From.ID, depsWalletMutationService{d: d}) {
+		if dec.policy == "deny" {
+			_ = d.Admin.Deny(ctx, cb.From.ID, dec.denyReason)
+		}
 		return
 	}
 	if dec.policy == "silent" {
+		sender.editText(ctx, chatID, msgID, "Tombol ini sudah tidak berlaku. Buka kembali menu Wallet.", AdminWalletMenu())
 		return
 	}
-	chatID, msgID := cb.Message.Message.Chat.ID, cb.Message.Message.ID
 	edit := func(text string, markup *models.InlineKeyboardMarkup) {
-		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: text, ReplyMarkup: markup})
+		sender.editText(ctx, chatID, msgID, text, markup)
 	}
 	clear := func() {
 		if d.Session != nil {
@@ -172,25 +174,30 @@ func handleWalletInput(ctx context.Context, b *bot.Bot, chatID, telegramID int64
 			reply(ctx, b, chatID, "Sesi deposit tidak valid. Ulangi dari Wallet.")
 			return true
 		}
-		row, err := d.Q.CreatePendingAdminStockDeposit(ctx, db.CreatePendingAdminStockDepositParams{AdminTelegramID: telegramID, Asset: st.Coin, Network: adminwallet.NetworkFor(st.Coin), Units: units, ToAddress: st.HotAddr, TxRef: ref})
+		preview, err := d.Ledger.CreateAdminStockDepositPreview(ctx, ledger.RecordStockDepositInput{AdminTelegramID: telegramID, Asset: st.Coin, Units: units, ToAddress: st.HotAddr, TxRef: ref})
 		if err != nil {
-			existing, lookupErr := d.Q.GetAdminStockDepositByRef(ctx, ref)
-			if lookupErr == nil && existing.AdminTelegramID == telegramID {
-				switch existing.Status {
-				case "recorded_mock":
-					balance, _, balanceErr := d.Ledger.FloatStatus(ctx, existing.Asset)
-					if balanceErr == nil && existing.JournalID.Valid {
-						reply(ctx, b, chatID, fmt.Sprintf("Deposit stok ini sudah pernah dicatat.\nJurnal: #%d\nSaldo saat ini: %s", existing.JournalID.Int64, balance.String()))
-						return true
-					}
-					reply(ctx, b, chatID, "Deposit stok ini sudah pernah dicatat.")
-					return true
-				case "cancelled":
-					reply(ctx, b, chatID, "Reference ini sebelumnya sudah dibatalkan dan tidak dapat digunakan ulang. Buat reference baru untuk pencatatan baru.")
-					return true
-				}
+			reply(ctx, b, chatID, "Gagal membuat preview. Coba lagi.")
+			return true
+		}
+		row := preview.Deposit
+		switch preview.State {
+		case ledger.StockDepositPreviewAlreadyRecorded:
+			balance, _, balanceErr := d.Ledger.FloatStatus(ctx, row.Asset)
+			if balanceErr == nil && row.JournalID.Valid {
+				reply(ctx, b, chatID, fmt.Sprintf("Deposit stok ini sudah pernah dicatat.\nJurnal: #%d\nSaldo saat ini: %s", row.JournalID.Int64, balance.String()))
+			} else {
+				reply(ctx, b, chatID, "Deposit stok ini sudah pernah dicatat.")
 			}
+			return true
+		case ledger.StockDepositPreviewCancelled:
+			reply(ctx, b, chatID, "Reference ini sebelumnya sudah dibatalkan dan tidak dapat digunakan ulang. Buat reference baru untuk pencatatan baru.")
+			return true
+		case ledger.StockDepositPreviewConflict, ledger.StockDepositPreviewUnauthorized:
 			reply(ctx, b, chatID, "Reference sudah dipakai atau gagal membuat preview. Gunakan reference lain.")
+			return true
+		case ledger.StockDepositPreviewCreated, ledger.StockDepositPreviewIdenticalPending:
+		default:
+			reply(ctx, b, chatID, "Gagal membuat preview. Coba lagi.")
 			return true
 		}
 		before, _, err := d.Ledger.FloatStatus(ctx, st.Coin)
@@ -242,7 +249,13 @@ func handleWalletConfirm(ctx context.Context, b *bot.Bot, chatID, telegramID, id
 		replyInline(ctx, b, chatID, fmt.Sprintf("Deposit #%d sudah diproses (SIMULASI).", res.DepositID), activityDetailButton(res.DepositID))
 		return
 	}
-	replyInline(ctx, b, chatID, fmt.Sprintf("Deposit stok tercatat (SIMULASI)\nDeposit ID: %d\nJournal ID: %d\nSaldo jurnal %s: %s", res.DepositID, res.JournalID, res.Asset, res.Balance.String()), activityDetailButton(res.DepositID))
+	text := fmt.Sprintf("Deposit stok tercatat (SIMULASI)\nDeposit ID: %d\nJournal ID: %d", res.DepositID, res.JournalID)
+	if res.BalanceAvailable {
+		text += fmt.Sprintf("\nSaldo jurnal %s: %s", res.Asset, res.Balance.String())
+	} else {
+		text += "\nSaldo terbaru belum tersedia; pencatatan sudah berhasil."
+	}
+	replyInline(ctx, b, chatID, text, activityDetailButton(res.DepositID))
 }
 
 func validWalletAsset(asset string) bool {

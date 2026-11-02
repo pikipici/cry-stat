@@ -6,6 +6,10 @@ package bot
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
+
+	"github.com/pikipici/crypto-station/internal/ledger"
 
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
@@ -47,6 +51,8 @@ type walletCallbackDecision struct {
 	policy string
 	// action bisnis: "menu", "assets", "deposit-picker", "none", ...
 	action string
+	// value is the validated callback payload used by the router.
+	value string
 	// denyReason diisi saat policy == "deny".
 	denyReason string
 }
@@ -78,9 +84,9 @@ func decideWalletCallback(data string, isAdmin bool, walletReady bool) walletCal
 		}
 		return walletCallbackDecision{policy: "ok", action: "deposit-coin"}
 	case len(data) > len("a:wdepok:") && data[:len("a:wdepok:")] == "a:wdepok:":
-		return walletCallbackDecision{policy: "ok", action: "confirm"}
+		return walletCallbackDecision{policy: "ok", action: "confirm", value: data}
 	case len(data) > len("a:wdepno:") && data[:len("a:wdepno:")] == "a:wdepno:":
-		return walletCallbackDecision{policy: "ok", action: "cancel"}
+		return walletCallbackDecision{policy: "ok", action: "cancel", value: data}
 	case data == "a:activity" || data == "a:activity:10" || data == "a:activity:25":
 		return walletCallbackDecision{policy: "ok", action: "activity"}
 	case len(data) > len("a:act:") && data[:len("a:act:")] == "a:act:":
@@ -88,6 +94,64 @@ func decideWalletCallback(data string, isAdmin bool, walletReady bool) walletCal
 	default:
 		return walletCallbackDecision{policy: "silent"}
 	}
+}
+
+type walletMutationService interface {
+	ConfirmWalletDeposit(context.Context, int64, int64) (string, *models.InlineKeyboardMarkup)
+	CancelWalletDeposit(context.Context, int64, int64) (string, *models.InlineKeyboardMarkup)
+}
+
+type depsWalletMutationService struct{ d *Deps }
+
+func (s depsWalletMutationService) ConfirmWalletDeposit(ctx context.Context, adminID, id int64) (string, *models.InlineKeyboardMarkup) {
+	row, err := s.d.Q.GetAdminStockDepositByID(ctx, id)
+	if err != nil || row.AdminTelegramID != adminID {
+		return "Deposit tidak ditemukan.", nil
+	}
+	res, err := s.d.Ledger.RecordAdminStockDeposit(ctx, ledger.RecordStockDepositInput{AdminTelegramID: adminID, Asset: row.Asset, Units: row.Units, ToAddress: row.ToAddress, TxRef: row.TxRef})
+	if err != nil {
+		return walletConfirmCopy(err), nil
+	}
+	return fmt.Sprintf("Deposit stok tercatat (SIMULASI)\nDeposit ID: %d\nJournal ID: %d", res.DepositID, res.JournalID), activityDetailButton(res.DepositID)
+}
+func (s depsWalletMutationService) CancelWalletDeposit(ctx context.Context, adminID, id int64) (string, *models.InlineKeyboardMarkup) {
+	if err := s.d.Ledger.CancelAdminStockDeposit(ctx, id, adminID); err != nil {
+		return walletConfirmCopy(err), AdminWalletMenu()
+	}
+	return "Deposit stok dibatalkan. Tidak ada jurnal dibuat.", AdminWalletMenu()
+}
+
+// routeWalletMutationCallback routes exclusively from the parsed decision.
+func routeWalletMutationCallback(ctx context.Context, sender walletSender, dec walletCallbackDecision, callbackID string, chatID int64, msgID int, adminID int64, svc walletMutationService) bool {
+	switch dec.policy {
+	case "deny":
+		sender.answerDenied(ctx, callbackID)
+		return true
+	case "silent":
+		return false
+	}
+	if dec.action == "not-ready" {
+		sender.editText(ctx, chatID, msgID, "Wallet belum siap.", AdminPanel())
+		return true
+	}
+	if dec.action != "confirm" && dec.action != "cancel" {
+		return false
+	}
+	parts := strings.Split(dec.value, ":")
+	id, err := strconv.ParseInt(parts[len(parts)-1], 10, 64)
+	if err != nil || id <= 0 {
+		sender.editText(ctx, chatID, msgID, "Tombol ini sudah tidak berlaku. Buka kembali menu Wallet.", AdminWalletMenu())
+		return true
+	}
+	var text string
+	var markup *models.InlineKeyboardMarkup
+	if dec.action == "confirm" {
+		text, markup = svc.ConfirmWalletDeposit(ctx, adminID, id)
+	} else {
+		text, markup = svc.CancelWalletDeposit(ctx, adminID, id)
+	}
+	sender.editText(ctx, chatID, msgID, text, markup)
+	return true
 }
 
 // walletConfirmCopy memetakan error ledger ke copy user (§8 revisi).

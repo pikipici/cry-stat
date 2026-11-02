@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/pikipici/crypto-station/internal/db"
 )
 
@@ -19,13 +20,13 @@ func TestRecordStockDepositAuditFailureRollsBackAll(t *testing.T) {
 	if err != nil {
 		t.Fatalf("float awal: %v", err)
 	}
-	stockDepositTestHook = func(stage string) error {
+	svc.SetStockDepositTestHook(func(stage string) error {
 		if stage == "before-audit" {
 			return errors.New("audit dipaksa gagal")
 		}
 		return nil
-	}
-	t.Cleanup(func() { stockDepositTestHook = nil })
+	})
+	t.Cleanup(func() { svc.SetStockDepositTestHook(nil) })
 	if _, err := svc.RecordAdminStockDeposit(ctx, in); err == nil {
 		t.Fatal("audit gagal harus menggagalkan record")
 	}
@@ -43,7 +44,7 @@ func TestRecordStockDepositAuditFailureRollsBackAll(t *testing.T) {
 	if count := stockDepositAuditCount(t, ctx, q, "wallet:stock_deposit:record", dep.ID); count != 0 {
 		t.Fatalf("audit rollback=%d, mau 0", count)
 	}
-	stockDepositTestHook = nil
+	svc.SetStockDepositTestHook(nil)
 	res, err := svc.RecordAdminStockDeposit(ctx, in)
 	if err != nil {
 		t.Fatalf("retry setelah rollback: %v", err)
@@ -61,13 +62,13 @@ func TestCancelStockDepositAuditFailureRollsBack(t *testing.T) {
 	ctx := context.Background()
 	in := stockDepositConflictInput(t)
 	dep := createPendingStockDeposit(t, ctx, q, in)
-	stockDepositTestHook = func(stage string) error {
+	svc.SetStockDepositTestHook(func(stage string) error {
 		if stage == "before-audit" {
 			return errors.New("audit dipaksa gagal")
 		}
 		return nil
-	}
-	t.Cleanup(func() { stockDepositTestHook = nil })
+	})
+	t.Cleanup(func() { svc.SetStockDepositTestHook(nil) })
 	if err := svc.CancelAdminStockDeposit(ctx, dep.ID, in.AdminTelegramID); err == nil {
 		t.Fatal("audit gagal harus menggagalkan cancel")
 	}
@@ -78,7 +79,7 @@ func TestCancelStockDepositAuditFailureRollsBack(t *testing.T) {
 	if count := stockDepositAuditCount(t, ctx, q, "wallet:stock_deposit:cancel", dep.ID); count != 0 {
 		t.Fatalf("audit cancel rollback=%d, mau 0", count)
 	}
-	stockDepositTestHook = nil
+	svc.SetStockDepositTestHook(nil)
 	if err := svc.CancelAdminStockDeposit(ctx, dep.ID, in.AdminTelegramID); err != nil {
 		t.Fatalf("cancel setelah rollback: %v", err)
 	}
@@ -161,15 +162,20 @@ func stockDepositAuditCount(t *testing.T, ctx context.Context, q *db.Queries, ac
 
 func stockDepositAudit(t *testing.T, ctx context.Context, q *db.Queries, action string, depositID int64) (before, after string, count int) {
 	t.Helper()
-	rows, err := q.RecentAdminAudit(ctx, 50)
+	// Query exact action+target instead of scanning a moving "latest 50" window.
+	// db.Queries intentionally does not expose its pool, so use the service pool
+	// from the test fixture through the existing query's underlying DB is not possible;
+	// add a dedicated sqlc query and use it here after regeneration.
+	rows, err := q.AdminAuditByActionTarget(ctx, db.AdminAuditByActionTargetParams{
+		Action:   action,
+		TargetID: pgtype.Int8{Int64: depositID, Valid: true},
+	})
 	if err != nil {
-		t.Fatalf("baca audit: %v", err)
+		t.Fatalf("baca audit exact: %v", err)
 	}
 	for _, row := range rows {
-		if row.Action == action && row.TargetID.Valid && row.TargetID.Int64 == depositID {
-			before, after = row.Before, row.After
-			count++
-		}
+		before, after = row.Before, row.After
+		count++
 	}
 	return before, after, count
 }

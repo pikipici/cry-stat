@@ -23,34 +23,54 @@
 
 ## 2. Upgrade Procedure (workspace)
 
+> Gunakan hanya DB workspace/test. Full verify memang menjalankan `goose up`, sehingga wajib opt-in eksplisit. Backup dilakukan sebelum migrasi.
+
 ```bash
 cd /home/ubuntu/crypto-station
 git fetch https://github.com/pikipici/cry-stat.git main
 git reset --hard FETCH_HEAD
-./scripts/verify.sh   # rebuild schema + sqlc + vet + test + build + smoke
 export DATABASE_URL="postgres://cs:[REDACTED]@localhost:5432/cryptostation?sslmode=disable"
-goose -dir ./migrations postgres "$DATABASE_URL" up
-goose -dir ./migrations postgres "$DATABASE_URL" status  # expect v10
+export VERIFY_ALLOW_DB_MIGRATION=YES
+
+# Backup custom-format dulu (§3), kemudian generate/vet/test/build + migrate + status + smoke:
+bash scripts/verify.sh --full
 git push /home/ubuntu/git-repos/crypto-station.git main
 ```
 
 ## 3. Backup Procedure (sebelum migrate / revisi besar)
 
+Pakai custom format supaya restore terkontrol dengan `pg_restore`:
+
 ```bash
 export DBURL="postgres://cs:[REDACTED]@localhost:5432/cryptostation"
-pg_dump "$DBURL" --no-owner --no-privileges \
-  -f /tmp/cs-backup-pre-<label>-$(date +%Y%m%d-%H%M).sql
-ls -la /tmp/cs-backup-pre-*.sql
+BACKUP="/tmp/cs-backup-pre-<label>-$(date +%Y%m%d-%H%M).dump"
+pg_dump "$DBURL" --format=custom --no-owner --no-privileges --file "$BACKUP"
+pg_restore --list "$BACKUP" >/dev/null
+ls -lh "$BACKUP"
 ```
 
-Restore (darurat, butuh approval user — menimpa data baru setelah backup):
+Restore darurat bersifat destruktif dan WAJIB approval user + maintenance window. Jangan restore ke DB aktif. Contoh aman: restore dulu ke database drill baru, verifikasi, baru putuskan cutover.
 
 ```bash
-# HENTIKAN bot dulu (kill PID / stop unit), lalu:
-psql "$DBURL" -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='cryptostation' AND pid<>pg_backend_pid();"
-pg_restore_compatible() { :; }  # dump adalah plain SQL:
-psql "$DBURL" < /tmp/cs-backup-pre-<label>-<ts>.sql
+# Hentikan bot/service lebih dulu. Gunakan koneksi maintenance ke database postgres.
+export MAINT_URL="postgres://cs:[REDACTED]@localhost:5432/postgres?sslmode=disable"
+export RESTORE_DB="cryptostation_restore_drill"
+export BACKUP="/tmp/cs-backup-pre-<label>-<ts>.dump"
+
+# Target drill harus dedicated; drop/recreate hanya setelah approval.
+psql "$MAINT_URL" -v ON_ERROR_STOP=1 -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${RESTORE_DB}' AND pid<>pg_backend_pid();"
+psql "$MAINT_URL" -v ON_ERROR_STOP=1 -c "DROP DATABASE IF EXISTS ${RESTORE_DB};"
+psql "$MAINT_URL" -v ON_ERROR_STOP=1 -c "CREATE DATABASE ${RESTORE_DB};"
+pg_restore --exit-on-error --no-owner --no-privileges --dbname="postgres://cs:[REDACTED]@localhost:5432/${RESTORE_DB}?sslmode=disable" "$BACKUP"
+
+# Restore drill verification:
+DRILL_URL="postgres://cs:[REDACTED]@localhost:5432/${RESTORE_DB}?sslmode=disable"
+goose -dir ./migrations postgres "$DRILL_URL" status
+psql "$DRILL_URL" -v ON_ERROR_STOP=1 -tAc "SELECT count(*) FROM admin_stock_deposits"
+psql "$DRILL_URL" -v ON_ERROR_STOP=1 -tAc "SELECT count(*) FROM admin_stock_deposits WHERE status='recorded_mock' AND journal_id IS NULL"
 ```
+
+Untuk mengganti database utama dari backup, lakukan prosedur drop/recreate yang sama terhadap target utama hanya setelah drill hijau, backup terbaru terverifikasi, bot berhenti, dan approval eksplisit diberikan. Jangan memakai import plain SQL ke schema existing karena dapat menghasilkan duplicate object/key atau restore parsial.
 
 ## 4. Health Checks (DB verification §10 plan)
 
