@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/pikipici/crypto-station/internal/db"
-
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/shopspring/decimal"
 )
