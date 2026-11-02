@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/pikipici/crypto-station/internal/admin"
+	"github.com/pikipici/crypto-station/internal/adminwallet"
 	"github.com/pikipici/crypto-station/internal/chain"
 	"github.com/pikipici/crypto-station/internal/db"
 	"github.com/pikipici/crypto-station/internal/ledger"
@@ -31,6 +32,7 @@ type Deps struct {
 	Risk    *risk.Service
 	Admin   *admin.Service
 	Trial   *trial.Service
+	Wallet  *adminwallet.Service
 	Chain   *chain.Service // pintu on-chain Fase 8 (mock di sandbox)
 	Limiter *RateLimiter
 	Session *Sessions // state multi-step T1-button (nil = dimatikan)
@@ -74,7 +76,7 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 	if d.Session != nil {
 		if st := d.Session.Get(upd.Message.From.ID); st.Step != StepIdle && MatchButton(text) == "" && !strings.HasPrefix(strings.ToLower(text), "/") {
 			switch st.Step {
-			case StepAdminSpread, StepAdminLimit, StepAdminBroadcast, StepAdminStock:
+			case StepAdminSpread, StepAdminLimit, StepAdminBroadcast, StepAdminStock, StepAdminStockDepositUnits, StepAdminStockDepositRef:
 				if handleAdminInput(ctx, b, upd.Message.Chat.ID, upd.Message.From.ID, text, st, d) {
 					return
 				}

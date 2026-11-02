@@ -37,7 +37,10 @@ func AdminPanel() *models.InlineKeyboardMarkup {
 			{Text: "📢 Broadcast", CallbackData: "a:broadcast"},
 		},
 		{
-			{Text: "📦 Stok", CallbackData: "a:stock"},
+			{Text: "💼 Wallet & Aset", CallbackData: "a:wallet"},
+			{Text: "🧾 Transaksi", CallbackData: "a:activity"},
+		},
+		{
 			{Text: "🧪 Trial", CallbackData: "a:trial"},
 		},
 		{
@@ -121,9 +124,48 @@ func AdminStockCoinPicker(aksi string) *models.InlineKeyboardMarkup {
 			{Text: "SOL", CallbackData: fmt.Sprintf("a:stock%s:SOL", aksi)},
 		},
 		{
-			{Text: "⬅️ Stok", CallbackData: "a:stock"},
+			{Text: "⬅️ Wallet", CallbackData: "a:wallet"},
 		},
 	}}
+}
+
+// AdminWalletMenu adalah submenu operasi stok dan ringkasan jurnal sandbox.
+func AdminWalletMenu() *models.InlineKeyboardMarkup {
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
+		{{Text: "📊 Ringkasan Aset", CallbackData: "a:wallet:assets"}, {Text: "➕ Deposit Stok", CallbackData: "a:wallet:deposit"}},
+		{{Text: "📉 Float Minimum", CallbackData: "a:stock:float"}, {Text: "⛽ Fee", CallbackData: "a:stock:fee"}},
+		{{Text: "🏦 Alamat Hot", CallbackData: "a:stock:hot"}},
+		{{Text: "⬅️ Panel", CallbackData: "a:panel"}},
+	}}
+}
+
+func AdminWalletDepositPicker() *models.InlineKeyboardMarkup {
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
+		{{Text: "BNB (BSC)", CallbackData: "a:wdep:BNB"}, {Text: "ETH (ERC20)", CallbackData: "a:wdep:ETH"}, {Text: "SOL", CallbackData: "a:wdep:SOL"}},
+		{{Text: "⬅️ Wallet", CallbackData: "a:wallet"}},
+	}}
+}
+
+func WalletDepositConfirm(depositID int64) *models.InlineKeyboardMarkup {
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
+		{{Text: "✅ Catat Deposit", CallbackData: fmt.Sprintf("a:wdepok:%d", depositID)}, {Text: "❌ Batal", CallbackData: fmt.Sprintf("a:wdepno:%d", depositID)}},
+	}}
+}
+
+func AdminActivityNav(limit int) *models.InlineKeyboardMarkup {
+	next := 25
+	label := "Tampilkan 25"
+	if limit >= 25 {
+		next, label = 10, "Tampilkan 10"
+	}
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
+		{{Text: label, CallbackData: fmt.Sprintf("a:activity:%d", next)}},
+		{{Text: "⬅️ Panel", CallbackData: "a:panel"}},
+	}}
+}
+
+func ActivityDetailBack() *models.InlineKeyboardMarkup {
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{{{Text: "⬅️ Transaksi", CallbackData: "a:activity"}}}}
 }
 
 // AdminLimitPicker: pilih key limit (whitelist sama kayak SetLimit).

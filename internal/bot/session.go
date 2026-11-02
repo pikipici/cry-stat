@@ -14,14 +14,16 @@ import (
 type Step string
 
 const (
-	StepIdle           Step = ""
-	StepAwaitBuy       Step = "await_buy_amount"  // sudah pilih coin buy, nunggu nominal
-	StepAwaitSell      Step = "await_sell_amount" // sudah pilih coin sell, nunggu nominal atau SEMUA
-	StepAwaitAddr      Step = "await_addr"        // sudah pilih coin alamat, nunggu string alamat
-	StepAdminSpread    Step = "admin_spread"      // sudah pilih coin+side spread, nunggu angka 0-0.1
-	StepAdminLimit     Step = "admin_limit"       // sudah pilih key limit, nunggu nilai
-	StepAdminBroadcast Step = "admin_broadcast"   // nunggu teks broadcast
-	StepAdminStock     Step = "admin_stock"       // sudah pilih aksi stok + coin, nunggu nilai
+	StepIdle                   Step = ""
+	StepAwaitBuy               Step = "await_buy_amount"          // sudah pilih coin buy, nunggu nominal
+	StepAwaitSell              Step = "await_sell_amount"         // sudah pilih coin sell, nunggu nominal atau SEMUA
+	StepAwaitAddr              Step = "await_addr"                // sudah pilih coin alamat, nunggu string alamat
+	StepAdminSpread            Step = "admin_spread"              // sudah pilih coin+side spread, nunggu angka 0-0.1
+	StepAdminLimit             Step = "admin_limit"               // sudah pilih key limit, nunggu nilai
+	StepAdminBroadcast         Step = "admin_broadcast"           // nunggu teks broadcast
+	StepAdminStock             Step = "admin_stock"               // sudah pilih aksi stok + coin, nunggu nilai
+	StepAdminStockDepositUnits Step = "admin_stock_deposit_units" // sudah pilih coin, nunggu units deposit
+	StepAdminStockDepositRef   Step = "admin_stock_deposit_ref"   // sudah isi units, nunggu reference
 )
 
 // SessionTimeout: state hangus setelah ini (suruh tap Beli/Jual lagi).
@@ -31,6 +33,10 @@ type Session struct {
 	Step      Step
 	Coin      string // BNB/ETH/SOL (T1 + admin spread/pause)
 	Extra     string // T1: kosong. Admin: side (buy/sell) / key limit
+	Units     string // canonical decimal untuk preview deposit stok
+	HotAddr   string // snapshot alamat hot saat flow deposit dimulai
+	TxRef     string // reference mock/sintaks ringan yang sudah divalidasi
+	DepositID int64  // pending deposit yang menunggu Confirm
 	UpdatedAt time.Time
 }
 

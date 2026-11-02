@@ -35,6 +35,12 @@ func handleAdminCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQue
 	if len(parts) < 2 {
 		return
 	}
+	// Wallet baru tetap melalui gerbang allowlist di atas; callback stok lama tetap kompatibel.
+	switch parts[1] {
+	case "wallet", "wdep", "wdepok", "wdepno", "activity", "act":
+		handleWalletCallback(ctx, b, cb, d, parts)
+		return
+	}
 	clearSess := func() {
 		if d.Session != nil {
 			d.Session.Clear(cb.From.ID)
@@ -198,6 +204,9 @@ func handleAdminInput(ctx context.Context, b *bot.Bot, chatID, telegramID int64,
 		_ = d.Admin.Deny(ctx, telegramID, "input:"+string(st.Step))
 		reply(ctx, b, chatID, "Bukan admin.")
 		return true
+	}
+	if st.Step == StepAdminStockDepositUnits || st.Step == StepAdminStockDepositRef {
+		return handleWalletInput(ctx, b, chatID, telegramID, text, st, d)
 	}
 	switch st.Step {
 	case StepAdminSpread:
