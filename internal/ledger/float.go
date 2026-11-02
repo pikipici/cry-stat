@@ -25,6 +25,8 @@ type FloatTopupResult struct {
 }
 
 // FloatTopup: owner transfer manual cold→hot, tercatat jurnal float-in.
+//
+// Deprecated: use RecordAdminStockDeposit so the transfer has an idempotent TxRef.
 // Kaki: house:cold coin −units, house:float coin +units. Sum per aset = 0.
 func (s *Service) FloatTopup(ctx context.Context, asset string, units decimal.Decimal) (FloatTopupResult, error) {
 	asset = strings.ToUpper(asset)
