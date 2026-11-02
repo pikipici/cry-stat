@@ -92,7 +92,7 @@ func TestRecordStockDepositWritesSuccessAudit(t *testing.T) {
 	ctx := context.Background()
 	in := stockDepositConflictInput(t)
 	in.ToAddress = "MOCK-HOT-ADDRESS-YANG-TIDAK-BOLEH-MASUK-AUDIT"
-	in.TxRef = "MOCK-REF-SANGAT-PANJANG-UNTUK-UJI-SHORT-REFERENCE"
+	in.TxRef = uniqueStockDepositRef(t) + "-PANJANG-UNTUK-UJI-SHORT-REFERENCE"
 	before, _, err := svc.FloatStatus(ctx, in.Asset)
 	if err != nil {
 		t.Fatalf("float awal: %v", err)
