@@ -798,7 +798,7 @@ Jangan membaca seluruh roadmap kecuali menemukan kontradiksi produk.
 - [x] R6 Reproducible sqlc/build pipeline (scripts/verify.sh VERIFY OK + clean-clone VERIFY OK + gofmt gate)
 - [x] R7 Migration/runbook hardening (v10 irreversible, no v11, backup 3.1MB, health 97|100|72 bersih)
 - [ ] R8 Telegram admin+non-admin trial (bot v0141 PID 1487639 siap — menunggu eksekusi user)
-- [ ] R9 Completion report correction
-- [x] Commit + dual push (head 40f2845)
-- [x] Workspace verification (verify.sh hijau)
+- [x] R9 Completion report correction (commit 69df191; verify final 88 PASS/0 FAIL via bash scripts/verify.sh)
+- [x] Commit + dual push (head 0ea9532)
+- [x] Workspace verification (verify.sh hijau + bot v0141 hidup)
 - [ ] Live approval obtained
