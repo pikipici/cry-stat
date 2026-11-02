@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # Crypto Station verify script (v0.14.1 R6).
+# Jalankan dengan bash:  bash scripts/verify.sh
+# (dash/sh tidak mendukung `set -o pipefail`.)
 # Satu command deterministic dari clean checkout:
 #   1. cek tool versions (go/sqlc/goose minimum)
 #   2. rebuild db/schema dari migrations (tanpa copy manual)
