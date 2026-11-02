@@ -55,3 +55,13 @@ SELECT id, user_id, asset, from_address, tx_hash, units, confirms,
        required_confirms, status, credited_idr, created_at
 FROM deposits
 ORDER BY created_at DESC, id DESC LIMIT $1;
+
+-- name: GetPayoutAdminByID :one
+SELECT id, user_id, asset, units, fee_units, sent_units, to_address, network,
+       tx_hash, status, created_at
+FROM payouts WHERE id=$1;
+
+-- name: GetUserDepositAdminByID :one
+SELECT id, user_id, asset, from_address, tx_hash, units, confirms,
+       required_confirms, status, credited_idr, created_at
+FROM deposits WHERE id=$1;
