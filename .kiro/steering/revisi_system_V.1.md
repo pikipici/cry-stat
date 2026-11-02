@@ -1,11 +1,13 @@
 # Crypto Station — Revisi Sistem V.1
 
-> Status: AUDIT + IMPLEMENTATION PLAN ONLY — belum ada perbaikan kode
-> Audit basis: commit `a16b2a6`
-> Dibuat: 2026-11-02
+> Status: ACTIVE ROADMAP — Admin Wallet v0.14/v0.14.1 selesai otomatis; hardening sistem user/topup/buy masih pending
+> Audit awal: commit `a16b2a6`
+> Progress code terkini: `8c60ce1`; steering/docs terkini: `b4db4a1`
+> Updated: 2026-11-03
 > Fokus: debug sistem existing, integritas transaksi, dan UX sisi user Telegram
 > Eksekusi runtime: build/test/migrate/run di `cbt-vps`, bukan lokal
-> Prioritas dokumen: perbaikan P0/P1 di sini harus didahulukan sebelum fitur baru pada `ADMIN_WALLET_OPERATIONS_PLAN.md`
+> Source of truth Admin Wallet: `.kiro/steering/ADMIN_WALLET_CURRENT_STATE.md`
+> Prioritas berikutnya: trial manual Admin Wallet, lalu fase user/topup/buy sandbox pada Bagian G dokumen ini
 
 ---
 
@@ -47,11 +49,11 @@ Keputusan yang tidak boleh dibuka ulang:
 
 Referensi utama:
 
-- `PROJECT_IDEAS.md`
-- `.kiro/steering/ADMIN_WALLET_OPERATIONS_PLAN.md`
-- Dokumen ini
+- `PROJECT_IDEAS.md` untuk keputusan produk/transit dan gate Stage 2.
+- `.kiro/steering/ADMIN_WALLET_CURRENT_STATE.md` untuk kondisi Admin Wallet terkini.
+- Dokumen ini untuk roadmap hardening sistem user, topup, buy/payout, ledger, dan UX.
 
-Jika ada kontradiksi antara kode lama dan model transit di `PROJECT_IDEAS.md`, model transit adalah pemenangnya.
+Jika ada kontradiksi antara kode lama dan model transit di `PROJECT_IDEAS.md`, model transit adalah pemenangnya. Untuk Admin Wallet, kondisi commit `8c60ce1` dan `ADMIN_WALLET_CURRENT_STATE.md` mengalahkan plan/report lama yang sudah dihapus.
 
 ---
 
@@ -1082,7 +1084,7 @@ Dilarang mengubah DB error menjadi empty state.
 - Test regression ditulis lebih dulu untuk bug P0/P1.
 - Coding lokal, runtime/test/migration di VPS.
 - Jangan deploy/restart live tanpa instruksi eksplisit user.
-- Jangan mulai `ADMIN_WALLET_OPERATIONS_PLAN.md` sebelum P0 minimum di dokumen ini selesai.
+- Admin Wallet sudah diimplementasikan dan di-hardening terpisah; jangan buka ulang scope tersebut kecuali mengikuti backlog di `ADMIN_WALLET_CURRENT_STATE.md`.
 
 ## Phase 1 — Pulihkan verification pipeline
 
@@ -2118,41 +2120,61 @@ Jangan membaca seluruh 894 baris roadmap berulang kali. Ambil bagian yang releva
 
 # BAGIAN I — CHECKPOINT PROGRESS EXECUTOR
 
-- [ ] Phase 1 — verification pipeline
-- [ ] Phase 2 — cancel/callback safety
-- [ ] Phase 3 — ledger invariants
-- [ ] Phase 4 — payout lifecycle
-- [ ] Phase 5 — deposit/address safety
-- [ ] Phase 6 — remove custodial drift
-- [ ] Phase 7 — user UX states
-- [ ] Phase 8 — admin existing blockers
-- [ ] Phase 9 — performance/DB hardening
-- [ ] Sandbox S1 — adapter contract + schema
-- [ ] Sandbox S2 — topup domain TDD
-- [ ] Sandbox S3 — topup bot UX
-- [ ] Sandbox S4 — durable buy/payout TDD
-- [ ] Sandbox S5 — Saldo/Status/Riwayat read models
-- [ ] Sandbox S6 — E2E trial + restart recovery
-- [ ] Full VPS verification
-- [ ] Manual sandbox trial
-- [ ] Docs updated
-- [ ] Commit/push completed
-- [ ] Deploy approval obtained
+## Progress selesai di jalur Admin Wallet
+
+- [x] Admin Wallet v0.14 diimplementasikan: ringkasan aset, deposit stok, activity feed, detail.
+- [x] Migration DB v10 diterapkan di workspace.
+- [x] Idempotency payload/admin, typed conflict/cancel/unauthorized selesai.
+- [x] Success/cancel audit dibuat atomik dengan mutasi.
+- [x] Callback confirm/cancel memakai typed routing + sender/service boundary.
+- [x] Preview creation dan duplicate semantics dipindahkan ke ledger service.
+- [x] Post-commit balance-read failure tidak lagi melaporkan mutasi sukses sebagai gagal.
+- [x] Exact audit query, router tests, dan preview-state tests ditambahkan.
+- [x] Full test, vet, build hijau di VPS pada code head `8c60ce1`.
+- [x] `scripts/verify.sh --no-db` menghasilkan `VERIFY OK` di VPS.
+- [x] Dokumentasi Admin Wallet dikonsolidasikan ke `ADMIN_WALLET_CURRENT_STATE.md`.
+- [x] Commit/push code `8c60ce1` dan steering `b4db4a1` selesai ke GitHub + bare VPS.
+- [ ] Trial Telegram Admin Wallet dengan akun admin asli.
+- [ ] Trial denial/detail dengan akun non-admin kedua.
+- [ ] Restore drill custom-format.
+- [ ] Approval deploy/restart live.
+
+## Roadmap hardening sistem user yang masih pending
+
+- [x] Phase 1 — verification pipeline minimum tersedia melalui `scripts/verify.sh`; full DB/restore drill masih pending.
+- [ ] Phase 2 — cancel/callback safety user.
+- [ ] Phase 3 — ledger invariants buy/deposit user.
+- [ ] Phase 4 — durable payout lifecycle.
+- [ ] Phase 5 — deposit/address safety user.
+- [ ] Phase 6 — remove custodial drift.
+- [ ] Phase 7 — user UX states.
+- [x] Phase 8 — admin existing blockers/Admin Wallet ditangani pada v0.14/v0.14.1; broadcast preview tetap perlu diverifikasi bila belum.
+- [ ] Phase 9 — performance/DB hardening.
+- [ ] Sandbox S1 — adapter contract + schema.
+- [ ] Sandbox S2 — topup domain TDD.
+- [ ] Sandbox S3 — topup bot UX.
+- [ ] Sandbox S4 — durable buy/payout TDD.
+- [ ] Sandbox S5 — Saldo/Status/Riwayat read models.
+- [ ] Sandbox S6 — E2E trial + restart recovery.
+- [x] Full VPS verification untuk scope Admin Wallet terkini.
+- [ ] Manual sandbox trial end-to-end user.
+- [x] Steering docs terkini dan sudah dikonsolidasikan.
+- [x] Commit/push progress Admin Wallet selesai.
+- [ ] Deploy approval obtained.
 
 ---
 
-## Final Recommendation
+## Final Recommendation Terkini
 
-Urutan paling aman dan bernilai tinggi:
+Urutan paling aman dari posisi `b4db4a1`:
 
-1. Pulihkan clean build/test.
-2. Perbaiki cancel semantics.
-3. Perbaiki ledger balance buy/deposit.
-4. Buat payout queued+refund/unknown state machine.
-5. Tutup callback/security/idempotency gaps.
-6. Hapus ALL/MAX dan satukan flow Jual.
-7. Perbarui Riwayat, Status, Saldo, quote, session, dan onboarding.
-8. Perbaiki tombol stok + broadcast admin.
-9. Baru lanjut implementasi admin wallet operations.
+1. Selesaikan trial manual Admin Wallet admin+non-admin dan verifikasi audit rows.
+2. Jalankan restore drill custom-format pada dedicated drill DB bila maintenance window disetujui.
+3. Mulai Phase 2–3: cancel semantics user dan ledger balance buy/deposit.
+4. Bangun durable payout queued+refund/unknown state machine.
+5. Bangun Top Up Simulasi production-shaped melalui Sandbox S1–S3.
+6. Satukan flow Jual transit, hapus ALL/MAX, dan perbarui Riwayat/Status/Saldo.
+7. Jalankan E2E sandbox Top Up → Beli → Payout success/failed/unknown → recovery.
+8. Jangan masuk real gateway/chain atau restart live sebelum gate dan approval eksplisit.
 
-Alasan: fitur admin wallet akan membaca saldo, jurnal, payout, dan deposit. Kalau fondasi tersebut belum benar, dashboard admin hanya akan menampilkan data yang terlihat rapi tetapi secara finansial belum dapat dipercaya.
+Admin Wallet sekarang dapat dipercaya untuk scope jurnal sandbox-nya. Prioritas teknis berikutnya berpindah ke fondasi user: topup IDR simulasi, ledger buy/deposit yang balance, payout durable, dan UX lifecycle.

@@ -2,7 +2,7 @@
 
 > Status: SOURCE OF TRUTH TERKINI untuk Admin Wallet v0.14/v0.14.1
 > Updated: 2026-11-03
-> Current code head: `8c60ce1`
+> Current code head: `8c60ce1`; steering/docs head: `b4db4a1`
 > DB workspace: migration v10 (`000010_admin_stock_deposits`)
 > Mode: SANDBOX / SIMULASI — bukan saldo atau transaksi on-chain
 > Live production: BELUM di-deploy/restart; wajib approval eksplisit user
