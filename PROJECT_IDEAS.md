@@ -1,6 +1,6 @@
 # Crypto Station — Roadmap & Living Plan
 
-> Status: v0.13 — Hot baru terpisah + deposit QRIS/BANK (setup Stage 0, sandbox tetap mock)
+> Status: v0.13-done — Stok mock-ready LIVE (45 tests hijau, DB v9, tombol admin 📦, admin 7254686681)
 > Owner: user + hermes
 > Last updated: 2026-11-02
 
@@ -17,6 +17,7 @@ v0.13 = setup keputusan, BELUM ada kode baru. Yang dikunci:
 2. DEPOSIT 2 JALUR: QRIS (auto, jalur utama) + transfer bank MANUAL (jalur cadangan,
    verifikasi owner via /approve). Sandbox = dua-duanya mock (cuma beda label).
    Stage 2 = QRIS asli DULU sampai stabil 2–4 minggu, bank manual nyusul.
+   **v0.13-done: deposit 2 jalur MASIH KEPUTUSAN (belum kode). Yang LIVE = stok hot.**
 3. KEY HOT: MVP = env file 600 (HOTWALLET_KEY_EVM + HOTWALLET_KEY_SOL), TIDAK di repo.
    Key asli baru masuk pas gate Stage 2 + Fase 10. Sandbox tetap mock tanpa key.
 4. ALAMAT YANG DIBUTUHKAN DARI OWNER (publik saja, bukan seed/key): 1 EVM (0x...,
@@ -114,6 +115,8 @@ Implikasi:
 | 44 | Key hot 2 env (BARU v0.13) | **HOTWALLET_KEY_EVM + HOTWALLET_KEY_SOL di env file 600.** Key asli baru masuk pas gate Stage 2 + Fase 10. Sandbox tetap mock tanpa key. HSM/KMS pasca-MVP |
 | 45 | Deposit 2 jalur (BARU v0.13) | **QRIS (auto, jalur utama) + transfer bank MANUAL (jalur cadangan).** Sandbox = dua-duanya mock (cuma beda label UX). Stage 2 = QRIS asli DULU 2–4 minggu stabil, bank manual nyusul. Bank manual: invoice + kode unik 3 digit + nominal exact + expiry 60 mnt + /approve owner; tanpa bukti mutasi = tidak kredit |
 | 46 | Phasing deposit (BARU v0.13) | **QRIS dulu, bank belakangan.** Alasan: QRIS 100% otomatis (90% user), bank 100% beban owner. Dua-duanya bareng = debugging QRIS + todongan approve numpuk |
+| 47 | Stok mock-ready LIVE (BARU v0.13-done) | **Migrasi 000009 (hot_address_*). FloatTopup jurnal float-in cold→hot. Guard float di risk (tipis = pause beli, jual jalan). Admin SetFloat/SetFee/SetHotAddress + audit. Bot /setfloat /setfee /sethot /floattopup /float + tombol 📦 Stok (lihat/float/fee/hot/topup). Trial snapshot + report float. 45 tests hijau, DB v9, heads 31d14a4 + 08c123d + 2f3d7a1** |
+| 48 | Admin live (BARU v0.13-done) | **admin_allowlist = 7254686681 (satu-satunya).** Env ADMIN_TELEGRAM_IDS kosong. Bot binary 22:54 via systemd-run --user (mati kalau reboot — permanen = unit system, belum dibikin) |
 | 39 | Fee network di quote (BARU v0.12) | **Estimasi fee per network di Settings (di-refresh job, bukan hardcode).** Quote beli tampil 3 baris: harga coin + fee kirim + total IDR. Fee > 20% nominal = tolak quote ("nominal terlalu kecil untuk fee"). Sandbox pakai fee mock tetap per coin |
 | 40 | Riwayat = kirim, bukan valuasi (BARU v0.12) | **/saldo = IDR + daftar payout terakhir (coin, units terkirim, txhash, status).** Tidak ada total valuasi portofolio, tidak ada tombol ALL. /riwayat = 10 payout/deposit terakhir + txhash/confirm count |
 | 41 | Menu UX berlapis (BARU v0.12-ux) | **Utama = Beli/Jual/Harga/Menu (+ Admin). Submenu Akun = Saldo/Riwayat/Status/Alamat + Kembali.** Batal = contextual (inline quote/picker + /batal), bukan tombol permanen. Alasan: 9 tombol flat bikin awam bingung; navigasi hafal posisi, aksi dibantu icon inline |
@@ -472,7 +475,7 @@ Internal (bukan public):
 
 Bot commands:
 - User: /start /saldo /harga /beli /jual /alamat /cekdeposit /status /riwayat /batal (*Stage 2: /topup [pilih QRIS/BANK #45] /tarik)
-- Admin, allowlist saja: /approve* /setspread /setlimit /pause /setfee /setfloat /broadcast /trial (*Stage 2: /approve topup-bank #45)
+- Admin, allowlist saja: /approve* /setspread /setlimit /setfloat /setfee /sethot /floattopup /float /pause /setfee /setfloat /broadcast /trial (*Stage 2: /approve topup-bank #45). **v0.13-done: tombol 📦 Stok di panel (lihat/float/fee/hot/topup, session StepAdminStock)**
 
 ## 11. Blueprint Arsitektur (LOCK v0.5)
 
@@ -606,6 +609,7 @@ Estimasi kasar, kerja santai, +buffer. Kalibrasi ulang setelah Fase 0.
 - Fase 4 — ✅ PARSIAL 2026-10-30 (migrasi 000005 exposure_snapshots, trial report + /broadcast + /trial, job exposure, TRIAL.md, 29 tests hijau, head 05695ad). Trial LIVE: T1 slash 6/6 ✅, bug ALL #1 ketemu + fix, T1-button + T2-button dikode (head a8a43d9), trial button HOLD nunggu v0.12
 - Fase 8 — ✅ DONE 2026-10-31 (migrasi 000006 chain transit: wallet_addresses/payouts/deposits/chain_events/float + quotes fee_units/to_address. internal/chain mock: validate/format per network, fee_mock_*, payout MOCK-tx idempotent. CreateQuoteBuy + jurnal transit house:float/fee-collect, coin user NOL. Bot: /alamat + daftar inline t:addr + beli wajib alamat + quote 3 baris + txhash + /status. Trial live: alamat valid/invalid ✅, beli 50rb → MOCK-175 ✅, saldo transit ✅. Head caf4d63/bb9770a/b7b610b)
 - Fase 9 — ✅ DONE 2026-11-01 (migrasi 000007 credited_idr + 000008 journal types payout/deposit/float-in. MockDeposit idempotent-by-tx + jurnal float/IDR + FloatStatus. Bot: Jual = deposit address + simulasi masuk t:depsim, Status gabung payout+deposit, /cekdeposit redirect, jual-bandar mati total. Menu UX berlapis (#41) + Status 1 pantau (#42). 41 tests hijau, DB v8, head 5ed66f7)
+- Stok v0.13 — ✅ DONE 2026-11-02 (migrasi 000009 hot_address_*. FloatTopup + guard float + SetFloat/SetFee/SetHotAddress + /setfloat /setfee /sethot /floattopup /float + tombol 📦 Stok + trial float. 45 tests hijau, DB v9, heads 31d14a4/08c123d/2f3d7a1). Admin live 7254686681, bot binary 22:54
 
 **Stage 2 — Real-money (setelah gate lolos; ±4–5 minggu)**
 - Fase 5 — topup QRIS + webhook idempotent + paid_late exact-match + /topup (5–7 hari)
@@ -659,7 +663,8 @@ gas spike 5x + 3 payout unknown nyangkut bareng.
 
 Ditutup di v0.12–v0.13, jangan dibuka lagi tanpa alasan di bawah:
 
-- **Hot baru + deposit 2 jalur (#43–46, v0.13):** seed baru terpisah, key EVM+SOL, QRIS dulu bank nyusul, Fase 5b. Setup keputusan — BELUM ada kode
+- **Stok mock-ready + tombol admin (#47–48, v0.13-done):** 000009 + FloatTopup + guard float + SetFloat/Fee/Hot + 📦 Stok + 45 tests + DB v9 + admin 7254686681. LIVE
+- **Hot baru + deposit 2 jalur (#43–46, v0.13):** seed baru terpisah, key EVM+SOL, QRIS dulu bank nyusul, Fase 5b. Deposit MASIH keputusan (belum kode)
 
 - **PIVOT transit (#35–40):** bandar custodial v0.11 DIBATALKAN. Beli = auto-kirim ke wallet user, jual = deposit on-chain, fee network user, hot-wallet float, 1 coin = 1 network tetap
 - **Fase 8 DONE (2026-10-31):** chain mock + alamat + quote 3 baris + payout mock + jurnal transit. Trial live ✅ (MOCK-175). Head caf4d63/bb9770a/b7b610b
@@ -682,10 +687,11 @@ Masih terbuka:
 8. SLA dispute publik — sebelum Stage 2 (termasuk deposit tak dikenal + payout unknown)
 9. Norek terima bank manual (#45) — bank apa + atas nama siapa + SLA verifikasi (usulan: max 2x24 jam, bukan instant). Diputus SEBELUM Fase 5b coding
 10. Alamat hot BARU (#43) — 1 EVM + 1 SOL dari owner (publik saja). Dibutuhkan SEBELUM Fase 10 coding; gate Stage 2 butuh 2 alamat terisi
+11. Unit systemd permanen cs-bot.service (v0.13-done) — sekarang systemd-run --user, mati kalau reboot. Bikin unit system + enable sebelum trial panjang
 
 ## 16. Deploy Strategy
 
-- Dev: long-polling dari cbt-vps (tanpa HTTPS). Lokal nol runtime
+- Dev: long-polling dari cbt-vps (tanpa HTTPS). Lokal nol runtime. **v0.13-done: bot via systemd-run --user (mati kalau reboot). Permanen = unit system cs-bot.service, BELUM dibikin (open baru)**
 - Stage 1: cbt-vps (Ubuntu 24.04, Go 1.27.3, Postgres 16 port 5432, tz Asia/Jakarta) + systemd, satu binary, webhook Telegram via HTTPS (Caddy 443), secret token wajib. DB `cryptostation`, role `cs`
 - Stage 2: + webhook provider via HTTPS, alert (rekonsiliasi gagal, eksposur, webhook invalid, sumber kurs mati), backup DB terjadwal
 - Env: BOT_TOKEN, WEBHOOK_SECRET, DATABASE_URL, ADMIN_TELEGRAM_IDS. PROVIDER_KEY + HOTWALLET_KEY_EVM + HOTWALLET_KEY_SOL (#44, baru Stage 2 + Fase 10). Tidak masuk repo
@@ -704,28 +710,33 @@ Masih terbuka:
 
 ## 18. Current Next Step
 
-**v0.13 — setup keputusan DONE (plan saja, BELUM ada kode).**
+**v0.13-done — Stok mock-ready + tombol admin LIVE. Posisi tersimpan.**
 
-v0.12-done tetap posisi kode: head 5ed66f7 (menu berlapis), DB v8, bot active,
-41 tests hijau 0 fail. Fase 8 trial live ✅. Fase 9 kode live, trial deposit +
-trial menu berlapis BELUM jalan.
-
-Yang baru dikunci v0.13 (#43–46): hot BARU terpisah (seed baru, 1 EVM + 1 SOL),
-key 2 env (EVM+SOL, baru pas Fase 10), deposit 2 jalur (QRIS dulu, bank manual
-nyusul Fase 5b). Semua setup Stage 0 — sandbox tetap mock, jangan colok key asli.
+Kode: heads 31d14a4 (stok) + 08c123d (fix guard) + 2f3d7a1 (tombol 📦).
+DB v9 (000009 hot_address_*), 45 tests hijau 0 fail, smoke exit 0.
+Bot binary 22:54 jalan (systemd-run --user, PID 1457593, sandbox).
+Admin live: 7254686681 satu-satunya. Panel ada 📦 Stok (lihat/float/fee/hot/topup).
 
 Lanjut nanti (urut):
-1. Owner bikin hot BARU manual (seed baru offline, catat 2 alamat publik EVM + SOL)
+1. Owner bikin hot BARU manual (seed baru offline, catat 2 alamat publik EVM + SOL) → /sethot-in
 2. Trial Fase 9 live: Jual → SOL → Rp50rb masuk → Saldo → Status (gabung payout+deposit)
-3. Trial menu berlapis: /start → Menu → Saldo → Kembali → Beli (quote ✅❌)
+3. Trial tombol 📦 Stok live: Lihat stok → Isi float → Float min → Fee → Hot
 4. Trial T2 ulang lawan transit (setspread/setlimit/pause/trial/broadcast)
-5. Stage 0: gateway (QRIS dulu) + node + float + fee network + norek bank (#45-open-9) + unit economics
+5. Bikin unit systemd permanen cs-bot.service (open-11) sebelum trial panjang
+6. Stage 0: gateway (QRIS dulu) + node + float + fee network + norek bank (#45-open-9) + unit economics
    → hasil masuk v0.14
 
 Setelah gate Stage 2 centang semua → Fase 5 (QRIS) → stabil 2–4 minggu →
 Fase 5b (bank manual) + Fase 6–7 (fiat) + Fase 10 (chain beneran, key hot masuk).
 
 Jangan mulai payments/chain asli, kurs kedua, atau enforcement mule/sybil sebelum gate.
+
+### Changelog v0.13 → v0.13-done
+
+- **Stok mock-ready LIVE (baru #47, heads 31d14a4 + 08c123d):** 000009 hot_address_*, FloatTopup jurnal float-in, guard float (HouseFloatByAsset, tipis = pause beli), SetFloat/SetFee/SetHotAddress + audit, /setfloat /setfee /sethot /floattopup /float, trial snapshot+report float, FloatStatus → sqlc. 45 tests hijau, DB v9
+- **Tombol 📦 Stok (head 2f3d7a1):** panel admin + Stok (lihat/float/fee/hot/topup) + coin picker + ketik nilai (StepAdminStock). /float refactor ke stockText
+- **Admin live (baru #48):** 7254686681 satu-satunya. Bot binary 22:54 via systemd-run --user (open-11: unit permanen belum)
+- **Fix guard:** TestExposureShortOnly topup dulu (float 24 < min 100 = pause bener) + TestFloatThinPauseBuy baru
 
 ### Changelog v0.12-done → v0.13
 
