@@ -15,6 +15,30 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+var (
+	// ErrStockDepositRefConflict menandakan TxRef sudah terikat pada payload lain.
+	ErrStockDepositRefConflict = errors.New("stock deposit reference conflict")
+	// ErrStockDepositCancelled menandakan TxRef pernah dibatalkan dan tidak dapat digunakan ulang.
+	ErrStockDepositCancelled = errors.New("stock deposit reference cancelled")
+	// ErrStockDepositUnauthorized menandakan TxRef milik admin lain.
+	ErrStockDepositUnauthorized = errors.New("stock deposit unauthorized")
+)
+
+// StockDepositConflictError menjelaskan field identitas pertama yang tidak cocok.
+type StockDepositConflictError struct {
+	Field string
+}
+
+func (e *StockDepositConflictError) Error() string {
+	return fmt.Sprintf("stock deposit reference conflict: field %s", e.Field)
+}
+
+// Unwrap memungkinkan caller memakai errors.Is(err, ErrStockDepositRefConflict).
+func (e *StockDepositConflictError) Unwrap() error { return ErrStockDepositRefConflict }
+
+// Is mempertahankan kecocokan sentinel saat error dibandingkan secara langsung.
+func (e *StockDepositConflictError) Is(target error) bool { return target == ErrStockDepositRefConflict }
+
 // RecordStockDepositInput adalah data deposit stok manual admin yang dikonfirmasi.
 type RecordStockDepositInput struct {
 	AdminTelegramID int64
@@ -42,6 +66,9 @@ func (s *Service) RecordAdminStockDeposit(ctx context.Context, in RecordStockDep
 	in.Asset = strings.ToUpper(strings.TrimSpace(in.Asset))
 	in.ToAddress = strings.TrimSpace(in.ToAddress)
 	in.TxRef = strings.TrimSpace(in.TxRef)
+	if in.AdminTelegramID == 0 {
+		return RecordStockDepositResult{}, fmt.Errorf("admin telegram id wajib diisi")
+	}
 	if !price.ValidAsset(in.Asset) {
 		return RecordStockDepositResult{}, fmt.Errorf("coin harus BNB/ETH/SOL")
 	}
@@ -108,6 +135,13 @@ func (s *Service) recordAdminStockDepositTx(ctx context.Context, in RecordStockD
 	if err != nil {
 		return RecordStockDepositResult{}, false, err
 	}
+	if conflict := compareStockDepositIdentity(dep, in); conflict != nil {
+		// Jangan mengembalikan detail deposit lama kepada admin lain.
+		if conflict.Field == "admin_telegram_id" {
+			return RecordStockDepositResult{}, false, fmt.Errorf("%w", ErrStockDepositUnauthorized)
+		}
+		return RecordStockDepositResult{}, false, conflict
+	}
 	result := RecordStockDepositResult{
 		DepositID: dep.ID, Asset: dep.Asset, Network: dep.Network,
 		Units: dep.Units, TxRef: dep.TxRef,
@@ -119,6 +153,9 @@ func (s *Service) recordAdminStockDepositTx(ctx context.Context, in RecordStockD
 			return RecordStockDepositResult{}, false, err
 		}
 		return result, false, nil
+	}
+	if dep.Status == "cancelled" {
+		return RecordStockDepositResult{}, false, fmt.Errorf("%w", ErrStockDepositCancelled)
 	}
 	if dep.Status != "pending_confirm" {
 		return RecordStockDepositResult{}, false, fmt.Errorf("status deposit %q tidak dapat diproses", dep.Status)
@@ -155,6 +192,27 @@ func (s *Service) recordAdminStockDepositTx(ctx context.Context, in RecordStockD
 	}
 	result.JournalID = j.ID
 	return result, false, nil
+}
+
+// compareStockDepositIdentity membandingkan identitas immutable setelah row dikunci.
+// Alamat hanya di-trim; kebijakan ini sengaja tidak mengubah huruf alamat Solana maupun EVM.
+func compareStockDepositIdentity(existing db.AdminStockDeposit, in RecordStockDepositInput) *StockDepositConflictError {
+	if existing.AdminTelegramID != in.AdminTelegramID {
+		return &StockDepositConflictError{Field: "admin_telegram_id"}
+	}
+	if existing.Asset != in.Asset {
+		return &StockDepositConflictError{Field: "asset"}
+	}
+	if existing.Network != stockDepositNetwork(in.Asset) {
+		return &StockDepositConflictError{Field: "network"}
+	}
+	if !existing.Units.Equal(in.Units) {
+		return &StockDepositConflictError{Field: "units"}
+	}
+	if strings.TrimSpace(existing.ToAddress) != in.ToAddress {
+		return &StockDepositConflictError{Field: "to_address"}
+	}
+	return nil
 }
 
 func stockDepositNetwork(asset string) string {
