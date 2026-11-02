@@ -1,8 +1,27 @@
 # Crypto Station — Roadmap & Living Plan
 
-> Status: v0.12-done — Fase 8+9 transit LIVE (41 tests hijau, DB v8, bot active)
+> Status: v0.13 — Hot baru terpisah + deposit QRIS/BANK (setup Stage 0, sandbox tetap mock)
 > Owner: user + hermes
-> Last updated: 2026-11-01
+> Last updated: 2026-11-02
+
+## v0.13 (baca dulu — hot baru + deposit 2 jalur, setup Stage 0)
+
+v0.12-done = Fase 8+9 transit LIVE (41 tests hijau, DB v8, bot active, head 5ed66f7).
+v0.13 = setup keputusan, BELUM ada kode baru. Yang dikunci:
+
+1. HOT WALLET BARU TERPISAH: stok BNB/ETH/SOL ngendon di hot-wallet khusus bot
+   (seed BARU, bukan wallet utama owner). Order masuk → sistem verifikasi dulu
+   (alamat valid, nominal min, quote 30s hidup, float cukup, fee ≤ 20%) → lolos
+   baru auto-kirim dari hot ke wallet user + txhash. Cold = simpanan gede owner,
+   tetap offline, isi ulang hot via transfer manual + jurnal float-in.
+2. DEPOSIT 2 JALUR: QRIS (auto, jalur utama) + transfer bank MANUAL (jalur cadangan,
+   verifikasi owner via /approve). Sandbox = dua-duanya mock (cuma beda label).
+   Stage 2 = QRIS asli DULU sampai stabil 2–4 minggu, bank manual nyusul.
+3. KEY HOT: MVP = env file 600 (HOTWALLET_KEY_EVM + HOTWALLET_KEY_SOL), TIDAK di repo.
+   Key asli baru masuk pas gate Stage 2 + Fase 10. Sandbox tetap mock tanpa key.
+4. ALAMAT YANG DIBUTUHKAN DARI OWNER (publik saja, bukan seed/key): 1 EVM (0x...,
+   dipakai BNB=BSC + ETH=ERC20) + 1 SOL (base58). Alamat pengirim payout =
+   alamat deposit sistem (sama, biar simpel).
 
 ## PIVOT v0.12 (baca dulu sebelum bab lain)
 
@@ -26,8 +45,9 @@ Implikasi:
 - Status gabung payout + deposit (1 pantau semua). /cekdeposit redirect ke Status.
 
 ## Daftar Isi
+- [v0.13 hot baru + deposit 2 jalur](#v013-baca-dulu--hot-baru--deposit-2-jalur-setup-stage-0)
 - [PIVOT v0.12](#pivot-v012-baca-dulu-sebelum-bab-lain)
-- [0. Locked Decisions](#0-locked-decisions-v012)
+- [0. Locked Decisions](#0-locked-decisions-v013)
 - [1. Goal](#1-goal)
 - [2. Target Users](#2-target-users)
 - [3. Stage Model & Gate](#3-stage-model--gate)
@@ -42,12 +62,12 @@ Implikasi:
 - [12. Roadmap](#12-roadmap)
 - [13. Unit Economics](#13-unit-economics)
 - [14. Risks](#14-risks)
-- [15. Open Decisions Tersisa (v0.12)](#15-open-decisions-tersisa-v012)
+- [15. Open Decisions Tersisa (v0.13)](#15-open-decisions-tersisa-v013)
 - [16. Deploy Strategy](#16-deploy-strategy)
 - [17. Implementation Notes](#17-implementation-notes)
 - [18. Current Next Step](#18-current-next-step)
 
-## 0. Locked Decisions (v0.12)
+## 0. Locked Decisions (v0.13)
 
 | # | Keputusan | Pilihan |
 |---|-----------|---------|
@@ -90,6 +110,10 @@ Implikasi:
 | 36 | Kirim otomatis (BARU v0.12) | **Tiap beli sukses OTOMATIS kirim ke alamat tersimpan, tanpa tombol tarik.** Tanpa alamat tersimpan = beli DITOLAK ("daftarin alamat dulu"). Status payout: queued → broadcasting → confirmed (txhash) / failed (refund IDR otomatis) / unknown (tahan, jangan refund, sampai rekonsiliasi) |
 | 37 | Jual = deposit on-chain (BARU v0.12) | **User kirim coin ke alamat deposit sistem (1 alamat per coin, tampil di bot).** Nunggu N konfirmasi (BNB 15, ETH 12, SOL 32 — di Settings) → sistem bayar IDR (bid − spread − fee). Deposit tak teridentifikasi (tanpa memo/tag user) = pending manual, tidak auto-kredit |
 | 38 | Hot-wallet + node (BARU v0.12) | **Sistem pegang hot-wallet float per coin + 1 node provider per chain (nama fix Stage 0).** Float minimum di Settings; di bawahnya = pause beli. Isi ulang = transfer manual owner + jurnal. Rekonsiliasi = jurnal vs saldo chain (bukan cuma internal). Key hot-wallet di env HSM/KMS eventually — MVP di env file 600, TIDAK di repo |
+| 43 | Hot baru terpisah (BARU v0.13) | **Seed BARU khusus bot, bukan wallet utama owner.** 1 key EVM (BNB=BSC + ETH=ERC20) + 1 key SOL. Seed kertas offline 2 copy, TIDAK di repo/chat/laptop. Owner kirim ke bot cuma 2 ALAMAT PUBLIK. Cold = simpanan gede owner offline; hot = float operasional harian + buffer gas. Alamat pengirim payout = alamat deposit sistem (sama) |
+| 44 | Key hot 2 env (BARU v0.13) | **HOTWALLET_KEY_EVM + HOTWALLET_KEY_SOL di env file 600.** Key asli baru masuk pas gate Stage 2 + Fase 10. Sandbox tetap mock tanpa key. HSM/KMS pasca-MVP |
+| 45 | Deposit 2 jalur (BARU v0.13) | **QRIS (auto, jalur utama) + transfer bank MANUAL (jalur cadangan).** Sandbox = dua-duanya mock (cuma beda label UX). Stage 2 = QRIS asli DULU 2–4 minggu stabil, bank manual nyusul. Bank manual: invoice + kode unik 3 digit + nominal exact + expiry 60 mnt + /approve owner; tanpa bukti mutasi = tidak kredit |
+| 46 | Phasing deposit (BARU v0.13) | **QRIS dulu, bank belakangan.** Alasan: QRIS 100% otomatis (90% user), bank 100% beban owner. Dua-duanya bareng = debugging QRIS + todongan approve numpuk |
 | 39 | Fee network di quote (BARU v0.12) | **Estimasi fee per network di Settings (di-refresh job, bukan hardcode).** Quote beli tampil 3 baris: harga coin + fee kirim + total IDR. Fee > 20% nominal = tolak quote ("nominal terlalu kecil untuk fee"). Sandbox pakai fee mock tetap per coin |
 | 40 | Riwayat = kirim, bukan valuasi (BARU v0.12) | **/saldo = IDR + daftar payout terakhir (coin, units terkirim, txhash, status).** Tidak ada total valuasi portofolio, tidak ada tombol ALL. /riwayat = 10 payout/deposit terakhir + txhash/confirm count |
 | 41 | Menu UX berlapis (BARU v0.12-ux) | **Utama = Beli/Jual/Harga/Menu (+ Admin). Submenu Akun = Saldo/Riwayat/Status/Alamat + Kembali.** Batal = contextual (inline quote/picker + /batal), bukan tombol permanen. Alasan: 9 tombol flat bikin awam bingung; navigasi hafal posisi, aksi dibantu icon inline |
@@ -117,7 +141,7 @@ baru buka uang asli + on-chain beneran kalau gate Stage 2 lolos.
 
 Output sebelum Stage 2:
 1. **Gateway menjawab terbuka.** Tanya 2–3 provider dengan deskripsi bisnis jujur: diterima/tidak, syarat onboarding, fee QRIS + disbursement, settlement time (catatan: Xendit QRIS T+2 hari kerja, max 20jt/tx), kebutuhan float. Jangan pilih vendor sebelum ada jawaban
-2. **Node + hot-wallet dipilih (v0.12, REVISI dari model stok #16 lama):** 1 node provider per chain (nama + fee + rate limit) + float minimum per coin + prosedur isi ulang manual. Inventory-vs-hedge v0.11 DIBATALKAN — tidak ada posisi bandar
+2. **Node + hot-wallet dipilih (v0.12, REVISI dari model stok #16 lama):** 1 node provider per chain (nama + fee + rate limit) + float minimum per coin + prosedur isi ulang manual. Inventory-vs-hedge v0.11 DIBATALKAN — tidak ada posisi bandar. **v0.13: hot = wallet BARU khusus bot (seed baru, #43), key EVM+SOL (#44)**
 3. **Sumber kurs dipilih, plus sumber pembanding untuk Stage 2** (#4). Bukan median
 4. **Jadwal fee network per chain terisi** (#39): fee rata-rata kirim BNB/ETH/SOL + sumber estimasi + ambang tolak (>20% nominal)
 5. **Unit economics terisi** (bab 13, + biaya gas hot-wallet per kirim)
@@ -142,7 +166,8 @@ Output sebelum Stage 2:
 ### Stage 2 — Real-money (bersyarat)
 
 Gate checklist, semua harus centang:
-- [ ] Gateway setuju tertulis
+- [ ] Gateway setuju tertulis (QRIS DULU #46; bank manual = norek owner, tanpa gateway)
+- [ ] Hot BARU siap (#43): 2 alamat publik terisi (EVM + SOL) + seed kertas offline + key di env 600 (#44, baru pas Fase 10)
 - [ ] Node provider per chain hidup + float hot-wallet minimum ter-set + prosedur isi ulang jalan (limit sandbox tidak dipakai ulang)
 - [ ] Sumber kurs kedua hidup dan fail-closed; ambang selisih X% ter-set
 - [ ] Nilai staleness koin dan kurs ter-set
@@ -161,7 +186,7 @@ Catatan: checklist ini operasional. Centang penuh bukan pernyataan bahwa bisnisn
 - DB: Postgres + **pgx/v5 + sqlc** (jangan GORM, jangan lib/pq). Uang tidak lewat `float64`. IDR BIGINT/int64, coin NUMERIC(36,18)/decimal
 - Migrasi: **goose v3**. Decimal: **shopspring/decimal** (bagi → bulatkan 18 desimal di Go → tulis)
 - Harga: Binance spot WS via **coder/websocket** (bookTicker gabungan bnbusdt/ethusdt/solusdt, jangan gorilla, jangan futures); 1 sumber kurs + staleness fail-closed; interface pembanding kosong sampai Stage 2
-- Money in/out (Stage 2): QRIS + disbursement 1 vendor, 1 interface. Kandidat: Xendit / Midtrans / Tripay / Duitku (hasil Stage 0)
+- Money in/out (Stage 2): QRIS + disbursement 1 vendor, 1 interface. Kandidat: Xendit / Midtrans / Tripay / Duitku (hasil Stage 0). **v0.13: QRIS dulu, bank manual nyusul (#46)**
 - Infra: 1 VPS + systemd, satu binary. Webhook Telegram via HTTPS Caddy 443, path acak (bukan token), tolak tanpa secret header. Long-polling buat dev
 
 ## 5. Core Features
@@ -179,7 +204,8 @@ Catatan: checklist ini operasional. Centang penuh bukan pernyataan bahwa bisnisn
 
 ### Stage 2 (real-money, setelah gate)
 10. Topup QRIS + webhook idempotent + paid_late exact-match + /topup
-11. Kirim on-chain BENERAN: hot-wallet + nonce + retry + txhash asli + status unknown + /status
+10b. Topup BANK manual + kode unik + /approve owner (nyusul setelah QRIS stabil #46)
+11. Kirim on-chain BENERAN dari hot baru (#43): hot-wallet + nonce + retry + txhash asli + status unknown + /status
 12. Deposit on-chain: watcher konfirmasi + kredit IDR + deposit tak dikenal = manual
 13. Withdraw IDR + PIN + name-inquiry + cooling-off norek + threshold approve + unknown + /tarik /approve
 14. Enforcement sybil / mule / limit global. Event Stage 1 jadi baseline, bukan diganti
@@ -197,8 +223,9 @@ Catatan: checklist ini operasional. Centang penuh bukan pernyataan bahwa bisnisn
 3. Stage 2: user bikin PIN sebelum bisa topup/withdraw. PIN bukan pengganti 2FA Telegram
 4. Limit harian di backend, reset ikut tanggal **WIB** (Asia/Jakarta, bukan jam server)
 
-### FLOW 1 — topup via QRIS (Stage 2)
-1. /topup → input nominal (min 50rb)
+### FLOW 1 — topup via QRIS (Stage 2, jalur utama #45–46)
+
+1. /topup → pilih QRIS → input nominal (min 50rb)
 2. Invoice + QR expired 30 menit; nominal bayar = pokok + fee QRIS. Selaraskan expiry bot dengan expiry provider, supaya paid_late tidak jadi jalur normal
 3. Bayar → webhook → verify signature + idempotent → saldo nambah. Webhook mentah simpan di WebhookEvents
 4. Notif masuk. Expired tanpa bayar → hangus, bikin baru. Callback dobel → 1x
@@ -207,6 +234,17 @@ Catatan: checklist ini operasional. Centang penuh bukan pernyataan bahwa bisnisn
    - limit jebol → jangan kredit, status butuh refund, manual
    - nominal beda → jangan pernah auto-kredit
    - paid_late tidak mengubah nominal dan tidak membuat quote baru
+
+### FLOW 1b — topup via transfer bank MANUAL (Stage 2, jalur cadangan #45–46)
+
+1. /topup → pilih BANK → input nominal (min 50rb) → invoice: norek tujuan +
+   nominal EXACT (pokok + kode unik 3 digit, misal Rp100.123) + expiry 60 menit
+2. User transfer → klik "sudah transfer" → status pending_bank + RiskEvent
+3. Owner cek MUTASI (bukan foto bukti) → /approve <invoice> → kredit pokok 1x
+   (jurnal topup, makan limit harian) / reject + catat alasan
+4. Aturan keras: 1 invoice aktif per user; nominal beda = tidak pernah auto-kredit;
+   lewat expiry = hangus (transfer telat = urus manual refund); limit jebol =
+   needs_refund manual. Sandbox = mock label saja (tanpa mutasi beneran)
 
 ### FLOW 2 — beli + auto-kirim (INTI v0.12)
 1. /harga → BNB/ETH/SOL (ask = harga beli user)
@@ -296,7 +334,8 @@ Tetap 1 sumber di Stage 1. Dua sumber belum menguji apa-apa sebelum quote, ledge
 
 ### 7.4 Hot-wallet (uang asli diputus Stage 0)
 
-- **Float nyata:** pegang BNB/ETH/SOL di hot-wallet senilai batas kirim harian + buffer. Risiko: key curi, nonce macet, gas spike. Mitigasi: key di env 600 (MVP) → HSM/KMS, nonce manager, fee estimator, pause otomatis
+- **Hot BARU khusus bot (#43, v0.13):** seed BARU, bukan wallet utama owner. 1 key EVM (BNB=BSC + ETH=ERC20) + 1 key SOL. Seed kertas offline 2 copy. Owner kasih ke sistem cuma 2 ALAMAT PUBLIK. Cold owner tetap offline
+- **Float nyata:** pegang BNB/ETH/SOL di hot-wallet senilai batas kirim harian + buffer. Risiko: key curi, nonce macet, gas spike. Mitigasi: key di env 600 (MVP: HOTWALLET_KEY_EVM + HOTWALLET_KEY_SOL, #44) → HSM/KMS, nonce manager, fee estimator, pause otomatis
 - **Isi ulang:** transfer manual owner dari cold wallet + jurnal float-in. Bukan hedge, bukan inventory bandar
 - **Node:** 1 provider per chain (nama + endpoint + rate limit fix Stage 0). Node mati = pause beli dan jual coin itu
 - Sandbox terkunci: float mock tercatat saja, payout = txhash mock. Ini bukan keputusan float Stage 2
@@ -366,7 +405,7 @@ LedgerAccounts { ID, Owner (user:<id> / house:cash / house:float / house:fee-col
 Journals { ID, Type (topup/buy/sell/payout/float-in/deposit/withdraw/refund/adjust), RefTable, RefID, CreatedAt }
 LedgerEntries { ID, JournalID, AccountID, Asset, Amount (signed), CreatedAt }  -- per jurnal, total Amount per Asset = 0
 Wallets { UserID, Asset, Balance }  -- cache turunan, unique (UserID, Asset). Coin user normalnya NOL (transit)
-TopupInvoices { ID, UserID, AmountIDR, FeeIDR, ProviderRef unique, QRPayload, Status (pending/paid/paid_late/needs_refund/expired/failed), ExpiresAt, PaidAt, IdempotencyKey unique }
+TopupInvoices { ID, UserID, Channel (qris/bank #45), AmountIDR, UniqueCode, FeeIDR, ProviderRef unique (QRIS) / BankRef, QRPayload, Status (pending/pending_bank/paid/paid_late/needs_refund/expired/failed), ExpiresAt, PaidAt, ApprovedBy, IdempotencyKey unique }
 Quotes { ID, UserID, Side (buy/sell), Asset, AmountIDR, QuotedUnits, FeeUnits, ToAddress, Bid, Ask, Mid, SpreadUsed, RateUSDTIDR, RateSource, RateAgeMs, PriceAgeMs, ExpiresAt, Status (active/used/expired) }  -- +FeeUnits+ToAddress v0.12
 Trades { ID, UserID, QuoteID unique, Side, Asset, AmountIDR, Units, PriceUsed, MidUsed, SpreadPnlIDR, JournalID, CreatedAt }
 BankAccounts { ID, UserID, BankCode, AccountNo, AccountNameVerified, Status (pending_confirm/active/disabled), ConfirmedAt, CooldownUntil }
@@ -386,7 +425,8 @@ AdminAudit { ID, AdminTelegramID, Action, TargetID, Before, After, CreatedAt }
 
 - Users.TelegramID unique, Wallets(UserID, Asset) unique, Trades.QuoteID unique
 - Payouts.TxHash unique, Payouts.TradeID unique, Deposits.TxHash unique
-- TopupInvoices.ProviderRef unique, Withdrawals.ProviderRef unique
+- TopupInvoices.ProviderRef unique, TopupInvoices.BankRef unique, Withdrawals.ProviderRef unique
+- TopupInvoices 1 aktif per user: unique (UserID) where Status IN ('pending','pending_bank') [Fase 5b]
 - LedgerEntries(JournalID), LedgerEntries(AccountID, CreatedAt)
 - BankAccounts(AccountNo, BankCode) — deteksi 1 norek dipakai banyak akun (enforcement Stage 2, event boleh dari Stage 1 kalau datanya ada)
 - RiskEvents(UserID, CreatedAt), RiskEvents(Kind, CreatedAt)
@@ -431,8 +471,8 @@ Internal (bukan public):
 - Job: refresh kurs; WS Binance; fee estimator per chain; watcher deposit; retry payout unknown; rekonsiliasi harian (termasuk on-chain); cek float
 
 Bot commands:
-- User: /start /saldo /harga /beli /jual /alamat /cekdeposit /status /riwayat /batal (*Stage 2: /topup /tarik)
-- Admin, allowlist saja: /approve* /setspread /setlimit /pause /setfee /setfloat /broadcast /trial (*Stage 2)
+- User: /start /saldo /harga /beli /jual /alamat /cekdeposit /status /riwayat /batal (*Stage 2: /topup [pilih QRIS/BANK #45] /tarik)
+- Admin, allowlist saja: /approve* /setspread /setlimit /pause /setfee /setfloat /broadcast /trial (*Stage 2: /approve topup-bank #45)
 
 ## 11. Blueprint Arsitektur (LOCK v0.5)
 
@@ -569,9 +609,10 @@ Estimasi kasar, kerja santai, +buffer. Kalibrasi ulang setelah Fase 0.
 
 **Stage 2 — Real-money (setelah gate lolos; ±4–5 minggu)**
 - Fase 5 — topup QRIS + webhook idempotent + paid_late exact-match + /topup (5–7 hari)
+- Fase 5b (v0.13, BARU) — topup BANK manual: invoice + kode unik + expiry 60 mnt + /approve owner + 1 aktif/user (3–4 hari, SETELAH QRIS stabil #46)
 - Fase 6 — withdraw + PIN + name-inquiry + cooling-off + threshold approve + unknown + /tarik /approve (4–5 hari)
 - Fase 7 — sumber kurs pembanding, enforcement anti-abuse, retry webhook, rekonsiliasi provider, alert, closed trial limit rendah (1–2 minggu)
-- Fase 10 (v0.12) — chain beneran: hot-wallet + node per chain + broadcast + retry unknown + watcher deposit + rekonsiliasi on-chain (1–2 minggu)
+- Fase 10 (v0.12) — chain beneran: hot-wallet + node per chain + broadcast + retry unknown + watcher deposit + rekonsiliasi on-chain (1–2 minggu). **v0.13: hot = wallet BARU (#43), key EVM+SOL (#44)**
 
 Checkpoint keras: **jangan coding payments/chain asli sebelum Stage 0 selesai + provider + node fix.** Mock interface boleh duluan. Jangan naikkan kurs atau anti-abuse ke versi full di Stage 1.
 
@@ -600,7 +641,8 @@ gas spike 5x + 3 payout unknown nyangkut bareng.
 - **Gateway menolak bisnis crypto:** bisa matikan Stage 2. Mitigasi: tanya terbuka di Stage 0; sandbox tetap jalan. Jangan mengunci vendor sebelum ada jawaban
 - **Gate operasional bukan izin usaha:** checklist Stage 2 tidak menjawab apakah bisnis ini boleh dijalankan
 - **Salah alamat = hilang (BARU v0.12):** user salah ketik alamat, coin terkirim dan tidak bisa ditarik. Mitigasi: validasi format + tampilkan alamat di quote + peringatan tiap Confirm + cooling-off ganti alamat
-- **Key hot-wallet curi (BARU v0.12):** seluruh float raib. Mitigasi: env 600, bukan repo; float = batas kirim harian + buffer doang (bukan semua dana); rotasi + HSM/KMS pasca-MVP
+- **Key hot-wallet curi (BARU v0.12):** seluruh float raib. Mitigasi: env 600, bukan repo; float = batas kirim harian + buffer doang (bukan semua dana); rotasi + HSM/KMS pasca-MVP. **v0.13: hot = seed BARU terpisah (#43) — wallet utama owner TIDAK tersentuh; key 2 env EVM+SOL (#44)**
+- **Bukti transfer bank palsu (BARU v0.13):** foto bukti gampang edit. Mitigasi: patokan = mutasi masuk + nominal exact + kode unik; tanpa itu = tidak kredit, /approve ditolak + RiskEvent
 - **Nonce macet / gas spike (BARU v0.12):** payout antre, user komplain. Mitigasi: nonce manager, fee estimator, retry backoff, status unknown jujur + /status, pause beli kalau macet > N menit
 - **Deposit tak dikenal (BARU v0.12):** user kirim tanpa identifikasi → IDR tidak auto-masuk. Mitigasi: alamat deposit unik per user kalau bisa; kalau 1 alamat global = pending manual + SLA jelas
 - **Node mati (BARU v0.12):** tidak bisa broadcast / cek konfirmasi. Mitigasi: pause coin itu dua arah, watcher retry, provider cadangan pasca-MVP
@@ -613,9 +655,11 @@ gas spike 5x + 3 payout unknown nyangkut bareng.
 - **Secret bocor:** env saja, bukan repo
 - **Limit sandbox terbawa ke produksi:** float + fee mock Stage 1 harus di-set ulang, tidak disalin
 
-## 15. Open Decisions Tersisa (v0.12)
+## 15. Open Decisions Tersisa (v0.13)
 
-Ditutup di v0.12, jangan dibuka lagi tanpa alasan di bawah:
+Ditutup di v0.12–v0.13, jangan dibuka lagi tanpa alasan di bawah:
+
+- **Hot baru + deposit 2 jalur (#43–46, v0.13):** seed baru terpisah, key EVM+SOL, QRIS dulu bank nyusul, Fase 5b. Setup keputusan — BELUM ada kode
 
 - **PIVOT transit (#35–40):** bandar custodial v0.11 DIBATALKAN. Beli = auto-kirim ke wallet user, jual = deposit on-chain, fee network user, hot-wallet float, 1 coin = 1 network tetap
 - **Fase 8 DONE (2026-10-31):** chain mock + alamat + quote 3 baris + payout mock + jurnal transit. Trial live ✅ (MOCK-175). Head caf4d63/bb9770a/b7b610b
@@ -636,19 +680,21 @@ Masih terbuka:
 6. Spread exact — 0.7% vs 1%, buy/sell beda atau sama (trial Fase 4). Jangan dikunci sekarang
 7. Konfirmasi deposit per coin — BNB 15 / ETH 12 / SOL 32 (usulan, boleh geser di Settings)
 8. SLA dispute publik — sebelum Stage 2 (termasuk deposit tak dikenal + payout unknown)
+9. Norek terima bank manual (#45) — bank apa + atas nama siapa + SLA verifikasi (usulan: max 2x24 jam, bukan instant). Diputus SEBELUM Fase 5b coding
+10. Alamat hot BARU (#43) — 1 EVM + 1 SOL dari owner (publik saja). Dibutuhkan SEBELUM Fase 10 coding; gate Stage 2 butuh 2 alamat terisi
 
 ## 16. Deploy Strategy
 
 - Dev: long-polling dari cbt-vps (tanpa HTTPS). Lokal nol runtime
 - Stage 1: cbt-vps (Ubuntu 24.04, Go 1.27.3, Postgres 16 port 5432, tz Asia/Jakarta) + systemd, satu binary, webhook Telegram via HTTPS (Caddy 443), secret token wajib. DB `cryptostation`, role `cs`
 - Stage 2: + webhook provider via HTTPS, alert (rekonsiliasi gagal, eksposur, webhook invalid, sumber kurs mati), backup DB terjadwal
-- Env: BOT_TOKEN, WEBHOOK_SECRET, DATABASE_URL, ADMIN_TELEGRAM_IDS. PROVIDER_KEY + HOTWALLET_KEY_<BNB/ETH/SOL> baru Stage 2. Tidak masuk repo
+- Env: BOT_TOKEN, WEBHOOK_SECRET, DATABASE_URL, ADMIN_TELEGRAM_IDS. PROVIDER_KEY + HOTWALLET_KEY_EVM + HOTWALLET_KEY_SOL (#44, baru Stage 2 + Fase 10). Tidak masuk repo
 
 ## 17. Implementation Notes
 
 - Payments/chain asli jangan sebelum Stage 0; mock interface boleh
 - Format rupiah/coin cuma di layer tampilan; simpan BIGINT / NUMERIC(36,18)
-- Semua angka kunci (spread, limit, fee network, float min, confirms, threshold, minimum, staleness koin, staleness kurs, divergence, cooldown, rate limit) via tabel Settings, tanpa restart
+- Semua angka kunci (spread, limit, fee network, float min, confirms, deposit address, hot address EVM+SOL #43, threshold, minimum, staleness koin, staleness kurs, divergence, cooldown, rate limit) via tabel Settings, tanpa restart
 - Tiap mutasi uang lewat templat jurnal bab 8. Tidak ada update saldo lepas dari jurnal
 - Lock order: Users → LedgerAccounts → Wallets. Payout/deposit ikut lock user yang sama
 - Harga basi, sumber down, timestamp kosong, tanpa alamat, fee > 20%: tolak quote. Jangan fallback
@@ -658,22 +704,33 @@ Masih terbuka:
 
 ## 18. Current Next Step
 
-**v0.12-done — Fase 8+9 transit LIVE. Posisi tersimpan.**
+**v0.13 — setup keputusan DONE (plan saja, BELUM ada kode).**
 
-Terakhir: head 5ed66f7 (menu berlapis), DB v8, bot active, 41 tests hijau 0 fail.
-Fase 8 trial live ✅ (alamat + payout MOCK-175 + saldo transit). Fase 9 kode live,
-trial deposit (Jual → depsim → Status) + trial menu berlapis BELUM jalan.
+v0.12-done tetap posisi kode: head 5ed66f7 (menu berlapis), DB v8, bot active,
+41 tests hijau 0 fail. Fase 8 trial live ✅. Fase 9 kode live, trial deposit +
+trial menu berlapis BELUM jalan.
+
+Yang baru dikunci v0.13 (#43–46): hot BARU terpisah (seed baru, 1 EVM + 1 SOL),
+key 2 env (EVM+SOL, baru pas Fase 10), deposit 2 jalur (QRIS dulu, bank manual
+nyusul Fase 5b). Semua setup Stage 0 — sandbox tetap mock, jangan colok key asli.
 
 Lanjut nanti (urut):
-1. Trial Fase 9 live: Jual → SOL → Rp50rb masuk → Saldo → Status (gabung payout+deposit)
-2. Trial menu berlapis: /start → Menu → Saldo → Kembali → Beli (quote ✅❌)
-3. Trial T2 ulang lawan transit (setspread/setlimit/pause/trial/broadcast)
-4. Stage 0 (STAGE0.md revisi): gateway + node + float + fee network + unit economics
-   → hasil masuk v0.13
+1. Owner bikin hot BARU manual (seed baru offline, catat 2 alamat publik EVM + SOL)
+2. Trial Fase 9 live: Jual → SOL → Rp50rb masuk → Saldo → Status (gabung payout+deposit)
+3. Trial menu berlapis: /start → Menu → Saldo → Kembali → Beli (quote ✅❌)
+4. Trial T2 ulang lawan transit (setspread/setlimit/pause/trial/broadcast)
+5. Stage 0: gateway (QRIS dulu) + node + float + fee network + norek bank (#45-open-9) + unit economics
+   → hasil masuk v0.14
 
-Setelah gate Stage 2 centang semua → Fase 5-7 (fiat) + Fase 10 (chain beneran).
+Setelah gate Stage 2 centang semua → Fase 5 (QRIS) → stabil 2–4 minggu →
+Fase 5b (bank manual) + Fase 6–7 (fiat) + Fase 10 (chain beneran, key hot masuk).
 
 Jangan mulai payments/chain asli, kurs kedua, atau enforcement mule/sybil sebelum gate.
+
+### Changelog v0.12-done → v0.13
+
+- **Hot baru + deposit 2 jalur (baru #43–46, setup Stage 0, BELUM kode):** seed baru terpisah, 1 EVM + 1 SOL, key 2 env (baru Fase 10), QRIS dulu bank nyusul, Fase 5b baru. Sandbox tetap mock
+- **Propagasi:** banner v0.13 + TOC, Stage 0/gate (hot #43 + QRIS-dulu), fitur Stage 2 (10b + #43), FLOW 1 judul + FLOW 1b bank manual, 7.4 hot baru, 8.3 TopupInvoices channel/kode/approve, 8.4 unique refs + 1-aktif, bot commands /topup + /approve, tech stack QRIS-dulu, roadmap Fase 5b + Fase 10 hot, risks key-curi + bukti-palsu, open 9–10 (norek + alamat hot), deploy env EVM+SOL, impl notes hot address, next step v0.13
 
 ### Changelog v0.12 → v0.12-done
 
