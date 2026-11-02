@@ -22,6 +22,9 @@ var (
 	ErrStockDepositCancelled = errors.New("stock deposit reference cancelled")
 	// ErrStockDepositUnauthorized menandakan TxRef milik admin lain.
 	ErrStockDepositUnauthorized = errors.New("stock deposit unauthorized")
+	// stockDepositTestHook adalah seam khusus test untuk membuktikan rollback.
+	// Nilainya nil pada production dan tidak memiliki wiring runtime.
+	stockDepositTestHook func(stage string) error
 )
 
 // StockDepositConflictError menjelaskan field identitas pertama yang tidak cocok.
@@ -161,6 +164,9 @@ func (s *Service) recordAdminStockDepositTx(ctx context.Context, in RecordStockD
 		return RecordStockDepositResult{}, false, fmt.Errorf("status deposit %q tidak dapat diproses", dep.Status)
 	}
 
+	if err := runStockDepositTestHook("before-journal"); err != nil {
+		return RecordStockDepositResult{}, false, err
+	}
 	j, err := q.CreateJournal(ctx, db.CreateJournalParams{
 		Type: "float-in", RefTable: pgtype.Text{String: "admin_stock_deposits", Valid: true},
 		RefID: pgtype.Int8{Int64: dep.ID, Valid: true},
@@ -182,9 +188,27 @@ func (s *Service) recordAdminStockDepositTx(ctx context.Context, in RecordStockD
 			return RecordStockDepositResult{}, false, err
 		}
 	}
+	if err := runStockDepositTestHook("before-mark-recorded"); err != nil {
+		return RecordStockDepositResult{}, false, err
+	}
 	if _, err := q.MarkAdminStockDepositRecorded(ctx, db.MarkAdminStockDepositRecordedParams{
 		ID: dep.ID, JournalID: pgtype.Int8{Int64: j.ID, Valid: true},
 	}); err != nil {
+		return RecordStockDepositResult{}, false, err
+	}
+	if err := runStockDepositTestHook("before-audit"); err != nil {
+		return RecordStockDepositResult{}, false, fmt.Errorf("insert audit success: %w", err)
+	}
+	if _, err := q.InsertAdminAudit(ctx, db.InsertAdminAuditParams{
+		AdminTelegramID: in.AdminTelegramID,
+		Action:          "wallet:stock_deposit:record",
+		TargetID:        pgtype.Int8{Int64: dep.ID, Valid: true},
+		Before:          fmt.Sprintf("pending %s %s", dep.Asset, dep.Units.String()),
+		After:           fmt.Sprintf("recorded_mock %s %s journal=%d ref=%s", dep.Asset, dep.Units.String(), j.ID, shortStockDepositRef(dep.TxRef)),
+	}); err != nil {
+		return RecordStockDepositResult{}, false, fmt.Errorf("insert audit success: %w", err)
+	}
+	if err := runStockDepositTestHook("before-commit"); err != nil {
 		return RecordStockDepositResult{}, false, err
 	}
 	if err := tx.Commit(ctx); err != nil {
@@ -192,6 +216,72 @@ func (s *Service) recordAdminStockDepositTx(ctx context.Context, in RecordStockD
 	}
 	result.JournalID = j.ID
 	return result, false, nil
+}
+
+// CancelAdminStockDeposit membatalkan deposit pending milik admin dan auditnya secara atomik.
+func (s *Service) CancelAdminStockDeposit(ctx context.Context, depositID, adminTelegramID int64) error {
+	if depositID <= 0 {
+		return fmt.Errorf("deposit id wajib positif")
+	}
+	if adminTelegramID == 0 {
+		return fmt.Errorf("admin telegram id wajib diisi")
+	}
+	tx, err := s.pool.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
+	q := db.New(s.pool).WithTx(tx)
+
+	dep, err := q.GetAdminStockDepositForUpdate(ctx, depositID)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return fmt.Errorf("%w", ErrStockDepositUnauthorized)
+		}
+		return err
+	}
+	if dep.AdminTelegramID != adminTelegramID {
+		return fmt.Errorf("%w", ErrStockDepositUnauthorized)
+	}
+	if dep.Status == "cancelled" {
+		return fmt.Errorf("%w", ErrStockDepositCancelled)
+	}
+	if dep.Status != "pending_confirm" {
+		return fmt.Errorf("status deposit %q tidak dapat dibatalkan", dep.Status)
+	}
+	if _, err := q.MarkAdminStockDepositCancelled(ctx, dep.ID); err != nil {
+		return err
+	}
+	if err := runStockDepositTestHook("before-audit"); err != nil {
+		return fmt.Errorf("insert audit cancel: %w", err)
+	}
+	if _, err := q.InsertAdminAudit(ctx, db.InsertAdminAuditParams{
+		AdminTelegramID: adminTelegramID,
+		Action:          "wallet:stock_deposit:cancel",
+		TargetID:        pgtype.Int8{Int64: dep.ID, Valid: true},
+		Before:          fmt.Sprintf("pending %s %s", dep.Asset, dep.Units.String()),
+		After:           "cancelled",
+	}); err != nil {
+		return fmt.Errorf("insert audit cancel: %w", err)
+	}
+	if err := runStockDepositTestHook("before-commit"); err != nil {
+		return err
+	}
+	return tx.Commit(ctx)
+}
+
+func runStockDepositTestHook(stage string) error {
+	if stockDepositTestHook == nil {
+		return nil
+	}
+	return stockDepositTestHook(stage)
+}
+
+func shortStockDepositRef(ref string) string {
+	if len(ref) <= 24 {
+		return ref
+	}
+	return ref[:16] + "..."
 }
 
 // compareStockDepositIdentity membandingkan identitas immutable setelah row dikunci.

@@ -2,6 +2,7 @@ package bot
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -84,17 +85,20 @@ func handleWalletCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQu
 		if err != nil || id <= 0 {
 			return
 		}
-		row, err := d.Q.GetAdminStockDepositByID(ctx, id)
-		if err != nil || row.AdminTelegramID != cb.From.ID || row.Status != "pending_confirm" {
-			edit("Deposit tidak dapat dibatalkan.", AdminWalletMenu())
-			return
-		}
-		if _, err := d.Q.MarkAdminStockDepositCancelled(ctx, id); err != nil {
-			edit("Gagal membatalkan deposit.", AdminWalletMenu())
+		if err := d.Ledger.CancelAdminStockDeposit(ctx, id, cb.From.ID); err != nil {
+			switch {
+			case errors.Is(err, ledger.ErrStockDepositUnauthorized):
+				edit("Deposit tidak ditemukan.", AdminWalletMenu())
+			case errors.Is(err, ledger.ErrStockDepositCancelled):
+				edit("Reference ini sebelumnya sudah dibatalkan dan tidak dapat digunakan ulang. Buat reference baru untuk pencatatan baru.", AdminWalletMenu())
+			case strings.Contains(err.Error(), "audit"):
+				edit("Deposit belum dicatat karena sistem gagal menyimpan jejak audit. Saldo tidak berubah. Coba lagi.", AdminWalletMenu())
+			default:
+				edit("Gagal membatalkan deposit.", AdminWalletMenu())
+			}
 			return
 		}
 		clear()
-		_ = d.Admin.Audit(ctx, cb.From.ID, "stockdeposit_cancel", id, true, row.Asset+"="+row.Units.String(), "cancelled")
 		edit("Deposit stok dibatalkan. Tidak ada jurnal dibuat.", AdminWalletMenu())
 	case "activity":
 		limit := 10
@@ -159,6 +163,22 @@ func handleWalletInput(ctx context.Context, b *bot.Bot, chatID, telegramID int64
 		}
 		row, err := d.Q.CreatePendingAdminStockDeposit(ctx, db.CreatePendingAdminStockDepositParams{AdminTelegramID: telegramID, Asset: st.Coin, Network: adminwallet.NetworkFor(st.Coin), Units: units, ToAddress: st.HotAddr, TxRef: ref})
 		if err != nil {
+			existing, lookupErr := d.Q.GetAdminStockDepositByRef(ctx, ref)
+			if lookupErr == nil && existing.AdminTelegramID == telegramID {
+				switch existing.Status {
+				case "recorded_mock":
+					balance, _, balanceErr := d.Ledger.FloatStatus(ctx, existing.Asset)
+					if balanceErr == nil && existing.JournalID.Valid {
+						reply(ctx, b, chatID, fmt.Sprintf("Deposit stok ini sudah pernah dicatat.\nJurnal: #%d\nSaldo saat ini: %s", existing.JournalID.Int64, balance.String()))
+						return true
+					}
+					reply(ctx, b, chatID, "Deposit stok ini sudah pernah dicatat.")
+					return true
+				case "cancelled":
+					reply(ctx, b, chatID, "Reference ini sebelumnya sudah dibatalkan dan tidak dapat digunakan ulang. Buat reference baru untuk pencatatan baru.")
+					return true
+				}
+			}
 			reply(ctx, b, chatID, "Reference sudah dipakai atau gagal membuat preview. Gunakan reference lain.")
 			return true
 		}
@@ -187,6 +207,10 @@ func handleWalletConfirm(ctx context.Context, b *bot.Bot, chatID, telegramID, id
 		replyInline(ctx, b, chatID, fmt.Sprintf("Deposit #%d sudah diproses (SIMULASI).", id), activityDetailButton(id))
 		return
 	}
+	if row.Status == "cancelled" {
+		reply(ctx, b, chatID, "Reference ini sebelumnya sudah dibatalkan dan tidak dapat digunakan ulang. Buat reference baru untuk pencatatan baru.")
+		return
+	}
 	if row.Status != "pending_confirm" {
 		reply(ctx, b, chatID, "Deposit tidak dapat diproses pada status ini.")
 		return
@@ -195,14 +219,20 @@ func handleWalletConfirm(ctx context.Context, b *bot.Bot, chatID, telegramID, id
 		reply(ctx, b, chatID, "Data deposit tidak valid.")
 		return
 	}
-	before, _, err := d.Ledger.FloatStatus(ctx, row.Asset)
-	if err != nil {
-		reply(ctx, b, chatID, "Gagal membaca saldo: "+err.Error())
-		return
-	}
 	res, err := d.Ledger.RecordAdminStockDeposit(ctx, ledger.RecordStockDepositInput{AdminTelegramID: telegramID, Asset: row.Asset, Units: row.Units, ToAddress: row.ToAddress, TxRef: row.TxRef})
 	if err != nil {
-		reply(ctx, b, chatID, "Gagal mencatat deposit: "+err.Error())
+		switch {
+		case errors.Is(err, ledger.ErrStockDepositRefConflict):
+			reply(ctx, b, chatID, "Reference ini sudah pernah digunakan untuk data lain. Gunakan reference transaksi yang benar atau hubungi operator.")
+		case errors.Is(err, ledger.ErrStockDepositCancelled):
+			reply(ctx, b, chatID, "Reference ini sebelumnya sudah dibatalkan dan tidak dapat digunakan ulang. Buat reference baru untuk pencatatan baru.")
+		case errors.Is(err, ledger.ErrStockDepositUnauthorized):
+			reply(ctx, b, chatID, "Deposit tidak ditemukan.")
+		case strings.Contains(err.Error(), "audit"):
+			reply(ctx, b, chatID, "Deposit belum dicatat karena sistem gagal menyimpan jejak audit. Saldo tidak berubah. Coba lagi.")
+		default:
+			reply(ctx, b, chatID, "Gagal mencatat deposit: "+err.Error())
+		}
 		return
 	}
 	if d.Session != nil {
@@ -212,7 +242,6 @@ func handleWalletConfirm(ctx context.Context, b *bot.Bot, chatID, telegramID, id
 		replyInline(ctx, b, chatID, fmt.Sprintf("Deposit #%d sudah diproses (SIMULASI).", res.DepositID), activityDetailButton(res.DepositID))
 		return
 	}
-	_ = d.Admin.Audit(ctx, telegramID, "stockdeposit", res.DepositID, true, row.Asset+"="+before.String(), row.Asset+"="+res.Balance.String()+" ref="+row.TxRef)
 	replyInline(ctx, b, chatID, fmt.Sprintf("Deposit stok tercatat (SIMULASI)\nDeposit ID: %d\nJournal ID: %d\nSaldo jurnal %s: %s", res.DepositID, res.JournalID, res.Asset, res.Balance.String()), activityDetailButton(res.DepositID))
 }
 
