@@ -14,20 +14,24 @@ import (
 )
 
 // handleAdminCallback: inline a:* — spread/limit/pause/broadcast/trial/close.
-// Dipanggil dari handleCallback SETELAH cek prefix a:.
+// Dipanggil dari handleCallback SETELAH cek prefix a: (dispatcher sudah
+// ValidateCallbackStructure, tapi guard penuh tetap di sini — defense in depth).
+// Task 6 CF-06: GuardCallback dulu (nil-safe + private + user), BARU allowlist.
+// Bukan admin = tolak + audit, tanpa mutasi bisnis, tanpa bocor data.
 func handleAdminCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d *Deps) {
-	uid, blocked := userID(ctx, d, cb.From.ID)
-	if blocked == "blocked" || uid == 0 {
+	g, _, ok := GuardCallback(ctx, d, cb)
+	if !ok {
 		return
 	}
+	uid := g.UID
 	// Allowlist di callback juga (bukan cuma pesan). Bukan admin = tolak + audit.
 	if !d.Admin.IsAdmin(cb.From.ID) {
 		_ = d.Admin.Deny(ctx, cb.From.ID, "panel:"+cb.Data)
 		_, _ = b.AnswerCallbackQuery(ctx, &bot.AnswerCallbackQueryParams{CallbackQueryID: cb.ID, Text: "Bukan admin."})
 		return
 	}
-	chatID := cb.Message.Message.Chat.ID
-	msgID := cb.Message.Message.ID
+	chatID := g.ChatID
+	msgID := g.MsgID
 	edit := func(text string, markup *models.InlineKeyboardMarkup) {
 		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: text, ReplyMarkup: markup})
 	}

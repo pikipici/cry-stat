@@ -652,6 +652,12 @@ func jual(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []stri
 }
 
 func handleCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d *Deps) {
+	// Task 6 CF-06: structural check PALING AWAL — sebelum AnswerCallbackQuery
+	// (yang butuh cb.ID) dan sebelum dispatch t:/a:/q: manapun.
+	// Callback malformed = return diam, tanpa panic, tanpa mutasi.
+	if !ValidateCallbackStructure(cb) {
+		return
+	}
 	// Jawab callback dulu biar spinner hilang.
 	_, _ = b.AnswerCallbackQuery(ctx, &bot.AnswerCallbackQueryParams{CallbackQueryID: cb.ID})
 	data := cb.Data
@@ -676,21 +682,19 @@ func handleCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d
 		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: cb.Message.Message.Chat.ID, MessageID: cb.Message.Message.ID, Text: "Tombol ini sudah kedaluwarsa. Mulai ulang proses."})
 		return
 	}
-	// Phase 2 (A12): guard q: branch - nil-safe + private + user. Spinner sudah dijawab.
-	if cb.Message.Message == nil {
+	// Task 6 CF-06: GuardCallback penuh (nil-safe + private + user) untuk q:.
+	// ValidateCallbackStructure di dispatcher menjamin cb/Message/From non-nil,
+	// tapi guard user/blocked/private tetap wajib sebelum mutasi bisnis.
+	g, deny, gok := GuardCallback(ctx, d, cb)
+	if !gok {
+		if deny != "" {
+			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: cb.Message.Message.Chat.ID, MessageID: cb.Message.Message.ID, Text: deny})
+		}
 		return
 	}
-	uid, blocked := userID(ctx, d, cb.From.ID)
-	if blocked == "blocked" || uid == 0 {
-		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: cb.Message.Message.Chat.ID, MessageID: cb.Message.Message.ID, Text: "Tombol ini sudah kedaluwarsa. Mulai ulang proses."})
-		return
-	}
-	if cb.Message.Message.Chat.Type != "private" {
-		return
-	}
-
-	chatID := cb.Message.Message.Chat.ID
-	msgID := cb.Message.Message.ID
+	uid := g.UID
+	chatID := g.ChatID
+	msgID := g.MsgID
 	if !ok {
 		// Phase 2 (A1): cancel SATU quote spesifik, owner-scoped.
 		cancelled, cerr := CancelQuote(ctx, d.Q, uid, qid)

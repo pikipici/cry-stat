@@ -21,12 +21,21 @@ type CallbackContext struct {
 
 // GuardCallback: validasi callback. Return (cctx, denyCopy, ok).
 // denyCopy kosong + !ok = tolak diam-diam tapi spinner sudah dijawab caller.
+// Task 6 CF-06: nil-check SEMUA level sebelum dereference (cb, From, Message,
+// nested Message, Chat). Tidak ada panic untuk input apapun.
 func GuardCallback(ctx context.Context, d *Deps, cb *models.CallbackQuery) (*CallbackContext, string, bool) {
-	if cb == nil || cb.Message.Message == nil {
+	if cb == nil {
+		return nil, "", false
+	}
+	if cb.From.ID == 0 {
+		return nil, "", false
+	}
+	if cb.Message.Message == nil {
 		return nil, "Tombol ini sudah kedaluwarsa. Mulai ulang proses.", false
 	}
-	chat := cb.Message.Message.Chat
-	if chat.Type != "private" {
+	msg := cb.Message.Message
+	// Chat zero-value aman dibaca (struct, bukan pointer) — tapi pastikan field ada.
+	if msg.Chat.Type != "private" {
 		return nil, "Proses hanya bisa dari chat pribadi.", false
 	}
 	uid, blocked := userID(ctx, d, cb.From.ID)
@@ -38,8 +47,27 @@ func GuardCallback(ctx context.Context, d *Deps, cb *models.CallbackQuery) (*Cal
 	}
 	return &CallbackContext{
 		UID:       uid,
-		ChatID:    chat.ID,
-		MsgID:     cb.Message.Message.ID,
+		ChatID:    msg.Chat.ID,
+		MsgID:     msg.ID,
 		IsPrivate: true,
 	}, "", true
+}
+
+// ValidateCallbackStructure: cek struktur mentah sebelum AnswerCallbackQuery pun.
+// Return false = jangan sentuh cb lebih jauh (panic-safe). Dipakai dispatcher
+// paling awal (Task 6 CF-06): AnswerCallback butuh cb.ID yang valid.
+func ValidateCallbackStructure(cb *models.CallbackQuery) bool {
+	if cb == nil {
+		return false
+	}
+	if cb.ID == "" {
+		return false
+	}
+	if cb.From.ID == 0 {
+		return false
+	}
+	if cb.Message.Message == nil {
+		return false
+	}
+	return true
 }
