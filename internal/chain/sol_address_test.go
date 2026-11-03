@@ -34,9 +34,9 @@ func TestSolValidVectors(t *testing.T) {
 	// (String mock lama "9WzD…" 41-char decode 30 byte = BUKAN pubkey valid,
 	// sudah diganti mock baru di seluruh repo.)
 	for _, v := range []string{
-		"11111111111111111111111111111111",            // system program (32x '1')
+		"11111111111111111111111111111111",             // system program (32x '1')
 		"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", // USDC mint
-		"So11111111111111111111111111111111111111112", // wrapped SOL
+		"So11111111111111111111111111111111111111112",  // wrapped SOL
 	} {
 		if err := ValidateAddress("SOL", v); err != nil {
 			t.Fatalf("vektor valid ditolak %q: %v", v, err)
