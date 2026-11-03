@@ -114,13 +114,17 @@ func TestPayoutFailedRefundOnce(t *testing.T) {
 	if _, err := cs.ProcessPayout(ctx, tr.PayoutID, PayoutFailed); err == nil {
 		t.Fatal("failed harus return error sentinel")
 	}
-	// Orkestrasi refund seperti bot.go: refund via ledger + catat.
-	jid, err := ls.RefundPayoutTx(ctx, uid, tr.AmountIDR, tr.TradeID)
-	if err != nil {
-		t.Fatalf("refund: %v", err)
+	// Orkestrasi refund atomic (Task 3+5): lock+jurnal+linkage 1 tx via RefundPayout.
+	// API lama RefundPayoutTx+SetRefundJournal deprecated (identity tradeID vs payoutID
+	// tabrakan namespace unique index).
+	jid, res, err := ls.RefundPayout(ctx, uid, tr.PayoutID)
+	if err != nil || res != ledger.RefundCreated {
+		t.Fatalf("refund: jid=%d res=%d err=%v", jid, res, err)
 	}
-	if err := cs.SetRefundJournal(ctx, tr.PayoutID, jid); err != nil {
-		t.Fatalf("set refund: %v", err)
+	// Retry via API atomic → AlreadyDone, tanpa jurnal kedua.
+	jid2, res2, err := ls.RefundPayout(ctx, uid, tr.PayoutID)
+	if err != nil || res2 != ledger.RefundAlreadyDone || jid2 != jid {
+		t.Fatalf("retry: jid2=%d res2=%d err=%v (mau AlreadyDone/%d)", jid2, res2, err, jid)
 	}
 	balAfter, _ := ls.Balances(ctx, uid)
 	// Saldo kembali = before - 0 (buy 100rb didebit, refund 100rb).
