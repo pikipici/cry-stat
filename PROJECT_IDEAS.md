@@ -1,9 +1,12 @@
 # Crypto Station — Roadmap & Living Plan
 
-> Status: revisi V.1 Phase 2–9 AUTOMATED DONE — hardening user flow hijau dan dipush; trial Telegram manual + Sandbox S1–S6 + restore drill masih pending
+> Status: revisi V.1 Phase 2–9 + CORRECTNESS FIX AUTOMATED DONE — hardening + refund atomic +
+> durable claim + guarded transition + callback guard hijau dan dipush; trial Telegram manual +
+> Sandbox S1–S6 + restore drill + CF-08 adjustment masih pending
 > Owner: user + hermes
 > Last updated: 2026-11-04
-> Code head: `f68daa8`; DB workspace v13 (`000013_ledger_hardening.sql`); docs head menyusul commit ini
+> Code head: lihat `.kiro/steering/REVISI_V1_CORRECTNESS_FIX_PLAN.md` §8 (dulu `f68daa8`);
+> DB workspace v14 (`000014_payout_correctness.sql`)
 > Mode: SANDBOX / SIMULASI; live production belum disentuh dan wajib approval eksplisit
 
 ## v0.13 (baca dulu — hot baru + deposit 2 jalur, setup Stage 0)
