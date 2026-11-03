@@ -761,18 +761,14 @@ func riwayat(ctx context.Context, telegramID int64, d *Deps) string {
 		items = items[:10]
 	}
 	var sb strings.Builder
-	sb.WriteString("Riwayat (SIMULASI):
-")
+	sb.WriteString("Riwayat (SIMULASI):" + "\n")
 	if !perrOK || !derrOK {
-		sb.WriteString("(sebagian data tidak tersedia)
-")
+		sb.WriteString("(sebagian data tidak tersedia)" + "\n")
 	}
 	for _, it := range items {
-		sb.WriteString(it.text + "
-")
+		sb.WriteString(it.text + "\n")
 	}
-	return strings.TrimRight(sb.String(), "
-")
+	return strings.TrimRight(sb.String(), "\n")
 }
 
 func batal(ctx context.Context, telegramID int64, d *Deps) string {
