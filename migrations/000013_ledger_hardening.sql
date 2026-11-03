@@ -4,15 +4,16 @@
 -- pada 2026-11-03; sent_units historis konsisten units-fee by construction).
 
 -- 1. Entry asset HARUS cocok dengan account asset (trigger, bukan app saja).
+-- NOTE goose: badan fungsi single-quote (tanpa dollar-quote $$).
 CREATE OR REPLACE FUNCTION check_entry_asset_match()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER AS '
 BEGIN
   IF NEW.asset != (SELECT asset FROM ledger_accounts WHERE id = NEW.account_id) THEN
-    RAISE EXCEPTION 'ledger_entries.asset % tidak cocok dengan account %', NEW.asset, NEW.account_id;
+    RAISE EXCEPTION ''ledger asset mismatch'';
   END IF;
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+' LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS trg_entry_asset_match ON ledger_entries;
 CREATE TRIGGER trg_entry_asset_match
