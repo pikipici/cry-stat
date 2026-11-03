@@ -70,8 +70,12 @@ func Route() []string {
 
 // Handle: dispatcher tunggal (dipanggil dari default handler main).
 func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
-	// Callback inline (confirm/cancel quote).
+	// Callback inline (confirm/cancel quote). Validate the raw structure before
+	// rate limiting, answering, dispatching, or dereferencing nested fields.
 	if upd.CallbackQuery != nil {
+		if !ValidateCallbackStructure(upd.CallbackQuery) {
+			return
+		}
 		// Rate limit juga untuk callback (anti double-tap spam).
 		if !d.Limiter.Allow(upd.CallbackQuery.From.ID) {
 			_, _ = b.AnswerCallbackQuery(ctx, &bot.AnswerCallbackQueryParams{CallbackQueryID: upd.CallbackQuery.ID, Text: "Kebanyakan, tunggu sebentar."})

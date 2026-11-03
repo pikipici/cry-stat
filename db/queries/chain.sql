@@ -57,13 +57,6 @@ SELECT id, user_id, trade_id, asset, units, fee_units, sent_units, to_address, n
        mode, attempt_count, last_error, refund_journal_id, broadcast_at, finalized_at, created_at
 FROM payouts WHERE id=$1;
 
--- name: ClaimQueuedPayouts :many
-SELECT id, user_id, trade_id, asset, units, fee_units, sent_units, to_address, network, tx_hash, status, confirms,
-       mode, attempt_count, last_error, refund_journal_id, broadcast_at, finalized_at, created_at
-FROM payouts WHERE status IN ('queued','broadcasting')
-ORDER BY id LIMIT $1
-FOR UPDATE SKIP LOCKED;
-
 -- name: LockPayoutForRefund :one
 SELECT id, user_id, trade_id, asset, status, refund_journal_id
 FROM payouts WHERE id=$1
@@ -90,6 +83,11 @@ SELECT id FROM payouts
 WHERE status='queued'
    OR (status='broadcasting' AND (claimed_at IS NULL OR claimed_at < $1))
 ORDER BY id LIMIT $2;
+
+-- name: GetPayoutClaim :one
+SELECT status, claim_token
+FROM payouts
+WHERE id=$1;
 
 -- name: MarkPayoutBroadcasting :execrows
 UPDATE payouts SET status='broadcasting', attempt_count=attempt_count+1, broadcast_at=now()

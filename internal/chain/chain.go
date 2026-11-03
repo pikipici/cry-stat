@@ -33,6 +33,10 @@ type Service struct {
 	pool *pgxpool.Pool
 	q    *db.Queries
 	set  *settings.Service
+
+	// Test-only fault seam: runs after confirmed UPDATE and before chain-event INSERT.
+	// Both statements share one DB transaction, so an error must roll back both.
+	beforeConfirmedEvent func() error
 }
 
 func New(pool *pgxpool.Pool, q *db.Queries, set *settings.Service) *Service {
@@ -210,22 +214,43 @@ func (s *Service) ProcessPayout(ctx context.Context, payoutID int64, mode Payout
 	case PayoutFailed:
 		return s.failPayout(ctx, p)
 	default: // PayoutSuccess
-		tx := fmt.Sprintf("MOCK-%d-%d", p.TradeID, p.AttemptCount+1)
-		n, err := s.q.MarkPayoutConfirmed(ctx, db.MarkPayoutConfirmedParams{
-			ID: p.ID, TxHash: pgText(tx), Confirms: 1,
-		})
-		if err := mustWin(n, err); err != nil {
-			return "", err
-		}
-		// Chain event HANYA bila confirm transition benar-benar menang (Task 5 CF-04).
-		if _, err := s.q.InsertChainEvent(ctx, db.InsertChainEventParams{
-			Asset: p.Asset, TxHash: tx, EventType: "mock_confirmed",
-			RawPayload: "sandbox mock, bukan chain beneran", Confirms: 1,
-		}); err != nil {
-			return "", err
-		}
-		return tx, nil
+		return s.confirmPayoutWithEvent(ctx, p)
 	}
+}
+
+// confirmPayoutWithEvent commits the terminal payout state and its audit event
+// atomically. A failed event insert must not leave a confirmed payout without
+// the corresponding chain event.
+func (s *Service) confirmPayoutWithEvent(ctx context.Context, p db.GetPayoutRow) (string, error) {
+	txHash := fmt.Sprintf("MOCK-%d-%d", p.TradeID, p.AttemptCount+1)
+	tx, err := s.pool.Begin(ctx)
+	if err != nil {
+		return "", err
+	}
+	defer tx.Rollback(ctx)
+	q := db.New(s.pool).WithTx(tx)
+
+	n, err := q.MarkPayoutConfirmed(ctx, db.MarkPayoutConfirmedParams{
+		ID: p.ID, TxHash: pgText(txHash), Confirms: 1,
+	})
+	if err := mustWin(n, err); err != nil {
+		return "", err
+	}
+	if s.beforeConfirmedEvent != nil {
+		if err := s.beforeConfirmedEvent(); err != nil {
+			return "", err
+		}
+	}
+	if _, err := q.InsertChainEvent(ctx, db.InsertChainEventParams{
+		Asset: p.Asset, TxHash: txHash, EventType: "mock_confirmed",
+		RawPayload: "sandbox mock, bukan chain beneran", Confirms: 1,
+	}); err != nil {
+		return "", err
+	}
+	if err := tx.Commit(ctx); err != nil {
+		return "", err
+	}
+	return txHash, nil
 }
 
 // failPayout: tandai failed. Zero-row → ErrPayoutStaleTransition (Task 5 CF-04/05).
@@ -252,16 +277,6 @@ func (s *Service) SetRefundJournal(ctx context.Context, payoutID, journalID int6
 		ID: payoutID, RefundJournalID: pgtype.Int8{Int64: journalID, Valid: true},
 	})
 	return mustWin(n, err)
-}
-
-// ClaimQueued: ambil batch queued/broadcasting (FOR UPDATE SKIP LOCKED)
-// untuk worker/recovery restart. Duplicate worker aman: 1 row 1 claimer.
-func (s *Service) ClaimQueued(ctx context.Context, limit int32) ([]db.ClaimQueuedPayoutsRow, error) {
-	rows, err := s.q.ClaimQueuedPayouts(ctx, limit)
-	if err != nil {
-		return nil, err
-	}
-	return rows, nil
 }
 
 func payoutFromTradeRow(p db.GetPayoutByTradeRow) db.GetPayoutRow {

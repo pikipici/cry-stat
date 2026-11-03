@@ -151,6 +151,31 @@ func main() {
 		}
 	}()
 
+	// Durable payout recovery worker (sandbox): scan -> atomic claim -> token-owned
+	// processing. Bounded batches avoid one tick monopolizing the bot process.
+	go func() {
+		t := time.NewTicker(30 * time.Second)
+		defer t.Stop()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case now := <-t.C:
+				workerToken := "sandbox-recovery-" + now.UTC().Format("20060102T150405.000000000")
+				results, err := chainSvc.RunRecoveryBatch(ctx, 25, workerToken, chain.PayoutSuccess)
+				if err != nil {
+					slog.Error("payout recovery scan/claim gagal", "err", err)
+					continue
+				}
+				for _, result := range results {
+					if result.Err != nil {
+						slog.Warn("payout recovery process gagal", "payout_id", result.PayoutID, "err", result.Err)
+					}
+				}
+			}
+		}
+	}()
+
 	b, err := tgbot.New(botToken, tgbot.WithDefaultHandler(
 		func(ctx context.Context, b *tgbot.Bot, upd *models.Update) {
 			bot.Handle(ctx, b, upd, deps)

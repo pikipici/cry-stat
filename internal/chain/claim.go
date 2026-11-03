@@ -111,6 +111,55 @@ func (s *Service) RecoveryScan(ctx context.Context, limit int32) ([]int64, error
 	})
 }
 
+// RecoveryResult captures one claimed payout processing attempt. Callers can
+// report each failure without losing successful work from the same batch.
+type RecoveryResult struct {
+	PayoutID int64
+	TxHash   string
+	Err      error
+}
+
+// ProcessClaimedPayout verifies claim ownership before processing. A worker
+// must never finalize a payout claimed by another token.
+func (s *Service) ProcessClaimedPayout(ctx context.Context, payoutID int64, token string, mode PayoutMode) (string, error) {
+	claim, err := s.q.GetPayoutClaim(ctx, payoutID)
+	if err != nil {
+		return "", err
+	}
+	if claim.Status != "broadcasting" || !claim.ClaimToken.Valid || claim.ClaimToken.String != token {
+		return "", ErrPayoutClaimLost
+	}
+	return s.ProcessPayout(ctx, payoutID, mode)
+}
+
+// RecoverQueued atomically claims the requested queued/stale payouts and
+// processes only rows won by this worker. Runtime recovery jobs should use
+// this API rather than the deprecated SELECT-only ClaimQueued helper.
+func (s *Service) RecoverQueued(ctx context.Context, ids []int64, tokenPrefix string, staleBefore time.Time, mode PayoutMode) ([]RecoveryResult, error) {
+	claimed, err := s.ClaimIDs(ctx, ids, tokenPrefix, staleBefore)
+	if err != nil {
+		return nil, err
+	}
+	results := make([]RecoveryResult, 0, len(claimed))
+	for _, row := range claimed {
+		token := tokenPrefix + "-" + int64ToStr(row.ID)
+		txHash, processErr := s.ProcessClaimedPayout(ctx, row.ID, token, mode)
+		results = append(results, RecoveryResult{PayoutID: row.ID, TxHash: txHash, Err: processErr})
+	}
+	return results, nil
+}
+
+// RunRecoveryBatch scans and processes one bounded recovery batch. The caller
+// controls scheduling; this method provides the production integration from
+// durable scan -> atomic claim -> token-owned processing.
+func (s *Service) RunRecoveryBatch(ctx context.Context, limit int32, workerToken string, mode PayoutMode) ([]RecoveryResult, error) {
+	ids, err := s.RecoveryScan(ctx, limit)
+	if err != nil {
+		return nil, err
+	}
+	return s.RecoverQueued(ctx, ids, workerToken, time.Now().Add(-StaleBroadcastingAge), mode)
+}
+
 func int64ToStr(v int64) string {
 	if v == 0 {
 		return "0"

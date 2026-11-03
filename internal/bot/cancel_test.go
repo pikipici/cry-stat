@@ -112,6 +112,13 @@ func TestGuardCallbackGroupRejected(t *testing.T) {
 	}
 }
 
+func TestHandleRejectsInvalidCallbackBeforeRateLimit(t *testing.T) {
+	d := &Deps{Limiter: nil}
+	upd := &models.Update{CallbackQuery: &models.CallbackQuery{}}
+	// Invalid callback must return before touching Limiter or Telegram I/O.
+	Handle(context.Background(), nil, upd, d)
+}
+
 func TestValidateCallbackStructureMatrix(t *testing.T) {
 	full := &models.CallbackQuery{
 		ID:   "abc",

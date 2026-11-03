@@ -215,7 +215,7 @@ func TestPayoutUnknownNoRefund(t *testing.T) {
 	}
 }
 
-// TestQueuedRecovery: delayed tetap queued → ClaimQueued dapat → proses OK.
+// TestQueuedRecovery: delayed tetap queued → durable recovery claim + proses OK.
 func TestQueuedRecovery(t *testing.T) {
 	cs, ls, q := payoutTestSetup(t)
 	ctx := context.Background()
@@ -226,21 +226,9 @@ func TestQueuedRecovery(t *testing.T) {
 	if _, err := cs.ProcessPayout(ctx, tr.PayoutID, PayoutDelayed); err == nil {
 		t.Fatal("delayed harus return error penanda")
 	}
-	claimed, err := cs.ClaimQueued(ctx, 5000)
-	if err != nil || len(claimed) == 0 {
-		t.Fatalf("claim queued: %v n=%d", err, len(claimed))
-	}
-	found := false
-	for _, c := range claimed {
-		if c.ID == tr.PayoutID {
-			found = true
-		}
-	}
-	if !found {
-		t.Fatal("payout delayed harus bisa di-claim recovery")
-	}
-	if _, err := cs.ProcessPayout(ctx, tr.PayoutID, PayoutSuccess); err != nil {
-		t.Fatalf("recovery success: %v", err)
+	results, err := cs.RecoverQueued(ctx, []int64{tr.PayoutID}, "queued-recovery", time.Now().Add(-StaleBroadcastingAge), PayoutSuccess)
+	if err != nil || len(results) != 1 || results[0].PayoutID != tr.PayoutID || results[0].Err != nil {
+		t.Fatalf("durable recovery: err=%v results=%+v", err, results)
 	}
 }
 
