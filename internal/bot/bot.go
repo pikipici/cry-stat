@@ -541,7 +541,7 @@ func saldo(ctx context.Context, telegramID int64, d *Deps) string {
 			if r.TxHash.Valid {
 				tx = " tx " + r.TxHash.String
 			}
-			fmt.Fprintf(&sb, "%s %s → %s (%s)%s\n", r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), PayoutStatusID(r.Status, r.RefundJournalID.Valid), tx)
+			fmt.Fprintf(&sb, "%s %s → %s (%s)%s\n", r.Asset, chain.NumericToDecimal(r.SentUnits).String(), shortAddr(r.ToAddress), PayoutStatusID(r.Status, r.RefundJournalID.Valid), tx)
 		}
 	}
 	sb.WriteString("Beli = otomatis dikirim ke wallet lu (/alamat buat daftar).")
@@ -788,7 +788,7 @@ func riwayat(ctx context.Context, telegramID int64, d *Deps) string {
 			if r.TxHash.Valid {
 				tx = shortTx(r.TxHash.String)
 			}
-			items = append(items, item{ts: ts, text: fmt.Sprintf("%s Beli %s %s -> %s (%s) tx %s", formatWIB(r.CreatedAt.Time), r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), PayoutStatusID(r.Status, r.RefundJournalID.Valid), tx)})
+			items = append(items, item{ts: ts, text: fmt.Sprintf("%s Beli %s %s -> %s (%s) tx %s", formatWIB(r.CreatedAt.Time), r.Asset, chain.NumericToDecimal(r.SentUnits).String(), shortAddr(r.ToAddress), PayoutStatusID(r.Status, r.RefundJournalID.Valid), tx)})
 		}
 	}
 	derrOK := false

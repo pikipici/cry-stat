@@ -280,7 +280,7 @@ func statusCmd(ctx context.Context, b *bot.Bot, chatID, telegramID int64, d *Dep
 			if r.TxHash.Valid {
 				tx = r.TxHash.String
 			}
-			fmt.Fprintf(&sb, "%s %s → %s\ntx %s (%s)\n", r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), tx, PayoutStatusID(r.Status, r.RefundJournalID.Valid))
+			fmt.Fprintf(&sb, "%s %s → %s\ntx %s (%s)\n", r.Asset, chain.NumericToDecimal(r.SentUnits).String(), shortAddr(r.ToAddress), tx, PayoutStatusID(r.Status, r.RefundJournalID.Valid))
 		}
 	}
 	drows, derr := d.Q.RecentDepositsByUser(ctx, db.RecentDepositsByUserParams{UserID: pgtype.Int8{Int64: uid, Valid: true}, Limit: 3})

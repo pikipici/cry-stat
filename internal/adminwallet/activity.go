@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"sort"
 
+	"github.com/pikipici/crypto-station/internal/chain"
+
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/shopspring/decimal"
 )
@@ -94,7 +96,7 @@ func (s *Service) GetDetail(ctx context.Context, kind string, id int64) (Activit
 		if err != nil {
 			return ActivityDetail{}, fmt.Errorf("detail payout: %w", err)
 		}
-		fee, sent := row.FeeUnits, numericDecimal(row.SentUnits, decimal.Zero)
+		fee, sent := row.FeeUnits, chain.NumericToDecimal(row.SentUnits)
 		return ActivityDetail{Item: ActivityItem{Kind: kind, ID: row.ID, Asset: row.Asset, Network: row.Network,
 			Status: row.Status, TxRef: textValue(row.TxHash), Units: row.Units, UserID: int64Ptr(row.UserID), CreatedAt: row.CreatedAt.Time},
 			FeeUnits: &fee, SentUnits: &sent, ToAddress: row.ToAddress}, nil
@@ -138,18 +140,6 @@ func textValue(value pgtype.Text) string {
 		return value.String
 	}
 	return ""
-}
-
-// numericDecimal: pgtype.Numeric (hasil GENERATED expression sqlc) → decimal.
-// Invalid/NaN = zero.
-func numericDecimal(value pgtype.Numeric, fallback decimal.Decimal) decimal.Decimal {
-	if !value.Valid || value.NaN {
-		return fallback
-	}
-	if value.Int == nil {
-		return decimal.Zero
-	}
-	return decimal.NewFromBigInt(value.Int, -value.Exp)
 }
 
 func int64Ptr(value int64) *int64 { return &value }

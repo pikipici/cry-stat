@@ -20,6 +20,15 @@ import (
 
 func pgText(s string) pgtype.Text { return pgtype.Text{String: s, Valid: true} }
 
+// NumericToDecimal: pgtype.Numeric (kolom GENERATED sqlc) → decimal.
+// Invalid/NaN/nil = zero. Dipakai bot + adminwallet.
+func NumericToDecimal(value pgtype.Numeric) decimal.Decimal {
+	if !value.Valid || value.NaN || value.Int == nil {
+		return decimal.Zero
+	}
+	return decimal.NewFromBigInt(value.Int, -value.Exp)
+}
+
 type Service struct {
 	pool *pgxpool.Pool
 	q    *db.Queries
