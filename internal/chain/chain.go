@@ -123,15 +123,15 @@ func (s *Service) Payout(ctx context.Context, userID, tradeID int64, asset strin
 }
 
 // ensureQueued: buat payout queued bila belum ada (idempotent by trade_id).
-func (s *Service) ensureQueued(ctx context.Context, userID, tradeID int64, asset string, units, feeUnits decimal.Decimal, toAddr string) (db.Payout, error) {
+func (s *Service) ensureQueued(ctx context.Context, userID, tradeID int64, asset string, units, feeUnits decimal.Decimal, toAddr string) (db.GetPayoutRow, error) {
 	asset = strings.ToUpper(asset)
 	net, ok := NetworkFor(asset)
 	if !ok {
-		return db.Payout{}, fmt.Errorf("coin tidak dikenal")
+		return db.GetPayoutRow{}, fmt.Errorf("coin tidak dikenal")
 	}
 	sent := units.Sub(feeUnits)
 	if sent.LessThanOrEqual(decimal.Zero) {
-		return db.Payout{}, fmt.Errorf("fee menelan seluruh units")
+		return db.GetPayoutRow{}, fmt.Errorf("fee menelan seluruh units")
 	}
 	// Trade sudah punya payout (jalur normal Phase 4) = pakai itu.
 	if p, err := s.q.GetPayoutByTrade(ctx, tradeID); err == nil {
@@ -202,7 +202,7 @@ func (s *Service) ProcessPayout(ctx context.Context, payoutID int64, mode Payout
 // failPayout: tandai failed. Refund DIORKESTRASI caller via ledger
 // (RefundPayoutTx + SetPayoutRefund) agar jurnal hanya ditulis pintu ledger.
 // unknown TIDAK pernah memanggil ini.
-func (s *Service) failPayout(ctx context.Context, p db.Payout) (string, error) {
+func (s *Service) failPayout(ctx context.Context, p db.GetPayoutRow) (string, error) {
 	// Sudah failed + refund = idempotent, tanpa jurnal kedua.
 	if cur, err := s.q.GetPayout(ctx, p.ID); err == nil && cur.Status == "failed" && cur.RefundJournalID.Valid {
 		return "", ErrPayoutFailed
@@ -221,25 +221,16 @@ func (s *Service) SetRefundJournal(ctx context.Context, payoutID, journalID int6
 
 // ClaimQueued: ambil batch queued/broadcasting (FOR UPDATE SKIP LOCKED)
 // untuk worker/recovery restart. Duplicate worker aman: 1 row 1 claimer.
-func (s *Service) ClaimQueued(ctx context.Context, limit int32) ([]db.Payout, error) {
+func (s *Service) ClaimQueued(ctx context.Context, limit int32) ([]db.ClaimQueuedPayoutsRow, error) {
 	rows, err := s.q.ClaimQueuedPayouts(ctx, limit)
 	if err != nil {
 		return nil, err
 	}
-	out := make([]db.Payout, 0, len(rows))
-	for _, r := range rows {
-		out = append(out, db.Payout{
-			ID: r.ID, UserID: r.UserID, TradeID: r.TradeID, Asset: r.Asset,
-			Units: r.Units, FeeUnits: r.FeeUnits, SentUnits: r.SentUnits,
-			ToAddress: r.ToAddress, Network: r.Network, TxHash: r.TxHash,
-			Status: r.Status, Confirms: r.Confirms, CreatedAt: r.CreatedAt,
-		})
-	}
-	return out, nil
+	return rows, nil
 }
 
-func payoutFromTradeRow(p db.PayoutByTradeRow) db.Payout {
-	return db.Payout{
+func payoutFromTradeRow(p db.GetPayoutByTradeRow) db.GetPayoutRow {
+	return db.GetPayoutRow{
 		ID: p.ID, UserID: p.UserID, TradeID: p.TradeID, Asset: p.Asset,
 		Units: p.Units, FeeUnits: p.FeeUnits, SentUnits: p.SentUnits,
 		ToAddress: p.ToAddress, Network: p.Network, TxHash: p.TxHash,
