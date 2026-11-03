@@ -242,6 +242,11 @@ func validateSolAddress(addr string) error {
 	if len(addr) < 32 || len(addr) > 44 {
 		return fmt.Errorf("alamat SOL harus 32–44 char base58")
 	}
+	// Leading '1' = zero byte (base58 nol). Hitung dulu agar tidak hilang.
+	leading := 0
+	for leading < len(addr) && addr[leading] == '1' {
+		leading++
+	}
 	decoded := make([]byte, 0, 32)
 	for _, c := range addr {
 		idx := -1
@@ -265,18 +270,10 @@ func validateSolAddress(addr string) error {
 			carry >>= 8
 		}
 	}
-	n := len(decoded)
-	if n > 32 {
-		// Kelebihan hanya sah bila semua byte depan nol (leading '1').
-		for _, b := range decoded[:n-32] {
-			if b != 0 {
-				return fmt.Errorf("alamat SOL tidak 32 byte")
-			}
-		}
+	// Total byte = leading zero ('1') + decoded value (minimal representation,
+	// tanpa nol depan). Public key valid = tepat 32.
+	if leading+len(decoded) == 32 {
 		return nil
 	}
-	if n < 32 {
-		return fmt.Errorf("alamat SOL tidak 32 byte")
-	}
-	return nil
+	return fmt.Errorf("alamat SOL tidak 32 byte")
 }
