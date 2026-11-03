@@ -156,6 +156,22 @@ func (s *Service) ensureQueued(ctx context.Context, userID, tradeID int64, asset
 	return s.q.GetPayout(ctx, pid)
 }
 
+// ErrPayoutStaleTransition: state transition kena 0 row — payout sudah pindah
+// state oleh worker lain (stale/racing transition). Bukan error operasional,
+// tapi sinyal kalah race. Task 5 CF-04.
+var ErrPayoutStaleTransition = errors.New("payout stale transition: state sudah berubah")
+
+// mustWin: execrows harus menang tepat ≥1 row, else ErrPayoutStaleTransition.
+func mustWin(n int64, err error) error {
+	if err != nil {
+		return err
+	}
+	if n == 0 {
+		return ErrPayoutStaleTransition
+	}
+	return nil
+}
+
 // ProcessPayout: mock processor state machine (G4.4). Idempotent per payout ID.
 // success: confirmed + MOCK txhash. failed: failed + refund once.
 // unknown: unknown + hold. delayed: tetap queued (attempt+1 tanpa transisi).
@@ -177,7 +193,8 @@ func (s *Service) ProcessPayout(ctx context.Context, payoutID int64, mode Payout
 	if p.Status == "unknown" && mode != PayoutSuccess && mode != PayoutFailed {
 		return "", ErrPayoutUnknown
 	}
-	if _, err := s.q.MarkPayoutBroadcasting(ctx, p.ID); err != nil {
+	n, err := s.q.MarkPayoutBroadcasting(ctx, p.ID)
+	if err := mustWin(n, err); err != nil {
 		return "", err
 	}
 
@@ -185,47 +202,56 @@ func (s *Service) ProcessPayout(ctx context.Context, payoutID int64, mode Payout
 	case PayoutDelayed:
 		return "", ErrPayoutDelayed
 	case PayoutUnknown:
-		// Task 2 compat: execrows return (rows, err); rows dicek Task 5.
-		_, _ = s.q.MarkPayoutUnknown(ctx, db.MarkPayoutUnknownParams{ID: p.ID, LastError: "mock unknown (sandbox)"})
+		n, err := s.q.MarkPayoutUnknown(ctx, db.MarkPayoutUnknownParams{ID: p.ID, LastError: "mock unknown (sandbox)"})
+		if err := mustWin(n, err); err != nil {
+			return "", err
+		}
 		return "", ErrPayoutUnknown
 	case PayoutFailed:
 		return s.failPayout(ctx, p)
 	default: // PayoutSuccess
 		tx := fmt.Sprintf("MOCK-%d-%d", p.TradeID, p.AttemptCount+1)
-		if _, err := s.q.MarkPayoutConfirmed(ctx, db.MarkPayoutConfirmedParams{
+		n, err := s.q.MarkPayoutConfirmed(ctx, db.MarkPayoutConfirmedParams{
 			ID: p.ID, TxHash: pgText(tx), Confirms: 1,
+		})
+		if err := mustWin(n, err); err != nil {
+			return "", err
+		}
+		// Chain event HANYA bila confirm transition benar-benar menang (Task 5 CF-04).
+		if _, err := s.q.InsertChainEvent(ctx, db.InsertChainEventParams{
+			Asset: p.Asset, TxHash: tx, EventType: "mock_confirmed",
+			RawPayload: "sandbox mock, bukan chain beneran", Confirms: 1,
 		}); err != nil {
 			return "", err
 		}
-		_, _ = s.q.InsertChainEvent(ctx, db.InsertChainEventParams{
-			Asset: p.Asset, TxHash: tx, EventType: "mock_confirmed",
-			RawPayload: "sandbox mock, bukan chain beneran", Confirms: 1,
-		})
 		return tx, nil
 	}
 }
 
-// failPayout: tandai failed. Refund DIORKESTRASI caller via ledger
-// (RefundPayoutTx + SetPayoutRefund) agar jurnal hanya ditulis pintu ledger.
+// failPayout: tandai failed. Zero-row → ErrPayoutStaleTransition (Task 5 CF-04/05).
+// Refund DIORKESTRASI caller via ledger agar jurnal hanya ditulis pintu ledger.
 // unknown TIDAK pernah memanggil ini.
-// Task 2 compat: execrows return (rows, err); rows dicek Task 5.
 func (s *Service) failPayout(ctx context.Context, p db.GetPayoutRow) (string, error) {
 	// Sudah failed + refund = idempotent, tanpa jurnal kedua.
 	if cur, err := s.q.GetPayout(ctx, p.ID); err == nil && cur.Status == "failed" && cur.RefundJournalID.Valid {
 		return "", ErrPayoutFailed
 	}
-	_, _ = s.q.MarkPayoutFailed(ctx, db.MarkPayoutFailedParams{ID: p.ID, LastError: "mock failed (sandbox)"})
+	n, err := s.q.MarkPayoutFailed(ctx, db.MarkPayoutFailedParams{ID: p.ID, LastError: "mock failed (sandbox)"})
+	if err := mustWin(n, err); err != nil {
+		return "", err
+	}
 	return "", ErrPayoutFailed
 }
 
 // SetRefundJournal: catat refund journal (ditulis ledger) ke payout.
 // Guard IS NULL di SQL = exactly-once walau retry.
-// Task 2 compat: execrows return (rows, err); rows dicek Task 3/5.
+// Zero-row → ErrPayoutStaleTransition (Task 5). Deprecated: Task 3 RefundPayout
+// atomic sudah linkage dalam tx yang sama; ini hanya untuk kompat caller lama.
 func (s *Service) SetRefundJournal(ctx context.Context, payoutID, journalID int64) error {
-	_, err := s.q.SetPayoutRefund(ctx, db.SetPayoutRefundParams{
+	n, err := s.q.SetPayoutRefund(ctx, db.SetPayoutRefundParams{
 		ID: payoutID, RefundJournalID: pgtype.Int8{Int64: journalID, Valid: true},
 	})
-	return err
+	return mustWin(n, err)
 }
 
 // ClaimQueued: ambil batch queued/broadcasting (FOR UPDATE SKIP LOCKED)

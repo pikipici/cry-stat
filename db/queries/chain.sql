@@ -93,7 +93,7 @@ ORDER BY id LIMIT $2;
 
 -- name: MarkPayoutBroadcasting :execrows
 UPDATE payouts SET status='broadcasting', attempt_count=attempt_count+1, broadcast_at=now()
-WHERE id=$1 AND status IN ('queued','broadcasting');
+WHERE id=$1 AND status IN ('queued','broadcasting','unknown');
 
 -- name: MarkPayoutConfirmed :execrows
 UPDATE payouts SET status='confirmed', tx_hash=$2, confirms=$3, finalized_at=now()
