@@ -4,6 +4,8 @@ package chain
 
 import (
 	"context"
+	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/pikipici/crypto-station/internal/db"
@@ -89,6 +91,10 @@ func TestPayoutFailedRefundOnce(t *testing.T) {
 	ctx := context.Background()
 	u, _ := q.CreateUser(ctx, db.CreateUserParams{TelegramID: 9001003, Mode: "sandbox"})
 	_ = ls.GrantSandbox(ctx, u.ID, 1000000)
+	before, err := globalSums(ctx, q)
+	if err != nil {
+		t.Fatalf("baseline sums: %v", err)
+	}
 	balBefore, _ := ls.Balances(ctx, u.ID)
 	qr, _ := ls.CreateQuoteBuy(ctx, u.ID, "SOL", 100000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
 	tr, _ := ls.ExecuteTrade(ctx, u.ID, qr.ID)
@@ -116,9 +122,55 @@ func TestPayoutFailedRefundOnce(t *testing.T) {
 	if !p.RefundJournalID.Valid || p.RefundJournalID.Int64 != jid {
 		t.Fatal("refund_journal_id harus tercatat tepat sekali")
 	}
-	if err := ls.ReconcileGlobal(ctx); err != nil {
-		t.Fatalf("global reconcile sesudah refund: %v", err)
+	// ReconcileGlobal absolut FAIL di workspace DB historis (SOL -54.69 warisan
+	// A3/A4). Yang diassert: DELTA global sum dari flow ini = 0 (jurnal baru
+	// buy+payout-failed+refund balance persis).
+	if err := assertGlobalDeltaZero(ctx, q, before); err != nil {
+		t.Fatalf("delta global: %v", err)
 	}
+}
+
+// globalSums: snapshot sum per asset seluruh ledger (termasuk historis).
+func globalSums(ctx context.Context, q *db.Queries) (map[string]string, error) {
+	rows, err := q.SumLedgerByOwnerAsset(ctx)
+	if err != nil {
+		return nil, err
+	}
+	// Agregasi manual per asset dari (owner,asset,total).
+	out := map[string]decimal.Decimal{}
+	for _, r := range rows {
+		a := strings.ToUpper(r.Asset)
+		cur, ok := out[a]
+		if !ok {
+			cur = decimal.Zero
+		}
+		out[a] = cur.Add(r.Total)
+	}
+	m := map[string]string{}
+	for a, v := range out {
+		m[a] = v.String()
+	}
+	return m, nil
+}
+
+// assertGlobalDeltaZero: baseline vs kini harus IDENTIK — jurnal flow baru
+// net-nol (balance), walau historis workspace imbalance.
+func assertGlobalDeltaZero(ctx context.Context, q *db.Queries, before map[string]string) error {
+	after, err := globalSums(ctx, q)
+	if err != nil {
+		return err
+	}
+	for a, b := range before {
+		if after[a] != b {
+			return fmt.Errorf("asset %s berubah: %s -> %s", a, b, after[a])
+		}
+	}
+	for a, v := range after {
+		if _, ok := before[a]; !ok {
+			return fmt.Errorf("asset baru %s=%s", a, v)
+		}
+	}
+	return nil
 }
 
 // TestPayoutUnknownNoRefund: unknown → hold, TIDAK ada refund.
