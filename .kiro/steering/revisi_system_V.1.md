@@ -2258,7 +2258,7 @@ Current Next Step:
 
 - [x] Phase 1 — verification pipeline minimum tersedia melalui `scripts/verify.sh`; full DB/restore drill masih pending.
 - [x] Phase 2 — cancel/callback safety user. AUTOMATED DONE 2026-11-03 (commits `1a117cb`+`e94a6f3`+`00ee7ee`+`33eac5c`, `scripts/verify.sh --no-db` VERIFY OK di VPS). Migration `000011_quote_cancelled.sql` (status `cancelled` + idx user-active). Queries `CancelActiveQuotesByUser`/`CancelQuoteByID`/`GetQuoteForUser`. `cancel.go` (CancelActiveQuotes/CancelQuote/BatalCopy 4-way/CancelAliases incl ❌). `callback_guard.go` (nil-safe+private-only+user, denyCopy typed). `cancel_test.go` pure unit hijau. `bot.go`: q:no per-quote cancel, q:ok owner-scoped lookup, malformed feedback, batal() 4-way, q: guard. `flow.go`: GuardCallback entry, t:cancel navigation-only, stale() feedback semua malformed. `session.go`: MatchButton ❌ batal. `adminflow.go`: broadcast-input cancel = nol kirim. Manual Telegram trial + workspace restart masih pending.
-- [ ] Phase 3 — ledger invariants buy/deposit user.
+- [x] Phase 3 — ledger invariants buy/deposit user. AUTOMATED DONE 2026-11-03 (commit `360f5ce`, verify --no-db VERIFY OK, targeted DB tests hijau). Buy: float -gross/external:payout +sent/fee-collect +fee. Deposit: +external:deposit -units. validateLegs pre-commit di trade/deposit/stock. ReconcileGlobal baru. Evidence: global SOL sum workspace IDENTIK -54.693206730894899100 sebelum/sesudah test run = jurnal baru sum nol persis. Manual Telegram trial + workspace restart masih pending.
 - [ ] Phase 4 — durable payout lifecycle.
 - [ ] Phase 5 — deposit/address safety user.
 - [ ] Phase 6 — remove custodial drift.
