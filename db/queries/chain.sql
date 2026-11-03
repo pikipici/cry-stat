@@ -72,10 +72,24 @@ FOR UPDATE;
 -- name: ClaimQueuedPayoutAtomic :one
 UPDATE payouts SET status='broadcasting', attempt_count=attempt_count+1,
        broadcast_at=now(), claim_token=$2, claimed_at=now()
-WHERE id=$1 AND status IN ('queued','broadcasting')
+WHERE id=$1 AND status='queued'
 RETURNING id, user_id, trade_id, asset, units, fee_units, sent_units, to_address, network,
        tx_hash, status, confirms, mode, attempt_count, last_error, refund_journal_id,
        broadcast_at, finalized_at, created_at;
+
+-- name: ReclaimStaleBroadcastingAtomic :one
+UPDATE payouts SET attempt_count=attempt_count+1,
+       broadcast_at=now(), claim_token=$2, claimed_at=now()
+WHERE id=$1 AND status='broadcasting' AND (claimed_at IS NULL OR claimed_at < $3)
+RETURNING id, user_id, trade_id, asset, units, fee_units, sent_units, to_address, network,
+       tx_hash, status, confirms, mode, attempt_count, last_error, refund_journal_id,
+       broadcast_at, finalized_at, created_at;
+
+-- name: ListReclaimablePayoutIDs :many
+SELECT id FROM payouts
+WHERE status='queued'
+   OR (status='broadcasting' AND (claimed_at IS NULL OR claimed_at < $1))
+ORDER BY id LIMIT $2;
 
 -- name: MarkPayoutBroadcasting :execrows
 UPDATE payouts SET status='broadcasting', attempt_count=attempt_count+1, broadcast_at=now()
