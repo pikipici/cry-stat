@@ -222,7 +222,7 @@ func TestQueuedRecovery(t *testing.T) {
 	if _, err := cs.ProcessPayout(ctx, tr.PayoutID, PayoutDelayed); err == nil {
 		t.Fatal("delayed harus return error penanda")
 	}
-	claimed, err := cs.ClaimQueued(ctx, 10)
+	claimed, err := cs.ClaimQueued(ctx, 5000)
 	if err != nil || len(claimed) == 0 {
 		t.Fatalf("claim queued: %v n=%d", err, len(claimed))
 	}
