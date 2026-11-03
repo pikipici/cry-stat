@@ -95,8 +95,8 @@ func TestReplaceAddressAudit(t *testing.T) {
 	ctx := context.Background()
 	uid := p5User(t, svc, q)
 	tg := int64(8005001)
-	addr1 := "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA"
-	addr2 := "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9abcD"
+	addr1 := "4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw"
+	addr2 := "a5mErVwME4geXptAs3SmoFRmbCeAoFmUMmENTfNVbbG"
 	b1, a1, err := svc.ReplaceWalletAddress(ctx, uid, tg, "SOL", addr1, "SOL")
 	if err != nil {
 		t.Fatalf("first set: %v", err)

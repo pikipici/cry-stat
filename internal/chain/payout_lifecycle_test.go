@@ -58,7 +58,7 @@ func TestTradeCreatesQueuedPayout(t *testing.T) {
 	ctx := context.Background()
 	uid := payoutUser(t, q)
 	_ = ls.GrantSandbox(ctx, uid, 1000000)
-	qr, err := ls.CreateQuoteBuy(ctx, uid, "SOL", 50000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
+	qr, err := ls.CreateQuoteBuy(ctx, uid, "SOL", 50000, decimal.RequireFromString("0.00001"), "4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw", payoutSnap())
 	if err != nil {
 		t.Fatalf("quote: %v", err)
 	}
@@ -85,7 +85,7 @@ func TestPayoutSuccessLifecycle(t *testing.T) {
 	ctx := context.Background()
 	uid := payoutUser(t, q)
 	_ = ls.GrantSandbox(ctx, uid, 1000000)
-	qr, _ := ls.CreateQuoteBuy(ctx, uid, "SOL", 50000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
+	qr, _ := ls.CreateQuoteBuy(ctx, uid, "SOL", 50000, decimal.RequireFromString("0.00001"), "4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw", payoutSnap())
 	tr, _ := ls.ExecuteTrade(ctx, uid, qr.ID)
 	tx1, err := cs.ProcessPayout(ctx, tr.PayoutID, PayoutSuccess)
 	if err != nil || tx1 == "" {
@@ -109,7 +109,7 @@ func TestPayoutFailedRefundOnce(t *testing.T) {
 		t.Fatalf("baseline sums: %v", err)
 	}
 	balBefore, _ := ls.Balances(ctx, uid)
-	qr, _ := ls.CreateQuoteBuy(ctx, uid, "SOL", 100000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
+	qr, _ := ls.CreateQuoteBuy(ctx, uid, "SOL", 100000, decimal.RequireFromString("0.00001"), "4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw", payoutSnap())
 	tr, _ := ls.ExecuteTrade(ctx, uid, qr.ID)
 	if _, err := cs.ProcessPayout(ctx, tr.PayoutID, PayoutFailed); err == nil {
 		t.Fatal("failed harus return error sentinel")
@@ -192,7 +192,7 @@ func TestPayoutUnknownNoRefund(t *testing.T) {
 	ctx := context.Background()
 	uid := payoutUser(t, q)
 	_ = ls.GrantSandbox(ctx, uid, 1000000)
-	qr, _ := ls.CreateQuoteBuy(ctx, uid, "SOL", 100000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
+	qr, _ := ls.CreateQuoteBuy(ctx, uid, "SOL", 100000, decimal.RequireFromString("0.00001"), "4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw", payoutSnap())
 	tr, _ := ls.ExecuteTrade(ctx, uid, qr.ID)
 	if _, err := cs.ProcessPayout(ctx, tr.PayoutID, PayoutUnknown); err == nil {
 		t.Fatal("unknown harus return error sentinel")
@@ -217,7 +217,7 @@ func TestQueuedRecovery(t *testing.T) {
 	ctx := context.Background()
 	uid := payoutUser(t, q)
 	_ = ls.GrantSandbox(ctx, uid, 1000000)
-	qr, _ := ls.CreateQuoteBuy(ctx, uid, "SOL", 50000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
+	qr, _ := ls.CreateQuoteBuy(ctx, uid, "SOL", 50000, decimal.RequireFromString("0.00001"), "4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw", payoutSnap())
 	tr, _ := ls.ExecuteTrade(ctx, uid, qr.ID)
 	if _, err := cs.ProcessPayout(ctx, tr.PayoutID, PayoutDelayed); err == nil {
 		t.Fatal("delayed harus return error penanda")

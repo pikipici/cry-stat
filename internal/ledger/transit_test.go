@@ -18,7 +18,7 @@ func TestBuyTransitNoUserCoin(t *testing.T) {
 	ctx := context.Background()
 	uid := tradeUser(t, svc, db.New(svc.pool))
 	fee := decimal.NewFromFloat(0.00001)
-	qr, err := svc.CreateQuoteBuy(ctx, uid, "SOL", 200000, fee, "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", testSnap())
+	qr, err := svc.CreateQuoteBuy(ctx, uid, "SOL", 200000, fee, "4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw", testSnap())
 	if err != nil {
 		t.Fatalf("quote buy: %v", err)
 	}
@@ -59,7 +59,7 @@ func TestBuyFeeTooBig(t *testing.T) {
 	uid := tradeUser(t, svc, db.New(svc.pool))
 	// Beli 25rb SOL ~0.015 units; fee 0.01 = >20% → tolak.
 	fee := decimal.NewFromFloat(0.01)
-	if _, err := svc.CreateQuoteBuy(ctx, uid, "SOL", 25000, fee, "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", testSnap()); err == nil {
+	if _, err := svc.CreateQuoteBuy(ctx, uid, "SOL", 25000, fee, "4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw", testSnap()); err == nil {
 		t.Fatal("fee raksasa LOLOS!")
 	}
 }

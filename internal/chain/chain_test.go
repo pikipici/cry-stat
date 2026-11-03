@@ -28,7 +28,7 @@ func TestValidateAddress(t *testing.T) {
 	if err := ValidateAddress("ETH", goodBNB); err != nil {
 		t.Fatalf("ETH valid ditolak: %v", err)
 	}
-	goodSOL := "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA"
+	goodSOL := "4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw"
 	// 44 char base58 valid (tanpa 0/O/I/l).
 	if err := ValidateAddress("SOL", goodSOL); err != nil {
 		t.Fatalf("SOL valid ditolak: %v", err)
@@ -46,7 +46,7 @@ func TestValidateAddress(t *testing.T) {
 		t.Fatal("SOL pendek lolos!")
 	}
 	// Base58 tidak punya char 0, O, I, l.
-	if err := ValidateAddress("SOL", "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zrO0"); err == nil {
+	if err := ValidateAddress("SOL", "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1O"); err == nil {
 		t.Fatal("SOL dengan O/0 lolos!")
 	}
 	if err := ValidateAddress("USDT", "apapun"); err == nil {
