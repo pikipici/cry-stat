@@ -13,9 +13,9 @@ import (
 
 // CallbackContext: hasil guard yang lolos — aman dipakai handler.
 type CallbackContext struct {
-	UID      int64
-	ChatID   int64
-	MsgID    int
+	UID       int64
+	ChatID    int64
+	MsgID     int
 	IsPrivate bool
 }
 
