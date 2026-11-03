@@ -2,9 +2,13 @@
 
 > Status: AUTOMATED DONE — hardening user flow existing selesai otomatis; manual/operational acceptance masih pending
 > Periode pengerjaan: 2026-11-03 (satu sesi, inline implementation)
-> Code head: `e2d19ee` (origin == server bare, dual push sinkron)
+> Code head saat laporan ini: `e2d19ee` (origin == server bare, dual push sinkron)
 > Baseline sebelum revisi: `a46427b` (docs) / `8c60ce1` (code Admin Wallet v0.14.1)
-> DB workspace: migration v13 (`000013_ledger_hardening.sql`)
+> DB workspace saat laporan ini: migration v13 (`000013_ledger_hardening.sql`)
+> ADDENDUM CORRECTNESS 2026-11-04: CF-01–CF-06 fixed (Task 0–6 FIX_PLAN), DB workspace v14,
+> head lihat FIX_PLAN checkpoint. Koreksi wording: trigger v13 = asset-match + domain checks,
+> BUKAN sum-zero per jurnal (sum-zero = validateLegs app-level). Jurnal baru pasca-Phase 3
+> balance sempurna (0 imbalance id>2000); global SOL -54.69 warisan pre-Phase 3 (adjustment pending approval).
 > Mode: SANDBOX / SIMULASI — bukan transaksi on-chain
 > Live production: BELUM disentuh; wajib approval eksplisit user
 > Toolchain: Go 1.27.3, sqlc 1.29.0, goose 3.28.0, PostgreSQL 16
@@ -233,10 +237,16 @@ Dihapus: `internal/ledger/sellall_test.go`, `sellAllFlow`, `quoteFlow`, `CreateQ
 - [x] Build/test dari clean checkout dengan langkah terdokumentasi (`verify.sh`).
 - [x] Cancel aktif mencegah eksekusi (owner-scoped + status cancelled).
 - [x] Buy selalu punya durable payout state (queued atomik).
-- [x] Failed payout refund tepat sekali (guard refund_journal_id).
-- [x] Unknown tidak auto-refund.
-- [x] Seluruh jurnal buy/deposit baru balance per asset (validateLegs + trigger).
-- [x] Callback private-only dan owner-scoped.
+- [x] Failed payout refund tepat sekali — UPDATE CORRECTNESS 2026-11-04: atomic 1 tx
+  (lock FOR UPDATE + jurnal ref payouts/payoutID + linkage), unique index, typed
+  Created/AlreadyDone/NotRefundable. Guard refund_journal_id lama sudah diganti.
+- [x] Unknown tidak auto-refund (typed NotRefundable, saldo tetap).
+- [x] Seluruh jurnal buy/deposit baru balance per asset — KLARIFIKASI: via validateLegs
+  (app-level, pre-commit). Trigger v13 = asset-match + domain checks (units/fee/sent_units
+  GENERATED), BUKAN sum-zero. Evidence 2026-11-04: 0 jurnal imbalance id>2000.
+- [x] Callback guard-first — UPDATE CORRECTNESS 2026-11-04: ValidateCallbackStructure
+  sebelum AnswerCallback/dispatch t:/a:/q:, GuardCallback nil-check semua level,
+  adminflow guard-dulu-baru-allowlist. Klaim lama "nil-safe + private-only" terlalu luas.
 - [x] Flow ALL/MAX tidak dapat dijangkau user (grep BERSIH).
 - [x] Slash dan button Jual satu flow.
 - [x] Riwayat payout/deposit lifecycle.
@@ -251,3 +261,48 @@ Dihapus: `internal/ledger/sellall_test.go`, `sellAllFlow`, `quoteFlow`, `CreateQ
 - [x] Full tests hijau di VPS.
 - [ ] Smoke bot sandbox manual (butuh manusia).
 - [ ] `PROJECT_IDEAS.md` diperbarui hasil aktual (pending — fokus berikutnya bila diminta).
+
+---
+
+## 10. Addendum Correctness 2026-11-04 (CF-07/CF-08/CF-09)
+
+### CF-07 — Trigger v13 BUKAN sum-zero (clarify, optional DB design)
+
+`000013_ledger_hardening.sql` berisi: trigger `trg_entry_asset_match` (entry asset =
+account asset), CHECK units/fee, `sent_units` GENERATED, partial unique 1 active quote.
+Tidak ada trigger sum-zero per jurnal. Sum-zero per jurnal ditegakkan `validateLegs`
+app-level pre-commit. Ini BUKAN bug — tapi wording lama yang bilang
+"(validateLegs + trigger)" untuk balance menyesatkan. Tidak perlu migration baru;
+kalau mau DB-level sum-zero trigger, itu design decision terpisah (cost per insert).
+
+### CF-08 — Historical SOL imbalance -54.693206730894899100 (proposal, BELUM dieksekusi)
+
+Evidence read-only 2026-11-04:
+
+- Global sums: BNB=0, ETH=0, IDR=0, SOL=-54.693206730894899100.
+- Jurnal imbalance TERAKHIR: id 1433 (2026-11-03 03:31 pagi, era pre-Phase 3 buy/deposit bug A3/A4).
+- Jurnal id>2000 (2800+ jurnal): 0 imbalance — write baru balance sempurna.
+- Asal: legs buy lama `float −sent + fee` (sum=2fee−gross) + deposit lama tanpa
+  `external:deposit` boundary leg. Sudah difix Phase 3 (buy boundary + deposit boundary
+  + validateLegs pre-commit).
+
+PROPOSAL ADJUSTMENT (butuh approval eksplisit user sebelum mutasi apapun):
+
+1. Buat SATU jurnal type `adjust`, ref_table=`system`, ref_id=0, reason
+   "koreksi imbalance SOL warisan pre-Phase 3 (jurnal 1–1433), evidence §CF-08".
+2. Legs: `external:adjustment` −54.693206730894899100 SOL (negatif dari imbalance) +
+   `house:inventory` +54.693206730894899100 SOL (counterpart). Sum = 0.
+3. Jangan update/delete jurnal lama — adjustment via jurnal baru (audit trail utuh).
+4. Rollback: reversal journal dengan legs berlawanan + reason link ke jurnal adjust.
+5. Verifikasi: ReconcileGlobal SOL=0 sesudah; Reconcile user-vs-wallet tetap hijau.
+6. Alternatif DITOLAK: update/delete langsung (hancurkan audit trail).
+
+[!] STATUS: menunggu keputusan user. JANGAN eksekusi tanpa approval eksplisit.
+
+### CF-09 — Completion report stale head (corrected)
+
+Header laporan ini memakai head `e2d19ee` / DB v13 — itu snapshot saat laporan ditulis
+(2026-11-03). Status correctness terkini (DB v14, CF-01–CF-06 fixed) ada di
+`.kiro/steering/REVISI_V1_CORRECTNESS_FIX_PLAN.md` §8 checkpoint. `PROJECT_IDEAS.md`
+sudah sinkron ke `f68daa8`/DB v13 sebelum correctness phase; update lanjutan ke DB v14
++ Task 0–6 menyusul di Task 10 documentation closure.
