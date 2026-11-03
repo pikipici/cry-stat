@@ -747,7 +747,6 @@ func handleCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d
 				Text: fmt.Sprintf("Beli tercatat tapi kirim gagal: %s. Hubungi admin.", perr.Error())})
 			return
 		}
-		}
 		net, _ := chain.NetworkFor(tr.Asset)
 		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID,
 			Text: fmt.Sprintf("Terkirim (SIMULASI): %s %s → %s (%s)\ntx %s\nCek /status, riwayat di /riwayat.",
