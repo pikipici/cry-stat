@@ -673,7 +673,7 @@ func handleCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d
 		return
 	}
 	// Phase 2 (A12): guard q: branch - nil-safe + private + user. Spinner sudah dijawab.
-	if cb.Message == nil || cb.Message.Message == nil {
+	if cb.Message.Message == nil {
 		return
 	}
 	uid, blocked := userID(ctx, d, cb.From.ID)

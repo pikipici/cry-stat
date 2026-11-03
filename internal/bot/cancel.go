@@ -46,7 +46,7 @@ func BatalCopy(sessionCleared bool, quotesCancelled int64) string {
 func CancelAliases(text string) bool {
 	t := strings.ToLower(strings.TrimSpace(text))
 	switch t {
-	case "batal", "/batal", "❌ batal", "\u274c batal":
+	case "batal", "/batal", "❌ batal":
 		return true
 	}
 	return false

@@ -22,7 +22,7 @@ type CallbackContext struct {
 // GuardCallback: validasi callback. Return (cctx, denyCopy, ok).
 // denyCopy kosong + !ok = tolak diam-diam tapi spinner sudah dijawab caller.
 func GuardCallback(ctx context.Context, d *Deps, cb *models.CallbackQuery) (*CallbackContext, string, bool) {
-	if cb == nil || cb.Message == nil || cb.Message.Message == nil {
+	if cb == nil || cb.Message.Message == nil {
 		return nil, "Tombol ini sudah kedaluwarsa. Mulai ulang proses.", false
 	}
 	chat := cb.Message.Message.Chat
