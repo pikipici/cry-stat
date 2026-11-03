@@ -209,6 +209,7 @@ func dustTolerance() decimal.Decimal {
 // Fase 8: buy membawa FeeUnits + SentUnits + ToAddress (buat payout mock).
 type TradeResult struct {
 	TradeID   int64
+	PayoutID  int64 // Phase 4: payout queued atomik (buy saja, 0 untuk sell)
 	Side      string
 	Asset     string
 	AmountIDR int64
@@ -377,10 +378,31 @@ func (s *Service) ExecuteTrade(ctx context.Context, userID, quoteID int64) (Trad
 	if err != nil {
 		return TradeResult{}, err
 	}
+	// Phase 4 (A2): payout row queued ATOMIK dengan trade — tidak ada trade
+	// buy tanpa kewajiban payout durable. Processor jalan sesudah commit.
+	var payoutID int64
+	if side == "buy" {
+		// 1 coin = 1 network tetap (mirror chain.NetworkFor tanpa import
+		// agar arah dependensi ledger->chain tidak muncul).
+		net := map[string]string{"BNB": "BSC", "ETH": "ERC20", "SOL": "SOL"}[asset]
+		payoutID, err = q.CreatePayoutQueued(ctx, db.CreatePayoutQueuedParams{
+			UserID:    userID,
+			TradeID:   tr.ID,
+			Asset:     asset,
+			Units:     units,
+			FeeUnits:  feeUnits,
+			SentUnits: sentUnits,
+			ToAddress: cq.ToAddress,
+			Network:   net,
+		})
+		if err != nil {
+			return TradeResult{}, err
+		}
+	}
 	if err := tx.Commit(ctx); err != nil {
 		return TradeResult{}, err
 	}
-	return TradeResult{TradeID: tr.ID, Side: side, Asset: asset, AmountIDR: cq.AmountIdr, Units: units, FeeUnits: feeUnits, SentUnits: sentUnits, ToAddress: cq.ToAddress, PnL: pnl}, nil
+	return TradeResult{TradeID: tr.ID, Side: side, Asset: asset, AmountIDR: cq.AmountIdr, Units: units, FeeUnits: feeUnits, SentUnits: sentUnits, ToAddress: cq.ToAddress, PnL: pnl, PayoutID: payoutID}, nil
 }
 
 type leg struct {

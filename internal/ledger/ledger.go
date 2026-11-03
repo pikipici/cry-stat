@@ -209,6 +209,59 @@ func (s *Service) Reconcile(ctx context.Context) error {
 	return nil
 }
 
+// RefundPayoutTx: reversal eksplisit payout failed (Phase 4 A2).
+// Satu payout = maksimal satu refund journal (guard refund_journal_id di caller).
+// unknown TIDAK pernah memanggil ini — hold tetap.
+func (s *Service) RefundPayoutTx(ctx context.Context, userID int64, amountIDR int64, tradeID int64) (int64, error) {
+	tx, err := s.pool.Begin(ctx)
+	if err != nil {
+		return 0, err
+	}
+	defer tx.Rollback(ctx)
+	q := db.New(s.pool).WithTx(tx)
+	u, err := q.GetUserForUpdate(ctx, userID)
+	if err != nil {
+		return 0, err
+	}
+	if u.Status == "blocked" {
+		return 0, ErrUserBlocked
+	}
+	amt := decimal.NewFromInt(amountIDR)
+	legs := []leg{
+		{owner: userOwner(userID), asset: "IDR", amount: amt},
+		{owner: houseOwner("cash"), asset: "IDR", amount: amt.Neg()},
+	}
+	if err := validateLegs(legs); err != nil {
+		return 0, err
+	}
+	j, err := q.CreateJournal(ctx, db.CreateJournalParams{
+		Type:     "refund",
+		RefTable: pgtype.Text{String: "payouts", Valid: true},
+		RefID:    pgtype.Int8{Int64: tradeID, Valid: true},
+	})
+	if err != nil {
+		return 0, err
+	}
+	for _, l := range legs {
+		acct, err := ensureAccount(ctx, q, l.owner, l.asset)
+		if err != nil {
+			return 0, err
+		}
+		if _, err := q.CreateLedgerEntry(ctx, db.CreateLedgerEntryParams{
+			JournalID: j.ID, AccountID: acct.ID, Asset: l.asset, Amount: l.amount,
+		}); err != nil {
+			return 0, err
+		}
+	}
+	if err := refreshWalletCache(ctx, q, userID, "IDR"); err != nil {
+		return 0, err
+	}
+	if err := tx.Commit(ctx); err != nil {
+		return 0, err
+	}
+	return j.ID, nil
+}
+
 // ReconcileGlobal: invariant ledger-level — sum SEMUA entries per asset = 0.
 // Mencakup house + external boundary (Reconcile lama hanya user-vs-wallet).
 // Dipakai test Phase 3 D2; trial/report tetap memakai Reconcile.

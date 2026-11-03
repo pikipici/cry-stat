@@ -42,3 +42,42 @@ FROM deposits WHERE tx_hash=$1;
 -- name: RecentDepositsByUser :many
 SELECT id, user_id, asset, from_address, tx_hash, units, confirms, required_confirms, status, credited_idr, created_at
 FROM deposits WHERE user_id=$1 ORDER BY id DESC LIMIT $2;
+
+-- Phase 4 (revisi V.1 A2): payout lifecycle durable.
+
+-- name: CreatePayoutQueued :one
+INSERT INTO payouts (user_id, trade_id, asset, units, fee_units, sent_units, to_address, network, mode, status, confirms)
+VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'sandbox','queued',0)
+ON CONFLICT (trade_id) DO NOTHING
+RETURNING id;
+
+-- name: GetPayout :one
+SELECT id, user_id, trade_id, asset, units, fee_units, sent_units, to_address, network, tx_hash, status, confirms,
+       mode, attempt_count, last_error, refund_journal_id, broadcast_at, finalized_at, created_at
+FROM payouts WHERE id=$1;
+
+-- name: ClaimQueuedPayouts :many
+SELECT id, user_id, trade_id, asset, units, fee_units, sent_units, to_address, network, tx_hash, status, confirms,
+       mode, attempt_count, last_error, refund_journal_id, broadcast_at, finalized_at, created_at
+FROM payouts WHERE status IN ('queued','broadcasting')
+ORDER BY id LIMIT $1
+FOR UPDATE SKIP LOCKED;
+
+-- name: MarkPayoutBroadcasting :exec
+UPDATE payouts SET status='broadcasting', attempt_count=attempt_count+1, broadcast_at=now()
+WHERE id=$1 AND status IN ('queued','broadcasting');
+
+-- name: MarkPayoutConfirmed :exec
+UPDATE payouts SET status='confirmed', tx_hash=$2, confirms=$3, finalized_at=now()
+WHERE id=$1 AND status IN ('queued','broadcasting','unknown');
+
+-- name: MarkPayoutFailed :exec
+UPDATE payouts SET status='failed', last_error=$2, finalized_at=now()
+WHERE id=$1 AND status IN ('queued','broadcasting','unknown') AND refund_journal_id IS NULL;
+
+-- name: MarkPayoutUnknown :exec
+UPDATE payouts SET status='unknown', last_error=$2
+WHERE id=$1 AND status IN ('queued','broadcasting');
+
+-- name: SetPayoutRefund :exec
+UPDATE payouts SET refund_journal_id=$2 WHERE id=$1 AND refund_journal_id IS NULL;

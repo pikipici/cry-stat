@@ -6,6 +6,7 @@ package chain
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -91,41 +92,157 @@ func (s *Service) FeeRejectPct() decimal.Decimal {
 	return decimal.NewFromFloat(0.2)
 }
 
-// Payout mock: catat Payouts confirmed + ChainEvents, txhash MOCK-<tradeID>.
-// Idempotent by trade_id (panggil 2x = baris sama, bukan dobel kirim).
+// PayoutMode: skenario mock processor (revisi V.1 G4.4, test-controlled).
+// Production nanti = hasil broadcast nyata, bukan parameter.
+type PayoutMode string
+
+const (
+	PayoutSuccess PayoutMode = "success" // queued→broadcasting→confirmed + txhash
+	PayoutFailed  PayoutMode = "failed"  // →failed + refund journal tepat sekali
+	PayoutUnknown PayoutMode = "unknown" // →unknown, tahan, JANGAN refund
+	PayoutDelayed PayoutMode = "delayed" // tetap queued (worker tick berikutnya)
+)
+
+// Sentinel: caller (bot/worker) orkestrasi refund via ledger — chain TIDAK
+// menulis jurnal (ledger satu-satunya pintu mutasi uang, bab 11.2).
+var (
+	ErrPayoutFailed  = errors.New("payout gagal")
+	ErrPayoutUnknown = errors.New("payout perlu pengecekan — jangan ulang transaksi")
+	ErrPayoutDelayed = errors.New("payout tertunda — diproses worker berikutnya")
+)
+
+// Payout: kompat Fase 8 — pastikan payout queued ada lalu proses success.
+// Sejak Phase 4, ExecuteTrade sudah membuat payout queued atomik; fungsi ini
+// hanya ensure (ON CONFLICT DO NOTHING) lalu memprosesnya.
 func (s *Service) Payout(ctx context.Context, userID, tradeID int64, asset string, units, feeUnits decimal.Decimal, toAddr string) (string, error) {
+	p, err := s.ensureQueued(ctx, userID, tradeID, asset, units, feeUnits, toAddr)
+	if err != nil {
+		return "", err
+	}
+	return s.ProcessPayout(ctx, p.ID, PayoutSuccess)
+}
+
+// ensureQueued: buat payout queued bila belum ada (idempotent by trade_id).
+func (s *Service) ensureQueued(ctx context.Context, userID, tradeID int64, asset string, units, feeUnits decimal.Decimal, toAddr string) (db.Payout, error) {
 	asset = strings.ToUpper(asset)
 	net, ok := NetworkFor(asset)
 	if !ok {
-		return "", fmt.Errorf("coin tidak dikenal")
+		return db.Payout{}, fmt.Errorf("coin tidak dikenal")
 	}
 	sent := units.Sub(feeUnits)
 	if sent.LessThanOrEqual(decimal.Zero) {
-		return "", fmt.Errorf("fee menelan seluruh units")
+		return db.Payout{}, fmt.Errorf("fee menelan seluruh units")
 	}
-	tx := fmt.Sprintf("MOCK-%d", tradeID)
-	// Idempotent: trade sudah punya payout = kembalikan tx lama.
+	// Trade sudah punya payout (jalur normal Phase 4) = pakai itu.
 	if p, err := s.q.GetPayoutByTrade(ctx, tradeID); err == nil {
-		if p.TxHash.Valid {
-			return p.TxHash.String, nil
-		}
-		return tx, nil
+		return payoutFromTradeRow(p), nil
 	}
-	if _, err := s.q.CreatePayout(ctx, db.CreatePayoutParams{
+	pid, err := s.q.CreatePayoutQueued(ctx, db.CreatePayoutQueuedParams{
 		UserID: userID, TradeID: tradeID, Asset: asset,
 		Units: units, FeeUnits: feeUnits, SentUnits: sent,
 		ToAddress: toAddr, Network: net,
-		TxHash: pgText(tx), Status: "confirmed", Confirms: 1,
-	}); err != nil {
+	})
+	if err != nil {
 		// Race: orang lain bikin duluan → ambil yang ada.
-		if p, err2 := s.q.GetPayoutByTrade(ctx, tradeID); err2 == nil && p.TxHash.Valid {
-			return p.TxHash.String, nil
+		if p, err2 := s.q.GetPayoutByTrade(ctx, tradeID); err2 == nil {
+			return payoutFromTradeRow(p), nil
 		}
+		return db.Payout{}, err
+	}
+	return s.q.GetPayout(ctx, pid)
+}
+
+// ProcessPayout: mock processor state machine (G4.4). Idempotent per payout ID.
+// success: confirmed + MOCK txhash. failed: failed + refund once.
+// unknown: unknown + hold. delayed: tetap queued (attempt+1 tanpa transisi).
+func (s *Service) ProcessPayout(ctx context.Context, payoutID int64, mode PayoutMode) (string, error) {
+	p, err := s.q.GetPayout(ctx, payoutID)
+	if err != nil {
 		return "", err
 	}
-	_, _ = s.q.InsertChainEvent(ctx, db.InsertChainEventParams{
-		Asset: asset, TxHash: tx, EventType: "mock_confirmed",
-		RawPayload: "sandbox mock, bukan chain beneran", Confirms: 1,
+	// Terminal sudah final = kembalikan hasil lama (exactly-once).
+	if p.Status == "confirmed" {
+		if p.TxHash.Valid {
+			return p.TxHash.String, nil
+		}
+		return "", fmt.Errorf("payout confirmed tanpa txhash")
+	}
+	if p.Status == "failed" {
+		return "", ErrPayoutFailed
+	}
+	if p.Status == "unknown" && mode != PayoutSuccess && mode != PayoutFailed {
+		return "", ErrPayoutUnknown
+	}
+	if err := s.q.MarkPayoutBroadcasting(ctx, p.ID); err != nil {
+		return "", err
+	}
+	switch mode {
+	case PayoutDelayed:
+		return "", ErrPayoutDelayed
+	case PayoutUnknown:
+		_ = s.q.MarkPayoutUnknown(ctx, db.MarkPayoutUnknownParams{ID: p.ID, LastError: "mock unknown (sandbox)"})
+		return "", ErrPayoutUnknown
+	case PayoutFailed:
+		return s.failPayout(ctx, p)
+	default: // PayoutSuccess
+		tx := fmt.Sprintf("MOCK-%d-%d", p.TradeID, p.AttemptCount+1)
+		if err := s.q.MarkPayoutConfirmed(ctx, db.MarkPayoutConfirmedParams{
+			ID: p.ID, TxHash: pgText(tx), Confirms: 1,
+		}); err != nil {
+			return "", err
+		}
+		_, _ = s.q.InsertChainEvent(ctx, db.InsertChainEventParams{
+			Asset: p.Asset, TxHash: tx, EventType: "mock_confirmed",
+			RawPayload: "sandbox mock, bukan chain beneran", Confirms: 1,
+		})
+		return tx, nil
+	}
+}
+
+// failPayout: tandai failed. Refund DIORKESTRASI caller via ledger
+// (RefundPayoutTx + SetPayoutRefund) agar jurnal hanya ditulis pintu ledger.
+// unknown TIDAK pernah memanggil ini.
+func (s *Service) failPayout(ctx context.Context, p db.Payout) (string, error) {
+	// Sudah failed + refund = idempotent, tanpa jurnal kedua.
+	if cur, err := s.q.GetPayout(ctx, p.ID); err == nil && cur.Status == "failed" && cur.RefundJournalID.Valid {
+		return "", ErrPayoutFailed
+	}
+	_ = s.q.MarkPayoutFailed(ctx, db.MarkPayoutFailedParams{ID: p.ID, LastError: "mock failed (sandbox)"})
+	return "", ErrPayoutFailed
+}
+
+// SetRefundJournal: catat refund journal (ditulis ledger) ke payout.
+// Guard IS NULL di SQL = exactly-once walau retry.
+func (s *Service) SetRefundJournal(ctx context.Context, payoutID, journalID int64) error {
+	return s.q.SetPayoutRefund(ctx, db.SetPayoutRefundParams{
+		ID: payoutID, RefundJournalID: pgtype.Int8{Int64: journalID, Valid: true},
 	})
-	return tx, nil
+}
+
+// ClaimQueued: ambil batch queued/broadcasting (FOR UPDATE SKIP LOCKED)
+// untuk worker/recovery restart. Duplicate worker aman: 1 row 1 claimer.
+func (s *Service) ClaimQueued(ctx context.Context, limit int32) ([]db.Payout, error) {
+	rows, err := s.q.ClaimQueuedPayouts(ctx, limit)
+	if err != nil {
+		return nil, err
+	}
+	out := make([]db.Payout, 0, len(rows))
+	for _, r := range rows {
+		out = append(out, db.Payout{
+			ID: r.ID, UserID: r.UserID, TradeID: r.TradeID, Asset: r.Asset,
+			Units: r.Units, FeeUnits: r.FeeUnits, SentUnits: r.SentUnits,
+			ToAddress: r.ToAddress, Network: r.Network, TxHash: r.TxHash,
+			Status: r.Status, Confirms: r.Confirms, CreatedAt: r.CreatedAt,
+		})
+	}
+	return out, nil
+}
+
+func payoutFromTradeRow(p db.PayoutByTradeRow) db.Payout {
+	return db.Payout{
+		ID: p.ID, UserID: p.UserID, TradeID: p.TradeID, Asset: p.Asset,
+		Units: p.Units, FeeUnits: p.FeeUnits, SentUnits: p.SentUnits,
+		ToAddress: p.ToAddress, Network: p.Network, TxHash: p.TxHash,
+		Status: p.Status, Confirms: p.Confirms,
+	}
 }

@@ -4,6 +4,7 @@ package bot
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -720,13 +721,32 @@ func handleCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d
 		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: msg})
 		return
 	}
-	// Fase 8 transit: buy sukses → payout mock otomatis (txhash MOCK-xxx).
+	// Phase 4: buy sukses -> payout durable (queued atomik di ExecuteTrade,
+	// diproses di sini). Refund HANYA diklaim setelah jurnal confirmed.
 	if tr.Side == "buy" {
 		tx, perr := d.Chain.Payout(ctx, uid, tr.TradeID, tr.Asset, tr.Units, tr.FeeUnits, tr.ToAddress)
 		if perr != nil {
+			// Failed -> refund via ledger, klaim hanya bila jurnal ada.
+			if errors.Is(perr, chain.ErrPayoutFailed) && tr.PayoutID != 0 {
+				if jid, rerr := d.Ledger.RefundPayoutTx(ctx, uid, tr.AmountIDR, tr.TradeID); rerr == nil {
+					_ = d.Chain.SetRefundJournal(ctx, tr.PayoutID, jid)
+					_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID,
+						Text: "Payout gagal - dana dikembalikan (SIMULASI). Cek /saldo."})
+					return
+				}
+				_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID,
+					Text: "Payout gagal - catat dan hubungi admin. Jangan ulang transaksi."})
+				return
+			}
+			if errors.Is(perr, chain.ErrPayoutUnknown) {
+				_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID,
+					Text: "Payout perlu pengecekan - jangan ulang transaksi. Cek /status."})
+				return
+			}
 			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID,
-				Text: fmt.Sprintf("Beli tercatat tapi kirim gagal: %s\nIDR tidak hilang — hubungi admin.", perr.Error())})
+				Text: fmt.Sprintf("Beli tercatat tapi kirim gagal: %s. Hubungi admin.", perr.Error())})
 			return
+		}
 		}
 		net, _ := chain.NetworkFor(tr.Asset)
 		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID,
