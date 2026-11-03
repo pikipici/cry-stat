@@ -440,11 +440,22 @@ Status `LIVE` tidak termasuk plan ini dan tetap memerlukan approval eksplisit te
 | 7 Ledger/report clarification | [x] | `ac072ae` | Report addendum §10: CF-07 trigger=asset-match bukan sum-zero (sum-zero=validateLegs app); CF-08 evidence read-only (SOL -54.69 warisan jurnal 1-1433, 0 imbalance id>2000) + PROPOSAL adjustment journal (BELUM dieksekusi, tunggu approval); CF-09 header dikoreksi + pointer ke FIX_PLAN | Historical adjustment needs approval — JANGAN eksekusi |
 | 8 Full verification | [x] | `e6d3a70` | 2026-11-04: verify.sh --no-db VERIFY OK; targeted 19 GREEN (6 refund/8 claim-transition/5 guard); full -p1 hijau semua pkg; DB v14; build OK; secret-scan bersih; live tidak disentuh | VPS only, sesuai plan |
 | 9 Manual workspace trial | [ ] | | | Needs user approval/restart |
-| 10 Documentation closure | [ ] | | | |
+| 10 Documentation closure | [x] | `d769153` | PROJECT_IDEAS + revisi_system_V.1 header sinkron (correctness done, DB v14, pointer FIX_PLAN); COMPLETION_REPORT addendum §10 (Task 7); TRIAL.md + ADMIN_WALLET_CURRENT_STATE.md + Fase0-README + STAGE0 TIDAK disentuh (4 MD work user, masih v0.14.1/v10 — sinkronisasi itu milik user); RefundPayoutTx lama masih ada (deprecated, hapus pasca-trial) | Implemented/automated dipisah dari manual/workspace/live di checkpoint |
 
 ## 9. Current Next Step
 
-Task 0 DONE 2026-11-04 — reconciliation verdict lawan HEAD `476c78c`:
+Task 0–8 + 10 DONE 2026-11-04 — CORRECTNESS AUTOMATED DONE. P0/P1 (CF-01–CF-06) fixed
+dan hijau; CF-07 clarified; CF-09 corrected; CF-08 proposal menunggu approval user.
+
+Sisa di luar automation (butuh manusia/approval):
+
+- Task 9 Manual workspace trial: failed/unknown/retry Telegram + restart recovery +
+  admin/non-admin callback. BUTUH approval user untuk restart bot workspace (bukan live).
+- CF-08 adjustment -54.69 SOL: proposal di COMPLETION_REPORT §10. BUTUH approval eksplisit.
+  JANGAN eksekusi tanpa itu.
+- 4 MD work user (TRIAL, ADMIN_WALLET_STATE, Fase0-README, STAGE0) masih versi lama
+  v0.14.1/v10 — sinkronisasi milik user, AI tidak menyentuh.
+- Sandbox S1–S6, restore drill, live: tetap dilarang tanpa approval eksplisit terpisah.
 
 - CF-01 MASIH VALID — `internal/ledger/ledger.go:215-262` RefundPayoutTx commit jurnal sendiri; linkage via `internal/bot/bot.go:733-735` RefundPayoutTx + SetRefundJournal terpisah; crash window nyata.
 - CF-02 MASIH VALID — `internal/ledger/ledger.go:237-241` RefTable=payouts tapi RefID=tradeID.
