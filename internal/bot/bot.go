@@ -9,6 +9,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/pikipici/crypto-station/internal/admin"
@@ -40,6 +41,26 @@ type Deps struct {
 	Limiter *RateLimiter
 	Session *Sessions // state multi-step T1-button (nil = dimatikan)
 	Mode    string    // sandbox / real (Fase 1-4: selalu sandbox)
+
+	// Phase 8 (A6): dedup broadcast double-tap/double-slash.
+	// Kunci: teks+sender sama dalam 60 detik = tolak kirim kedua.
+	BroadcastMu   sync.Mutex
+	BroadcastLast map[string]time.Time
+}
+
+// claimBroadcastSend: klaim sekali pakai per key dalam 60 detik.
+// Pure map+mutex — unit-testable tanpa DB/bot.
+func (d *Deps) claimBroadcastSend(key string) bool {
+	d.BroadcastMu.Lock()
+	defer d.BroadcastMu.Unlock()
+	if d.BroadcastLast == nil {
+		d.BroadcastLast = map[string]time.Time{}
+	}
+	if last, ok := d.BroadcastLast[key]; ok && time.Since(last) < 60*time.Second {
+		return false
+	}
+	d.BroadcastLast[key] = time.Now()
+	return true
 }
 
 func Route() []string {
@@ -395,7 +416,14 @@ func adminBroadcast(ctx context.Context, b *bot.Bot, chatID, telegramID int64, r
 }
 
 // doBroadcast: kirim ke semua user aktif + audit. Dipakai slash + button.
+// Phase 8 (A6): dedup 60 detik per (sender, teks) — double-tap/double-slash
+// tidak broadcast dua kali. Preview sendiri nol kiriman (bukan di sini).
 func doBroadcast(ctx context.Context, b *bot.Bot, telegramID int64, text string, d *Deps) string {
+	key := fmt.Sprintf("%d\x00%s", telegramID, text)
+	if !d.claimBroadcastSend(key) {
+		_ = d.Admin.Audit(ctx, telegramID, "broadcast", 0, false, "target=dedup", "sent=0 duplicate")
+		return "Broadcast sama baru saja dikirim — duplikat ditolak."
+	}
 	msg := "[Crypto Station] " + text
 	ids, err := d.Q.ListActiveTelegramIDs(ctx)
 	if err != nil {

@@ -279,6 +279,18 @@ func CoinPicker(side string) *models.InlineKeyboardMarkup {
 
 // Phase 6 (A10): SellAmountPicker (Jual SEMUA) DIHAPUS — sell-bandar mati total.
 
+// BroadcastConfirmKeyboard: preview broadcast admin (Phase 8 A6).
+// Kirim = a:broadcast:send, Batal = a:broadcast:no. Tanpa callback ini
+// tidak ada pengiriman (preview nol kiriman).
+func BroadcastConfirmKeyboard() *models.InlineKeyboardMarkup {
+	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
+		{
+			{Text: "✅ Kirim broadcast", CallbackData: "a:broadcast:send"},
+			{Text: "❌ Batal", CallbackData: "a:broadcast:no"},
+		},
+	}}
+}
+
 // QuoteKeyboard: Konfirmasi/Batal untuk quote id. Dipakai slash + button flow.
 // Phase 7 (A25): label Indonesia; callback data tetap q:<id>:ok/no.
 func QuoteKeyboard(quoteID int64) *models.InlineKeyboardMarkup {

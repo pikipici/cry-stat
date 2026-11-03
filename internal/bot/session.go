@@ -24,6 +24,7 @@ const (
 	StepAdminStock             Step = "admin_stock"               // sudah pilih aksi stok + coin, nunggu nilai
 	StepAdminStockDepositUnits Step = "admin_stock_deposit_units" // sudah pilih coin, nunggu units deposit
 	StepAdminStockDepositRef   Step = "admin_stock_deposit_ref"   // sudah isi units, nunggu reference
+	StepAdminBroadcastConfirm  Step = "admin_broadcast_confirm"   // preview broadcast, nunggu Konfirmasi/Batal
 )
 
 // SessionTimeout: state hangus setelah ini (suruh tap Beli/Jual lagi).
@@ -106,6 +107,8 @@ func ExpiredCopy(st Session) string {
 		return "Sesi admin sudah habis. Buka Admin lagi."
 	case StepAdminBroadcast:
 		return "Sesi broadcast sudah habis. Buka Admin → Broadcast lagi."
+	case StepAdminBroadcastConfirm:
+		return "Sesi konfirmasi broadcast sudah habis. Buka Admin → Broadcast lagi."
 	default:
 		return ""
 	}

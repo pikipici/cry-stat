@@ -62,10 +62,39 @@ func handleAdminCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQue
 		edit("Pause coin apa?", AdminCoinPicker("pause"))
 		return
 	case "broadcast":
-		if d.Session != nil {
-			d.Session.Set(cb.From.ID, Session{Step: StepAdminBroadcast})
+		// Phase 8 (A6): a:broadcast = mulai input; a:broadcast:send/no = confirm.
+		if len(parts) == 2 {
+			if d.Session != nil {
+				d.Session.Set(cb.From.ID, Session{Step: StepAdminBroadcast})
+			}
+			edit("Ketik pesan broadcast (atau ❌ Batal):", nil)
+			return
 		}
-		edit("Ketik pesan broadcast (atau ❌ Batal):", nil)
+		if len(parts) != 3 {
+			return
+		}
+		// Kirim HANYA via confirm. Session hilang/ganda = tolak.
+		act := parts[2]
+		if act != "send" && act != "no" {
+			return
+		}
+		st := Session{Step: StepIdle}
+		if d.Session != nil {
+			st = d.Session.Get(cb.From.ID)
+		}
+		if st.Step != StepAdminBroadcastConfirm || strings.TrimSpace(st.Extra) == "" {
+			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Broadcast sudah diproses atau kedaluwarsa."})
+			return
+		}
+		text := st.Extra
+		clearSess()
+		if act == "no" {
+			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Broadcast dibatalkan. Nol pesan terkirim."})
+			return
+		}
+		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Mengirim broadcast..."})
+		res := doBroadcast(ctx, b, cb.From.ID, text, d)
+		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: res})
 		return
 	case "trial":
 		clearSess()
@@ -253,10 +282,18 @@ func handleAdminInput(ctx context.Context, b *bot.Bot, chatID, telegramID int64,
 			reply(ctx, b, chatID, "Broadcast dibatalkan. Nol pesan terkirim.")
 			return true
 		}
+		// Phase 8 (A6): simpan teks → preview + Konfirmasi/Batal.
+		// TIDAK ada pengiriman di sini (nol kiriman sampai confirm).
 		if d.Session != nil {
-			d.Session.Clear(telegramID)
+			d.Session.Set(telegramID, Session{Step: StepAdminBroadcastConfirm, Extra: text})
 		}
-		reply(ctx, b, chatID, doBroadcast(ctx, b, telegramID, text, d))
+		_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID,
+			Text:        "Preview broadcast:\n\n" + text + "\n\nKirim ke semua user?",
+			ReplyMarkup: BroadcastConfirmKeyboard()})
+		return true
+	case StepAdminBroadcastConfirm:
+		// Ketikan saat menunggu konfirmasi = abaikan dengan arahan.
+		reply(ctx, b, chatID, "Tap ✅ Kirim broadcast atau ❌ Batal di atas.")
 		return true
 	case StepAdminStock:
 		// Input stok: float/fee = angka, hot = alamat, topup = units.
