@@ -1,8 +1,10 @@
 # Crypto Station — Roadmap & Living Plan
 
-> Status: v0.14-admin-wallet DONE — Panel Wallet & Aset + Transaksi LIVE di workspace (62 tests hijau, DB v10, deposit idempotent, feed gabungan)
+> Status: revisi V.1 Phase 2–9 AUTOMATED DONE — hardening user flow hijau dan dipush; trial Telegram manual + Sandbox S1–S6 + restore drill masih pending
 > Owner: user + hermes
-> Last updated: 2026-11-02
+> Last updated: 2026-11-04
+> Code head: `f68daa8`; DB workspace v13 (`000013_ledger_hardening.sql`); docs head menyusul commit ini
+> Mode: SANDBOX / SIMULASI; live production belum disentuh dan wajib approval eksplisit
 
 ## v0.13 (baca dulu — hot baru + deposit 2 jalur, setup Stage 0)
 
@@ -121,7 +123,7 @@ Implikasi:
 | 40 | Riwayat = kirim, bukan valuasi (BARU v0.12) | **/saldo = IDR + daftar payout terakhir (coin, units terkirim, txhash, status).** Tidak ada total valuasi portofolio, tidak ada tombol ALL. /riwayat = 10 payout/deposit terakhir + txhash/confirm count |
 | 41 | Menu UX berlapis (BARU v0.12-ux) | **Utama = Beli/Jual/Harga/Menu (+ Admin). Submenu Akun = Saldo/Riwayat/Status/Alamat + Kembali.** Batal = contextual (inline quote/picker + /batal), bukan tombol permanen. Alasan: 9 tombol flat bikin awam bingung; navigasi hafal posisi, aksi dibantu icon inline |
 | 42 | Status 1 pantau (BARU v0.12) | **/status + tombol Status = payout + deposit sekaligus.** /cekdeposit redirect ke Status (kompat slash). Menu tidak nambah |
-| 49 | Wallet & Aset + Transaksi (BARU v0.14) | **Panel admin Wallet & Aset (Ringkasan/Deposit/Float/Fee/Hot) + Transaksi (feed gabungan + detail).** Deposit stok via pending-row preview + Confirm idempotent (tx_ref UNIQUE). Feed = STOCK_IN/PAYOUT_OUT/USER_DEPOSIT_IN merge-sort. Semua layar SIMULASI + WIB, bukan on-chain. Tombol Stok lama diabsorpsi (a:stock:* kompatibel). DB v10 |
+| 49 | Wallet & Aset + Transaksi (v0.14 + hardening v0.14.1) | **Panel admin Wallet & Aset (Ringkasan/Deposit/Float/Fee/Hot) + Transaksi (feed gabungan + detail).** Deposit stok via pending-row preview + Confirm idempotent (`tx_ref` UNIQUE), immutable identity, typed conflict/cancelled/unauthorized, audit success/cancel atomik, callback decision boundary, dan post-commit result aman. Feed = STOCK_IN/PAYOUT_OUT/USER_DEPOSIT_IN merge-sort. Semua layar SIMULASI + WIB, bukan on-chain. DB v10. Automated VPS hijau pada code head `8c60ce1`; manual admin/non-admin trial masih pending |
 
 ## 1. Goal
 
@@ -254,14 +256,14 @@ Catatan: checklist ini operasional. Centang penuh bukan pernyataan bahwa bisnisn
 1. /harga → BNB/ETH/SOL (ask = harga beli user)
 2. /beli → pilih coin → input IDR (min 25rb). WAJIB sudah ada alamat tersimpan — belum ada = ditolak ("daftarin alamat dulu via /alamat")
 3. Cek: harga koin dan kurs tidak basi, sumber hidup, coin tidak di-pause, float hot-wallet cukup, fee ≤ 20% nominal
-4. Quote mengikat 30 detik, 3 BARIS: "harga 0.02867 SOL = Rp50.000 + fee kirim RpX = total RpY. dikirim ke 0xabc... (BSC). Confirm?"
-5. Confirm → atomik: quote dikonsumsi, jurnal tercatat → payout row queued → (Stage 1: mock confirmed + txhash mock; Stage 2: broadcast on-chain)
-6. Sukses = "Terkirim 0.02867 SOL ke 0xabc... tx MOCK-xxx". Coin TIDAK masuk saldo bot
-7. Lewat → requote 1 klik. Failed broadcast → refund IDR otomatis. Unknown → tahan, /status cek
+4. Quote mengikat 30 detik (revisi V.1 Phase 7): "Konfirmasi Pembelian — SIMULASI: Bayar Rp50.000, Dapat sebelum biaya X SOL, Biaya jaringan F SOL (±RpY), Diterima N SOL, Network Solana, Alamat tujuan: <penuh>. Harga berlaku 30 detik. ⚠️ Pastikan alamat dan network benar. Pengiriman crypto tidak dapat dibatalkan." [Konfirmasi] [Batal]
+5. Konfirmasi → atomik: quote dikonsumsi, jurnal balance tercatat → payout row queued atomik → processor mock (success confirmed + txhash / failed + refund tepat sekali / unknown tahan). Batal → quote cancelled, tidak bisa dieksekusi. Forged quote user lain = generik tidak ketemu
+6. Sukses = payout Berhasil tx MOCK-xxx. Gagal = dana dikembalikan HANYA bila jurnal refund posted. Unknown = "Perlu pengecekan — jangan ulang transaksi". Coin TIDAK masuk saldo bot
+7. Lewat → requote 1 klik. Session hangus → copy kontekstual ("Sesi beli sudah habis..."). Status: Menunggu diproses / Sedang dikirim / Berhasil / Gagal / Perlu pengecekan
 
-### FLOW 2b — alamat wallet (/alamat, BARU v0.12)
-1. /alamat BNB 0x... → validasi format BSC (0x + 40 hex). ETH sama. SOL = base58 32-44 char
-2. 1 alamat per coin. Ganti = timpa + audit + (Stage 2: PIN + cooling-off)
+### FLOW 2b — alamat wallet (/alamat, BARU v0.12; hardening Phase 5 A17/A18)
+1. /alamat BNB 0x... → validasi format BSC (0x + 40 hex). ETH sama. SOL = base58 decode tepat 32 byte (tolak O/I/l/0, tanpa dep baru)
+2. 1 alamat per coin. Ganti = replace atomik + audit actual before/after (bukan "(kosong)") + (Stage 2: PIN + cooling-off)
 3. Tanpa alamat = beli DITOLAK. Bukan opsional
 
 ### FLOW 3 — jual via deposit (REVISI v0.12)
@@ -368,22 +370,26 @@ RETURNING *;  -- 0 baris = sudah dipakai/expired/bukan milik user, batalkan tran
 
 Tiap jurnal, sum Amount per Asset = 0. Spread bukan kaki kas.
 
-Beli `amount` IDR kirim `terkirim` koin ke wallet user (v0.12, REVISI — coin tidak ngendap):
+Beli `amount` IDR kirim `terkirim` koin ke wallet user (v0.12 transit; Phase 3 revisi V.1 — balance per asset):
 
 - user IDR −amount
 - house:cash IDR +amount
-- house:float koin −terkirim (keluar hot-wallet)
+- house:float koin −gross_units (keluar hot-wallet sebesar bruto)
+- external:payout koin +terkirim (keluar boundary ke wallet user)
 - house:fee-collect koin +fee_units (fee network terkumpul, bukan laba — buat bayar gas)
+- Sum coin = −gross + sent + fee = 0. `validateLegs` menolak jurnal tak-balance pre-commit
 - P&L spread = (ask − mid) × units, disimpan di trade, bukan di saldo revenue
-- Payout row: queued → confirmed (txhash) / failed (refund IDR) / unknown (tahan)
+- Payout row atomik dengan trade: queued → broadcasting → confirmed (txhash MOCK-*) / failed (refund journal tepat sekali via `refund_journal_id`) / unknown (tahan, JANGAN refund). Refund hanya diklaim setelah jurnal posted
 
-Jual via deposit (v0.12, REVISI): user kirim `units_masuk` ke deposit sistem, cukup
+Jual via deposit (v0.12 transit; Phase 3 revisi V.1 — balance per asset): user kirim `units_masuk` ke deposit sistem, cukup
 konfirmasi → IDR masuk:
 
+- external:deposit koin −units_masuk (masuk boundary dari wallet user)
 - house:float koin +units_masuk (masuk hot-wallet)
 - user IDR +amount_bayar (bid − spread − fee)
 - house:cash IDR −amount_bayar
-- P&L = (mid − bid) × units. Deposit row: pending → credited / manual
+- Sum per asset = 0. P&L = (mid − bid) × units
+- Deposit row: pending → credited / manual. Retry identik = once; tx sama beda user/asset/units = typed conflict (Phase 5 A14), tanpa bocor data
 
 Topup paid / paid_late yang lolos (fee tidak masuk laba, #9):
 
@@ -410,7 +416,7 @@ Journals { ID, Type (topup/buy/sell/payout/float-in/deposit/withdraw/refund/adju
 LedgerEntries { ID, JournalID, AccountID, Asset, Amount (signed), CreatedAt }  -- per jurnal, total Amount per Asset = 0
 Wallets { UserID, Asset, Balance }  -- cache turunan, unique (UserID, Asset). Coin user normalnya NOL (transit)
 TopupInvoices { ID, UserID, Channel (qris/bank #45), AmountIDR, UniqueCode, FeeIDR, ProviderRef unique (QRIS) / BankRef, QRPayload, Status (pending/pending_bank/paid/paid_late/needs_refund/expired/failed), ExpiresAt, PaidAt, ApprovedBy, IdempotencyKey unique }
-Quotes { ID, UserID, Side (buy/sell), Asset, AmountIDR, QuotedUnits, FeeUnits, ToAddress, Bid, Ask, Mid, SpreadUsed, RateUSDTIDR, RateSource, RateAgeMs, PriceAgeMs, ExpiresAt, Status (active/used/expired) }  -- +FeeUnits+ToAddress v0.12
+Quotes { ID, UserID, Side (buy), Asset, AmountIDR, QuotedUnits, FeeUnits, ToAddress, Bid, Ask, Mid, SpreadUsed, RateUSDTIDR, RateSource, RateAgeMs, PriceAgeMs, ExpiresAt, Status (active/used/expired/cancelled) }  -- +FeeUnits+ToAddress v0.12; +cancelled revisi V.1 Phase 2; sell-bandar mati total Phase 6 (sell via deposit)
 Trades { ID, UserID, QuoteID unique, Side, Asset, AmountIDR, Units, PriceUsed, MidUsed, SpreadPnlIDR, JournalID, CreatedAt }
 BankAccounts { ID, UserID, BankCode, AccountNo, AccountNameVerified, Status (pending_confirm/active/disabled), ConfirmedAt, CooldownUntil }
 Withdrawals { ID, UserID, BankAccountID, AmountIDR, FeeIDR, NetIDR, Status (pending/approved/auto_processing/success/failed/unknown/rejected), ProviderRef unique, ApprovedBy, CreatedAt }
@@ -611,7 +617,9 @@ Estimasi kasar, kerja santai, +buffer. Kalibrasi ulang setelah Fase 0.
 - Fase 8 — ✅ DONE 2026-10-31 (migrasi 000006 chain transit: wallet_addresses/payouts/deposits/chain_events/float + quotes fee_units/to_address. internal/chain mock: validate/format per network, fee_mock_*, payout MOCK-tx idempotent. CreateQuoteBuy + jurnal transit house:float/fee-collect, coin user NOL. Bot: /alamat + daftar inline t:addr + beli wajib alamat + quote 3 baris + txhash + /status. Trial live: alamat valid/invalid ✅, beli 50rb → MOCK-175 ✅, saldo transit ✅. Head caf4d63/bb9770a/b7b610b)
 - Fase 9 — ✅ DONE 2026-11-01 (migrasi 000007 credited_idr + 000008 journal types payout/deposit/float-in. MockDeposit idempotent-by-tx + jurnal float/IDR + FloatStatus. Bot: Jual = deposit address + simulasi masuk t:depsim, Status gabung payout+deposit, /cekdeposit redirect, jual-bandar mati total. Menu UX berlapis (#41) + Status 1 pantau (#42). 41 tests hijau, DB v8, head 5ed66f7)
 - Stok v0.13 — ✅ DONE 2026-11-02 (migrasi 000009 hot_address_*. FloatTopup + guard float + SetFloat/SetFee/SetHotAddress + /setfloat /setfee /sethot /floattopup /float + tombol 📦 Stok + trial float. 45 tests hijau, DB v9, heads 31d14a4/08c123d/2f3d7a1). Admin live 7254686681, bot binary 22:54
-- Wallet v0.14 — ✅ DONE 2026-11-02 (migrasi 000010 admin_stock_deposits + 11 sqlc queries. RecordAdminStockDeposit idempotent + internal/adminwallet summary+feed + bot panel Wallet & Aset/Transaksi + flow preview-Confirm + audit. 62 tests hijau 0 fail, vet bersih, build+smoke exit 0, DB v10. Heads 94e620f/24afdfd/b9b1fe5/57c597b/a2832cb/2d43306. Workspace-verified, bot workspace belum restart, trial manual Bagian 10 plan pending)
+- Wallet v0.14 — ✅ IMPLEMENTED 2026-11-02 (migrasi 000010 admin_stock_deposits + sqlc queries, summary/feed/detail, panel Wallet & Aset/Transaksi, preview-Confirm, audit, DB v10). Heads 94e620f/24afdfd/b9b1fe5/57c597b/a2832cb/2d43306
+- Wallet hardening v0.14.1 — ✅ AUTOMATED DONE 2026-11-03 (immutable identity + typed conflict/cancelled/unauthorized, transactional success/cancel audit, callback decision boundary, ledger-owned preview semantics, post-commit balance read handling, exact audit query, router+preview tests, hardened verify/restore runbook). Code head `8c60ce1`; full test/vet/build + `scripts/verify.sh --no-db` hijau di VPS. Manual Telegram admin/non-admin trial, restart recovery, dan restore drill masih pending; live belum disentuh
+- Revisi V.1 Phase 2–9 — ✅ AUTOMATED DONE 2026-11-03/04 (laporan: `.kiro/steering/REVISI_V1_COMPLETION_REPORT.md`). Cancel owner-scoped + status cancelled (000011); jurnal balance + validateLegs + ReconcileGlobal; payout queued atomik + refund-once + unknown hold (000012); deposit conflict typed + address audit atomik + SOL base58 32-byte; sell-bandar mati total + riwayat transit; quote aman + session expired + lifecycle ID; broadcast preview+confirm+dedup; wallet agg targeted + ledger hardening (000013: trigger match, units>0, fee>=0, sent GENERATED, partial unique 1 active quote). Code head `f68daa8`; DB workspace v13; verify VERIFY OK + semua package DB hijau. Manual trial + Sandbox S1–S6 masih pending
 
 **Stage 2 — Real-money (setelah gate lolos; ±4–5 minggu)**
 - Fase 5 — topup QRIS + webhook idempotent + paid_late exact-match + /topup (5–7 hari)
@@ -712,35 +720,39 @@ Masih terbuka:
 
 ## 18. Current Next Step
 
-**v0.14-admin-wallet DONE — Panel Wallet & Aset + Transaksi terverifikasi di workspace. Belum deploy live.**
+**Revisi V.1 Phase 2–9: automated scope DONE dan dipush (`f68daa8`, DB v13). Live production belum disentuh.**
 
-Kode: heads 94e620f (T2 migrasi+query) + 24afdfd (T3 ledger) + b9b1fe5 (T4+T5 service+feed) + 57c597b/a2832cb (fixup pgtype+import) + 2d43306 (T6+T7 bot flow+views).
-DB v10 (000010 admin_stock_deposits), 62 tests hijau 0 fail (24 test funcs, subtests Michał), vet bersih, build + smoke exit 0.
-Bot workspace belum di-restart (binary lama masih v0.13-done). Panel baru (Wallet & Aset + Transaksi) aktif setelah restart workspace.
-Admin live: 7254686681 satu-satunya. Semua layar baru berlabel SIMULASI, bukan saldo on-chain.
+Current state:
+- Code head `f68daa8`; DB workspace v13 (`000013_ledger_hardening.sql`).
+- Full test, vet, build, dan `scripts/verify.sh --no-db` hijau di VPS; targeted DB suites hijau.
+- Laporan: `.kiro/steering/REVISI_V1_COMPLETION_REPORT.md`.
+- Seluruh UI tetap SANDBOX/SIMULASI; bukan saldo atau transaksi on-chain.
 
-Yang DONE v0.14 (workspace-verified, bukan live):
-- Migrasi 000010: tabel admin_stock_deposits (tx_ref UNIQUE idempotency, journal_id UNIQUE, status pending_confirm/recorded_mock/cancelled/failed)
-- Ledger RecordAdminStockDeposit idempotent (double-confirm = 1 jurnal, AlreadyDone=true)
-- Asset summary 3 coin (AMAN/TIPIS, estimasi IDR fail-closed, tanpa fallback)
-- Activity feed gabungan STOCK_IN/PAYOUT_OUT/USER_DEPOSIT_IN + detail per kind
-- Bot: panel Wallet & Aset (Ringkasan/Deposit/Float/Fee/Hot) + Transaksi (10/25 + detail), flow units → ref → preview → Confirm, audit stockdeposit
-- Tombol Stok lama diabsorpsi (callback a:stock:* tetap kompatibel)
+Acceptance yang masih pending (butuh manusia/approval):
+1. Trial Telegram manual: Admin Wallet (TRIAL.md T1) + user flow Phase 2–8 (cancel, quote aman, deposit conflict copy, riwayat, status, broadcast preview) dengan akun admin asli; denial dengan akun non-admin + verifikasi `admin_audit`.
+2. Restart bot workspace (approval user) → feed, detail, idempotency, queued payout tetap tersedia.
+3. Restore drill PostgreSQL custom-format ke dedicated drill DB (maintenance window + approval).
+4. Pastikan bot workspace menjalankan binary code head terbaru.
 
-Lanjut nanti (urut):
-1. Restart bot WORKSPACE biar panel baru hidup → trial Bagian 10 plan (18 langkah: ringkasan, deposit SOL, double-tap, feed, detail, beli+jual mock muncul)
-2. Owner bikin hot BARU manual (seed baru offline, catat 2 alamat publik EVM + SOL) → /sethot-in
-3. Trial Fase 9 live: Jual → SOL → Rp50rb masuk → Saldo → Status (gabung payout+deposit)
-4. Trial T2 ulang lawan transit (setspread/setlimit/pause/trial/broadcast)
-5. Bikin unit systemd permanen cs-bot.service (open-11) sebelum trial panjang
-6. Stage 0: gateway (QRIS dulu) + node + float + fee network + norek bank (#45-open-9) + unit economics
-   → hasil masuk v0.15
+Setelah acceptance manual:
+5. Sandbox S1–S6 di `.kiro/steering/revisi_system_V.1.md`: adapter contract + schema, topup domain TDD, topup UX, buy/payout durable TDD, read models, E2E trial.
+6. Owner menyiapkan hot wallet BARU secara offline: satu alamat publik EVM + satu SOL; seed/key tidak boleh masuk chat/repo.
+7. Selesaikan `STAGE0.md`: gateway QRIS tertulis, node, float, fee network, kurs pembanding, rekening bank manual, unit economics, systemd permanen, backup/alerting.
 
-Setelah gate Stage 2 centang semua → Fase 5 (QRIS) → stabil 2–4 minggu →
-Fase 5b (bank manual) + Fase 6–7 (fiat) + Fase 10 (chain beneran, key hot masuk).
+Setelah gate Stage 2 centang semua → Fase 5 (QRIS) → stabil 2–4 minggu → Fase 5b (bank manual) + Fase 6–7 (fiat) + Fase 10 (chain beneran, key hot masuk).
 
-Jangan mulai payments/chain asli, kurs kedua, atau enforcement mule/sybil sebelum gate.
-Jangan deploy/restart LIVE tanpa persetujuan eksplisit user.
+Jangan mulai payments/chain asli, private key, watcher, kurs kedua production, atau enforcement mule/sybil sebelum gate. Jangan deploy/restart LIVE tanpa persetujuan eksplisit user.
+
+### Changelog revisi V.1 Phase 2–9 (2026-11-03/04, head `f68daa8`)
+
+- **Phase 2 cancel/callback:** migration 000011 (status cancelled), CancelActiveQuotesByUser/CancelQuoteByID/GetQuoteForUser, BatalCopy 4-way, GuardCallback, t:cancel navigation-only, q:no/q:ok owner-scoped, MatchButton ❌ Batal, broadcast-input cancel nol kirim.
+- **Phase 3 ledger balance:** buy legs float −gross/external:payout +sent/fee-collect; deposit +external:deposit; validateLegs pre-commit; ReconcileGlobal; evidence SOL sum identik digit terakhir.
+- **Phase 4 payout durable:** migration 000012 (mode/attempt/last_error/refund_journal_id/broadcast/finalized_at); queued atomik; ProcessPayout success/failed/unknown/delayed; refund-once; ClaimQueued SKIP LOCKED; bot copy jujur.
+- **Phase 5 safety:** DepositConflictError user/asset/units; ReplaceWalletAddress atomik; SOL base58 strict 32-byte (mock lama 30-byte diganti vektor valid).
+- **Phase 6 custodial mati:** ALL/MAX ditolak; sellAllFlow/t:sellall/CreateQuoteUnits/ExecuteTrade-sell/TestSellFlow/SellAmountPicker/quoteFlow dihapus; riwayat transit; /jual satu flow.
+- **Phase 7 UX:** start grant-fix + saldo dinamis; quote bruto/fee-IDR/net/alamat penuh/warning; status error/empty/partial; ExpiredStep + copy; label senilai + neto; mapping ID; welcome transit; tombol Konfirmasi.
+- **Phase 8 admin:** stok contract test 4x3; broadcast preview+confirm+dedup60s; kirim hanya via callback; session ganda ditolak.
+- **Phase 9 DB:** SumLedgerByOwner + refresh 1 query; migration 000013 (trigger asset-match, units>0, fee>=0, sent GENERATED, partial unique 1 active quote); chain.NumericToDecimal; EXPLAIN Index Scan target.
 
 ### Changelog v0.13 → v0.13-done
 
