@@ -32,10 +32,10 @@ func TestSolBase58RejectsForbidden(t *testing.T) {
 func TestSolValidVectors(t *testing.T) {
 	// Vektor dikenal: system program + USDC mint + basis test.
 	for _, v := range []string{
-		"11111111111111111111111111111111",                         // system program (32x '1')
-		"9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA",                 // basis
-		"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",              // USDC mint
-		"So11111111111111111111111111111111111111112",              // wrapped SOL
+		"11111111111111111111111111111111",             // system program (32x '1')
+		"9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA",    // basis
+		"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", // USDC mint
+		"So11111111111111111111111111111111111111112",  // wrapped SOL
 	} {
 		if err := ValidateAddress("SOL", v); err != nil {
 			t.Fatalf("vektor valid ditolak %q: %v", v, err)
