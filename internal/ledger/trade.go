@@ -270,11 +270,8 @@ func (s *Service) ExecuteTrade(ctx context.Context, userID, quoteID int64) (Trad
 			return TradeResult{}, err
 		}
 	}
-	// Refresh cache yang berubah.
-	if err := refreshWalletCache(ctx, q, userID, "IDR"); err != nil {
-		return TradeResult{}, err
-	}
-	if err := refreshWalletCache(ctx, q, userID, asset); err != nil {
+	// Refresh cache user (semua asset sekaligus, 1 query targeted).
+	if err := refreshWalletCache(ctx, q, userID); err != nil {
 		return TradeResult{}, err
 	}
 	tr, err := q.CreateTrade(ctx, db.CreateTradeParams{

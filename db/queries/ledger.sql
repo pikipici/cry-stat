@@ -47,6 +47,13 @@ SELECT a.owner, e.asset, SUM(e.amount)::NUMERIC(36,18) AS total
 FROM ledger_entries e JOIN ledger_accounts a ON a.id = e.account_id
 GROUP BY a.owner, e.asset;
 
+-- Phase 9 (A26): agregat targeted per owner — O(user), bukan O(ledger).
+-- name: SumLedgerByOwner :many
+SELECT e.asset, SUM(e.amount)::NUMERIC(36,18) AS total
+FROM ledger_entries e JOIN ledger_accounts a ON a.id = e.account_id
+WHERE a.owner = $1
+GROUP BY e.asset;
+
 -- Total cache wallets per user+aset (untuk rekonsiliasi).
 -- name: SumWalletsByUserAsset :many
 SELECT user_id, asset, SUM(balance)::NUMERIC(36,18) AS total

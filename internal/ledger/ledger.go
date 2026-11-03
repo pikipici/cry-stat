@@ -134,7 +134,7 @@ func (s *Service) GrantSandbox(ctx context.Context, userID int64, amountIDR int6
 		return err
 	}
 	// Cache turunan: wallet user = total jurnal user saat ini (grant pertama = amount).
-	if err := refreshWalletCache(ctx, q, userID, "IDR"); err != nil {
+	if err := refreshWalletCache(ctx, q, userID); err != nil {
 		return err
 	}
 	return tx.Commit(ctx)
@@ -253,7 +253,7 @@ func (s *Service) RefundPayoutTx(ctx context.Context, userID int64, amountIDR in
 			return 0, err
 		}
 	}
-	if err := refreshWalletCache(ctx, q, userID, "IDR"); err != nil {
+	if err := refreshWalletCache(ctx, q, userID); err != nil {
 		return 0, err
 	}
 	if err := tx.Commit(ctx); err != nil {
@@ -309,19 +309,18 @@ func ensureAccount(ctx context.Context, q *db.Queries, owner, asset string) (db.
 	return a, nil
 }
 
-// refreshWalletCache: hitung ulang cache dari jurnal (dipanggil DALAM tx yang sama dengan jurnal).
-func refreshWalletCache(ctx context.Context, q *db.Queries, userID int64, asset string) error {
-	sums, err := q.SumLedgerByOwnerAsset(ctx)
+// refreshWalletCache: hitung ulang cache user dari jurnal (DALAM tx yang sama).
+// Phase 9 (A26): 1 query targeted per owner (O(user)), menggantikan full scan.
+// Semua asset user di-refresh sekaligus — caller tidak perlu 2x panggil.
+func refreshWalletCache(ctx context.Context, q *db.Queries, userID int64) error {
+	sums, err := q.SumLedgerByOwner(ctx, userOwner(userID))
 	if err != nil {
 		return err
 	}
-	owner := userOwner(userID)
-	total := decimal.Zero
 	for _, r := range sums {
-		if r.Owner == owner && strings.ToUpper(r.Asset) == asset {
-			total = r.Total
+		if _, err := q.UpsertWalletBalance(ctx, db.UpsertWalletBalanceParams{UserID: userID, Asset: strings.ToUpper(r.Asset), Balance: r.Total}); err != nil {
+			return err
 		}
 	}
-	_, err = q.UpsertWalletBalance(ctx, db.UpsertWalletBalanceParams{UserID: userID, Asset: asset, Balance: total})
-	return err
+	return nil
 }

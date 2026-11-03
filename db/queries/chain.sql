@@ -15,8 +15,8 @@ SELECT id, user_id, asset, address, network, status, created_at
 FROM wallet_addresses WHERE user_id=$1 AND status='active' ORDER BY asset;
 
 -- name: CreatePayout :one
-INSERT INTO payouts (user_id, trade_id, asset, units, fee_units, sent_units, to_address, network, tx_hash, status, confirms)
-VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+INSERT INTO payouts (user_id, trade_id, asset, units, fee_units, to_address, network, tx_hash, status, confirms)
+VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
 RETURNING id, created_at;
 
 -- name: GetPayoutByTrade :one
@@ -47,8 +47,8 @@ FROM deposits WHERE user_id=$1 ORDER BY id DESC LIMIT $2;
 -- Phase 4 (revisi V.1 A2): payout lifecycle durable.
 
 -- name: CreatePayoutQueued :one
-INSERT INTO payouts (user_id, trade_id, asset, units, fee_units, sent_units, to_address, network, mode, status, confirms)
-VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'sandbox','queued',0)
+INSERT INTO payouts (user_id, trade_id, asset, units, fee_units, to_address, network, mode, status, confirms)
+VALUES ($1,$2,$3,$4,$5,$6,$7,'sandbox','queued',0)
 ON CONFLICT (trade_id) DO NOTHING
 RETURNING id;
 

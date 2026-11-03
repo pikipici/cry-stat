@@ -141,7 +141,7 @@ func (s *Service) MockDeposit(ctx context.Context, userID int64, asset string, u
 			return DepositResult{}, err
 		}
 	}
-	if err := refreshWalletCache(ctx, q, userID, "IDR"); err != nil {
+	if err := refreshWalletCache(ctx, q, userID); err != nil {
 		return DepositResult{}, err
 	}
 	if err := tx.Commit(ctx); err != nil {

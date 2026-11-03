@@ -134,7 +134,7 @@ func (s *Service) ensureQueued(ctx context.Context, userID, tradeID int64, asset
 	}
 	pid, err := s.q.CreatePayoutQueued(ctx, db.CreatePayoutQueuedParams{
 		UserID: userID, TradeID: tradeID, Asset: asset,
-		Units: units, FeeUnits: feeUnits, SentUnits: sent,
+		Units: units, FeeUnits: feeUnits,
 		ToAddress: toAddr, Network: net,
 	})
 	if err != nil {
