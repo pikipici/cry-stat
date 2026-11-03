@@ -277,18 +277,7 @@ func CoinPicker(side string) *models.InlineKeyboardMarkup {
 	}}
 }
 
-// SellAmountPicker: jual SEMUA (units langsung) atau ketik nominal.
-// Callback t:sellall:SOL membawa coin; nominal diketik sebagai pesan biasa.
-func SellAmountPicker(coin string) *models.InlineKeyboardMarkup {
-	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
-		{
-			{Text: "💰 Jual SEMUA", CallbackData: fmt.Sprintf("t:sellall:%s", coin)},
-		},
-		{
-			{Text: "❌ Batal", CallbackData: "t:cancel"},
-		},
-	}}
-}
+// Phase 6 (A10): SellAmountPicker (Jual SEMUA) DIHAPUS — sell-bandar mati total.
 
 // QuoteKeyboard: Confirm/Batal untuk quote id. Dipakai slash + button flow.
 func QuoteKeyboard(quoteID int64) *models.InlineKeyboardMarkup {

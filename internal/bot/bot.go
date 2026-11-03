@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -519,10 +520,11 @@ func harga(ctx context.Context, arg string, d *Deps) string {
 	return strings.TrimRight(sb.String(), "\n")
 }
 
-// parseTradeArgs: /beli SOL 200000 atau /jual SOL ALL. ALL hanya untuk jual.
+// parseTradeArgs: /beli SOL 200000. ALL/MAX DIBATALKAN (Phase 6 A10) —
+// coin tidak ngendap di bot, tidak ada yang bisa di-ALL-kan.
 func parseTradeArgs(rest []string) (asset string, amountIDR int64, all bool, errText string) {
 	if len(rest) < 2 {
-		return "", 0, false, "Format: /beli SOL 200000 atau /jual SOL 100000 (jual bisa ALL). Contoh: /beli SOL 200000"
+		return "", 0, false, "Format: /beli SOL 200000. Contoh: /beli SOL 200000"
 	}
 	asset = strings.ToUpper(strings.TrimSpace(rest[0]))
 	if !price.ValidAsset(asset) {
@@ -532,7 +534,7 @@ func parseTradeArgs(rest []string) (asset string, amountIDR int64, all bool, err
 	raw = strings.ReplaceAll(raw, ".", "")
 	raw = strings.ReplaceAll(raw, ",", "")
 	if raw == "ALL" || raw == "MAX" {
-		return asset, 0, true, ""
+		return "", 0, false, "Jual ALL/MAX sudah tidak berlaku. Jual sekarang via deposit: /jual SOL"
 	}
 	n, err := strconv.ParseInt(raw, 10, 64)
 	if err != nil || n <= 0 {
@@ -563,13 +565,9 @@ func beli(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []stri
 		sendCoinPicker(ctx, b, chatID, "buy")
 		return
 	}
-	asset, amount, all, errText := parseTradeArgs(rest)
+	asset, amount, _, errText := parseTradeArgs(rest)
 	if errText != "" {
 		reply(ctx, b, chatID, errText)
-		return
-	}
-	if all {
-		reply(ctx, b, chatID, "ALL hanya untuk jual. Beli pakai nominal: /beli SOL 200000")
 		return
 	}
 	// Fase 8 transit: buy wajib alamat + fee + auto-kirim (bukan masuk saldo).
@@ -581,71 +579,27 @@ func jual(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest []stri
 		reply(ctx, b, chatID, need)
 		return
 	}
-	// T1-button: tap Jual tanpa arg = kirim picker coin (bukan error format).
+	// Phase 6 (A11): slash dan tombol satu flow deposit. Tanpa arg = picker.
 	if len(rest) == 0 {
 		sendCoinPicker(ctx, b, chatID, "sell")
 		return
 	}
-	// Fase 9: jual slash langsung = arahin ke flow deposit (bandar mati).
-	reply(ctx, b, chatID, "Jual sekarang via deposit: tap Jual → pilih coin → kirim ke alamat deposit → tap simulasi masuk.")
-}
-
-// sellAllFlow: jual SEMUA units dari saldo (tanpa muter IDR).
-func sellAllFlow(ctx context.Context, b *bot.Bot, chatID, telegramID, uid int64, asset string, d *Deps) {
-	if err := d.Risk.CheckBeforeQuote(ctx, asset, "sell"); err != nil {
-		_ = d.Risk.RecordEvent(ctx, uid, true, telegramID, "quote_rejected", "sell "+asset+": "+err.Error())
-		reply(ctx, b, chatID, "Tidak bisa kasih quote: "+riskMsg(err))
+	asset := strings.ToUpper(strings.TrimSpace(rest[0]))
+	if !price.ValidAsset(asset) {
+		reply(ctx, b, chatID, "Coin tidak dikenal. Pilihan: BNB, ETH, SOL. Contoh: /jual SOL")
 		return
 	}
-	bal, err := d.Ledger.Balances(ctx, uid)
-	if err != nil {
-		reply(ctx, b, chatID, "Gagal baca saldo, coba lagi.")
-		return
+	if len(rest) > 1 {
+		raw := strings.ToUpper(strings.TrimSpace(rest[1]))
+		if raw == "ALL" || raw == "MAX" {
+			// Phase 6 (A10): ALL/MAX dibatalkan — tawarkan flow deposit.
+			_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID,
+				Text: "Jual ALL/MAX sudah tidak berlaku (coin tidak ngendap di bot).\n" + sellDepositText(asset, d), ReplyMarkup: DepositSimPicker(asset)})
+			return
+		}
 	}
-	units := bal[asset]
-	if units.IsZero() || units.IsNegative() {
-		reply(ctx, b, chatID, "Tidak ada "+asset+" untuk dijual.")
-		return
-	}
-	snap, err := d.Price.Snapshot(asset)
-	if err != nil {
-		reply(ctx, b, chatID, "Harga basi ("+errMsg(err)+"), coba lagi.")
-		return
-	}
-	qr, err := d.Ledger.CreateQuoteUnits(ctx, uid, asset, units, snap)
-	if err != nil {
-		reply(ctx, b, chatID, "Gagal bikin quote: "+err.Error())
-		return
-	}
-	lockSecs := d.Set.Int64("quote_lock_seconds")
-	text := fmt.Sprintf("Jual %s Rp%s\nDapat: %s %s\nHarga lock %d detik. Confirm?", asset, formatIDR(decimal.NewFromInt(qr.AmountIDR)), qr.Units.String(), asset, lockSecs)
-	_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID, Text: text, ReplyMarkup: QuoteKeyboard(qr.ID)})
-}
-
-// quoteFlow: risk-check → snapshot fail-closed → simpan quote → inline confirm/cancel.
-func quoteFlow(ctx context.Context, b *bot.Bot, chatID, telegramID, uid int64, side, asset string, amount int64, d *Deps) {
-	if err := d.Risk.CheckBeforeQuote(ctx, asset, side); err != nil {
-		_ = d.Risk.RecordEvent(ctx, uid, true, telegramID, "quote_rejected", side+" "+asset+": "+err.Error())
-		reply(ctx, b, chatID, "Tidak bisa kasih quote: "+riskMsg(err))
-		return
-	}
-	snap, err := d.Price.Snapshot(asset)
-	if err != nil {
-		reply(ctx, b, chatID, "Harga basi ("+errMsg(err)+"), coba lagi.")
-		return
-	}
-	qr, err := d.Ledger.CreateQuote(ctx, uid, side, asset, amount, snap)
-	if err != nil {
-		reply(ctx, b, chatID, "Gagal bikin quote: "+err.Error())
-		return
-	}
-	verb := "Beli"
-	if side == "sell" {
-		verb = "Jual"
-	}
-	lockSecs := d.Set.Int64("quote_lock_seconds")
-	text := fmt.Sprintf("%s %s Rp%s\nDapat: %s %s\nHarga lock %d detik. Confirm?", verb, asset, formatIDR(decimal.NewFromInt(amount)), qr.Units.String(), asset, lockSecs)
-	_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID, Text: text, ReplyMarkup: QuoteKeyboard(qr.ID)})
+	_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID,
+		Text: sellDepositText(asset, d), ReplyMarkup: DepositSimPicker(asset)})
 }
 
 func handleCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d *Deps) {
@@ -769,23 +723,56 @@ func riwayat(ctx context.Context, telegramID int64, d *Deps) string {
 	if uid == 0 {
 		return "Belum terdaftar. Kirim /start dulu."
 	}
-	rows, err := d.Q.RecentTradesByUser(ctx, db.RecentTradesByUserParams{UserID: uid, Limit: 10})
-	if err != nil {
-		return "Gagal baca riwayat, coba lagi."
+	// Phase 6 (A9): timeline transit gabungan payout+deposit, merge-sort, limit 10.
+	// Trade tanpa payout TIDAK ditampilkan sebagai terkirim.
+	type item struct {
+		ts    int64
+		text  string
 	}
-	if len(rows) == 0 {
+	var items []item
+	perrOK := false
+	if prows, perr := d.Q.RecentPayoutsByUser(ctx, db.RecentPayoutsByUserParams{UserID: uid, Limit: 10}); perr == nil {
+		perrOK = true
+		for _, r := range prows {
+			ts := r.CreatedAt.Time.Unix()
+			tx := "(tanpa tx)"
+			if r.TxHash.Valid {
+				tx = shortTx(r.TxHash.String)
+			}
+			items = append(items, item{ts: ts, text: fmt.Sprintf("%s Beli %s %s -> %s (%s) tx %s", formatWIB(r.CreatedAt.Time), r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), r.Status, tx)})
+		}
+	}
+	derrOK := false
+	if drows, derr := d.Q.RecentDepositsByUser(ctx, db.RecentDepositsByUserParams{UserID: pgtype.Int8{Int64: uid, Valid: true}, Limit: 10}); derr == nil {
+		derrOK = true
+		for _, r := range drows {
+			ts := r.CreatedAt.Time.Unix()
+			items = append(items, item{ts: ts, text: fmt.Sprintf("%s Jual %s %s -> IDR +%s (%s) tx %s", formatWIB(r.CreatedAt.Time), r.Asset, r.Units.String(), formatIDR(decimal.NewFromInt(r.CreditedIdr)), r.Status, shortTx(r.TxHash))})
+		}
+	}
+	if !perrOK && !derrOK {
+		return "Status sedang tidak tersedia. Coba lagi."
+	}
+	if len(items) == 0 {
 		return "Belum ada transaksi. Tap Beli buat mulai (contoh: beli SOL 50000)"
 	}
-	var sb strings.Builder
-	sb.WriteString("10 transaksi terakhir (SIMULASI):\n")
-	for _, r := range rows {
-		verb := "Beli"
-		if r.Side == "sell" {
-			verb = "Jual"
-		}
-		fmt.Fprintf(&sb, "%s %s Rp%s (%s)\n", verb, r.Asset, formatIDR(decimal.NewFromInt(r.AmountIdr)), r.Units.String())
+	sort.Slice(items, func(i, j int) bool { return items[i].ts > items[j].ts })
+	if len(items) > 10 {
+		items = items[:10]
 	}
-	return strings.TrimRight(sb.String(), "\n")
+	var sb strings.Builder
+	sb.WriteString("Riwayat (SIMULASI):
+")
+	if !perrOK || !derrOK {
+		sb.WriteString("(sebagian data tidak tersedia)
+")
+	}
+	for _, it := range items {
+		sb.WriteString(it.text + "
+")
+	}
+	return strings.TrimRight(sb.String(), "
+")
 }
 
 func batal(ctx context.Context, telegramID int64, d *Deps) string {

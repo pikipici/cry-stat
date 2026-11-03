@@ -169,41 +169,8 @@ func TestBuyInsufficientBalance(t *testing.T) {
 	}
 }
 
-func TestSellFlow(t *testing.T) {
-	// PIVOT v0.12: jual-bandar dari saldo coin DIBATALKAN (transit — coin tidak ngendap).
-	// Jual = deposit on-chain (Fase 9). Test ini diganti transit_test.go + Fase 9.
-	t.Skip("pivot transit: tidak ada saldo coin, jual = Fase 9")
-	svc, _, _ := tradeDeps(t)
-	ctx := context.Background()
-	uid := tradeUser(t, svc, db.New(svc.pool))
-	// Beli dulu 400rb.
-	qr, _ := svc.CreateQuote(ctx, uid, "buy", "SOL", 400000, testSnap())
-	if _, err := svc.ExecuteTrade(ctx, uid, qr.ID); err != nil {
-		t.Fatalf("buy: %v", err)
-	}
-	// Jual balik: amount IDR dihitung dari units yang dipunya x bid.
-	// Catatan dust: buy units dibulatkan 18 desimal, jadi jual-ALL di level bot
-	// menghitung amount dari balance. Di test ini toleransi dust kecil.
-	snap := testSnap()
-	balBefore, _ := svc.Balances(ctx, uid)
-	sellAmount := balBefore["SOL"].Mul(snap.Bid).Round(0).IntPart()
-	qr2, err := svc.CreateQuote(ctx, uid, "sell", "SOL", sellAmount, snap)
-	if err != nil {
-		t.Fatalf("quote sell: %v", err)
-	}
-	if _, err := svc.ExecuteTrade(ctx, uid, qr2.ID); err != nil {
-		t.Fatalf("sell: %v", err)
-	}
-	bal, _ := svc.Balances(ctx, uid)
-	// Dust < 1e-6 SOL wajar dari pembulatan 18 desimal dua arah (bukan bug ledger).
-	dustLimit := decimal.NewFromFloat(0.000001)
-	if bal["SOL"].Abs().GreaterThan(dustLimit) {
-		t.Fatalf("SOL sisa %s, melebihi dust wajar %s", bal["SOL"], dustLimit)
-	}
-	if err := svc.Reconcile(ctx); err != nil {
-		t.Fatalf("reconcile: %v", err)
-	}
-}
+// Phase 6: TestSellFlow (sell-bandar) DIHAPUS — sell = deposit transit (Fase 9).
+// Coverage pengganti: deposit_safety_test.go + transit_test.go.
 
 func TestBelowMinimum(t *testing.T) {
 	svc, _, _ := tradeDeps(t)

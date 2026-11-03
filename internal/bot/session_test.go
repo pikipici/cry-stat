@@ -73,7 +73,7 @@ func TestSessionsTimeout(t *testing.T) {
 }
 
 func TestKeyboardsNotNil(t *testing.T) {
-	if MainMenu() == nil || CoinPicker("buy") == nil || SellAmountPicker("SOL") == nil || QuoteKeyboard(1) == nil {
+	if MainMenu() == nil || CoinPicker("buy") == nil || QuoteKeyboard(1) == nil {
 		t.Fatal("keyboard builder mengembalikan nil")
 	}
 	if MainMenuFor(false) == nil || MainMenuFor(true) == nil {
@@ -123,9 +123,6 @@ func TestKeyboardsNotNil(t *testing.T) {
 	}
 	if got := CoinPicker("sell").InlineKeyboard[0][2].CallbackData; got != "t:sell:SOL" {
 		t.Fatalf("callback coin salah: %q", got)
-	}
-	if got := SellAmountPicker("ETH").InlineKeyboard[0][0].CallbackData; got != "t:sellall:ETH" {
-		t.Fatalf("callback sellall salah: %q", got)
 	}
 	if got := QuoteKeyboard(42).InlineKeyboard[0][0].CallbackData; got != "q:42:ok" {
 		t.Fatalf("callback quote salah: %q", got)

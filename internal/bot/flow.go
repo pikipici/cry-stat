@@ -10,6 +10,7 @@ import (
 
 	"github.com/pikipici/crypto-station/internal/chain"
 	"github.com/pikipici/crypto-station/internal/db"
+	"github.com/pikipici/crypto-station/internal/price"
 
 	"github.com/jackc/pgx/v5/pgtype"
 
@@ -119,24 +120,11 @@ func handleFlowCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuer
 			stale()
 			return
 		}
-		if d.Session != nil {
-			step := StepAwaitBuy
-			if parts[1] == "sell" {
-				step = StepAwaitSell
-			}
-			d.Session.Set(cb.From.ID, Session{Step: step, Coin: coin})
-		}
 		if parts[1] == "sell" {
-			// Fase 9: jual = deposit on-chain (bukan nominal/ALL).
-			// Tampilkan alamat deposit + tombol simulasi kirim masuk.
-			depAddr, _ := d.Set.Get("deposit_address_" + strings.ToLower(coin))
-			if depAddr == "" {
-				depAddr = "MOCK-DEPOSIT-" + coin
-			}
+			// Phase 6: satu presenter deposit dipakai tombol + slash.
 			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{
 				ChatID: chatID, MessageID: msgID,
-				Text:        fmt.Sprintf("Jual %s:\n1. Kirim %s dari wallet lu ke:\n%s\n2. Tap tombol di bawah buat simulasi kirim masuk (sandbox).", coin, coin, depAddr),
-				ReplyMarkup: DepositSimPicker(coin),
+				Text: sellDepositText(coin, d), ReplyMarkup: DepositSimPicker(coin),
 			})
 			return
 		}
@@ -144,25 +132,24 @@ func handleFlowCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuer
 			ChatID: chatID, MessageID: msgID,
 			Text: fmt.Sprintf("Mau beli %s berapa? Ketik angka IDR (min %s). Contoh: 50000", coin, d.Set.MustString("min_buy_idr")),
 		})
+		if d.Session != nil {
+			d.Session.Set(cb.From.ID, Session{Step: StepAwaitBuy, Coin: coin})
+		}
 		return
 	case "sellall":
-		if len(parts) != 3 {
-			stale()
-			return
-		}
-		coin := strings.ToUpper(parts[2])
-		if coin != "BNB" && coin != "ETH" && coin != "SOL" {
-			stale()
-			return
-		}
-		if d.Session != nil {
-			d.Session.Clear(cb.From.ID)
-		}
-		// Edit pesan picker biar tidak bisa ditap 2x, lalu kirim quote baru.
-		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Siapin quote jual SEMUA " + coin + "..."})
-		sellAllFlow(ctx, b, chatID, cb.From.ID, uid, coin, d)
+		// Phase 6 (A10): sell-bandar mati total. Forged callback = stale.
+		stale()
 		return
 	}
+}
+
+// sellDepositText: copy satu-satunya layar jual (Phase 6 A11).
+func sellDepositText(coin string, d *Deps) string {
+	depAddr, _ := d.Set.Get("deposit_address_" + strings.ToLower(coin))
+	if depAddr == "" {
+		depAddr = "MOCK-DEPOSIT-" + coin
+	}
+	return fmt.Sprintf("Jual %s (SIMULASI):\n1. Kirim %s dari wallet lu ke:\n%s\n2. Tap tombol di bawah buat simulasi kirim masuk (sandbox).", coin, coin, depAddr)
 }
 
 // handleAmountInput: user lagi await nominal/alamat dan mengetik.
@@ -201,19 +188,27 @@ func handleAmountInput(ctx context.Context, b *bot.Bot, chatID, telegramID int64
 		reply(ctx, b, chatID, fmt.Sprintf("Minimum Rp%s. Coba lagi atau tap Batal.", d.Set.MustString("min_buy_idr")))
 		return
 	}
-	side := "buy"
+	// Phase 6: satu-satunya quote user adalah buy. Session sell basi diarahkan
+	// ke deposit dan return — tidak ada path sell ke quote bandar.
 	if st.Step == StepAwaitSell {
-		side = "sell"
+		// Phase 6 (A10/A11): sell-bandar mati. Session sell basi (dibuat
+		// sebelum Phase 6) tidak boleh jadi quote bandar — arahin deposit.
+		if d.Session != nil {
+			d.Session.Clear(telegramID)
+		}
+		if !price.ValidAsset(st.Coin) {
+			reply(ctx, b, chatID, "Jual sekarang via deposit: tap Jual → pilih coin.")
+			return
+		}
+		reply(ctx, b, chatID, fmt.Sprintf("Jual %s sekarang via deposit (SIMULASI): tap Jual → pilih %s → kirim ke alamat deposit.", st.Coin, st.Coin))
+		return
 	}
 	if d.Session != nil {
 		d.Session.Clear(telegramID)
 	}
 	// Fase 8 transit: buy via quoteFlowBuy (alamat + fee + kirim).
-	if side == "buy" {
-		quoteFlowBuy(ctx, b, chatID, telegramID, uid, st.Coin, amount, d)
-		return
-	}
-	quoteFlow(ctx, b, chatID, telegramID, uid, side, st.Coin, amount, d)
+	// Phase 6: satu-satunya quote user adalah buy. Sell = deposit flow.
+	quoteFlowBuy(ctx, b, chatID, telegramID, uid, st.Coin, amount, d)
 }
 
 // successHint: teks sukses trade pakai hint button (slash tetap disebut sekali).
@@ -306,6 +301,14 @@ func shortAddr(a string) string {
 		return a
 	}
 	return a[:8] + "..." + a[len(a)-4:]
+}
+
+// shortTx: hash/reference pendek untuk list (detail penuh di layar detail).
+func shortTx(tx string) string {
+	if len(tx) <= 16 {
+		return tx
+	}
+	return tx[:10] + "..." + tx[len(tx)-6:]
 }
 
 // quoteFlowBuy: buy transit Fase 8 — wajib alamat, fee mock, quote 3 baris,
