@@ -24,7 +24,8 @@ SELECT id, user_id, trade_id, asset, units, fee_units, sent_units, to_address, n
 FROM payouts WHERE trade_id=$1;
 
 -- name: RecentPayoutsByUser :many
-SELECT id, user_id, trade_id, asset, units, fee_units, sent_units, to_address, network, tx_hash, status, confirms, created_at
+SELECT id, user_id, trade_id, asset, units, fee_units, sent_units, to_address, network, tx_hash, status, confirms,
+       mode, attempt_count, refund_journal_id, created_at
 FROM payouts WHERE user_id=$1 ORDER BY id DESC LIMIT $2;
 
 -- name: InsertChainEvent :one

@@ -108,7 +108,7 @@ func handleFlowCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuer
 			return
 		}
 		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID,
-			Text: fmt.Sprintf("Deposit masuk (SIMULASI): %s %s\ntx %s\nIDR +%s. Cek /saldo.", dep.Units.String(), dep.Asset, txHash, formatIDR(decimal.NewFromInt(dep.AmountIDR)))})
+			Text: fmt.Sprintf("Deposit masuk (SIMULASI): %s %s\ntx %s\nIDR +%s (neto dari senilai Rp%s). Cek /saldo.", dep.Units.String(), dep.Asset, txHash, formatIDR(decimal.NewFromInt(dep.AmountIDR)), formatIDR(decimal.NewFromInt(amount)))})
 		return
 	case "buy", "sell":
 		if len(parts) != 3 {
@@ -271,27 +271,35 @@ func statusCmd(ctx context.Context, b *bot.Bot, chatID, telegramID int64, d *Dep
 	}
 	var sb strings.Builder
 	sb.WriteString("Status terakhir:\n")
+	// Phase 7 (A20/A24): bedakan error vs empty vs partial; status copy ID.
 	prows, perr := d.Q.RecentPayoutsByUser(ctx, db.RecentPayoutsByUserParams{UserID: uid, Limit: 3})
 	if perr == nil && len(prows) > 0 {
-		sb.WriteString("Terkirim:\n")
+		sb.WriteString("Pengiriman terbaru:\n")
 		for _, r := range prows {
 			tx := "(tanpa tx)"
 			if r.TxHash.Valid {
 				tx = r.TxHash.String
 			}
-			fmt.Fprintf(&sb, "%s %s → %s\ntx %s (%s)\n", r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), tx, r.Status)
+			fmt.Fprintf(&sb, "%s %s → %s\ntx %s (%s)\n", r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), tx, PayoutStatusID(r.Status, r.RefundJournalID.Valid))
 		}
 	}
 	drows, derr := d.Q.RecentDepositsByUser(ctx, db.RecentDepositsByUserParams{UserID: pgtype.Int8{Int64: uid, Valid: true}, Limit: 3})
 	if derr == nil && len(drows) > 0 {
 		sb.WriteString("Deposit masuk:\n")
 		for _, r := range drows {
-			fmt.Fprintf(&sb, "%s %s → IDR +%s (%s)\ntx %s\n", r.Asset, r.Units.String(), formatIDR(decimal.NewFromInt(r.CreditedIdr)), r.Status, r.TxHash)
+			fmt.Fprintf(&sb, "%s %s → IDR +%s (%s)\ntx %s\n", r.Asset, r.Units.String(), formatIDR(decimal.NewFromInt(r.CreditedIdr)), DepositStatusID(r.Status), r.TxHash)
 		}
+	}
+	if perr != nil && derr != nil {
+		reply(ctx, b, chatID, "Status sedang tidak tersedia. Coba lagi.")
+		return
 	}
 	if (perr != nil || len(prows) == 0) && (derr != nil || len(drows) == 0) {
 		reply(ctx, b, chatID, "Belum ada pengiriman/deposit. Beli dulu (otomatis dikirim), jual via deposit.")
 		return
+	}
+	if perr != nil || derr != nil {
+		sb.WriteString("(sebagian data tidak tersedia)\n")
 	}
 	reply(ctx, b, chatID, strings.TrimRight(sb.String(), "\n"))
 }
@@ -342,8 +350,12 @@ func quoteFlowBuy(ctx context.Context, b *bot.Bot, chatID, telegramID, uid int64
 	}
 	net, _ := chain.NetworkFor(asset)
 	lockSecs := d.Set.Int64("quote_lock_seconds")
-	text := fmt.Sprintf("Beli %s Rp%s\nDapat: %s %s (fee %s)\nTerkirim ke %s (%s)\nHarga lock %d detik. Confirm?",
-		asset, formatIDR(decimal.NewFromInt(amount)), qr.SentUnits.String(), asset, qr.FeeUnits.String(),
-		shortAddr(qr.ToAddress), net, lockSecs)
+	// Phase 7 (A19): quote aman — bruto/fee/net, fee-IDR, alamat penuh,
+	// warning irreversible. Golden copy per coin di test bot.
+	feeIDR := qr.FeeUnits.Mul(qr.Price).Round(0)
+	text := fmt.Sprintf("Konfirmasi Pembelian — SIMULASI\n\nBayar: Rp%s\nDapat sebelum biaya: %s %s\nBiaya jaringan: %s %s (±Rp%s)\nDiterima: %s %s\nNetwork: %s\nAlamat tujuan:\n%s\nHarga berlaku: %d detik\n\n⚠️ Pastikan alamat dan network benar. Pengiriman crypto tidak dapat dibatalkan.",
+		formatIDR(decimal.NewFromInt(amount)), qr.Units.String(), asset,
+		qr.FeeUnits.String(), asset, formatIDR(feeIDR),
+		qr.SentUnits.String(), asset, net, qr.ToAddress, lockSecs)
 	_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: chatID, Text: text, ReplyMarkup: QuoteKeyboard(qr.ID)})
 }

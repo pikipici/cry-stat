@@ -279,23 +279,25 @@ func CoinPicker(side string) *models.InlineKeyboardMarkup {
 
 // Phase 6 (A10): SellAmountPicker (Jual SEMUA) DIHAPUS — sell-bandar mati total.
 
-// QuoteKeyboard: Confirm/Batal untuk quote id. Dipakai slash + button flow.
+// QuoteKeyboard: Konfirmasi/Batal untuk quote id. Dipakai slash + button flow.
+// Phase 7 (A25): label Indonesia; callback data tetap q:<id>:ok/no.
 func QuoteKeyboard(quoteID int64) *models.InlineKeyboardMarkup {
 	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
 		{
-			{Text: "✅ Confirm", CallbackData: fmt.Sprintf("q:%d:ok", quoteID)},
+			{Text: "✅ Konfirmasi", CallbackData: fmt.Sprintf("q:%d:ok", quoteID)},
 			{Text: "❌ Batal", CallbackData: fmt.Sprintf("q:%d:no", quoteID)},
 		},
 	}}
 }
 
-// DepositSimPicker: Fase 9 — simulasi kirim masuk + nominal pilih.
-// Callback t:depsim:SOL:50000 (units IDR mock).
+// DepositSimPicker: simulasi kirim masuk + nominal pilih.
+// Phase 7 (A22): label jujur "senilai" — kredit neto = nominal − fee,
+// bukan nominal penuh. Callback t:depsim:SOL:50000 (units IDR mock).
 func DepositSimPicker(coin string) *models.InlineKeyboardMarkup {
 	return &models.InlineKeyboardMarkup{InlineKeyboard: [][]models.InlineKeyboardButton{
 		{
-			{Text: "Rp50rb masuk", CallbackData: fmt.Sprintf("t:depsim:%s:50000", coin)},
-			{Text: "Rp100rb masuk", CallbackData: fmt.Sprintf("t:depsim:%s:100000", coin)},
+			{Text: "Simulasi kirim senilai Rp50rb", CallbackData: fmt.Sprintf("t:depsim:%s:50000", coin)},
+			{Text: "Simulasi kirim senilai Rp100rb", CallbackData: fmt.Sprintf("t:depsim:%s:100000", coin)},
 		},
 		{
 			{Text: "❌ Batal", CallbackData: "t:cancel"},

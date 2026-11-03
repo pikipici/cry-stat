@@ -193,6 +193,15 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 	case "/approve":
 		reply(ctx, b, upd.Message.Chat.ID, "Belum ada withdraw di sandbox (Stage 2).")
 	default:
+		// Phase 7 (A21): session hangus = copy kontekstual, bukan unknown.
+		if d.Session != nil {
+			if st := d.Session.ExpiredStep(upd.Message.From.ID); st.Step != StepIdle {
+				if copy := ExpiredCopy(st); copy != "" {
+					reply(ctx, b, upd.Message.Chat.ID, copy)
+					return
+				}
+			}
+		}
 		reply(ctx, b, upd.Message.Chat.ID, "Perintah tidak dikenal. Tap tombol di bawah atau coba /start, /saldo, /harga, /beli, /jual, /riwayat.")
 	}
 }
@@ -454,19 +463,29 @@ func start(ctx context.Context, telegramID int64, d *Deps) string {
 			u = u2
 			_ = nu
 		} else {
-			if err := d.Ledger.GrantSandbox(ctx, nu.ID, d.Set.Int64("sandbox_starting_balance_idr")); err != nil {
+			// Phase 7 (A16): grant dari setting aktual, pesan dinamis.
+			grant := d.Set.Int64("sandbox_starting_balance_idr")
+			if err := d.Ledger.GrantSandbox(ctx, nu.ID, grant); err != nil {
 				return "Akun jadi, tapi grant saldo gagal. Coba /saldo."
 			}
 			return "Selamat datang di Crypto Station (SIMULASI).\n" +
-				"Modal sandbox Rp1.000.000 sudah masuk.\n" +
-				"Tap Beli / Jual / Harga di bawah. Tap Menu buat Saldo, Riwayat, Status, Alamat.\n" +
-				"Beli otomatis dikirim ke wallet lu — daftarin dulu via Menu → Alamat."
+				"Modal sandbox Rp" + formatIDR(decimal.NewFromInt(grant)) + " sudah masuk.\n" +
+				"Beli dikirim ke wallet pribadi kamu — daftarin dulu via Menu → Alamat.\n" +
+				"Jual dengan mengirim coin ke alamat deposit sistem."
 		}
 	}
 	if st := u.Status; st == "blocked" {
 		return "Akun diblokir. Hubungi admin."
 	}
-	return "Kamu sudah terdaftar (SIMULASI).\nPakai /harga untuk cek harga, /saldo untuk cek saldo."
+	// Phase 7 (A16): user existing tanpa grant diperbaiki; pesan pakai saldo aktual.
+	if err := d.Ledger.GrantSandbox(ctx, u.ID, d.Set.Int64("sandbox_starting_balance_idr")); err != nil {
+		return "Akun bermasalah, hubungi admin."
+	}
+	bal, err := d.Ledger.Balances(ctx, u.ID)
+	if err != nil {
+		return "Kamu sudah terdaftar (SIMULASI). Pakai /saldo untuk cek saldo."
+	}
+	return "Kamu sudah terdaftar (SIMULASI).\nSaldo IDR: Rp" + formatIDR(bal["IDR"]) + ".\nBeli dikirim ke wallet pribadi kamu. Jual via kirim coin ke alamat deposit."
 }
 
 func saldo(ctx context.Context, telegramID int64, d *Deps) string {
@@ -485,15 +504,16 @@ func saldo(ctx context.Context, telegramID int64, d *Deps) string {
 	sb.WriteString("Saldo sandbox (SIMULASI):\n")
 	sb.WriteString("IDR: Rp" + formatIDR(bal["IDR"]) + "\n")
 	// Fase 8 transit: coin tidak ngendap — tampilkan payout terakhir, bukan valuasi.
+	// Phase 7 (A24): heading lifecycle + status copy Indonesia.
 	prows, err := d.Q.RecentPayoutsByUser(ctx, db.RecentPayoutsByUserParams{UserID: uid, Limit: 3})
 	if err == nil && len(prows) > 0 {
-		sb.WriteString("Terkirim:\n")
+		sb.WriteString("Pengiriman terbaru:\n")
 		for _, r := range prows {
 			tx := ""
 			if r.TxHash.Valid {
 				tx = " tx " + r.TxHash.String
 			}
-			fmt.Fprintf(&sb, "%s %s → %s (%s)%s\n", r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), r.Status, tx)
+			fmt.Fprintf(&sb, "%s %s → %s (%s)%s\n", r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), PayoutStatusID(r.Status, r.RefundJournalID.Valid), tx)
 		}
 	}
 	sb.WriteString("Beli = otomatis dikirim ke wallet lu (/alamat buat daftar).")
@@ -740,7 +760,7 @@ func riwayat(ctx context.Context, telegramID int64, d *Deps) string {
 			if r.TxHash.Valid {
 				tx = shortTx(r.TxHash.String)
 			}
-			items = append(items, item{ts: ts, text: fmt.Sprintf("%s Beli %s %s -> %s (%s) tx %s", formatWIB(r.CreatedAt.Time), r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), r.Status, tx)})
+			items = append(items, item{ts: ts, text: fmt.Sprintf("%s Beli %s %s -> %s (%s) tx %s", formatWIB(r.CreatedAt.Time), r.Asset, r.SentUnits.String(), shortAddr(r.ToAddress), PayoutStatusID(r.Status, r.RefundJournalID.Valid), tx)})
 		}
 	}
 	derrOK := false
@@ -748,7 +768,7 @@ func riwayat(ctx context.Context, telegramID int64, d *Deps) string {
 		derrOK = true
 		for _, r := range drows {
 			ts := r.CreatedAt.Time.Unix()
-			items = append(items, item{ts: ts, text: fmt.Sprintf("%s Jual %s %s -> IDR +%s (%s) tx %s", formatWIB(r.CreatedAt.Time), r.Asset, r.Units.String(), formatIDR(decimal.NewFromInt(r.CreditedIdr)), r.Status, shortTx(r.TxHash))})
+			items = append(items, item{ts: ts, text: fmt.Sprintf("%s Jual %s %s -> IDR +%s (%s) tx %s", formatWIB(r.CreatedAt.Time), r.Asset, r.Units.String(), formatIDR(decimal.NewFromInt(r.CreditedIdr)), DepositStatusID(r.Status), shortTx(r.TxHash))})
 		}
 	}
 	if !perrOK && !derrOK {

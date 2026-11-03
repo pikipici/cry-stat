@@ -43,11 +43,14 @@ type Session struct {
 type Sessions struct {
 	mu sync.Mutex
 	m  map[int64]Session
+	// lastExpired: step terakhir yang hangus timeout (sekali baca via
+	// ExpiredStep, untuk copy kontekstual A21). Clear/Set menimpa.
+	expired map[int64]Session
 }
 
-func NewSessions() *Sessions { return &Sessions{m: map[int64]Session{}} }
+func NewSessions() *Sessions { return &Sessions{m: map[int64]Session{}, expired: map[int64]Session{}} }
 
-// Get: ambil state kalau masih fresh; expired = hapus + idle.
+// Get: ambil state kalau masih fresh; expired = hapus + idle + catat.
 func (s *Sessions) Get(id int64) Session {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -57,6 +60,7 @@ func (s *Sessions) Get(id int64) Session {
 	}
 	if time.Since(st.UpdatedAt) > SessionTimeout {
 		delete(s.m, id)
+		s.expired[id] = st
 		return Session{Step: StepIdle}
 	}
 	return st
@@ -75,6 +79,36 @@ func (s *Sessions) Clear(id int64) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	delete(s.m, id)
+	delete(s.expired, id)
+}
+
+// ExpiredStep: ambil + hapus catatan hangus (sekali pakai).
+// Return StepIdle bila tidak ada catatan.
+func (s *Sessions) ExpiredStep(id int64) Session {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	st, ok := s.expired[id]
+	if !ok {
+		return Session{Step: StepIdle}
+	}
+	delete(s.expired, id)
+	return st
+}
+
+// ExpiredCopy: copy kontekstual A21 dari session yang hangus.
+func ExpiredCopy(st Session) string {
+	switch st.Step {
+	case StepAwaitBuy:
+		return "Sesi beli sudah habis. Tekan Beli untuk mulai lagi."
+	case StepAwaitAddr:
+		return "Sesi alamat sudah habis. Buka Menu → Alamat."
+	case StepAdminSpread, StepAdminLimit, StepAdminStock, StepAdminStockDepositUnits, StepAdminStockDepositRef:
+		return "Sesi admin sudah habis. Buka Admin lagi."
+	case StepAdminBroadcast:
+		return "Sesi broadcast sudah habis. Buka Admin → Broadcast lagi."
+	default:
+		return ""
+	}
 }
 
 // ParseNominal: "50000" / "50.000" / "Rp50.000" / "50,000" → 50000.
