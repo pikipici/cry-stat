@@ -4,16 +4,17 @@
 -- pada 2026-11-03; sent_units historis konsisten units-fee by construction).
 
 -- 1. Entry asset HARUS cocok dengan account asset (trigger, bukan app saja).
--- NOTE goose: badan fungsi single-quote (tanpa dollar-quote $$).
+-- +goose StatementBegin
 CREATE OR REPLACE FUNCTION check_entry_asset_match()
-RETURNS TRIGGER AS '
+RETURNS TRIGGER AS $$
 BEGIN
   IF NEW.asset != (SELECT asset FROM ledger_accounts WHERE id = NEW.account_id) THEN
-    RAISE EXCEPTION ''ledger asset mismatch'';
+    RAISE EXCEPTION 'ledger asset mismatch';
   END IF;
   RETURN NEW;
 END;
-' LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
+-- +goose StatementEnd
 
 DROP TRIGGER IF EXISTS trg_entry_asset_match ON ledger_entries;
 CREATE TRIGGER trg_entry_asset_match
@@ -32,7 +33,7 @@ ALTER TABLE payouts DROP COLUMN IF EXISTS sent_units;
 ALTER TABLE payouts ADD COLUMN sent_units NUMERIC(36,18)
   GENERATED ALWAYS AS (units - fee_units) STORED;
 
--- 3. Satu active quote per user (partial unique — expired/used/cancelled bebas).
+-- 4. Satu active quote per user (partial unique — expired/used/cancelled bebas).
 CREATE UNIQUE INDEX IF NOT EXISTS idx_quotes_user_single_active
   ON quotes(user_id) WHERE status = 'active';
 
