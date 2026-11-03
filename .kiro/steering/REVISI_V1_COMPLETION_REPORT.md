@@ -5,8 +5,8 @@
 > Code head saat laporan ini: `e2d19ee` (origin == server bare, dual push sinkron)
 > Baseline sebelum revisi: `a46427b` (docs) / `8c60ce1` (code Admin Wallet v0.14.1)
 > DB workspace saat laporan ini: migration v13 (`000013_ledger_hardening.sql`)
-> ADDENDUM CORRECTNESS 2026-11-04: CF-01–CF-06 fixed (Task 0–6 FIX_PLAN), DB workspace v14,
-> head lihat FIX_PLAN checkpoint. Koreksi wording: trigger v13 = asset-match + domain checks,
+> ADDENDUM CORRECTNESS 2026-11-04: CF-01–CF-06 fixed; follow-up runtime/atomicity gaps ditutup pada `fe1d906`, DB workspace v14.
+> Durable recovery worker terintegrasi; confirmed payout + chain event atomik; callback guard berada di outer dispatcher. Koreksi wording: trigger v13 = asset-match + domain checks,
 > BUKAN sum-zero per jurnal (sum-zero = validateLegs app-level). Jurnal baru pasca-Phase 3
 > balance sempurna (0 imbalance id>2000); global SOL -54.69 warisan pre-Phase 3 (adjustment pending approval).
 > Mode: SANDBOX / SIMULASI — bukan transaksi on-chain

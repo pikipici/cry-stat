@@ -5,8 +5,8 @@
 > otomatis (Task 0–8 FIX_PLAN, DB workspace v14). CF-07 clarified, CF-08 proposal pending approval,
 > CF-09 corrected. Manual trial + Sandbox S1–S6 masih pending.
 > Audit awal: commit `a16b2a6`
-> Progress code terkini: lihat `.kiro/steering/REVISI_V1_CORRECTNESS_FIX_PLAN.md` §8 checkpoint
-> (dulu `8c60ce1`; sekarang melaju via Phase 2–9 + correctness Task 0–8)
+> Progress code terkini: `fe1d906`; docs head `c0c8700`; DB workspace v14
+> Evidence: `.kiro/steering/REVISI_V1_CORRECTNESS_FIX_PLAN.md` §8 + `LAPORAN_PERBAIKAN_REVISI_V1.md`
 > Updated: 2026-11-04
 > Fokus: debug sistem existing, integritas transaksi, dan UX sisi user Telegram
 > Eksekusi runtime: build/test/migrate/run di `cbt-vps`, bukan lokal

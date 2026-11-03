@@ -5,7 +5,7 @@
 > Sandbox S1–S6 + restore drill + CF-08 adjustment masih pending
 > Owner: user + hermes
 > Last updated: 2026-11-04
-> Code head: lihat `.kiro/steering/REVISI_V1_CORRECTNESS_FIX_PLAN.md` §8 (dulu `f68daa8`);
+> Code head: `fe1d906`; docs head: `c0c8700`; detail evidence di `.kiro/steering/REVISI_V1_CORRECTNESS_FIX_PLAN.md` §8
 > DB workspace v14 (`000014_payout_correctness.sql`)
 > Mode: SANDBOX / SIMULASI; live production belum disentuh dan wajib approval eksplisit
 
@@ -723,34 +723,37 @@ Masih terbuka:
 
 ## 18. Current Next Step
 
-**Revisi V.1 Phase 2–9: automated scope DONE dan dipush (`f68daa8`, DB v13). Live production belum disentuh.**
+**Revisi V.1 Phase 2–9 + correctness follow-up AUTOMATED DONE (`fe1d906`, DB v14). Live production belum disentuh.**
 
 Current state:
-- Code head `f68daa8`; DB workspace v13 (`000013_ledger_hardening.sql`).
-- Full test, vet, build, dan `scripts/verify.sh --no-db` hijau di VPS; targeted DB suites hijau.
-- Laporan: `.kiro/steering/REVISI_V1_COMPLETION_REPORT.md`.
+- Atomic refund exactly-once, guarded payout transitions, durable claim/reclaim, runtime recovery worker, dan callback outer guard selesai.
+- Confirmed payout + chain event sekarang commit atomik; fault-injection regression test hijau.
+- Runtime recovery sandbox: bounded scan → atomic claim/reclaim → token ownership → processing tiap 30 detik.
+- Full `go test -count=1 ./...`, vet, build, `verify.sh --no-db`, dan DB smoke hijau di VPS.
+- Origin, server bare, dan workspace sinkron; evidence detail di `LAPORAN_PERBAIKAN_REVISI_V1.md` dan FIX_PLAN.
 - Seluruh UI tetap SANDBOX/SIMULASI; bukan saldo atau transaksi on-chain.
 
 Acceptance yang masih pending (butuh manusia/approval):
-1. Trial Telegram manual: Admin Wallet (TRIAL.md T1) + user flow Phase 2–8 (cancel, quote aman, deposit conflict copy, riwayat, status, broadcast preview) dengan akun admin asli; denial dengan akun non-admin + verifikasi `admin_audit`.
-2. Restart bot workspace (approval user) → feed, detail, idempotency, queued payout tetap tersedia.
-3. Restore drill PostgreSQL custom-format ke dedicated drill DB (maintenance window + approval).
-4. Pastikan bot workspace menjalankan binary code head terbaru.
+1. Dengan approval user, restart bot workspace ke binary `fe1d906` dan verifikasi recovery-worker log. Restart workspace sebelumnya sudah dilakukan pada correctness head awal; follow-up belum direstart.
+2. Trial Telegram manual: Admin Wallet + cancel/quote/deposit/riwayat/status/broadcast + failed/unknown/retry payout dengan akun admin asli.
+3. Trial denial/callback/detail menggunakan akun non-admin dan verifikasi `admin_audit`.
+4. Putuskan CF-08 historical SOL adjustment `-54.693206730894899100`: eksekusi, tunda, atau tolak. Jangan mutasi tanpa approval eksplisit.
+5. Restore drill PostgreSQL custom-format ke dedicated drill DB bila maintenance window disetujui.
 
 Setelah acceptance manual:
-5. Sandbox S1–S6 di `.kiro/steering/revisi_system_V.1.md`: adapter contract + schema, topup domain TDD, topup UX, buy/payout durable TDD, read models, E2E trial.
-6. Owner menyiapkan hot wallet BARU secara offline: satu alamat publik EVM + satu SOL; seed/key tidak boleh masuk chat/repo.
-7. Selesaikan `STAGE0.md`: gateway QRIS tertulis, node, float, fee network, kurs pembanding, rekening bank manual, unit economics, systemd permanen, backup/alerting.
+6. Sandbox S1–S6 di `.kiro/steering/revisi_system_V.1.md`: adapter contract + schema, topup domain TDD, topup UX, durable lifecycle read models, dan E2E recovery.
+7. Owner menyiapkan hot wallet BARU secara offline: satu alamat publik EVM + satu SOL; seed/key tidak boleh masuk chat/repo.
+8. Selesaikan `STAGE0.md`: gateway QRIS tertulis, node, float, fee network, kurs pembanding, rekening bank manual, unit economics, systemd permanen, backup/alerting.
 
 Setelah gate Stage 2 centang semua → Fase 5 (QRIS) → stabil 2–4 minggu → Fase 5b (bank manual) + Fase 6–7 (fiat) + Fase 10 (chain beneran, key hot masuk).
 
-Jangan mulai payments/chain asli, private key, watcher, kurs kedua production, atau enforcement mule/sybil sebelum gate. Jangan deploy/restart LIVE tanpa persetujuan eksplisit user.
+Jangan mulai payments/chain asli, private key, watcher nyata, kurs kedua production, atau enforcement mule/sybil sebelum gate. Jangan deploy/restart LIVE tanpa persetujuan eksplisit user.
 
 ### Changelog revisi V.1 Phase 2–9 (2026-11-03/04, head `f68daa8`)
 
 - **Phase 2 cancel/callback:** migration 000011 (status cancelled), CancelActiveQuotesByUser/CancelQuoteByID/GetQuoteForUser, BatalCopy 4-way, GuardCallback, t:cancel navigation-only, q:no/q:ok owner-scoped, MatchButton ❌ Batal, broadcast-input cancel nol kirim.
 - **Phase 3 ledger balance:** buy legs float −gross/external:payout +sent/fee-collect; deposit +external:deposit; validateLegs pre-commit; ReconcileGlobal; evidence SOL sum identik digit terakhir.
-- **Phase 4 payout durable:** migration 000012 (mode/attempt/last_error/refund_journal_id/broadcast/finalized_at); queued atomik; ProcessPayout success/failed/unknown/delayed; refund-once; ClaimQueued SKIP LOCKED; bot copy jujur.
+- **Phase 4 payout durable + correctness follow-up:** migration 000012/000014; queued atomik; atomic refund exactly-once; guarded transitions; durable claim/reclaim + runtime recovery worker; confirmed payout + chain event atomik; bot copy jujur.
 - **Phase 5 safety:** DepositConflictError user/asset/units; ReplaceWalletAddress atomik; SOL base58 strict 32-byte (mock lama 30-byte diganti vektor valid).
 - **Phase 6 custodial mati:** ALL/MAX ditolak; sellAllFlow/t:sellall/CreateQuoteUnits/ExecuteTrade-sell/TestSellFlow/SellAmountPicker/quoteFlow dihapus; riwayat transit; /jual satu flow.
 - **Phase 7 UX:** start grant-fix + saldo dinamis; quote bruto/fee-IDR/net/alamat penuh/warning; status error/empty/partial; ExpiredStep + copy; label senilai + neto; mapping ID; welcome transit; tombol Konfirmasi.

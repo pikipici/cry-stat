@@ -1,9 +1,9 @@
 # Crypto Station — Admin Wallet Current State
 
-> Status: SOURCE OF TRUTH TERKINI untuk Admin Wallet v0.14/v0.14.1
-> Updated: 2026-11-03
-> Current code head: `8c60ce1`; steering/docs head: `b4db4a1`
-> DB workspace: migration v10 (`000010_admin_stock_deposits`)
+> Status: ADMIN WALLET SOURCE OF TRUTH — core v0.14/v0.14.1 tetap selesai; sistem lanjut ke Revisi V.1 correctness follow-up
+> Updated: 2026-11-04
+> Admin Wallet implementation head: `8c60ce1`; current code head: `fe1d906`; docs head: `c0c8700`
+> DB workspace: migration v14 (`000014_payout_correctness.sql`); tabel Admin Wallet tetap dari v10
 > Mode: SANDBOX / SIMULASI — bukan saldo atau transaksi on-chain
 > Live production: BELUM di-deploy/restart; wajib approval eksplisit user
 
@@ -35,7 +35,7 @@ Admin Wallet sudah berkembang dari menu `📦 Stok` sederhana menjadi panel oper
 9. Menjalankan callback admin melalui allowlist dan routing yang dapat diuji.
 10. Menjaga seluruh UI tetap jujur dengan label `SIMULASI`.
 
-Fondasi kode dan automated verification sudah hijau pada workspace VPS. Yang masih belum selesai adalah trial tombol Telegram end-to-end menggunakan akun admin dan akun non-admin, serta persetujuan untuk deploy/restart live.
+Fondasi Admin Wallet dan Revisi V.1 correctness sudah hijau otomatis pada workspace VPS sampai `fe1d906`. Workspace pernah direstart dan data recovery diverifikasi pada correctness head sebelumnya; follow-up binary sudah build/DB-smoke tetapi belum direstart lagi tanpa approval baru. Yang masih belum selesai adalah trial tombol Telegram end-to-end menggunakan akun admin dan akun non-admin, restore drill, CF-08 historical adjustment decision, serta persetujuan terpisah untuk restart workspace berikutnya atau menyentuh live.
 
 ---
 
@@ -595,7 +595,7 @@ Hasil historis 2026-11-03 sebelum commit terbaru:
 
 - `8c60ce1` — routing, preview service, post-commit result, exact audit query, verify script, restore runbook, tests.
 
-Current source head: `8c60ce1`.
+Admin Wallet implementation source head: `8c60ce1`. Current repository code head setelah Revisi V.1 correctness follow-up: `fe1d906`; current docs head sebelum sinkronisasi ini: `c0c8700`.
 
 ---
 
