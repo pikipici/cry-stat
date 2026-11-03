@@ -18,10 +18,10 @@ func TestSolBase58RejectsForbidden(t *testing.T) {
 		name string
 		addr string
 	}{
-		{"O-for-A", strings.Replace(base, "A", "O", 1)},
-		{"I-for-H", strings.Replace(base, "H", "I", 1)},
-		{"l-for-k", strings.Replace(base, "k", "l", 1)},
-		{"zero-digit", strings.Replace(base, "9", "0", 1)},
+		{"O-for-E", strings.Replace(base, "E", "O", 1)},
+		{"I-for-P", strings.Replace(base, "P", "I", 1)},
+		{"l-for-w", strings.Replace(base, "w", "l", 1)},
+		{"zero-digit", strings.Replace(base, "5", "0", 1)},
 	} {
 		if err := ValidateAddress("SOL", bad.addr); err == nil {
 			t.Fatalf("%s LOLOS: %q", bad.name, bad.addr)
