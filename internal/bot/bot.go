@@ -726,8 +726,8 @@ func riwayat(ctx context.Context, telegramID int64, d *Deps) string {
 	// Phase 6 (A9): timeline transit gabungan payout+deposit, merge-sort, limit 10.
 	// Trade tanpa payout TIDAK ditampilkan sebagai terkirim.
 	type item struct {
-		ts    int64
-		text  string
+		ts   int64
+		text string
 	}
 	var items []item
 	perrOK := false

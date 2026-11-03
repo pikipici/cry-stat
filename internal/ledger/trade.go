@@ -141,8 +141,6 @@ func (s *Service) createQuoteInner(ctx context.Context, userID int64, side, asse
 	return QuoteResult{ID: rowID, Side: side, Asset: asset, AmountIDR: amountIDR, Units: units, FeeUnits: feeUnits, SentUnits: sent, ToAddress: toAddress, Price: px, ExpiresAt: rowExpires, FeeNote: "fee network ditanggung user"}, nil
 }
 
-
-
 // TradeResult: hasil eksekusi.
 // Fase 8: buy membawa FeeUnits + SentUnits + ToAddress (buat payout mock).
 type TradeResult struct {
