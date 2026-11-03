@@ -2,7 +2,7 @@
 
 > Status: ACTIVE ROADMAP — Admin Wallet v0.14/v0.14.1 selesai otomatis; hardening sistem user/topup/buy masih pending
 > Audit awal: commit `a16b2a6`
-> Progress code terkini: `8c60ce1`; steering/docs terkini: `b4db4a1`
+> Progress code terkini: `8c60ce1`; repository/docs sebelum sinkronisasi seluruh Markdown: `a46427b`
 > Updated: 2026-11-03
 > Fokus: debug sistem existing, integritas transaksi, dan UX sisi user Telegram
 > Eksekusi runtime: build/test/migrate/run di `cbt-vps`, bukan lokal
@@ -54,6 +54,70 @@ Referensi utama:
 - Dokumen ini untuk roadmap hardening sistem user, topup, buy/payout, ledger, dan UX.
 
 Jika ada kontradiksi antara kode lama dan model transit di `PROJECT_IDEAS.md`, model transit adalah pemenangnya. Untuk Admin Wallet, kondisi commit `8c60ce1` dan `ADMIN_WALLET_CURRENT_STATE.md` mengalahkan plan/report lama yang sudah dihapus.
+
+### 1.1 Instruksi wajib untuk AI executor sebelum menyentuh kode
+
+Dokumen ini berasal dari audit awal commit `a16b2a6`, sedangkan baseline kode yang sudah diverifikasi sekarang adalah `8c60ce1`. Karena itu, checkbox pending bukan bukti otomatis bahwa implementasinya belum ada. AI executor **wajib melakukan reconciliation pass terhadap code head aktual** sebelum menulis test atau kode.
+
+Urutan preflight yang tidak boleh dilewati:
+
+1. Baca berurutan:
+   - `.kiro/steering/ADMIN_WALLET_CURRENT_STATE.md`;
+   - bagian ini dan `BAGIAN I — CHECKPOINT PROGRESS EXECUTOR`;
+   - bagian Pivot, Locked Decisions, Ledger, dan Current Next Step di `PROJECT_IDEAS.md`;
+   - `TRIAL.md` untuk acceptance manual yang masih pending.
+2. Jalankan `git status --short --branch` dan `git log --oneline -20`. Jangan menghapus, menimpa, atau me-reset perubahan user yang belum di-commit.
+3. Catat baseline aktual: repository HEAD, code head relevan, migration DB workspace, automated verification, manual trial, workspace restart, dan live deployment sebagai status yang terpisah.
+4. Untuk setiap temuan/task yang akan dikerjakan, klasifikasikan dulu:
+   - `DONE` — sudah ada dan teruji pada code head sekarang;
+   - `MASIH VALID` — gap masih nyata dan aman dieksekusi;
+   - `BERUBAH` — masalah masih ada tetapi kontrak/file/solusinya sudah bergeser;
+   - `DROP` — tidak lagi berlaku akibat pivot transit atau implementasi baru.
+5. Verifikasi klasifikasi dengan membaca kode, query, migration, dan test terkait. Jangan percaya commit message atau checkbox plan saja.
+6. Tulis hasil reconciliation singkat ke checkpoint dokumen ini sebelum implementasi fase pertama. Jangan audit ulang seluruh repository jika bukti yang dibutuhkan sudah tersedia.
+
+Aturan eksekusi:
+
+- Jangan menjalankan seluruh roadmap secara borongan. Kerjakan satu fase kecil pada satu waktu, mulai dari **Phase 2 — cancel/callback safety user**, lalu Phase 3 ledger invariant, kecuali reconciliation membuktikan urutan dependensinya berubah.
+- Gunakan TDD untuk bug/invariant: test gagal yang mereproduksi gap → implementasi minimum → targeted test → full verification.
+- Runtime, generate, migration, test, build, dan smoke dijalankan di `cbt-vps`; lokal hanya coding + Git.
+- Sebelum migration atau operasi DB: cek migration terbaru agar nomor tidak bentrok dengan v10, gunakan perubahan forward/additive, backup bila operasi berisiko, dan jangan memakai DB live.
+- Jangan mengubah handler langsung untuk memanipulasi saldo. Semua mutasi uang/coin harus melalui application service + jurnal double-entry dan idempotency boundary.
+- Pertahankan model transit: tidak ada saldo coin user, tidak ada `ALL/MAX`, beli menghasilkan payout, dan jual berasal dari deposit user.
+- Pertahankan label `SIMULASI`; mock tidak boleh dipresentasikan sebagai QRIS, transfer bank, txhash, atau saldo on-chain nyata.
+- Jangan memasukkan seed/private key/credential ke source, test fixture, log, audit, dokumentasi, atau chat.
+- Jangan deploy/restart live, mengaktifkan gateway/chain asli, atau memasukkan private key tanpa approval eksplisit user dan gate Stage 2 lengkap.
+
+Quality gate per fase:
+
+1. Targeted tests untuk package yang disentuh hijau.
+2. `go vet ./...`, `go test -count=1 ./...`, build bot, dan `bash scripts/verify.sh --no-db` hijau di VPS.
+3. Jika schema berubah, jalankan full verification hanya pada DB workspace/test dengan opt-in yang diwajibkan script.
+4. Lakukan manual smoke untuk flow Telegram yang berubah; automated test tidak boleh diklaim sebagai manual trial.
+5. Commit satu scope logis, push ke GitHub + bare VPS sesuai workflow, lalu verifikasi workspace berada pada commit tersebut.
+6. Update checkpoint di dokumen ini: SHA, test evidence, migration, manual trial, workspace status, dan next task.
+7. Berhenti dan laporkan jika acceptance gagal, kontrak plan bertentangan dengan kode aktual, atau dibutuhkan keputusan produk. Jangan menebak.
+
+Definition of handoff yang jujur:
+
+- `implemented` ≠ `automated verified`;
+- `automated verified` ≠ `manual Telegram trial passed`;
+- `workspace restarted/deployed` ≠ `live deployed`;
+- `live deployed` hanya boleh ditulis setelah approval eksplisit dan verifikasi live.
+
+### 1.2 Urutan eksekusi yang direkomendasikan
+
+1. Reconcile task plan terhadap code head aktual dan tandai statusnya.
+2. Tutup acceptance Admin Wallet yang masih pending: admin trial, non-admin denial/audit, restart recovery, dan restore drill bila maintenance window disetujui.
+3. Phase 2 — cancel semantics + callback/private-chat safety user.
+4. Phase 3 — ledger invariant buy/deposit per asset.
+5. Phase 4 — durable payout lifecycle, refund-once, unknown no-refund, dan restart recovery.
+6. Phase 5–7 — deposit/address safety, hapus drift custodial, lalu Saldo/Status/Riwayat lifecycle.
+7. Sandbox S1–S3 — Top Up Simulasi production-shaped.
+8. Sandbox S4–S6 — durable buy/payout, unified read models, dan E2E restart trial.
+9. Phase 9 performance/DB hardening hanya setelah correctness path stabil dan terukur.
+
+Jika suatu fase ternyata sudah sebagian dikerjakan, jangan mengulang implementasi. Pecah hanya gap tersisa menjadi task kecil dan pertahankan test/behavior yang sudah benar.
 
 ---
 
@@ -2120,6 +2184,47 @@ Jangan membaca seluruh 894 baris roadmap berulang kali. Ambil bagian yang releva
 
 # BAGIAN I — CHECKPOINT PROGRESS EXECUTOR
 
+## Reconciliation gate sebelum fase berikutnya
+
+AI executor berikutnya wajib mengisi tabel ini dari pemeriksaan code head aktual sebelum mengubah kode. Gunakan satu baris per phase/temuan yang akan disentuh; jangan menyalin semua temuan tanpa verifikasi.
+
+| Scope/temuan | Status (`DONE`/`MASIH VALID`/`BERUBAH`/`DROP`) | Evidence file/test/SHA | Gap tersisa | Next action |
+|---|---|---|---|---|
+| Admin Wallet v0.14/v0.14.1 | DONE otomatis; manual acceptance pending | `8c60ce1`, `ADMIN_WALLET_CURRENT_STATE.md` | Trial admin/non-admin, restart recovery, restore drill | Jalankan acceptance yang disetujui |
+| Phase 2 cancel/callback safety user — RECONCILED 2026-11-03 vs code head `8c60ce1` | MASIH VALID (A1, A8, A15, A23 inti); BERUBAH sebagian (A12 rate-limit callback sudah ada); klasifikasi per temuan di bawah | `db/queries/quotes_trades.sql`, `internal/bot/bot.go:650-685,751-770`, `internal/bot/flow.go:22-40,130-144`, `migrations/000003_quotes_trades.sql`, `internal/bot/session.go` | 6 query/handler/callback/migration edits + RED regression tests | Tunggu approval + SSH ke cbt-vps pulih, lalu Phase 2 TDD per C0 |
+| Phase 3 ledger invariant buy/deposit | Belum direconcile terhadap code head aktual | | | Reconcile setelah/bersama Phase 2 |
+
+### Reconciliation detail Phase 2 (2026-11-03, head `8c60ce1`)
+
+| Temuan | Klasifikasi | Evidence | Gap tersisa |
+|---|---|---|---|
+| A1 cancel quote aktif tidak bekerja | MASIH VALID | `ExpireUserQuotes` (`quotes_trades.sql:23-25`) masih predicate `expires_at <= now()` saja, tanpa status `cancelled`. `bot.go:682,769-770` + `flow.go:38` memanggilnya dari `/batal`, `q:no`, `t:cancel` lalu klaim "dibatalkan" — quote future-expiry tetap `active` + `ConsumeQuote` (:11-15) tetap bisa `used`. `createQuoteInner` (`trade.go:112`) expire quote lama saat quote baru dibuat, tapi tidak menutup lubang cancel. CHECK status quotes (`000003:31`) hanya `active/used/expired` — belum ada `cancelled` | Query baru `CancelActiveQuotesByUser` + `CancelQuoteByID` owner-scoped + status `cancelled` (migration baru) + RED tests D1 |
+| A8 cancel navigation side effect global | MASIH VALID | `flow.go:34-40` `t:cancel` = `Session.Clear` + `ExpireUserQuotes` (expire SEMUA quote user). `/batal` (`bot.go:751-766`) = `Session.Clear` + `expireActive` + copy selalu "Quote aktif dibatalkan" walau 0 row. Admin close path sama | Pisah navigation-cancel vs quote-cancel; return count; copy kontekstual A23 |
+| A12 callback private-chat guard | BERUBAH sebagian | Message path SUDAH private-only (`bot.go:62-65`) + callback rate-limit SUDAH ada (`bot.go:52-55`). TAPI callback path (`handleCallback:650`, `handleFlowCallback` flow.go:22) TIDAK cek `Chat.Type` — group/supergroup callback tetap bisa mutasi. Juga `cb.Message.Message` nil-unsafe (`bot.go:677-678`, `flow.go:27-28`), dan `q:%d:ok` path (`bot.go:687`) `GetQuote(qid)` TANPA owner-scope sebelum `CheckBeforeExecute` | Guard middleware callback: private-chat + nil-safe + ownership; ini overlap A15 |
+| A13 callback gagal diam-diam | MASIH VALID | `bot.go:670-671` malformed `q:` = bare `return` tanpa Answer; `flow.go:30-32,43-44,66-67` invalid len/coin = bare `return` tanpa feedback (spinner gantung). `handleFlowCallback:23-26` unregistered/blocked = bare `return`. Positive: `handleCallback:652` + rate-limit branch (`:53`) sudah Answer | Semua branch harus AnswerCallback + copy typed (belum `/start`, blocked, stale, malformed) |
+| A15 quote lookup sebelum ownership | MASIH VALID | `bot.go:687` `GetQuote(ctx, qid)` by ID saja (`quotes_trades.sql:17-21` `WHERE id=$1`), baru `Risk.CheckBeforeExecute` (`:692`) pakai `qrow.Asset/Side` milik quote — forged qid user lain bocor ke risk path sebelum `ExecuteTrade` owner-check. Belum ada oracle-exact tapi boundary salah urutan | Query `(quote_id, user_id)` scoped + ownership dulu, risk sesudah; generic response forged |
+| A23 `/batal` false confirmation | MASIH VALID | `batal()` (`bot.go:751-766`) selalu return "Quote aktif dibatalkan." — tidak bedakan session-cancel vs quote-cancel vs no-op. `expireActive` return error saja, bukan row count | Return count dari cancel op; 4 copy kontekstual (session / quote / keduanya / tidak ada) |
+| A5/A6 admin existing blockers (Phase 8 reminder) | DONE di Admin Wallet path; A6 broadcast preview SISA | Commit `8c60ce1` typed routing + sender/service boundary (`wallet_sender.go`, `wallet_router_test.go`); `ADMIN_WALLET_CURRENT_STATE.md` §3.6 | Broadcast preview/confirm/idempotency (Phase 8 scope) diverifikasi saat trial, bukan Phase 2 |
+| Blocker eksekusi | INFRA | `ssh rdpkhorur` timeout 2026-11-03 (host 157.15.40.83:7120). Remote `cbt-vps` (43.134.111.212:22) belum dicoba sesi ini. Lokal: Go TIDAK ada — build/test/vet HANYA di VPS. Dual remote: `origin`=GitHub cry-stat + `server`=cbt-vps bare repo | Pulihkan SSH (coba `cbt-vps` langsung) sebelum codex/TDD loop; tanpa VPS tidak ada verify |
+
+Template update per fase selesai:
+
+```text
+Phase:
+Baseline SHA:
+Result SHA:
+Classification before work:
+Files changed:
+Migration:
+Targeted tests:
+Full VPS verification:
+Manual Telegram trial:
+Workspace deployed/restarted:
+Live deployed: NO kecuali ada approval eksplisit + evidence
+Remaining risk:
+Current Next Step:
+```
+
 ## Progress selesai di jalur Admin Wallet
 
 - [x] Admin Wallet v0.14 diimplementasikan: ringkasan aset, deposit stok, activity feed, detail.
@@ -2166,7 +2271,7 @@ Jangan membaca seluruh 894 baris roadmap berulang kali. Ambil bagian yang releva
 
 ## Final Recommendation Terkini
 
-Urutan paling aman dari posisi `b4db4a1`:
+Urutan paling aman dari posisi code head `8c60ce1` dan repository/docs head `a46427b`:
 
 1. Selesaikan trial manual Admin Wallet admin+non-admin dan verifikasi audit rows.
 2. Jalankan restore drill custom-format pada dedicated drill DB bila maintenance window disetujui.
