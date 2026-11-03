@@ -2192,7 +2192,17 @@ AI executor berikutnya wajib mengisi tabel ini dari pemeriksaan code head aktual
 |---|---|---|---|---|
 | Admin Wallet v0.14/v0.14.1 | DONE otomatis; manual acceptance pending | `8c60ce1`, `ADMIN_WALLET_CURRENT_STATE.md` | Trial admin/non-admin, restart recovery, restore drill | Jalankan acceptance yang disetujui |
 | Phase 2 cancel/callback safety user — RECONCILED 2026-11-03 vs code head `8c60ce1` | MASIH VALID (A1, A8, A15, A23 inti); BERUBAH sebagian (A12 rate-limit callback sudah ada); klasifikasi per temuan di bawah | `db/queries/quotes_trades.sql`, `internal/bot/bot.go:650-685,751-770`, `internal/bot/flow.go:22-40,130-144`, `migrations/000003_quotes_trades.sql`, `internal/bot/session.go` | 6 query/handler/callback/migration edits + RED regression tests | Tunggu approval + SSH ke cbt-vps pulih, lalu Phase 2 TDD per C0 |
-| Phase 3 ledger invariant buy/deposit | Belum direconcile terhadap code head aktual | | | Reconcile setelah/bersama Phase 2 |
+| Phase 3 ledger invariant buy/deposit — RECONCILED 2026-11-03 vs head `417c841` | MASIH VALID inti (A3 buy, A4 deposit, Reconcile house-blind); A26 targeted-agg = Phase 9, Phase 3 cukup pre-commit validation | `internal/ledger/trade.go:299-328`, `deposit.go:93-97`, `ledger.go` Reconcile/refreshWalletCache | Perbaiki legs + validate sum=0 + Reconcile house-aware | Gas TDD inline |
+### Reconciliation detail Phase 3 (2026-11-03, head `417c841`)
+| Temuan | Klasifikasi | Evidence | Gap tersisa |
+|---|---|---|---|
+| A3 jurnal buy coin tidak balance | MASIH VALID | legs buy `trade.go:299-305`: float −sentUnits, fee-collect +feeUnits → sum coin = 2fee−gross, NOL hanya bila fee=0. IDR legs (±amount) balance | Template `house:float −gross / external:payout +sent / fee-clearing +fee` (nama account final saat implementasi, makna dikunci plan) |
+| A3b sisi sell masih bandar | MASIH VALID (perluasan) | legs sell `trade.go:322-327`: user coin −units, `house:inventory` +units — sisa model custodial v0.11; transit = user kirim coin ke sistem (flow deposit), bukan trade sell dari saldo | Samakan dengan template deposit transit; hapus inventory leg dari user-sell path |
+| A4 jurnal deposit coin tidak balance | MASIH VALID | legs `deposit.go:93-97`: float +units, cash −IDR, user +IDR → coin sum = +units ≠ 0, tanpa kaki negatif | Tambah `external:deposit −units_in` boundary account |
+| Reconcile buta house | MASIH VALID | `ledger.go` Reconcile filter `user:` saja, house* diskip → corrupt float/fee-collect/cash lolos | Perluas ke house accounts; pertahankan user-vs-wallet check existing |
+| A26 refreshWalletCache O(n) | VALID tapi PHASE 9 | `refreshWalletCache` panggil `SumLedgerByOwnerAsset` (full scan) tiap trade, 2x per trade user | Phase 3: tambah `validateLegs` pre-commit (O(legs), murah). Targeted query = Phase 9 |
+| Referensi pola benar | DONE (acuan) | `stock_deposit.go` float-in: cold −units + float +units = balance | Tiru pola ini untuk buy/deposit |
+| Blocker | TIDAK ADA | Go+sqlc+goose di cbt-vps OK; codex quota mati → inline | Gas inline, verify --no-db + targeted tests |
 
 ### Reconciliation detail Phase 2 (2026-11-03, head `8c60ce1`)
 
