@@ -729,10 +729,11 @@ func handleCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d
 	if tr.Side == "buy" {
 		tx, perr := d.Chain.Payout(ctx, uid, tr.TradeID, tr.Asset, tr.Units, tr.FeeUnits, tr.ToAddress)
 		if perr != nil {
-			// Failed -> refund via ledger, klaim hanya bila jurnal ada.
+			// Failed -> refund atomic via ledger (Task 3: jurnal+linkage 1 tx).
+			// AlreadyDone (retry/double-tap) tetap tampil refunded, tanpa jurnal kedua.
 			if errors.Is(perr, chain.ErrPayoutFailed) && tr.PayoutID != 0 {
-				if jid, rerr := d.Ledger.RefundPayoutTx(ctx, uid, tr.AmountIDR, tr.TradeID); rerr == nil {
-					_ = d.Chain.SetRefundJournal(ctx, tr.PayoutID, jid)
+				if _, res, rerr := d.Ledger.RefundPayout(ctx, uid, tr.PayoutID); rerr == nil &&
+					(res == ledger.RefundCreated || res == ledger.RefundAlreadyDone) {
 					_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID,
 						Text: "Payout gagal - dana dikembalikan (SIMULASI). Cek /saldo."})
 					return
