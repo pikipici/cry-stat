@@ -14,6 +14,16 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+// DepositConflictError: tx_hash sama tapi identity beda (revisi V.1 A14).
+// Field menyebut dimensi yang mismatch; payload lama TIDAK dibocorkan.
+type DepositConflictError struct {
+	Field string // "user" | "asset" | "units"
+}
+
+func (e *DepositConflictError) Error() string {
+	return "deposit conflict: " + e.Field
+}
+
 // DepositResult: hasil simulasi deposit masuk.
 type DepositResult struct {
 	DepositID int64
@@ -37,8 +47,18 @@ func (s *Service) MockDeposit(ctx context.Context, userID int64, asset string, u
 	if txHash == "" {
 		return DepositResult{}, fmt.Errorf("tx hash kosong")
 	}
-	// Idempotent: tx sudah ada = kembalikan yang lama.
+	// Phase 5 (A14): idempotent SUKSES hanya bila seluruh identity sama
+	// (user, asset, units). Mismatch = typed conflict, tanpa bocor payload lama.
 	if d, err := db.New(s.pool).GetDepositByTx(ctx, txHash); err == nil {
+		if !d.UserID.Valid || d.UserID.Int64 != userID {
+			return DepositResult{}, &DepositConflictError{Field: "user"}
+		}
+		if d.Asset != asset {
+			return DepositResult{}, &DepositConflictError{Field: "asset"}
+		}
+		if !d.Units.Equal(units) {
+			return DepositResult{}, &DepositConflictError{Field: "units"}
+		}
 		return DepositResult{DepositID: d.ID, Asset: d.Asset, Units: d.Units, AmountIDR: d.CreditedIdr}, nil
 	}
 	// Nilai IDR = units × bid − fee mock (sama kayak payout, arah kebalik).
@@ -75,8 +95,18 @@ func (s *Service) MockDeposit(ctx context.Context, userID int64, asset string, u
 	  ON CONFLICT (tx_hash) DO NOTHING
 	  RETURNING id`, userID, asset, txHash, units.String(), confirms, amountIDR).Scan(&depID)
 	if err != nil {
-		// Race: orang lain insert duluan → ambil yang ada.
+		// Race: orang lain insert duluan → samakan identity (A14), bukan
+		// langsung sukses. pgx ErrNoRows saat CONFLICT-DO-NOTHING tanpa RETURN.
 		if d, err2 := db.New(s.pool).GetDepositByTx(ctx, txHash); err2 == nil {
+			if !d.UserID.Valid || d.UserID.Int64 != userID {
+				return DepositResult{}, &DepositConflictError{Field: "user"}
+			}
+			if d.Asset != asset {
+				return DepositResult{}, &DepositConflictError{Field: "asset"}
+			}
+			if !d.Units.Equal(units) {
+				return DepositResult{}, &DepositConflictError{Field: "units"}
+			}
 			return DepositResult{DepositID: d.ID, Asset: d.Asset, Units: d.Units, AmountIDR: d.CreditedIdr}, nil
 		}
 		return DepositResult{}, err

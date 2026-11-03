@@ -62,13 +62,8 @@ func ValidateAddress(asset, addr string) error {
 		}
 		return nil
 	case "SOL":
-		if len(addr) < 32 || len(addr) > 44 {
-			return fmt.Errorf("alamat SOL harus 32–44 char base58")
-		}
-		for _, c := range addr {
-			if !((c >= '1' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
-				return fmt.Errorf("alamat SOL mengandung char bukan base58")
-			}
+		if err := validateSolAddress(addr); err != nil {
+			return err
 		}
 		return nil
 	}
@@ -236,4 +231,52 @@ func payoutFromTradeRow(p db.GetPayoutByTradeRow) db.GetPayoutRow {
 		ToAddress: p.ToAddress, Network: p.Network, TxHash: p.TxHash,
 		Status: p.Status, Confirms: p.Confirms,
 	}
+}
+
+// solBase58Alphabet: Bitcoin/Base58 tanpa 0, O, I, l (revisi V.1 A18).
+const solBase58Alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+
+// validateSolAddress: base58 decode manual, harus tepat 32 byte public key.
+// Tanpa network call, tanpa dep baru. Tidak panic untuk input apapun.
+func validateSolAddress(addr string) error {
+	if len(addr) < 32 || len(addr) > 44 {
+		return fmt.Errorf("alamat SOL harus 32–44 char base58")
+	}
+	decoded := make([]byte, 0, 32)
+	for _, c := range addr {
+		idx := -1
+		for i := 0; i < len(solBase58Alphabet); i++ {
+			if byte(c) == solBase58Alphabet[i] {
+				idx = i
+				break
+			}
+		}
+		if idx < 0 {
+			return fmt.Errorf("alamat SOL mengandung char bukan base58: %q", string(c))
+		}
+		carry := idx
+		for j := len(decoded) - 1; j >= 0; j-- {
+			v := int(decoded[j])*58 + carry
+			decoded[j] = byte(v & 0xff)
+			carry = v >> 8
+		}
+		for carry > 0 {
+			decoded = append([]byte{byte(carry & 0xff)}, decoded...)
+			carry >>= 8
+		}
+	}
+	n := len(decoded)
+	if n > 32 {
+		// Kelebihan hanya sah bila semua byte depan nol (leading '1').
+		for _, b := range decoded[:n-32] {
+			if b != 0 {
+				return fmt.Errorf("alamat SOL tidak 32 byte")
+			}
+		}
+		return nil
+	}
+	if n < 32 {
+		return fmt.Errorf("alamat SOL tidak 32 byte")
+	}
+	return nil
 }

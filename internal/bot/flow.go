@@ -184,12 +184,11 @@ func handleAmountInput(ctx context.Context, b *bot.Bot, chatID, telegramID int64
 			d.Session.Clear(telegramID)
 		}
 		net, _ := chain.NetworkFor(st.Coin)
-		row, err := d.Q.UpsertWalletAddress(ctx, db.UpsertWalletAddressParams{UserID: uid, Asset: st.Coin, Address: addr, Network: net})
-		if err != nil {
+		// Phase 5 (A17): replace atomik + audit actual before/after di ledger.
+		if _, _, err := d.Ledger.ReplaceWalletAddress(ctx, uid, telegramID, st.Coin, addr, net); err != nil {
 			reply(ctx, b, chatID, "Gagal simpan alamat: "+err.Error())
 			return
 		}
-		_ = d.Admin.Audit(ctx, telegramID, "alamat", uid, true, st.Coin+"=(kosong)", st.Coin+"="+row.Address)
 		reply(ctx, b, chatID, fmt.Sprintf("Alamat %s (%s) tersimpan.\nBeli sekarang otomatis dikirim ke sini.", st.Coin, net))
 		return
 	}
@@ -260,13 +259,12 @@ func alamatCmd(ctx context.Context, b *bot.Bot, chatID, telegramID int64, rest [
 		return
 	}
 	net, _ := chain.NetworkFor(coin)
-	row, err := d.Q.UpsertWalletAddress(ctx, db.UpsertWalletAddressParams{UserID: uid, Asset: coin, Address: addr, Network: net})
-	if err != nil {
+	// Phase 5 (A17): replace atomik + audit actual before/after di ledger.
+	if _, _, err := d.Ledger.ReplaceWalletAddress(ctx, uid, telegramID, coin, addr, net); err != nil {
 		reply(ctx, b, chatID, "Gagal simpan alamat: "+err.Error())
 		return
 	}
-	_ = d.Admin.Audit(ctx, telegramID, "alamat", uid, true, coin+"=(kosong)", coin+"="+row.Address)
-	reply(ctx, b, chatID, fmt.Sprintf("Alamat %s (%s) tersimpan: %s\nBeli sekarang otomatis dikirim ke sini.", coin, net, row.Address))
+	reply(ctx, b, chatID, fmt.Sprintf("Alamat %s (%s) tersimpan: %s\nBeli sekarang otomatis dikirim ke sini.", coin, net, addr))
 }
 
 // statusCmd: /status — payout + deposit terakhir user (1 pantau semua, Fase 9).
