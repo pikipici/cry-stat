@@ -17,7 +17,6 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/shopspring/decimal"
-
 )
 
 // payoutUser: user unik per run (telegramID nanotime — rerun aman).
