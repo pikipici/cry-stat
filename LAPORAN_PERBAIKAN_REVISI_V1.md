@@ -1,7 +1,7 @@
 # Laporan Perbaikan Revisi V.1 — Correctness Fix (CF-01 s/d CF-09)
 
 > Tanggal: 2026-11-04
-> Head: `84095c8` (origin + server bare sinkron)
+> Audited implementation head: `84095c8`; follow-up correctness head: `fe1d906` (origin + server bare sinkron)
 > DB workspace: v14 (`000014_payout_correctness.sql`)
 > Mode: SANDBOX / SIMULASI — live tidak disentuh
 > Dokumen pelaksana: `.kiro/steering/REVISI_V1_CORRECTNESS_FIX_PLAN.md` (Task 0–10)
@@ -119,3 +119,33 @@ CF-09 corrected. Sisa: trial tap Telegram manual (Task 9) + keputusan CF-08.
 | `19a591a` | Task 8 full verify |
 | `d769153` + `50ad758` | Task 10 closure |
 | `84095c8` | Task 9 restart + recovery |
+| `fe1d906` | Follow-up audit: recovery worker terintegrasi, claim ownership, confirm+event atomik, callback guard di outer dispatcher |
+
+---
+
+## 5. Follow-up Audit Fix (`fe1d906`)
+
+Review setelah laporan awal menemukan tiga gap tambahan. Semuanya sudah ditutup dan diverifikasi di VPS:
+
+1. **Durable claim sebelumnya baru primitive/test.** Sekarang runtime sandbox menjalankan recovery batch tiap 30 detik melalui `RunRecoveryBatch`: scan → atomic claim/reclaim → token-owned processing. API lama `ClaimQueued` dan query SELECT-only dihapus.
+2. **Confirmed payout + chain event sebelumnya dua statement non-atomik.** Sekarang keduanya commit dalam satu DB transaction. Fault-injection test membuktikan kegagalan event me-rollback status confirmed dan txhash.
+3. **Outer dispatcher callback sebelumnya menyentuh rate limiter sebelum structural guard.** Sekarang `ValidateCallbackStructure` berjalan sebelum limiter, Telegram I/O, atau dispatch namespace.
+
+Regression tests baru:
+
+- wrong claim token tidak dapat memproses payout;
+- queued recovery melakukan claim dan finalize;
+- forced chain-event failure me-rollback confirmed payout;
+- invalid callback ditolak sebelum rate limiter.
+
+Verifikasi head `fe1d906` di `cbt-vps`:
+
+- targeted chain + bot: hijau;
+- full `go test -count=1 ./...`: semua package hijau;
+- `go vet ./...`: bersih;
+- `go build ./cmd/bot`: sukses;
+- `bash scripts/verify.sh --no-db`: `VERIFY OK`;
+- origin + server bare + workspace sinkron ke `fe1d906`;
+- live production tetap tidak disentuh.
+
+Sisa status tidak berubah: manual Telegram tap masih pending dan CF-08 adjustment tetap menunggu approval eksplisit.

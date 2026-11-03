@@ -2,9 +2,9 @@
 
 > **Untuk AI executor:** eksekusi task secara berurutan dengan TDD. Jangan melanjutkan ke Sandbox S1–S6 sebelum seluruh blocker P0/P1 di dokumen ini hijau.
 >
-> Status: READY FOR EXECUTION — audit koreksi terhadap completion report Phase 2–9
-> Audit baseline: repository HEAD `476c78c`; implementation head yang dilaporkan `e2d19ee`
-> DB workspace yang dilaporkan: migration v13
+> Status: CORRECTNESS AUTOMATED DONE — follow-up gaps ditutup pada `fe1d906`; manual Telegram acceptance + CF-08 masih pending
+> Audit baseline: repository HEAD `476c78c`; initial remediation `84095c8`; follow-up correctness `fe1d906`
+> DB workspace: migration v14
 > Mode: SANDBOX / SIMULASI
 > Live production: DILARANG deploy/restart tanpa approval eksplisit user
 > Runtime/build/test/migrate: `cbt-vps`; lokal hanya coding + Git
@@ -27,15 +27,15 @@ Target akhir:
 
 | ID | Severity | Temuan | Evidence utama | Status |
 |---|---|---|---|---|
-| CF-01 | P0 | Refund journal commit terpisah dari `refund_journal_id`, sehingga crash/retry bisa double-credit | `internal/ledger/ledger.go:215-262`, `internal/bot/bot.go:733-735`, `db/queries/chain.sql:83-84` | OPEN |
-| CF-02 | P0 | Refund journal memakai `RefTable=payouts` tetapi `RefID=tradeID` | `internal/ledger/ledger.go:237-241` | OPEN |
-| CF-03 | P1 | `ClaimQueued` hanya SELECT lock tanpa transaction/lease durable | `db/queries/chain.sql:60-65`, `internal/chain/chain.go:226-233` | OPEN |
-| CF-04 | P1 | Transition payout memakai `:exec`; zero-row update dianggap sukses | `db/queries/chain.sql:67-84`, `internal/chain/chain.go:180-215` | OPEN |
-| CF-05 | P1 | Error transition unknown/failed diabaikan | `internal/chain/chain.go:187,214` | OPEN |
-| CF-06 | P1 | Dispatcher callback dereference sebelum guard; klaim nil-safe/private-only terlalu luas | `internal/bot/bot.go:654-690`, `internal/bot/adminflow.go` | OPEN |
-| CF-07 | P2 | DB trigger v13 hanya asset-match, bukan sum-zero per jurnal | `migrations/000013_ledger_hardening.sql:6-22` | OPEN — clarify report, optional DB design |
-| CF-08 | P2 | Historical global SOL imbalance masih `-54.693206730894899100` | completion report §4 | OPEN — remediation decision required |
-| CF-09 | P3 | Completion report stale: head dan `PROJECT_IDEAS.md` status tidak lagi aktual | completion report header/§9 vs HEAD `476c78c` | OPEN |
+| CF-01 | P0 | Refund journal commit terpisah dari `refund_journal_id`, sehingga crash/retry bisa double-credit | `internal/ledger/payout_refund.go`, migration v14 | DONE `e8961fe` |
+| CF-02 | P0 | Refund journal memakai `RefTable=payouts` tetapi `RefID=tradeID` | `internal/ledger/payout_refund.go` | DONE `e8961fe` |
+| CF-03 | P1 | `ClaimQueued` hanya SELECT lock tanpa transaction/lease durable | `internal/chain/claim.go`, runtime worker `cmd/bot/main.go` | DONE `9914240` + `fe1d906` |
+| CF-04 | P1 | Transition payout memakai `:exec`; zero-row update dianggap sukses | `db/queries/chain.sql`, `internal/chain/chain.go` | DONE `c78b51b` |
+| CF-05 | P1 | Error transition unknown/failed diabaikan | `internal/chain/chain.go` | DONE `c78b51b` |
+| CF-06 | P1 | Dispatcher callback dereference sebelum guard; klaim nil-safe/private-only terlalu luas | `internal/bot/bot.go`, `callback_guard.go` | DONE `2ceaefa` + `fe1d906` |
+| CF-07 | P2 | DB trigger v13 hanya asset-match, bukan sum-zero per jurnal | completion report addendum | CLARIFIED `ac072ae` |
+| CF-08 | P2 | Historical global SOL imbalance masih `-54.693206730894899100` | completion report §10 | PENDING APPROVAL |
+| CF-09 | P3 | Completion report stale: head dan `PROJECT_IDEAS.md` status tidak lagi aktual | active docs + follow-up report | DONE `fe1d906` |
 
 ## 3. Locked Implementation Decisions
 
@@ -444,26 +444,19 @@ Status `LIVE` tidak termasuk plan ini dan tetap memerlukan approval eksplisit te
 
 ## 9. Current Next Step
 
-Task 0–8 + 10 DONE 2026-11-04 — CORRECTNESS AUTOMATED DONE. P0/P1 (CF-01–CF-06) fixed
-dan hijau; CF-07 clarified; CF-09 corrected; CF-08 proposal menunggu approval user.
+Correctness automation selesai sampai follow-up head `fe1d906`:
 
-Sisa di luar automation (butuh manusia/approval):
+- CF-01–CF-06 DONE; durable recovery sekarang benar-benar terintegrasi ke runtime worker.
+- Confirmed payout + chain event commit atomik dan punya fault-injection regression test.
+- Callback structural guard berjalan di outer dispatcher sebelum limiter/I/O/dispatch.
+- Full tests, vet, build, dan `verify.sh --no-db` hijau di VPS.
+- CF-07 clarified dan CF-09 corrected.
 
-- Task 9 Manual workspace trial: failed/unknown/retry Telegram + restart recovery +
-  admin/non-admin callback. BUTUH approval user untuk restart bot workspace (bukan live).
-- CF-08 adjustment -54.69 SOL: proposal di COMPLETION_REPORT §10. BUTUH approval eksplisit.
-  JANGAN eksekusi tanpa itu.
-- 4 MD work user (TRIAL, ADMIN_WALLET_STATE, Fase0-README, STAGE0) masih versi lama
-  v0.14.1/v10 — sinkronisasi milik user, AI tidak menyentuh.
-- Sandbox S1–S6, restore drill, live: tetap dilarang tanpa approval eksplisit terpisah.
+Sisa yang membutuhkan manusia/approval:
 
-- CF-01 MASIH VALID — `internal/ledger/ledger.go:215-262` RefundPayoutTx commit jurnal sendiri; linkage via `internal/bot/bot.go:733-735` RefundPayoutTx + SetRefundJournal terpisah; crash window nyata.
-- CF-02 MASIH VALID — `internal/ledger/ledger.go:237-241` RefTable=payouts tapi RefID=tradeID.
-- CF-03 MASIH VALID — `db/queries/chain.sql:60-65` ClaimQueuedPayouts SELECT FOR UPDATE SKIP LOCKED tanpa update atomik; `internal/chain/chain.go:226-233` lepas setelah statement.
-- CF-04 MASIH VALID — `db/queries/chain.sql:67-84` semua MarkPayout* `:exec`; `internal/chain/chain.go:180-215` tanpa cek rows affected.
-- CF-05 MASIH VALID — `internal/chain/chain.go:187` dan `:214` pakai `_ =` untuk MarkPayoutUnknown/MarkPayoutFailed.
-- CF-06 MASIH VALID — `internal/bot/bot.go:654-657` dereference cb.ID/cb.Data sebelum guard; guard nil-safe+private baru di q: branch `:680-690`, t:/a: dispatch `:659-667` tanpa guard sama.
-- CF-07/08/09 ikut OPEN per §2 (butuh cek 000013 di VPS + decision adjustment + koreksi report).
-- Work MD user (4 modified + 1 untracked) TIDAK disentuh task ini.
+1. Manual Telegram trial: admin/non-admin, failed/unknown/retry, callback malformed/group, dan visual feed/detail.
+2. CF-08 adjustment historical SOL `-54.693206730894899100`: belum dieksekusi; wajib approval eksplisit.
+3. Restore drill custom-format jika maintenance window disetujui.
+4. Sandbox S1–S6 dan live tetap scope terpisah; live tidak boleh disentuh tanpa approval eksplisit.
 
-AI executor mulai **Task 1 — RED Tests untuk Atomic Refund Exactly-once**. Jangan menulis migration atau source code sebelum RED test di-commit.
+Tidak ada lagi task coding correctness yang terbuka di dokumen ini selain temuan baru dari manual trial.
