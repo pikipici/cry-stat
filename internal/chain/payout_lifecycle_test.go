@@ -5,8 +5,10 @@ package chain
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/pikipici/crypto-station/internal/db"
 	"github.com/pikipici/crypto-station/internal/ledger"
@@ -16,8 +18,20 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/shopspring/decimal"
 
-	"os"
 )
+
+// payoutUser: user unik per run (telegramID nanotime — rerun aman).
+func payoutUser(t *testing.T, q *db.Queries) int64 {
+	t.Helper()
+	u, err := q.CreateUser(context.Background(), db.CreateUserParams{
+		TelegramID: time.Now().UnixNano()%10000000000 + int64(os.Getpid()%100000),
+		Mode:       "sandbox",
+	})
+	if err != nil {
+		t.Fatalf("create user: %v", err)
+	}
+	return u.ID
+}
 
 func payoutTestSetup(t *testing.T) (*Service, *ledger.Service, *db.Queries) {
 	t.Helper()
@@ -43,13 +57,13 @@ func payoutTestSetup(t *testing.T) (*Service, *ledger.Service, *db.Queries) {
 func TestTradeCreatesQueuedPayout(t *testing.T) {
 	cs, ls, q := payoutTestSetup(t)
 	ctx := context.Background()
-	u, _ := q.CreateUser(ctx, db.CreateUserParams{TelegramID: 9001001, Mode: "sandbox"})
-	_ = ls.GrantSandbox(ctx, u.ID, 1000000)
-	qr, err := ls.CreateQuoteBuy(ctx, u.ID, "SOL", 50000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
+	uid := payoutUser(t, q)
+	_ = ls.GrantSandbox(ctx, uid, 1000000)
+	qr, err := ls.CreateQuoteBuy(ctx, uid, "SOL", 50000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
 	if err != nil {
 		t.Fatalf("quote: %v", err)
 	}
-	tr, err := ls.ExecuteTrade(ctx, u.ID, qr.ID)
+	tr, err := ls.ExecuteTrade(ctx, uid, qr.ID)
 	if err != nil {
 		t.Fatalf("execute: %v", err)
 	}
@@ -70,10 +84,10 @@ func TestTradeCreatesQueuedPayout(t *testing.T) {
 func TestPayoutSuccessLifecycle(t *testing.T) {
 	cs, ls, q := payoutTestSetup(t)
 	ctx := context.Background()
-	u, _ := q.CreateUser(ctx, db.CreateUserParams{TelegramID: 9001002, Mode: "sandbox"})
-	_ = ls.GrantSandbox(ctx, u.ID, 1000000)
-	qr, _ := ls.CreateQuoteBuy(ctx, u.ID, "SOL", 50000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
-	tr, _ := ls.ExecuteTrade(ctx, u.ID, qr.ID)
+	uid := payoutUser(t, q)
+	_ = ls.GrantSandbox(ctx, uid, 1000000)
+	qr, _ := ls.CreateQuoteBuy(ctx, uid, "SOL", 50000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
+	tr, _ := ls.ExecuteTrade(ctx, uid, qr.ID)
 	tx1, err := cs.ProcessPayout(ctx, tr.PayoutID, PayoutSuccess)
 	if err != nil || tx1 == "" {
 		t.Fatalf("success: %v %q", err, tx1)
@@ -89,27 +103,27 @@ func TestPayoutSuccessLifecycle(t *testing.T) {
 func TestPayoutFailedRefundOnce(t *testing.T) {
 	cs, ls, q := payoutTestSetup(t)
 	ctx := context.Background()
-	u, _ := q.CreateUser(ctx, db.CreateUserParams{TelegramID: 9001003, Mode: "sandbox"})
-	_ = ls.GrantSandbox(ctx, u.ID, 1000000)
+	uid := payoutUser(t, q)
+	_ = ls.GrantSandbox(ctx, uid, 1000000)
 	before, err := globalSums(ctx, q)
 	if err != nil {
 		t.Fatalf("baseline sums: %v", err)
 	}
-	balBefore, _ := ls.Balances(ctx, u.ID)
-	qr, _ := ls.CreateQuoteBuy(ctx, u.ID, "SOL", 100000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
-	tr, _ := ls.ExecuteTrade(ctx, u.ID, qr.ID)
+	balBefore, _ := ls.Balances(ctx, uid)
+	qr, _ := ls.CreateQuoteBuy(ctx, uid, "SOL", 100000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
+	tr, _ := ls.ExecuteTrade(ctx, uid, qr.ID)
 	if _, err := cs.ProcessPayout(ctx, tr.PayoutID, PayoutFailed); err == nil {
 		t.Fatal("failed harus return error sentinel")
 	}
 	// Orkestrasi refund seperti bot.go: refund via ledger + catat.
-	jid, err := ls.RefundPayoutTx(ctx, u.ID, tr.AmountIDR, tr.TradeID)
+	jid, err := ls.RefundPayoutTx(ctx, uid, tr.AmountIDR, tr.TradeID)
 	if err != nil {
 		t.Fatalf("refund: %v", err)
 	}
 	if err := cs.SetRefundJournal(ctx, tr.PayoutID, jid); err != nil {
 		t.Fatalf("set refund: %v", err)
 	}
-	balAfter, _ := ls.Balances(ctx, u.ID)
+	balAfter, _ := ls.Balances(ctx, uid)
 	// Saldo kembali = before - 0 (buy 100rb didebit, refund 100rb).
 	if !balAfter["IDR"].Equal(balBefore["IDR"]) {
 		t.Fatalf("refund once: before=%s after=%s", balBefore["IDR"], balAfter["IDR"])
@@ -177,10 +191,10 @@ func assertGlobalDeltaZero(ctx context.Context, q *db.Queries, before map[string
 func TestPayoutUnknownNoRefund(t *testing.T) {
 	cs, ls, q := payoutTestSetup(t)
 	ctx := context.Background()
-	u, _ := q.CreateUser(ctx, db.CreateUserParams{TelegramID: 9001004, Mode: "sandbox"})
-	_ = ls.GrantSandbox(ctx, u.ID, 1000000)
-	qr, _ := ls.CreateQuoteBuy(ctx, u.ID, "SOL", 100000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
-	tr, _ := ls.ExecuteTrade(ctx, u.ID, qr.ID)
+	uid := payoutUser(t, q)
+	_ = ls.GrantSandbox(ctx, uid, 1000000)
+	qr, _ := ls.CreateQuoteBuy(ctx, uid, "SOL", 100000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
+	tr, _ := ls.ExecuteTrade(ctx, uid, qr.ID)
 	if _, err := cs.ProcessPayout(ctx, tr.PayoutID, PayoutUnknown); err == nil {
 		t.Fatal("unknown harus return error sentinel")
 	}
@@ -202,10 +216,10 @@ func TestPayoutUnknownNoRefund(t *testing.T) {
 func TestQueuedRecovery(t *testing.T) {
 	cs, ls, q := payoutTestSetup(t)
 	ctx := context.Background()
-	u, _ := q.CreateUser(ctx, db.CreateUserParams{TelegramID: 9001005, Mode: "sandbox"})
-	_ = ls.GrantSandbox(ctx, u.ID, 1000000)
-	qr, _ := ls.CreateQuoteBuy(ctx, u.ID, "SOL", 50000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
-	tr, _ := ls.ExecuteTrade(ctx, u.ID, qr.ID)
+	uid := payoutUser(t, q)
+	_ = ls.GrantSandbox(ctx, uid, 1000000)
+	qr, _ := ls.CreateQuoteBuy(ctx, uid, "SOL", 50000, decimal.RequireFromString("0.00001"), "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsHYdLVL9zreA", payoutSnap())
+	tr, _ := ls.ExecuteTrade(ctx, uid, qr.ID)
 	if _, err := cs.ProcessPayout(ctx, tr.PayoutID, PayoutDelayed); err == nil {
 		t.Fatal("delayed harus return error penanda")
 	}
