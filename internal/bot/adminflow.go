@@ -245,6 +245,14 @@ func handleAdminInput(ctx context.Context, b *bot.Bot, chatID, telegramID int64,
 		reply(ctx, b, chatID, st.Extra+": "+before+" → "+after)
 		return true
 	case StepAdminBroadcast:
+		// Phase 2: teks batal = cancel dengan nol kiriman (A6 trap guard).
+		if CancelAliases(text) {
+			if d.Session != nil {
+				d.Session.Clear(telegramID)
+			}
+			reply(ctx, b, chatID, "Broadcast dibatalkan. Nol pesan terkirim.")
+			return true
+		}
 		if d.Session != nil {
 			d.Session.Clear(telegramID)
 		}

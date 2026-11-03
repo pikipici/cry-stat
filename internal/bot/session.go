@@ -115,7 +115,7 @@ func MatchButton(text string) string {
 		return BtnJual
 	case "riwayat", "/riwayat":
 		return BtnRiwayat
-	case "batal", "/batal":
+	case "batal", "/batal", "❌ batal", "❌batal":
 		return BtnBatal
 	case "alamat", "/alamat":
 		return BtnAlamat

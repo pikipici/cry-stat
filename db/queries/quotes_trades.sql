@@ -24,6 +24,25 @@ FROM quotes WHERE id = $1;
 UPDATE quotes SET status = 'expired'
 WHERE user_id = $1 AND status = 'active' AND expires_at <= now();
 
+-- Phase 2 (revisi V.1 A1): cancel eksplisit, owner-scoped, dengan count.
+
+-- name: CancelActiveQuotesByUser :execrows
+UPDATE quotes SET status = 'cancelled'
+WHERE user_id = $1 AND status = 'active';
+
+-- name: CancelQuoteByID :one
+UPDATE quotes SET status = 'cancelled'
+WHERE id = $1 AND user_id = $2 AND status = 'active'
+RETURNING id;
+
+-- Phase 2 (revisi V.1 A15): lookup owner-scoped sebelum risk check.
+
+-- name: GetQuoteForUser :one
+SELECT id, user_id, side, asset, amount_idr, quoted_units, bid, ask, mid,
+       spread_used, rate_usdt_idr, rate_source, rate_age_ms, price_age_ms,
+       expires_at, status, created_at
+FROM quotes WHERE id = $1 AND user_id = $2;
+
 -- name: ActiveQuoteForUser :one
 SELECT id, user_id, side, asset, amount_idr, quoted_units, bid, ask, mid,
        spread_used, rate_usdt_idr, rate_source, rate_age_ms, price_age_ms,

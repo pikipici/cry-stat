@@ -668,23 +668,44 @@ func handleCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d
 	} else if _, err := fmt.Sscanf(data, "q:%d:no", &qid); err == nil {
 		ok = false
 	} else {
+		// Phase 2 (A13): malformed q: callback — feedback, tanpa mutasi.
+		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: cb.Message.Message.Chat.ID, MessageID: cb.Message.Message.ID, Text: "Tombol ini sudah kedaluwarsa. Mulai ulang proses."})
+		return
+	}
+	// Phase 2 (A12): guard q: branch - nil-safe + private + user. Spinner sudah dijawab.
+	if cb.Message == nil || cb.Message.Message == nil {
 		return
 	}
 	uid, blocked := userID(ctx, d, cb.From.ID)
 	if blocked == "blocked" || uid == 0 {
+		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: cb.Message.Message.Chat.ID, MessageID: cb.Message.Message.ID, Text: "Tombol ini sudah kedaluwarsa. Mulai ulang proses."})
 		return
 	}
+	if cb.Message.Message.Chat.Type != "private" {
+		return
+	}
+
 	chatID := cb.Message.Message.Chat.ID
 	msgID := cb.Message.Message.ID
 	if !ok {
-		// FIX debug #6: Batal via tombol WAJIB expire quote itu (sebelumnya cuma edit pesan,
-		// quote tetap active 30 detik — inkonsisten dengan /batal).
-		_ = d.Q.ExpireUserQuotes(ctx, uid)
-		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Quote dibatalkan."})
+		// Phase 2 (A1): cancel SATU quote spesifik, owner-scoped.
+		cancelled, cerr := CancelQuote(ctx, d.Q, uid, qid)
+		if cerr != nil {
+			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Gagal membatalkan, coba lagi."})
+			return
+		}
+		if cancelled {
+			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Quote dibatalkan."})
+			return
+		}
+		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Quote sudah tidak aktif."})
 		return
 	}
+
 	// Confirm → cek risk ulang (30 detik bisa berubah) → eksekusi atomik.
-	qrow, err := d.Q.GetQuote(ctx, qid)
+	// Phase 2 (A15): lookup owner-scoped dulu, risk sesudah — forged qid
+	// user lain = generik "tidak ketemu", tanpa oracle.
+	qrow, err := d.Q.GetQuoteForUser(ctx, db.GetQuoteForUserParams{ID: qid, UserID: uid})
 	if err != nil {
 		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Quote tidak ketemu. Minta requote: ulangi /beli atau /jual."})
 		return
@@ -756,16 +777,23 @@ func batal(ctx context.Context, telegramID int64, d *Deps) string {
 	if uid == 0 {
 		return "Belum terdaftar. Kirim /start dulu."
 	}
+	// Phase 2 (A8/A23): pisah navigation-cancel vs quote-cancel, copy jujur.
+	sessionCleared := false
 	if d.Session != nil {
+		if st := d.Session.Get(telegramID); st.Step != StepIdle {
+			sessionCleared = true
+		}
 		d.Session.Clear(telegramID)
 	}
-	if err := expireActive(ctx, d, uid); err != nil {
+	n, err := CancelActiveQuotes(ctx, d.Q, uid)
+	if err != nil {
 		return "Gagal membatalkan, coba lagi."
 	}
-	return "Quote aktif dibatalkan."
+	return BatalCopy(sessionCleared, n)
 }
 
-// expireActive: tandai semua quote active user jadi expired (best effort, 1 query).
+// expireActive: housekeeping quote yang waktunya lewat (best effort, 1 query).
+// Phase 2: batal() tidak lagi memakai ini - cancel eksplisit via CancelActiveQuotes.
 func expireActive(ctx context.Context, d *Deps, uid int64) error {
 	return d.Q.ExpireUserQuotes(ctx, uid)
 }

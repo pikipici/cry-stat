@@ -20,31 +20,44 @@ import (
 
 // handleFlowCallback: inline t:buy:SOL / t:sell:ETH / t:sellall:SOL / t:cancel.
 func handleFlowCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuery, d *Deps) {
-	uid, blocked := userID(ctx, d, cb.From.ID)
-	if blocked == "blocked" || uid == 0 {
+	// Phase 2 (A12/A13): guard dulu — nil-safe + private + user.
+	// Spinner sudah dijawab caller (handleCallback).
+	g, deny, ok := GuardCallback(ctx, d, cb)
+	if !ok {
+		if deny != "" && cb != nil && cb.Message.Message != nil {
+			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: cb.Message.Message.Chat.ID, MessageID: cb.Message.Message.ID, Text: deny})
+		}
 		return
 	}
-	chatID := cb.Message.Message.Chat.ID
-	msgID := cb.Message.Message.ID
+	uid := g.UID
+	chatID := g.ChatID
+	msgID := g.MsgID
 	parts := strings.Split(cb.Data, ":")
 	if len(parts) < 2 {
+		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Tombol ini sudah kedaluwarsa. Mulai ulang proses."})
 		return
+	}
+	// Phase 2 (A13): malformed tanpa mutasi tapi spinner + feedback jelas.
+	stale := func() {
+		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Tombol ini sudah kedaluwarsa. Mulai ulang proses."})
 	}
 	switch parts[1] {
 	case "cancel":
+		// Phase 2 (A8): navigation-cancel — clear session SAJA, quote tidak disentuh.
 		if d.Session != nil {
 			d.Session.Clear(cb.From.ID)
 		}
-		_ = d.Q.ExpireUserQuotes(ctx, uid)
-		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Dibatalkan."})
+		_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Proses dibatalkan."})
 		return
 	case "addr":
 		// Fase 8: daftar alamat — t:addr:SOL → session await addr → user ketik alamat.
 		if len(parts) != 3 {
+			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Tombol ini sudah kedaluwarsa. Mulai ulang proses."})
 			return
 		}
 		coin := strings.ToUpper(parts[2])
 		if coin != "BNB" && coin != "ETH" && coin != "SOL" {
+			_, _ = b.EditMessageText(ctx, &bot.EditMessageTextParams{ChatID: chatID, MessageID: msgID, Text: "Tombol ini sudah kedaluwarsa. Mulai ulang proses."})
 			return
 		}
 		if d.Session != nil {
@@ -64,14 +77,17 @@ func handleFlowCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuer
 		// Fase 9: simulasi deposit masuk — t:depsim:SOL:50000.
 		// Units mock = nominal IDR / bid (arah kebalik payout).
 		if len(parts) != 4 {
+			stale()
 			return
 		}
 		coin := strings.ToUpper(parts[2])
 		if coin != "BNB" && coin != "ETH" && coin != "SOL" {
+			stale()
 			return
 		}
 		amount, ok := ParseNominal(parts[3])
 		if !ok || amount <= 0 {
+			stale()
 			return
 		}
 		if d.Session != nil {
@@ -95,10 +111,12 @@ func handleFlowCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuer
 		return
 	case "buy", "sell":
 		if len(parts) != 3 {
+			stale()
 			return
 		}
 		coin := strings.ToUpper(parts[2])
 		if coin != "BNB" && coin != "ETH" && coin != "SOL" {
+			stale()
 			return
 		}
 		if d.Session != nil {
@@ -129,10 +147,12 @@ func handleFlowCallback(ctx context.Context, b *bot.Bot, cb *models.CallbackQuer
 		return
 	case "sellall":
 		if len(parts) != 3 {
+			stale()
 			return
 		}
 		coin := strings.ToUpper(parts[2])
 		if coin != "BNB" && coin != "ETH" && coin != "SOL" {
+			stale()
 			return
 		}
 		if d.Session != nil {
