@@ -45,6 +45,32 @@ func userOwner(id int64) string { return fmt.Sprintf("user:%d", id) }
 // house:revenue TIDAK dipakai untuk kas spread di MVP (bab 8.3 plan).
 func houseOwner(kind string) string { return "house:" + kind }
 
+// externalOwner: boundary account transit (revisi V.1 Phase 3).
+// external:payout = coin keluar boundary ke wallet user (buy).
+// external:deposit = coin masuk boundary dari wallet user (jual/deposit).
+// Bukan saldo internal — penyeimbang agar sum per asset = 0.
+func externalOwner(kind string) string { return "external:" + kind }
+
+// validateLegs: sum amount per asset HARUS nol sebelum tulis jurnal.
+// Dipanggil pre-commit di setiap mutasi (buy/deposit/stock). O(legs), murah.
+func validateLegs(legs []leg) error {
+	sums := map[string]decimal.Decimal{}
+	for _, l := range legs {
+		a := strings.ToUpper(l.asset)
+		s, ok := sums[a]
+		if !ok {
+			s = decimal.Zero
+		}
+		sums[a] = s.Add(l.amount)
+	}
+	for a, s := range sums {
+		if !s.IsZero() {
+			return fmt.Errorf("jurnal tidak balance: asset %s sum=%s", a, s.String())
+		}
+	}
+	return nil
+}
+
 // WIBToday: tanggal reset limit ikut Asia/Jakarta (bab 6 FLOW 0), bukan jam server.
 func WIBToday() string {
 	return timeWIB("2006-01-02")
@@ -179,6 +205,41 @@ func (s *Service) Reconcile(ctx context.Context) error {
 		if !t.IsZero() {
 			return fmt.Errorf("rekonsiliasi gagal: %s ada jurnal %s tapi tanpa wallet", k, t)
 		}
+	}
+	return nil
+}
+
+// ReconcileGlobal: invariant ledger-level — sum SEMUA entries per asset = 0.
+// Mencakup house + external boundary (Reconcile lama hanya user-vs-wallet).
+// Dipakai test Phase 3 D2; trial/report tetap memakai Reconcile.
+// Catatan: workspace DB berisi jurnal lama imbalance (SOL -54.69 @ 2026-11-03)
+// sehingga fungsi ini FAIL di data historis — itu bukti A3/A4, bukan bug fungsi.
+func (s *Service) ReconcileGlobal(ctx context.Context) error {
+	type row struct {
+		Asset string
+		Total decimal.Decimal
+	}
+	rows, err := s.pool.Query(ctx, `SELECT asset, SUM(amount) FROM ledger_entries GROUP BY asset`)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+	var bad []string
+	for rows.Next() {
+		var asset string
+		var total decimal.Decimal
+		if err := rows.Scan(&asset, &total); err != nil {
+			return err
+		}
+		if !total.IsZero() {
+			bad = append(bad, asset+"="+total.String())
+		}
+	}
+	if err := rows.Err(); err != nil {
+		return err
+	}
+	if len(bad) > 0 {
+		return fmt.Errorf("rekonsiliasi global gagal: %s", strings.Join(bad, ", "))
 	}
 	return nil
 }

@@ -81,7 +81,18 @@ func (s *Service) MockDeposit(ctx context.Context, userID int64, asset string, u
 		}
 		return DepositResult{}, err
 	}
-	// Jurnal deposit: house:float +units, house:cash −IDR, user IDR +IDR.
+	// Phase 3 transit balance: coin masuk dari boundary external:deposit,
+	// float +, cash −IDR, user +IDR. Sum per asset = 0.
+	amt := decimal.NewFromInt(amountIDR)
+	legs := []leg{
+		{owner: externalOwner("deposit"), asset: asset, amount: units.Neg()},
+		{owner: houseOwner("float"), asset: asset, amount: units},
+		{owner: houseOwner("cash"), asset: "IDR", amount: amt.Neg()},
+		{owner: userOwner(userID), asset: "IDR", amount: amt},
+	}
+	if err := validateLegs(legs); err != nil {
+		return DepositResult{}, err
+	}
 	j, err := q.CreateJournal(ctx, db.CreateJournalParams{
 		Type: "deposit", RefTable: pgtype.Text{String: "deposits", Valid: true},
 		RefID: pgtype.Int8{Int64: depID, Valid: true},
@@ -89,12 +100,7 @@ func (s *Service) MockDeposit(ctx context.Context, userID int64, asset string, u
 	if err != nil {
 		return DepositResult{}, err
 	}
-	amt := decimal.NewFromInt(amountIDR)
-	for _, l := range []leg{
-		{owner: houseOwner("float"), asset: asset, amount: units},
-		{owner: houseOwner("cash"), asset: "IDR", amount: amt.Neg()},
-		{owner: userOwner(userID), asset: "IDR", amount: amt},
-	} {
+	for _, l := range legs {
 		acct, err := ensureAccount(ctx, q, l.owner, l.asset)
 		if err != nil {
 			return DepositResult{}, err

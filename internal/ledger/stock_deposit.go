@@ -230,10 +230,15 @@ func (s *Service) recordAdminStockDepositTx(ctx context.Context, in RecordStockD
 	if err != nil {
 		return RecordStockDepositResult{}, false, err
 	}
-	for _, l := range []leg{
+	stockLegs := []leg{
 		{owner: houseOwner("cold"), asset: dep.Asset, amount: dep.Units.Neg()},
 		{owner: houseOwner("float"), asset: dep.Asset, amount: dep.Units},
-	} {
+	}
+	// Phase 3: kunci invariant float-in juga.
+	if err := validateLegs(stockLegs); err != nil {
+		return RecordStockDepositResult{}, false, err
+	}
+	for _, l := range stockLegs {
 		acct, err := ensureAccount(ctx, q, l.owner, l.asset)
 		if err != nil {
 			return RecordStockDepositResult{}, false, err

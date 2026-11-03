@@ -12,7 +12,7 @@ import (
 )
 
 // TestBuyTransitNoUserCoin: buy Fase 8 TIDAK menambah coin user.
-// Jurnal: user IDR −, house:cash IDR +, house:float coin −sent, house:fee-collect +fee.
+// Jurnal (Phase 3 balance): user IDR −, house:cash IDR +, house:float coin −gross, external:payout +sent, house:fee-collect +fee.
 func TestBuyTransitNoUserCoin(t *testing.T) {
 	svc, _, _ := tradeDeps(t)
 	ctx := context.Background()

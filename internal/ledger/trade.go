@@ -299,8 +299,10 @@ func (s *Service) ExecuteTrade(ctx context.Context, userID, quoteID int64) (Trad
 		legs = []leg{
 			{owner: userOwner(userID), asset: "IDR", amount: amount.Neg()},
 			{owner: houseOwner("cash"), asset: "IDR", amount: amount},
-			// Fase 8 transit: coin keluar hot-wallet langsung (tidak ngendap di user).
-			{owner: houseOwner("float"), asset: asset, amount: sentUnits.Neg()},
+			// Phase 3 transit balance: float keluar GROSS, sent ke boundary
+			// external:payout, fee ke fee-collect. Sum coin = -gross+sent+fee = 0.
+			{owner: houseOwner("float"), asset: asset, amount: units.Neg()},
+			{owner: externalOwner("payout"), asset: asset, amount: sentUnits},
 			{owner: houseOwner("fee-collect"), asset: asset, amount: feeUnits},
 		}
 	} else {
@@ -329,6 +331,10 @@ func (s *Service) ExecuteTrade(ctx context.Context, userID, quoteID int64) (Trad
 	jtype := "buy"
 	if side == "sell" {
 		jtype = "sell"
+	}
+	// Phase 3: kunci invariant sebelum tulis — corrupt/missing leg = rollback.
+	if err := validateLegs(legs); err != nil {
+		return TradeResult{}, err
 	}
 	j, err := q.CreateJournal(ctx, db.CreateJournalParams{
 		Type:     jtype,
