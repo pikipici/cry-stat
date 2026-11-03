@@ -4,6 +4,7 @@
 package bot
 
 import (
+	"context"
 	"testing"
 
 	"github.com/go-telegram/bot/models"
@@ -55,7 +56,7 @@ func TestGuardCallbackNil(t *testing.T) {
 		{"nil-inner", &models.CallbackQuery{Message: models.MaybeInaccessibleMessage{}}},
 	}
 	for _, c := range cases {
-		_, copy, ok := GuardCallback(t.Context(), d, c.cb)
+		_, copy, ok := GuardCallback(context.Background(), d, c.cb)
 		if ok {
 			t.Errorf("%s: expected !ok", c.name)
 		}
