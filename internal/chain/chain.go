@@ -177,20 +177,22 @@ func (s *Service) ProcessPayout(ctx context.Context, payoutID int64, mode Payout
 	if p.Status == "unknown" && mode != PayoutSuccess && mode != PayoutFailed {
 		return "", ErrPayoutUnknown
 	}
-	if err := s.q.MarkPayoutBroadcasting(ctx, p.ID); err != nil {
+	if _, err := s.q.MarkPayoutBroadcasting(ctx, p.ID); err != nil {
 		return "", err
 	}
+
 	switch mode {
 	case PayoutDelayed:
 		return "", ErrPayoutDelayed
 	case PayoutUnknown:
-		_ = s.q.MarkPayoutUnknown(ctx, db.MarkPayoutUnknownParams{ID: p.ID, LastError: "mock unknown (sandbox)"})
+		// Task 2 compat: execrows return (rows, err); rows dicek Task 5.
+		_, _ = s.q.MarkPayoutUnknown(ctx, db.MarkPayoutUnknownParams{ID: p.ID, LastError: "mock unknown (sandbox)"})
 		return "", ErrPayoutUnknown
 	case PayoutFailed:
 		return s.failPayout(ctx, p)
 	default: // PayoutSuccess
 		tx := fmt.Sprintf("MOCK-%d-%d", p.TradeID, p.AttemptCount+1)
-		if err := s.q.MarkPayoutConfirmed(ctx, db.MarkPayoutConfirmedParams{
+		if _, err := s.q.MarkPayoutConfirmed(ctx, db.MarkPayoutConfirmedParams{
 			ID: p.ID, TxHash: pgText(tx), Confirms: 1,
 		}); err != nil {
 			return "", err
@@ -206,21 +208,24 @@ func (s *Service) ProcessPayout(ctx context.Context, payoutID int64, mode Payout
 // failPayout: tandai failed. Refund DIORKESTRASI caller via ledger
 // (RefundPayoutTx + SetPayoutRefund) agar jurnal hanya ditulis pintu ledger.
 // unknown TIDAK pernah memanggil ini.
+// Task 2 compat: execrows return (rows, err); rows dicek Task 5.
 func (s *Service) failPayout(ctx context.Context, p db.GetPayoutRow) (string, error) {
 	// Sudah failed + refund = idempotent, tanpa jurnal kedua.
 	if cur, err := s.q.GetPayout(ctx, p.ID); err == nil && cur.Status == "failed" && cur.RefundJournalID.Valid {
 		return "", ErrPayoutFailed
 	}
-	_ = s.q.MarkPayoutFailed(ctx, db.MarkPayoutFailedParams{ID: p.ID, LastError: "mock failed (sandbox)"})
+	_, _ = s.q.MarkPayoutFailed(ctx, db.MarkPayoutFailedParams{ID: p.ID, LastError: "mock failed (sandbox)"})
 	return "", ErrPayoutFailed
 }
 
 // SetRefundJournal: catat refund journal (ditulis ledger) ke payout.
 // Guard IS NULL di SQL = exactly-once walau retry.
+// Task 2 compat: execrows return (rows, err); rows dicek Task 3/5.
 func (s *Service) SetRefundJournal(ctx context.Context, payoutID, journalID int64) error {
-	return s.q.SetPayoutRefund(ctx, db.SetPayoutRefundParams{
+	_, err := s.q.SetPayoutRefund(ctx, db.SetPayoutRefundParams{
 		ID: payoutID, RefundJournalID: pgtype.Int8{Int64: journalID, Valid: true},
 	})
+	return err
 }
 
 // ClaimQueued: ambil batch queued/broadcasting (FOR UPDATE SKIP LOCKED)
