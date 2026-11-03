@@ -147,7 +147,7 @@ func (s *Service) ensureQueued(ctx context.Context, userID, tradeID int64, asset
 		if p, err2 := s.q.GetPayoutByTrade(ctx, tradeID); err2 == nil {
 			return payoutFromTradeRow(p), nil
 		}
-		return db.Payout{}, err
+		return db.GetPayoutRow{}, err
 	}
 	return s.q.GetPayout(ctx, pid)
 }
