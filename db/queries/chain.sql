@@ -64,21 +64,34 @@ FROM payouts WHERE status IN ('queued','broadcasting')
 ORDER BY id LIMIT $1
 FOR UPDATE SKIP LOCKED;
 
--- name: MarkPayoutBroadcasting :exec
+-- name: LockPayoutForRefund :one
+SELECT id, user_id, trade_id, asset, status, refund_journal_id
+FROM payouts WHERE id=$1
+FOR UPDATE;
+
+-- name: ClaimQueuedPayoutAtomic :one
+UPDATE payouts SET status='broadcasting', attempt_count=attempt_count+1,
+       broadcast_at=now(), claim_token=$2, claimed_at=now()
+WHERE id=$1 AND status IN ('queued','broadcasting')
+RETURNING id, user_id, trade_id, asset, units, fee_units, sent_units, to_address, network,
+       tx_hash, status, confirms, mode, attempt_count, last_error, refund_journal_id,
+       broadcast_at, finalized_at, created_at;
+
+-- name: MarkPayoutBroadcasting :execrows
 UPDATE payouts SET status='broadcasting', attempt_count=attempt_count+1, broadcast_at=now()
 WHERE id=$1 AND status IN ('queued','broadcasting');
 
--- name: MarkPayoutConfirmed :exec
+-- name: MarkPayoutConfirmed :execrows
 UPDATE payouts SET status='confirmed', tx_hash=$2, confirms=$3, finalized_at=now()
 WHERE id=$1 AND status IN ('queued','broadcasting','unknown');
 
--- name: MarkPayoutFailed :exec
+-- name: MarkPayoutFailed :execrows
 UPDATE payouts SET status='failed', last_error=$2, finalized_at=now()
 WHERE id=$1 AND status IN ('queued','broadcasting','unknown') AND refund_journal_id IS NULL;
 
--- name: MarkPayoutUnknown :exec
+-- name: MarkPayoutUnknown :execrows
 UPDATE payouts SET status='unknown', last_error=$2
 WHERE id=$1 AND status IN ('queued','broadcasting');
 
--- name: SetPayoutRefund :exec
+-- name: SetPayoutRefund :execrows
 UPDATE payouts SET refund_journal_id=$2 WHERE id=$1 AND refund_journal_id IS NULL;
