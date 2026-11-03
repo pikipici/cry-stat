@@ -214,9 +214,9 @@ func TestParallelDifferentQuotesNoOverspend(t *testing.T) {
 // expire-otomatis) dieksekusi paralel → 1 sukses + 1 ErrNoBalance, saldo tidak minus.
 // Tanpa FOR UPDATE, dua-duanya baca cache cukup dan dua-duanya lolos (overspend).
 func TestParallelActiveQuotesLock(t *testing.T) {
-// Phase 9 (A27): partial unique 1 active quote/user — insert langsung quote
-// kedua HARUS gagal constraint. Race dua quote hidup tidak mungkin lagi;
-// double-execute 1 quote dicover TestDoubleTapOneWins (consume atomik).
+	// Phase 9 (A27): partial unique 1 active quote/user — insert langsung quote
+	// kedua HARUS gagal constraint. Race dua quote hidup tidak mungkin lagi;
+	// double-execute 1 quote dicover TestDoubleTapOneWins (consume atomik).
 	svc, q, _ := tradeDeps(t)
 	ctx := context.Background()
 	uid := mkTradeUser(t, svc, q, 1000000)
