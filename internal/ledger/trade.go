@@ -302,7 +302,6 @@ func (s *Service) ExecuteTrade(ctx context.Context, userID, quoteID int64) (Trad
 			Asset:     asset,
 			Units:     units,
 			FeeUnits:  feeUnits,
-			SentUnits: sentUnits,
 			ToAddress: cq.ToAddress,
 			Network:   net,
 		})
