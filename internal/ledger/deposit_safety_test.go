@@ -4,8 +4,10 @@ package ledger
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/pikipici/crypto-station/internal/db"
 	"github.com/pikipici/crypto-station/internal/price"
@@ -57,7 +59,7 @@ func TestDepositConflictUser(t *testing.T) {
 	ctx := context.Background()
 	a := p5User(t, svc, q)
 	b := p5User(t, svc, q)
-	txh := "MOCK-P5-USERCONFLICT"
+	txh := fmt.Sprintf("MOCK-P5-USERCONFLICT-%d", time.Now().UnixNano())
 	if _, err := svc.MockDeposit(ctx, a, "SOL", decimal.RequireFromString("0.05"), txh, p5Snap()); err != nil {
 		t.Fatalf("deposit A: %v", err)
 	}
@@ -73,7 +75,7 @@ func TestDepositConflictAssetUnits(t *testing.T) {
 	svc, q := p5Setup(t)
 	ctx := context.Background()
 	uid := p5User(t, svc, q)
-	txh := "MOCK-P5-ASSETUNITS"
+	txh := fmt.Sprintf("MOCK-P5-ASSETUNITS-%d", time.Now().UnixNano())
 	if _, err := svc.MockDeposit(ctx, uid, "SOL", decimal.RequireFromString("0.05"), txh, p5Snap()); err != nil {
 		t.Fatalf("deposit: %v", err)
 	}
