@@ -214,11 +214,14 @@ func TestParallelDifferentQuotesNoOverspend(t *testing.T) {
 // expire-otomatis) dieksekusi paralel → 1 sukses + 1 ErrNoBalance, saldo tidak minus.
 // Tanpa FOR UPDATE, dua-duanya baca cache cukup dan dua-duanya lolos (overspend).
 func TestParallelActiveQuotesLock(t *testing.T) {
+// Phase 9 (A27): partial unique 1 active quote/user — insert langsung quote
+// kedua HARUS gagal constraint. Race dua quote hidup tidak mungkin lagi;
+// double-execute 1 quote dicover TestDoubleTapOneWins (consume atomik).
 	svc, q, _ := tradeDeps(t)
 	ctx := context.Background()
 	uid := mkTradeUser(t, svc, q, 1000000)
 	snap := testSnap()
-	mk := func(amount int64) int64 {
+	mk := func(amount int64) (int64, error) {
 		t.Helper()
 		var id int64
 		err := svc.pool.QueryRow(ctx, `INSERT INTO quotes
@@ -229,30 +232,21 @@ func TestParallelActiveQuotesLock(t *testing.T) {
 			uid, amount,
 			decimal.NewFromInt(amount).Div(snap.Ask).Round(18),
 			snap.Bid, snap.Ask, snap.Mid).Scan(&id)
-		if err != nil {
-			t.Fatalf("insert quote: %v", err)
-		}
-		return id
+		return id, err
 	}
-	a, b := mk(600000), mk(600000)
-	var wg sync.WaitGroup
-	res := make([]error, 2)
-	wg.Add(2)
-	go func() { defer wg.Done(); _, res[0] = svc.ExecuteTrade(ctx, uid, a) }()
-	go func() { defer wg.Done(); _, res[1] = svc.ExecuteTrade(ctx, uid, b) }()
-	wg.Wait()
-	ok, fail := 0, 0
-	for _, e := range res {
-		if e == nil {
-			ok++
-		} else if errors.Is(e, ErrNoBalance) || errors.Is(e, ErrQuoteUsed) {
-			fail++
-		} else {
-			t.Fatalf("error tak terduga: %v", e)
-		}
+	if _, err := mk(600000); err != nil {
+		t.Fatalf("insert pertama: %v", err)
 	}
-	if ok != 1 || fail != 1 {
-		t.Fatalf("mau 1 sukses + 1 gagal, dapat ok=%d gagal=%d (%v)", ok, fail, res)
+	if _, err := mk(600000); err == nil {
+		t.Fatal("insert quote active kedua harus DITOLAK partial unique")
+	}
+	// CreateQuote baru mengexpire lama → tetap 1 active, executable.
+	qr, err := svc.CreateQuote(ctx, uid, "buy", "SOL", 100000, testSnap())
+	if err != nil {
+		t.Fatalf("requote sesudah expire: %v", err)
+	}
+	if _, err := svc.ExecuteTrade(ctx, uid, qr.ID); err != nil {
+		t.Fatalf("execute: %v", err)
 	}
 	bal, _ := svc.Balances(ctx, uid)
 	if bal["IDR"].IsNegative() {
