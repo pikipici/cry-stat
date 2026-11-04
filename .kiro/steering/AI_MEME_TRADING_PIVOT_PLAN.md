@@ -1,9 +1,9 @@
 # Crypto Station → Personal AI Meme Trading Bot — Pivot Roadmap & Living Plan
 
-> Status: v0.2 — SKILL-FIRST BASELINE LOCKED; P0–P2 execution plan siap direview sebelum coding
+> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0.1 DONE, P0.2 NEXT
 > Owner: user/owner Telegram `7254686681` + Hermes
 > Last updated: 2026-11-04
-> Baseline repository: `503f5fb`
+> Pivot baseline: `503f5fb`; current implementation head: `385ad9e`
 > Baseline database: workspace v14
 > Skill baseline audited read-only: `meme-token-skill-v1.1.0.zip`
 > Skill SHA-256: `07e506260e11ad0d4f9346f39cd0dbce47f6f56e87953c92d6a5d8dcccd10bd8`
@@ -40,7 +40,8 @@ Dokumen ini adalah **approved design direction untuk pivot** setelah user mengik
 21. Risks & Non-goals
 22. Open Decisions
 23. Acceptance Criteria
-24. Current Next Step
+24. Task-by-Task P0–P2
+25. Current Next Step
 
 ---
 
@@ -1133,6 +1134,8 @@ The pivot design is ready for implementation only when:
 
 ### P0 — Pivot freeze & immutable baseline
 
+**Progress:** 1/3 tasks done. P0.1 implemented and automated-verified; runtime activation remains pending explicit restart approval.
+
 #### Task P0.1 — Freeze legacy product routes `[x]`
 
 **Objective:** legacy exchange tetap dapat di-rollback tetapi tidak lagi menerima pengembangan/flow baru setelah owner shell cutover.
@@ -1152,7 +1155,7 @@ The pivot design is ready for implementation only when:
 
 **Acceptance:** tidak ada route yang dihapus; mode bisa rollback; mode baru owner-only dan tidak menyatakan trading aktif.
 
-**Evidence 2026-11-04:** RED terbukti (`MainMenuForMode`/product-mode API belum ada); GREEN targeted; full `go test -count=1 -p=1 ./...`, `go vet ./...`, build, dan no-token DB smoke hijau di `cbt-vps`. `PRODUCT_MODE` default/fallback tetap `legacy_sandbox`; `meme_research` membekukan message + callback legacy dan hanya memberi owner tombol `Research` dengan label `RESEARCH ONLY`. Kode belum diaktifkan/restart pada runtime workspace.
+**Evidence 2026-11-04 (`385ad9e`):** RED terbukti (`MainMenuForMode`/product-mode API belum ada); GREEN targeted; full `go test -count=1 -p=1 ./...`, `go vet ./...`, build, dan no-token DB smoke hijau di `cbt-vps`. `PRODUCT_MODE` default/fallback tetap `legacy_sandbox`; `meme_research` membekukan message + callback legacy dan hanya memberi owner tombol `Research` dengan label `RESEARCH ONLY`. Source local/origin/server/workspace sinkron di `385ad9e`; runtime process masih binary lama dan belum restart/aktif `meme_research`.
 
 #### Task P0.2 — Consolidate project source of truth
 
@@ -1365,7 +1368,7 @@ P0–P2 selesai hanya jika:
 
 ## 25. Current Next Step
 
-Roadmap v0.2 sekarang **execution-ready untuk P0–P2**, tetapi coding belum dimulai pada commit plan ini.
+Roadmap v0.2 sedang dieksekusi. **P0.1 DONE secara code + automated verification; belum runtime-activated.**
 
 Urutan berikutnya:
 
