@@ -11,17 +11,18 @@ import (
 
 // Teks tombol menu (tanpa slash — pesan masuk apa adanya).
 const (
-	BtnHarga   = "Harga"
-	BtnSaldo   = "Saldo"
-	BtnBeli    = "Beli"
-	BtnJual    = "Jual"
-	BtnRiwayat = "Riwayat"
-	BtnBatal   = "Batal"
-	BtnAlamat  = "Alamat"
-	BtnStatus  = "Status"
-	BtnMenu    = "Menu"
-	BtnKembali = "Kembali"
-	BtnAdmin   = "Admin"
+	BtnHarga    = "Harga"
+	BtnSaldo    = "Saldo"
+	BtnBeli     = "Beli"
+	BtnJual     = "Jual"
+	BtnRiwayat  = "Riwayat"
+	BtnBatal    = "Batal"
+	BtnAlamat   = "Alamat"
+	BtnStatus   = "Status"
+	BtnMenu     = "Menu"
+	BtnKembali  = "Kembali"
+	BtnAdmin    = "Admin"
+	BtnResearch = "Research"
 )
 
 // AdminPanel: inline panel admin (dibuka via /admin atau tombol Admin).
@@ -224,6 +225,23 @@ func MainMenuFor(isAdmin bool) *models.ReplyKeyboardMarkup {
 	}
 	if isAdmin {
 		kb = [][]models.KeyboardButton{{{Text: BtnAdmin}}}
+	}
+	return &models.ReplyKeyboardMarkup{
+		Keyboard:       kb,
+		ResizeKeyboard: true,
+		IsPersistent:   true,
+	}
+}
+
+// MainMenuForMode keeps legacy_sandbox as the safe default. The pivot mode
+// exposes only a non-trading Research entry to the allowlisted owner.
+func MainMenuForMode(isOwner bool, productMode string) *models.ReplyKeyboardMarkup {
+	if NormalizeProductMode(productMode) != ProductModeMemeResearch {
+		return MainMenuFor(isOwner)
+	}
+	kb := [][]models.KeyboardButton{}
+	if isOwner {
+		kb = [][]models.KeyboardButton{{{Text: BtnResearch}}}
 	}
 	return &models.ReplyKeyboardMarkup{
 		Keyboard:       kb,

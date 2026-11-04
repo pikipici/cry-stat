@@ -1133,7 +1133,7 @@ The pivot design is ready for implementation only when:
 
 ### P0 — Pivot freeze & immutable baseline
 
-#### Task P0.1 — Freeze legacy product routes
+#### Task P0.1 — Freeze legacy product routes `[x]`
 
 **Objective:** legacy exchange tetap dapat di-rollback tetapi tidak lagi menerima pengembangan/flow baru setelah owner shell cutover.
 
@@ -1151,6 +1151,8 @@ The pivot design is ready for implementation only when:
 5. Commit: `feat(bot): add explicit product pivot mode`.
 
 **Acceptance:** tidak ada route yang dihapus; mode bisa rollback; mode baru owner-only dan tidak menyatakan trading aktif.
+
+**Evidence 2026-11-04:** RED terbukti (`MainMenuForMode`/product-mode API belum ada); GREEN targeted; full `go test -count=1 -p=1 ./...`, `go vet ./...`, build, dan no-token DB smoke hijau di `cbt-vps`. `PRODUCT_MODE` default/fallback tetap `legacy_sandbox`; `meme_research` membekukan message + callback legacy dan hanya memberi owner tombol `Research` dengan label `RESEARCH ONLY`. Kode belum diaktifkan/restart pada runtime workspace.
 
 #### Task P0.2 — Consolidate project source of truth
 
@@ -1367,15 +1369,15 @@ Roadmap v0.2 sekarang **execution-ready untuk P0–P2**, tetapi coding belum dim
 
 Urutan berikutnya:
 
-1. Review task plan P0–P2 ini.
-2. Jika approved, mulai **Task P0.1** dengan TDD.
-3. Jangan mengaktifkan `meme_research` runtime sampai targeted + full test hijau dan user memberi approval restart workspace.
+1. **Task P0.1 selesai otomatis tetapi belum diaktifkan di runtime.**
+2. Lanjut **Task P0.2**: konsolidasi source of truth.
+3. Jangan mengaktifkan `meme_research` runtime sampai user memberi approval restart workspace.
 4. Jangan masukkan AI key, wallet key, signing, swap, atau real funds selama P0–P2.
 5. BSC provider, historical vendor, social source, dan Robinhood Chain identity tetap discovery backlog, bukan blocker P0–P2.
 
 Prompt lanjut yang valid:
 
-- `gas P0.1` — mulai implementasi pertama dengan TDD.
+- `gas P0.2` — konsolidasi dokumentasi menjadi satu source of truth.
 - `review P0-P2 dulu` — audit task plan tanpa coding.
 - `ubah task <ID>` — revisi scope sebelum coding.
 - `gap audit v0.2` — cari gap tambahan sebelum implementasi.

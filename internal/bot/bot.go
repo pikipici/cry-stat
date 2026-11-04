@@ -29,23 +29,48 @@ import (
 )
 
 type Deps struct {
-	Q       *db.Queries
-	Set     *settings.Service
-	Price   *price.Service
-	Ledger  *ledger.Service
-	Risk    *risk.Service
-	Admin   *admin.Service
-	Trial   *trial.Service
-	Wallet  *adminwallet.Service
-	Chain   *chain.Service // pintu on-chain Fase 8 (mock di sandbox)
-	Limiter *RateLimiter
-	Session *Sessions // state multi-step T1-button (nil = dimatikan)
-	Mode    string    // sandbox / real (Fase 1-4: selalu sandbox)
+	Q           *db.Queries
+	Set         *settings.Service
+	Price       *price.Service
+	Ledger      *ledger.Service
+	Risk        *risk.Service
+	Admin       *admin.Service
+	Trial       *trial.Service
+	Wallet      *adminwallet.Service
+	Chain       *chain.Service // pintu on-chain Fase 8 (mock di sandbox)
+	Limiter     *RateLimiter
+	Session     *Sessions // state multi-step T1-button (nil = dimatikan)
+	Mode        string    // sandbox / real (Fase 1-4: selalu sandbox)
+	ProductMode string    // legacy_sandbox (default) / meme_research
 
 	// Phase 8 (A6): dedup broadcast double-tap/double-slash.
 	// Kunci: teks+sender sama dalam 60 detik = tolak kirim kedua.
 	BroadcastMu   sync.Mutex
 	BroadcastLast map[string]time.Time
+}
+
+const (
+	ProductModeLegacySandbox  = "legacy_sandbox"
+	ProductModeMemeResearch   = "meme_research"
+	MemeResearchFrozenCopy    = "Mode meme research aktif (RESEARCH ONLY). Fitur exchange lama dibekukan; trading dan eksekusi belum aktif."
+	MemeResearchOwnerOnlyCopy = "Bot sedang dalam mode riset pribadi owner."
+)
+
+func NormalizeProductMode(raw string) string {
+	if strings.EqualFold(strings.TrimSpace(raw), ProductModeMemeResearch) {
+		return ProductModeMemeResearch
+	}
+	return ProductModeLegacySandbox
+}
+
+func ProductModeAccess(isOwner bool, productMode string) (string, bool) {
+	if NormalizeProductMode(productMode) != ProductModeMemeResearch {
+		return "", true
+	}
+	if !isOwner {
+		return MemeResearchOwnerOnlyCopy, false
+	}
+	return MemeResearchFrozenCopy, true
 }
 
 // claimBroadcastSend: klaim sekali pakai per key dalam 60 detik.
@@ -76,6 +101,10 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 		if !ValidateCallbackStructure(upd.CallbackQuery) {
 			return
 		}
+		if copy, _ := ProductModeAccess(d.Admin.IsAdmin(upd.CallbackQuery.From.ID), d.ProductMode); NormalizeProductMode(d.ProductMode) == ProductModeMemeResearch {
+			_, _ = b.AnswerCallbackQuery(ctx, &bot.AnswerCallbackQueryParams{CallbackQueryID: upd.CallbackQuery.ID, Text: copy})
+			return
+		}
 		// Rate limit juga untuk callback (anti double-tap spam).
 		if !d.Limiter.Allow(upd.CallbackQuery.From.ID) {
 			_, _ = b.AnswerCallbackQuery(ctx, &bot.AnswerCallbackQueryParams{CallbackQueryID: upd.CallbackQuery.ID, Text: "Kebanyakan, tunggu sebentar."})
@@ -98,6 +127,19 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 		return
 	}
 	text := strings.TrimSpace(upd.Message.Text)
+	isOwner := d.Admin.IsAdmin(upd.Message.From.ID)
+	if copy, allowed := ProductModeAccess(isOwner, d.ProductMode); NormalizeProductMode(d.ProductMode) == ProductModeMemeResearch {
+		if !allowed {
+			reply(ctx, b, upd.Message.Chat.ID, copy)
+			return
+		}
+		if strings.EqualFold(text, "/start") || strings.EqualFold(text, BtnResearch) || strings.EqualFold(text, "/research") {
+			_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: upd.Message.Chat.ID, Text: copy, ReplyMarkup: MainMenuForMode(true, d.ProductMode)})
+			return
+		}
+		reply(ctx, b, upd.Message.Chat.ID, copy)
+		return
+	}
 	// T2-button: session admin aktif = tangani dulu (allowlist di dalam).
 	// T1-button: kalau lagi nunggu nominal DAN teks bukan tombol menu,
 	// perlakukan sebagai input nominal (sebelum parsing slash).
@@ -157,7 +199,7 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 	switch cmd {
 	case "/start":
 		startText := start(ctx, upd.Message.From.ID, d)
-		_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: upd.Message.Chat.ID, Text: startText, ReplyMarkup: MainMenuFor(d.Admin.IsAdmin(upd.Message.From.ID))})
+		_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: upd.Message.Chat.ID, Text: startText, ReplyMarkup: MainMenuForMode(isOwner, d.ProductMode)})
 	case "/saldo":
 		reply(ctx, b, upd.Message.Chat.ID, saldo(ctx, upd.Message.From.ID, d))
 	case "/harga":

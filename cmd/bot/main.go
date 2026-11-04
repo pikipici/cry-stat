@@ -30,6 +30,7 @@ func main() {
 
 	databaseURL := mustEnv("DATABASE_URL")
 	botToken := os.Getenv("BOT_TOKEN") // kosong = mode cek DB saja
+	productMode := bot.NormalizeProductMode(os.Getenv("PRODUCT_MODE"))
 
 	pool, err := pgxpool.New(ctx, databaseURL)
 	if err != nil {
@@ -57,9 +58,9 @@ func main() {
 	chainSvc := chain.New(pool, q, set)
 	walletSvc := adminwallet.New(q, set, ledgerSvc, priceSvc)
 	limiter := bot.NewRateLimiter(int(set.Int64("rate_limit_per_min")))
-	deps := &bot.Deps{Q: q, Set: set, Price: priceSvc, Ledger: ledgerSvc, Risk: riskSvc, Admin: adminSvc, Trial: trialSvc, Wallet: walletSvc, Chain: chainSvc, Limiter: limiter, Session: bot.NewSessions(), Mode: "sandbox"}
+	deps := &bot.Deps{Q: q, Set: set, Price: priceSvc, Ledger: ledgerSvc, Risk: riskSvc, Admin: adminSvc, Trial: trialSvc, Wallet: walletSvc, Chain: chainSvc, Limiter: limiter, Session: bot.NewSessions(), Mode: "sandbox", ProductMode: productMode}
 
-	slog.Info("crypto-station fase 4 start", "mode", "sandbox")
+	slog.Info("crypto-station fase 4 start", "mode", "sandbox", "product_mode", productMode)
 
 	if botToken == "" {
 		var n int

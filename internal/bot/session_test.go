@@ -72,6 +72,37 @@ func TestSessionsTimeout(t *testing.T) {
 	}
 }
 
+func TestPivotFreezeMenuForOwner(t *testing.T) {
+	kb := MainMenuForMode(true, ProductModeMemeResearch)
+	if len(kb.Keyboard) != 1 || len(kb.Keyboard[0]) != 1 || kb.Keyboard[0][0].Text != BtnResearch {
+		t.Fatalf("menu meme_research owner harus hanya Research: %+v", kb.Keyboard)
+	}
+	copy, allowed := ProductModeAccess(true, ProductModeMemeResearch)
+	if !allowed || copy != MemeResearchFrozenCopy {
+		t.Fatalf("owner access = (%q,%v), mau frozen copy + allowed", copy, allowed)
+	}
+}
+
+func TestPivotFreezeDeniesNonOwner(t *testing.T) {
+	kb := MainMenuForMode(false, ProductModeMemeResearch)
+	if len(kb.Keyboard) != 0 {
+		t.Fatalf("non-owner tidak boleh mendapat menu meme research: %+v", kb.Keyboard)
+	}
+	copy, allowed := ProductModeAccess(false, ProductModeMemeResearch)
+	if allowed || copy != MemeResearchOwnerOnlyCopy {
+		t.Fatalf("non-owner access = (%q,%v), mau owner-only + denied", copy, allowed)
+	}
+}
+
+func TestProductModeDefaultsToLegacySandbox(t *testing.T) {
+	if got := NormalizeProductMode(""); got != ProductModeLegacySandbox {
+		t.Fatalf("mode kosong = %q, mau %q", got, ProductModeLegacySandbox)
+	}
+	if got := NormalizeProductMode("unknown"); got != ProductModeLegacySandbox {
+		t.Fatalf("mode invalid = %q, mau safe default %q", got, ProductModeLegacySandbox)
+	}
+}
+
 func TestKeyboardsNotNil(t *testing.T) {
 	if MainMenu() == nil || CoinPicker("buy") == nil || QuoteKeyboard(1) == nil {
 		t.Fatal("keyboard builder mengembalikan nil")
