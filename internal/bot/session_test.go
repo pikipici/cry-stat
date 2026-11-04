@@ -82,11 +82,11 @@ func TestKeyboardsNotNil(t *testing.T) {
 	if len(MainMenuFor(false).Keyboard) != 2 {
 		t.Fatalf("menu utama user harus 2 baris, dapat %d", len(MainMenuFor(false).Keyboard))
 	}
-	if len(MainMenuFor(true).Keyboard) != 3 {
-		t.Fatalf("menu utama admin harus 3 baris, dapat %d", len(MainMenuFor(true).Keyboard))
+	if len(MainMenuFor(true).Keyboard) != 1 {
+		t.Fatalf("menu utama admin harus hanya 1 baris, dapat %d", len(MainMenuFor(true).Keyboard))
 	}
-	if MainMenuFor(true).Keyboard[2][0].Text != BtnAdmin {
-		t.Fatalf("baris admin salah: %q", MainMenuFor(true).Keyboard[2][0].Text)
+	if len(MainMenuFor(true).Keyboard[0]) != 1 || MainMenuFor(true).Keyboard[0][0].Text != BtnAdmin {
+		t.Fatalf("menu utama admin harus hanya tombol Admin: %+v", MainMenuFor(true).Keyboard)
 	}
 	if MainMenuFor(false).Keyboard[0][0].Text != BtnBeli || MainMenuFor(false).Keyboard[1][1].Text != BtnMenu {
 		t.Fatalf("menu utama harus Beli/Jual/Harga/Menu: %+v", MainMenuFor(false).Keyboard)

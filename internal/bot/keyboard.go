@@ -215,15 +215,15 @@ func MainMenu() *models.ReplyKeyboardMarkup {
 	}
 }
 
-// MainMenuFor: menu UTAMA ramping (v0.12-ux) — Beli Jual Harga Menu (+ Admin).
-// Submenu Akun (Saldo Riwayat Status Alamat) dibuka via tombol Menu.
+// MainMenuFor: user mendapat Beli/Jual/Harga/Menu; admin hanya mendapat Admin.
+// Submenu Akun (Saldo Riwayat Status Alamat) dibuka via tombol Menu untuk user.
 func MainMenuFor(isAdmin bool) *models.ReplyKeyboardMarkup {
 	kb := [][]models.KeyboardButton{
 		{{Text: BtnBeli}, {Text: BtnJual}},
 		{{Text: BtnHarga}, {Text: BtnMenu}},
 	}
 	if isAdmin {
-		kb = append(kb, []models.KeyboardButton{{Text: BtnAdmin}})
+		kb = [][]models.KeyboardButton{{{Text: BtnAdmin}}}
 	}
 	return &models.ReplyKeyboardMarkup{
 		Keyboard:       kb,
