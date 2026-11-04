@@ -1,6 +1,6 @@
 # Crypto Station → Personal AI Meme Trading Bot — Pivot Roadmap & Living Plan
 
-> Status: v0.1 — arah produk, arsitektur target, safety gate, dan phased migration sudah didraft; MENUNGGU REVIEW/APPROVAL USER
+> Status: v0.2 — SKILL-FIRST BASELINE LOCKED; P0–P2 execution plan siap direview sebelum coding
 > Owner: user/owner Telegram `7254686681` + Hermes
 > Last updated: 2026-11-04
 > Baseline repository: `503f5fb`
@@ -10,7 +10,7 @@
 > Runtime policy: coding + Git lokal; generate/test/build/runtime di `cbt-vps`
 > Safety: belum ada real wallet signing, real broker order, atau auto-trading yang disetujui
 
-Dokumen ini adalah **candidate source of truth untuk pivot**. Selama v0.1 belum di-ACK, `.kiro/steering/CRYPTO_STATION_CURRENT_STATE.md` tetap menjadi sumber fakta implementasi legacy. Setelah pivot disetujui, kedua dokumen harus direkonsiliasi menjadi satu current-state/roadmap aktif; jangan menjalankan dua roadmap paralel.
+Dokumen ini adalah **approved design direction untuk pivot** setelah user mengikuti rekomendasi audit skill. `CRYPTO_STATION_CURRENT_STATE.md` tetap menjadi sumber fakta implementasi legacy sampai Task P0.2 mengonsolidasikan statusnya; dokumen ini menjadi sumber desain target dan urutan implementasi. ACK v0.2 tidak mengizinkan real execution.
 
 ---
 
@@ -44,20 +44,20 @@ Dokumen ini adalah **candidate source of truth untuk pivot**. Selama v0.1 belum 
 
 ---
 
-## 0. Locked Decisions (v0.1)
+## 0. Locked Decisions (v0.2)
 
 | # | Keputusan | Pilihan |
 |---|---|---|
 | 1 | Produk | Bot trading meme token pribadi, bukan exchange publik |
 | 2 | Akses | Owner-only, Telegram ID `7254686681`; deny-by-default |
-| 3 | Venue awal | Solana, BSC, dan Robinhood sebagai adapter terpisah |
-| 4 | Status Robinhood | Broker/execution venue, bukan blockchain/network |
-| 5 | Peran AI | AI menghasilkan keputusan terstruktur pada setiap candidate execution |
+| 3 | Chain target | Solana dahulu; BSC expansion; Robinhood Chain discovery sampai identitas teknis terverifikasi |
+| 4 | Robinhood Chain | Klaim chain dari materi skill, bukan broker/Robinhood Crypto; `UNVERIFIED_DISCOVERY`, bukan execution venue |
+| 5 | Peran AI | Menafsirkan evidence dan membuat proposal; bukan sumber evidence, gate, atau izin eksekusi |
 | 6 | Strategy source | Skill buatan user, versioned dan terus diperbarui; bukan strategi hardcoded di core bot |
 | 7 | Skill baseline | `meme-token-skill-v1.1.0.zip`, SHA-256 tercatat di header |
 | 8 | AI configuration | Endpoint, API key, dan model dapat disetel melalui Telegram seperti provider setup Hermes |
 | 9 | AI compatibility | OpenAI-compatible default; provider non-compatible lewat adapter |
-| 10 | Execution progression | Paper → Advisory → Confirm → Auto; tidak boleh lompat langsung ke Auto |
+| 10 | Execution progression | Research → Offline Simulation → Prospective Paper → Advisory → Confirm → Auto |
 | 11 | Risk authority | Deterministic risk engine selalu lebih berkuasa daripada keputusan AI |
 | 12 | Wallet | Dedicated hot wallet per chain/venue; bukan wallet utama owner |
 | 13 | Asset identity | Chain/venue + contract/mint/instrument ID; ticker tidak cukup |
@@ -68,6 +68,18 @@ Dokumen ini adalah **candidate source of truth untuk pivot**. Selama v0.1 belum 
 | 18 | Legacy | Public user/IDR/QRIS/payout/admin-stock roadmap dibekukan; tidak dikembangkan selama pivot |
 | 19 | Live gate | Real signing/order dan Auto memerlukan approval eksplisit terpisah setelah paper/shadow gates |
 | 20 | Failure default | Stale data, provider down, skill invalid, AI timeout, schema invalid, risk unknown, atau reconcile mismatch = NO TRADE |
+| 21 | Skill authority | v1.1.0 immutable research/safety kernel; semantics evidence, G0–G5, `UNKNOWN`, dan `NO TRADE` dipertahankan |
+| 22 | Current skill scope | Research-only + offline simulation; bukan live signal/profitable strategy |
+| 23 | Execution prerequisite | G0, G1, G2 resolved deterministically; `UNKNOWN` memblokir real execution |
+| 24 | Phase 3 score | Inspectability bukan confidence profit, safety score, atau buy score |
+| 25 | AI rollout | Evidence/schema compatibility dahulu; AI explanation/proposal setelahnya |
+| 26 | Python runtime | Prompt/schema integration dahulu; script hanya isolated runner tanpa wallet key dan network default |
+| 27 | Database pivot | Database trading baru; legacy DB v14 read-only/archive |
+| 28 | AI topology | Satu primary + optional shadow evaluator; tanpa model voting MVP |
+| 29 | Base currency | USD/USDC canonical; IDR display opsional |
+| 30 | Signing | Service terisolasi; env key bukan default real funds |
+| 31 | Legacy runtime | Sandbox legacy boleh hidup tetapi frozen sampai owner shell P1 menggantikannya |
+| 32 | Reproducibility | Run mencatat skill version/hash, contract/config hash, dan evidence IDs |
 
 ---
 
@@ -967,7 +979,7 @@ Order recommended:
 
 1. Solana/Jupiter.
 2. BSC provider/router.
-3. Robinhood only if official execution contract is acceptable.
+3. Robinhood Chain hanya jika discovery membuktikan chain ID, RPC, explorer, docs, dan execution venue resmi.
 
 Each venue needs separate key/account, test, tiny cap, incident runbook, and approval.
 
@@ -1068,11 +1080,11 @@ Each venue needs separate key/account, test, tiny cap, incident runbook, and app
 - Provider outage/stale/conflicting data.
 - Duplicate order during timeout/retry.
 - Incorrect PnL from partial fills/fees.
-- Robinhood API/terms/instrument limitations.
+- Klaim Robinhood Chain bisa tidak terverifikasi atau tidak memiliki stack execution yang layak.
 - Cross-venue asset identity mismatch.
 - Auto mode enabled with insufficient evidence.
 
-### 21.2 Non-goals v0.1
+### 21.2 Non-goals v0.2
 
 - Public users or multi-tenant accounts.
 - Leverage, margin, futures, shorts, options.
@@ -1085,22 +1097,15 @@ Each venue needs separate key/account, test, tiny cap, incident runbook, and app
 
 ---
 
-## 22. Open Decisions Tersisa (v0.1)
+## 22. Open Decisions Tersisa (v0.2)
 
-1. **Database pivot:** continue migration v15 in existing DB, or new clean trading DB with legacy read-only connection? Recommendation: new clean trading DB; legacy DB remains immutable archive until migration is proven.
-2. **AI provider multiplicity:** one primary + optional fallback, or multiple voting models? Recommendation: one primary + optional shadow evaluator; avoid voting complexity in MVP.
-3. **Skill execution format:** consume SKILL.md as prompt-only first, or execute selected Python modules in sandbox? Recommendation: prompt/schema integration first; Python execution only after isolated runner and capability policy.
-4. **BSC execution provider/router:** choose after read-only quote/sell simulation spike.
-5. **Robinhood scope:** crypto only, stocks too, or advisory/manual handoff if official API is insufficient? Needs account/API capability discovery.
-6. **Market data vendors:** exact Solana/BSC historical and point-in-time sources.
-7. **Social data:** sources, rate limits, provenance, and whether included in MVP.
-8. **Signing boundary:** env-file key, external signer, or hardware/remote signer. Recommendation for real funds: isolated signer/external wallet; env key only for tiny staged pilot if explicitly accepted.
-9. **Paper promotion metrics:** minimum duration/sample, drawdown, expectancy, incident-free criteria.
-10. **Auto schedule:** fixed interval, event-driven, or both. Recommendation: bounded fixed interval first.
-11. **Position accounting:** FIFO lots recommended; confirm treatment of transfers and cross-venue holdings.
-12. **Base currency:** USD/USDC recommended for normalized exposure and PnL; display IDR optional.
-13. **Legacy runtime:** stop old sandbox bot immediately after plan approval, or keep owner admin shell until P1? Recommendation: keep running but frozen until P1 owner shell replaces it.
-14. **CF-08 legacy SOL imbalance:** archive as known legacy discrepancy, correct with adjustment, or retain old DB untouched. Recommendation: do not adjust during pivot; record in archive manifest.
+1. **BSC provider/router:** pilih setelah read-only quote + sell-simulation spike.
+2. **Robinhood Chain identity:** verifikasi nama resmi, chain ID, RPC, explorer, native asset, docs, EVM compatibility, DEX/router, dan mainnet/testnet. Gagal verifikasi = tetap `UNVERIFIED_DISCOVERY`.
+3. **Market data vendors:** exact Solana/BSC historical point-in-time sources.
+4. **Social data:** sources, rate limits, provenance, dan inclusion phase.
+5. **Paper promotion metrics:** minimum duration/sample, drawdown, expectancy, dan incident-free criteria.
+6. **Position accounting:** FIFO lots direkomendasikan; treatment transfer/cross-chain ditetapkan saat P6.
+7. **CF-08 legacy SOL:** rekomendasi sudah locked untuk tidak dimutasi selama pivot; final archive disposition di P10.
 
 ---
 
@@ -1108,9 +1113,9 @@ Each venue needs separate key/account, test, tiny cap, incident runbook, and app
 
 The pivot design is ready for implementation only when:
 
-- [ ] User ACKs product boundary and Locked Decisions #1–#20.
-- [ ] Open Decisions #1–#3, #5, #8, #12, and #13 are resolved for Phase P1/P2.
-- [ ] Legacy feature freeze is explicit.
+- [x] User ACKs skill-first direction dan Locked Decisions #1–#32.
+- [x] Database, AI topology, skill runtime, signing direction, base currency, dan legacy runtime resolved untuk P0–P2.
+- [x] Legacy feature freeze explicit secara desain; implementasi freeze dilakukan P0.
 - [ ] No real credentials or funds are introduced during P0–P5.
 - [ ] Skill v1.1.0 is treated as unproven research input, not profitable strategy.
 - [ ] Risk engine remains deterministic and non-bypassable.
@@ -1121,20 +1126,256 @@ The pivot design is ready for implementation only when:
 
 ---
 
-## 24. Current Next Step
+## 24. Task-by-Task Implementation Plan P0–P2
 
-**TUNGGU USER REVIEW/ACK v0.1. Jangan implementasi pivot code dulu.**
+> Status legend: `[ ]` pending, `[~]` in progress, `[x]` done, `[!]` blocked.
+> Scope P0–P2 tetap research-only. Tidak ada AI API key, wallet key, signing, swap, atau real order.
 
-User dapat menjawab:
+### P0 — Pivot freeze & immutable baseline
 
-1. `ACK v0.1, ikut rekomendasi open decisions` — lock rekomendasi dan bump roadmap ke v0.2, lalu detailkan P0–P2 task-by-task.
-2. Override nomor Open Decision tertentu, contoh: `1 existing DB, 3 sandbox Python, 12 USDT, 13 stop sekarang`.
-3. Minta bedah khusus salah satu area: Robinhood, skill runtime, wallet signing, AI provider, BSC, atau Auto gate.
-4. Minta gap audit sebelum ACK.
+#### Task P0.1 — Freeze legacy product routes
 
-Setelah ACK v0.2:
+**Objective:** legacy exchange tetap dapat di-rollback tetapi tidak lagi menerima pengembangan/flow baru setelah owner shell cutover.
 
-1. Reconcile dokumen ini dengan `CRYPTO_STATION_CURRENT_STATE.md` menjadi satu source of truth.
-2. Freeze backlog legacy dan tandai runtime status secara jujur.
-3. Tulis task-by-task P0–P2 dengan TDD, exact files, migrations, verification, dan commit boundaries.
-4. Implementasi dimulai hanya setelah approval task plan.
+**Files:**
+- Modify: `internal/bot/bot.go`
+- Modify: `internal/bot/keyboard.go`
+- Test: `internal/bot/session_test.go`
+- Docs: `.kiro/steering/CRYPTO_STATION_CURRENT_STATE.md`
+
+**Steps (TDD):**
+1. Tulis test bahwa owner hanya melihat pivot/frozen notice dan entry owner shell; public user route lama tidak dipromosikan.
+2. Jalankan `go test ./internal/bot -run 'Test.*PivotFreeze' -count=1`; expected RED.
+3. Implement feature flag `PRODUCT_MODE=legacy_sandbox|meme_research` dengan default aman `legacy_sandbox` sampai deployment approval.
+4. GREEN targeted test, lalu `go test -count=1 -p=1 ./...` di `cbt-vps`.
+5. Commit: `feat(bot): add explicit product pivot mode`.
+
+**Acceptance:** tidak ada route yang dihapus; mode bisa rollback; mode baru owner-only dan tidak menyatakan trading aktif.
+
+#### Task P0.2 — Consolidate project source of truth
+
+**Objective:** satu dokumen aktif menyatakan legacy frozen + pivot v0.2 tanpa menghilangkan runbook historis.
+
+**Files:**
+- Modify/merge: `.kiro/steering/AI_MEME_TRADING_PIVOT_PLAN.md`
+- Retire after merge: `.kiro/steering/CRYPTO_STATION_CURRENT_STATE.md`
+
+**Steps:**
+1. Salin fakta runtime, migration/backup/restore, commit history, dan known CF-08 discrepancy.
+2. Cari semua referensi nama dokumen lama.
+3. Hapus dokumen lama hanya setelah seluruh unique operational content masuk.
+4. Verify `git ls-files '*.md'`, `git diff --check`, heading/line counts.
+5. Commit: `docs: make AI meme trading roadmap the single source of truth`.
+
+#### Task P0.3 — Register immutable skill artifact manifest
+
+**Objective:** mencatat artifact v1.1.0 tanpa menjalankan isi ZIP.
+
+**Files:**
+- Create: `skills/meme-token/v1.1.0/manifest.json`
+- Create: `internal/skill/manifest.go`
+- Test: `internal/skill/manifest_test.go`
+- Modify: `.gitignore` hanya bila raw ZIP memang diputuskan tetap external/untracked.
+
+**Steps (TDD):**
+1. Test wished-for parser untuk name/version/SHA-256/contract/capabilities/prohibitions.
+2. RED: package/API belum ada.
+3. Implement parser dan verify SHA-256 terhadap file yang diberikan saat import; jangan vendor/extract ZIP pada task ini.
+4. Test mismatch hash, unsupported contract, missing prohibition.
+5. Commit: `feat(skill): add immutable artifact manifest contract`.
+
+**Acceptance:** manifest membedakan `research_only=true`, `executes_transactions=false`, `is_buy_signal=false`.
+
+### P1 — Clean trading DB + schema compatibility + owner shell
+
+#### Task P1.1 — Bootstrap clean trading database config
+
+**Objective:** trading research state tidak bercampur legacy ledger v14.
+
+**Files:**
+- Create: `internal/tradingconfig/config.go`
+- Test: `internal/tradingconfig/config_test.go`
+- Modify: `cmd/bot/main.go`
+- Create: `.env.trading.example` tanpa secret nyata.
+
+**Steps (TDD):**
+1. Test config mewajibkan `TRADING_DATABASE_URL` pada `meme_research`, tetapi tidak pada legacy mode.
+2. RED.
+3. Implement parser, validation, redacted errors.
+4. Test tidak ada DSN/key bocor.
+5. Commit: `feat(config): add isolated trading database configuration`.
+
+#### Task P1.2 — Create migration 000001 research foundation
+
+**Objective:** persist immutable skill/evidence/run metadata di DB trading baru.
+
+**Files:**
+- Create: `trading/migrations/000001_research_foundation.sql`
+- Create: `trading/queries/skills.sql`
+- Create: `trading/queries/research.sql`
+- Create/update: `trading/sqlc.yaml`
+- Test: `internal/research/repository_integration_test.go`
+
+**Tables minimum:**
+- `skill_packages`
+- `research_runs`
+- `evidence_items`
+- `market_snapshots`
+- `gate_results`
+- `audit_events`
+
+**Constraints:** immutable payload hash; unique artifact SHA; run captures skill/config hashes; UTC timestamps; no secret columns.
+
+**Steps (TDD):** migration on empty DB → insert immutable run graph → duplicate/hash mutation rejected → sqlc generate → tests green.
+
+**Verify:** migrate up/down only against disposable trading test DB; `go test -count=1 ./internal/research/...`.
+
+**Commit:** `feat(research): add isolated research persistence`.
+
+#### Task P1.3 — Implement skill schema compatibility layer
+
+**Objective:** preserve v1.1.0 contracts before creating bot-specific contracts.
+
+**Files:**
+- Create: `internal/skill/contracts/research_snapshot.go`
+- Create: `internal/skill/contracts/phase2_observation.go`
+- Create: `internal/skill/contracts/phase3_run.go`
+- Create: `internal/skill/contracts/phase4_report.go`
+- Tests: matching `*_test.go` fixtures under `internal/skill/testdata/`.
+
+**Steps (TDD):**
+1. Copy safe synthetic JSON fixtures as testdata with provenance notice.
+2. Test exact enums, null/unknown preservation, `research_priority_only=true`, `is_buy_signal=false`, `executes_transactions=false`.
+3. RED then minimal typed decoder/validator.
+4. Reject Phase 3 score conversion helper/API entirely; no `ToBuyConfidence` function.
+5. Commit: `feat(skill): preserve v1.1 compatibility contracts`.
+
+#### Task P1.4 — Build owner-only research shell
+
+**Objective:** Telegram menu mencerminkan kemampuan skill aktual, bukan trading yang belum ada.
+
+**Files:**
+- Create: `internal/ownerui/keyboard.go`
+- Create: `internal/ownerui/handler.go`
+- Tests: `internal/ownerui/*_test.go`
+- Modify: `internal/bot/bot.go`, `cmd/bot/main.go`
+
+**Menu P1:**
+`[Research] [Watchlist] [Skill] [Runs] [System] [Pause]`
+
+**Steps (TDD):** owner sees menu; non-owner denied; group denied; screens label `RESEARCH ONLY`; no Buy/Sell/Auto buttons.
+
+**Commit:** `feat(ownerui): add research-only control shell`.
+
+### P2 — Safe skill registry + bounded research runner
+
+#### Task P2.1 — Safe ZIP intake and quarantine
+
+**Objective:** accept versioned skill package without executing it.
+
+**Files:**
+- Create: `internal/skill/archive.go`
+- Create: `internal/skill/registry.go`
+- Tests: `internal/skill/archive_test.go`, fixture archives under `internal/skill/testdata/archives/`.
+
+**Security tests first:** zip-slip, absolute path, symlink, nested archive, file/count/size cap, duplicate normalized path, missing SKILL.md, hash mismatch.
+
+**Implementation:** extract only to quarantine; static inventory; store metadata/validation result; no Python invocation/network.
+
+**Commit:** `feat(skill): quarantine and validate skill archives`.
+
+#### Task P2.2 — Register baseline v1.1.0
+
+**Objective:** import user artifact as inactive/validated metadata baseline.
+
+**Files:** no source change expected beyond optional safe import command.
+- Create: `cmd/skillctl/main.go` if needed.
+- Test: `cmd/skillctl/main_test.go` or service tests.
+
+**Flow:** `inspect → checksum → static validate → register inactive → explicit activate`.
+
+**Acceptance:** SHA exactly `07e506260e11ad0d4f9346f39cd0dbce47f6f56e87953c92d6a5d8dcccd10bd8`; scripts remain unexecuted; audit row exists.
+
+**Commit:** `feat(skill): register meme research v1.1.0 baseline`.
+
+#### Task P2.3 — Build bounded research job state machine
+
+**Objective:** translate Phase 3 one-shot semantics into durable bounded jobs without claiming realtime autonomy.
+
+**Files:**
+- Create: `internal/research/job.go`
+- Create: `internal/research/service.go`
+- Create: `internal/research/worker.go`
+- Create: `trading/queries/jobs.sql`
+- Tests: unit + Postgres integration.
+
+**States:** `queued → claimed → running → completed|completed_with_gaps|partial|failed`.
+
+**Invariants:** atomic claim token/lease; max candidates/calls/seconds; immutable run config; resume does not silently refresh completed evidence.
+
+**Commit:** `feat(research): add bounded durable research runs`.
+
+#### Task P2.4 — Add prompt/schema-only AI compatibility boundary (no provider call)
+
+**Objective:** define future AI explanation input/output without enabling AI yet.
+
+**Files:**
+- Create: `internal/ai/contracts.go`
+- Create: `internal/ai/prompt.go`
+- Tests: `internal/ai/contracts_test.go`, `prompt_test.go`.
+
+**Contract:** input references validated evidence IDs/gates; output `EXPLAIN|REQUEST_MORE_DATA|NO_TRADE_PROPOSAL`; no BUY/SELL execution authority; no hidden chain-of-thought storage.
+
+**Tests:** untrusted social/token text cannot modify system fields; unresolved G0–G2 cannot become executable proposal; artifact/config hashes required.
+
+**Commit:** `feat(ai): define evidence-bound explanation contract`.
+
+#### Task P2.5 — P0–P2 full verification and checkpoint
+
+**Verify on `cbt-vps`:**
+1. `sqlc generate` for trading schema.
+2. Migrate empty disposable trading DB.
+3. `go test -count=1 -p=1 ./...`.
+4. `go vet ./...`.
+5. Build bot + skillctl.
+6. No-token/no-AI-key smoke.
+7. Owner/non-owner Telegram manual trial after explicit restart approval.
+8. Confirm legacy DB v14 unchanged and no real secret/fund introduced.
+
+**Commit:** `docs: close skill-first foundation P0-P2`.
+
+### P0–P2 completion gate
+
+P0–P2 selesai hanya jika:
+
+- [ ] one source of truth aktif;
+- [ ] skill v1.1.0 immutable dan reproducible;
+- [ ] clean trading DB berjalan;
+- [ ] four skill contracts preserved;
+- [ ] owner UI jujur `RESEARCH ONLY`;
+- [ ] durable bounded runs recoverable;
+- [ ] AI boundary belum bisa mengeksekusi;
+- [ ] legacy DB tidak dimutasi;
+- [ ] full automated verification green;
+- [ ] manual Telegram trial terpisah dan jujur.
+
+---
+
+## 25. Current Next Step
+
+Roadmap v0.2 sekarang **execution-ready untuk P0–P2**, tetapi coding belum dimulai pada commit plan ini.
+
+Urutan berikutnya:
+
+1. Review task plan P0–P2 ini.
+2. Jika approved, mulai **Task P0.1** dengan TDD.
+3. Jangan mengaktifkan `meme_research` runtime sampai targeted + full test hijau dan user memberi approval restart workspace.
+4. Jangan masukkan AI key, wallet key, signing, swap, atau real funds selama P0–P2.
+5. BSC provider, historical vendor, social source, dan Robinhood Chain identity tetap discovery backlog, bukan blocker P0–P2.
+
+Prompt lanjut yang valid:
+
+- `gas P0.1` — mulai implementasi pertama dengan TDD.
+- `review P0-P2 dulu` — audit task plan tanpa coding.
+- `ubah task <ID>` — revisi scope sebelum coding.
+- `gap audit v0.2` — cari gap tambahan sebelum implementasi.
