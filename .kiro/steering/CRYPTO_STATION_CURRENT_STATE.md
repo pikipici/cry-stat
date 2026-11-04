@@ -5,7 +5,7 @@
 > Status: Revisi V.1 Phase 2–9 + correctness follow-up AUTOMATED DONE
 > Updated: 2026-11-04
 > Code head: `fe1d906`
-> Documentation consolidation baseline: `bdcd5e4`
+> Documentation consolidation baseline: `3cb2838`
 > DB workspace: v14 (`000014_payout_correctness.sql`)
 > Mode: SANDBOX / SIMULASI — bukan transaksi on-chain atau uang nyata
 > Runtime/build/test/migrate: `cbt-vps`; lokal hanya coding + Git
@@ -58,17 +58,18 @@ Pada `cbt-vps`, head `fe1d906`:
 - `go build ./cmd/bot`: sukses;
 - `bash scripts/verify.sh --no-db`: `VERIFY OK`;
 - DB smoke binary token-kosong: sukses, 39 settings terbaca;
-- origin + server bare + workspace sinkron sebelum commit konsolidasi docs.
+- origin + server bare + workspace sinkron di `3cb2838` sebelum restart.
+- 2026-11-04 workspace direstart ke binary build dari code `fe1d906`/repo `3cb2838`; runtime sandbox hidup di tmux `cs-bot` setelah melewati tick recovery 30 detik.
+- Telegram `getMe` OK untuk `@cryptostationonly_bot`; webhook kosong; pending update 0; DB tetap v14 dan 7 setting wajib tersedia.
 
 ### Belum selesai
 
-1. Restart bot workspace ke binary `fe1d906` dan verifikasi recovery-worker log — butuh approval user.
-2. Manual Telegram trial admin + non-admin.
-3. CF-08 historical SOL imbalance decision — butuh approval eksplisit.
-4. Restore drill custom-format — butuh maintenance window + approval.
-5. Sandbox S1–S6 Top Up production-shaped.
-6. Stage 0 eksternal: gateway, node, fee/float, kurs pembanding, economics, hot wallet.
-7. Live/real-money/real-chain tetap dilarang sebelum gate penuh.
+1. Manual Telegram trial admin + non-admin.
+2. CF-08 historical SOL imbalance decision — butuh approval eksplisit.
+3. Restore drill custom-format — butuh maintenance window + approval.
+4. Sandbox S1–S6 Top Up production-shaped.
+5. Stage 0 eksternal: gateway, node, fee/float, kurs pembanding, economics, hot wallet.
+6. Live/real-money/real-chain tetap dilarang sebelum gate penuh.
 
 ### Aturan kerja
 
@@ -384,7 +385,7 @@ Status: menunggu user memilih **eksekusi / tunda / tolak**. Jangan mutasi tanpa 
 - [x] Automated correctness hijau pada `fe1d906`.
 - [x] DB workspace v14.
 - [x] Workspace pernah direstart pada correctness head awal; feed/data/linkage terbaca.
-- [ ] User menyetujui restart workspace ke binary `fe1d906`.
+- [x] User menyetujui dan workspace direstart ke binary `fe1d906` pada 2026-11-04.
 - [ ] Akun admin asli tersedia.
 - [ ] Akun non-admin kedua tersedia.
 
@@ -421,8 +422,8 @@ Status: menunggu user memilih **eksekusi / tunda / tolak**. Jangan mutasi tanpa 
 
 ### T4 — Restart persistence
 
-- [ ] Restart workspace ke `fe1d906` setelah approval.
-- [ ] Verifikasi startup + recovery-worker log.
+- [x] Restart workspace ke `fe1d906` setelah approval.
+- [x] Verifikasi startup, runtime tetap hidup setelah tick recovery, `getMe`, webhook kosong, DB v14, dan setting wajib. Worker tidak mengeluarkan log khusus ketika tidak ada item/error.
 - [ ] Feed/detail/references tetap tersedia.
 - [ ] Queued/stale payout diproses tanpa overlap.
 
@@ -865,12 +866,11 @@ Key commits:
 
 Urutan aman:
 
-1. **Minta approval restart workspace ke `fe1d906`.** Setelah approval: build, restart sandbox only, verify startup dan recovery-worker logs.
-2. **Jalankan manual Telegram trial §7** dengan admin dan non-admin.
-3. **Pilih CF-08:** execute / tunda / tolak. Adjustment tidak boleh berjalan tanpa jawaban eksplisit.
-4. **Restore drill** bila maintenance window disetujui.
-5. Setelah manual acceptance, kickoff **Sandbox S1** dengan reconciliation terhadap code HEAD dan TDD.
-6. Paralel: user menyelesaikan Stage 0 eksternal §8.
+1. **Jalankan manual Telegram trial §7** dengan admin dan non-admin. Workspace sandbox sudah hidup di binary `fe1d906`.
+2. **Pilih CF-08:** execute / tunda / tolak. Adjustment tidak boleh berjalan tanpa jawaban eksplisit.
+3. **Restore drill** bila maintenance window disetujui.
+4. Setelah manual acceptance, kickoff **Sandbox S1** dengan reconciliation terhadap code HEAD dan TDD.
+5. Paralel: user menyelesaikan Stage 0 eksternal §8.
 
 Dilarang:
 
