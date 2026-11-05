@@ -16,6 +16,7 @@ import (
 	"github.com/pikipici/crypto-station/internal/price"
 	"github.com/pikipici/crypto-station/internal/risk"
 	"github.com/pikipici/crypto-station/internal/settings"
+	"github.com/pikipici/crypto-station/internal/tradingconfig"
 	"github.com/pikipici/crypto-station/internal/trial"
 
 	tgbot "github.com/go-telegram/bot"
@@ -31,6 +32,11 @@ func main() {
 	databaseURL := mustEnv("DATABASE_URL")
 	botToken := os.Getenv("BOT_TOKEN") // kosong = mode cek DB saja
 	productMode := bot.NormalizeProductMode(os.Getenv("PRODUCT_MODE"))
+	tradingConfig, err := tradingconfig.Load(os.Getenv)
+	if err != nil {
+		slog.Error("trading config tidak valid", "err", err)
+		os.Exit(1)
+	}
 
 	pool, err := pgxpool.New(ctx, databaseURL)
 	if err != nil {
@@ -60,7 +66,7 @@ func main() {
 	limiter := bot.NewRateLimiter(int(set.Int64("rate_limit_per_min")))
 	deps := &bot.Deps{Q: q, Set: set, Price: priceSvc, Ledger: ledgerSvc, Risk: riskSvc, Admin: adminSvc, Trial: trialSvc, Wallet: walletSvc, Chain: chainSvc, Limiter: limiter, Session: bot.NewSessions(), Mode: "sandbox", ProductMode: productMode}
 
-	slog.Info("crypto-station fase 4 start", "mode", "sandbox", "product_mode", productMode)
+	slog.Info("crypto-station fase 4 start", "mode", "sandbox", "product_mode", productMode, "trading_db_enabled", tradingConfig.Enabled)
 
 	if botToken == "" {
 		var n int
