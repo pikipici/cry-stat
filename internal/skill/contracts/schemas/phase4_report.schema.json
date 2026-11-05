@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Phase 4 backtest report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "version",
+    "mode",
+    "mint",
+    "source_type",
+    "is_synthetic",
+    "provider",
+    "data_sha256",
+    "execution_model",
+    "executes_real_orders",
+    "is_buy_signal",
+    "metrics",
+    "open_position_unliquidated",
+    "assumptions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "phase4.report.v1"
+    },
+    "version": {
+      "const": "1.1.0"
+    },
+    "mode": {
+      "enum": [
+        "demo",
+        "backtest",
+        "walkforward"
+      ]
+    },
+    "mint": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_type": {
+      "enum": [
+        "synthetic",
+        "historical_external"
+      ]
+    },
+    "is_synthetic": {
+      "type": "boolean"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "data_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "period_start_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "period_end_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "execution_model": {
+      "const": "delayed_next_open_with_depth_proxies"
+    },
+    "executes_real_orders": {
+      "const": false
+    },
+    "is_buy_signal": {
+      "const": false
+    },
+    "open_position_unliquidated": {
+      "type": "boolean"
+    },
+    "metrics": {
+      "type": "object",
+      "required": [
+        "closed_trades",
+        "net_realized_pnl_usd",
+        "marked_return_frac",
+        "max_marked_drawdown_frac",
+        "open_position_count"
+      ],
+      "properties": {
+        "closed_trades": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "net_realized_pnl_usd": {
+          "type": "number"
+        },
+        "marked_return_frac": {
+          "type": "number"
+        },
+        "max_marked_drawdown_frac": {
+          "type": "number",
+          "minimum": 0
+        },
+        "open_position_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "win_rate_closed_trades": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 2
+    }
+  },
+  "additionalProperties": false
+}

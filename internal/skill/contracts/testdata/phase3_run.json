@@ -1,0 +1,79 @@
+{
+  "schema_version": "phase3.run.v1",
+  "run_id": "phase3-3027d44b18b9",
+  "created_at_utc": "2026-11-03T19:59:05Z",
+  "mode": "demo",
+  "synthetic": true,
+  "status": "COMPLETED_WITH_GAPS",
+  "candidate_count": 4,
+  "processed_count": 4,
+  "request_json_calls": 19,
+  "research_priority_only": true,
+  "is_buy_signal": false,
+  "executes_transactions": false,
+  "ranked_watchlist": [
+    {
+      "research_rank": 1,
+      "mint": "5FBLXHBJvA8QmsjWFmozsSChsFdJwLZPfHHChqZ9ZMMj",
+      "gate_status": "DATA_TIDAK_CUKUP",
+      "label": "RESEARCH_QUEUE",
+      "inspectability_score": 100,
+      "outstanding_checks": [
+        "Audit token authorities, extensions, and mutable controls",
+        "Check executable sell quote, effective depth, fees, and restrictions",
+        "Verify original X/social narrative and event chronology",
+        "Pre-register hypothesis and test on out-of-sample data"
+      ]
+    },
+    {
+      "research_rank": 2,
+      "mint": "6wFfpCKU1Wh2boh7QgvSJzbE4NxXZ8jGQYS5hdMqgxMw",
+      "gate_status": "DATA_TIDAK_CUKUP",
+      "label": "RISK_REVIEW",
+      "inspectability_score": 65,
+      "outstanding_checks": [
+        "Manually investigate active mint/freeze authority before further consideration",
+        "Audit token authorities, extensions, and mutable controls",
+        "Check executable sell quote, effective depth, fees, and restrictions",
+        "Verify original X/social narrative and event chronology",
+        "Pre-register hypothesis and test on out-of-sample data"
+      ]
+    },
+    {
+      "research_rank": 3,
+      "mint": "8KdhweZ9UrtgQcURmzmFWfiXMdXYcg1yFqJKhe9Lw3Na",
+      "gate_status": "DATA_TIDAK_CUKUP",
+      "label": "NEEDS_DATA",
+      "inspectability_score": 70,
+      "outstanding_checks": [
+        "Audit token authorities, extensions, and mutable controls",
+        "Check executable sell quote, effective depth, fees, and restrictions",
+        "Resolve missing DEX/holder evidence and account-vs-wallet ambiguity",
+        "Verify original X/social narrative and event chronology",
+        "Pre-register hypothesis and test on out-of-sample data"
+      ]
+    },
+    {
+      "research_rank": 4,
+      "mint": "FbGic6y5JuXXMvvunUx77UBPjA1xhDc24f3TcWdZahHB",
+      "gate_status": "TIDAK_BISA_DINILAI",
+      "label": "BLOCKED_IDENTITY",
+      "inspectability_score": 0,
+      "outstanding_checks": [
+        "Verify mint on independent Solana RPC / explorer",
+        "Audit token authorities, extensions, and mutable controls",
+        "Check executable sell quote, effective depth, fees, and restrictions",
+        "Verify original X/social narrative and event chronology",
+        "Pre-register hypothesis and test on out-of-sample data"
+      ]
+    }
+  ],
+  "caveats": [
+    "Inspectability score measures evidence availability only; it is NOT investment attractiveness, predicted profit, or safety.",
+    "Automated checks do not verify sellability, Token-2022 extensions, social narratives, or manipulation.",
+    "No output can be interpreted as a buy signal. No wallet access, swaps, or orders.",
+    "Synthetic demo data are invented and MUST NOT be treated as market evidence."
+  ],
+  "outstanding_count": 0,
+  "resumable": false
+}

@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/meme-token-skill/schemas/phase3_run.schema.json",
+  "title": "Phase 3 bounded autonomous research run summary",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "created_at_utc",
+    "mode",
+    "synthetic",
+    "status",
+    "candidate_count",
+    "processed_count",
+    "request_json_calls",
+    "research_priority_only",
+    "is_buy_signal",
+    "executes_transactions",
+    "ranked_watchlist",
+    "caveats"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "phase3.run.v1"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^phase3-[a-f0-9]{12}$"
+    },
+    "created_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "mode": {
+      "enum": [
+        "demo",
+        "live"
+      ]
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "RUNNING",
+        "COMPLETED",
+        "COMPLETED_WITH_GAPS",
+        "PARTIAL",
+        "PARTIAL_CALL_BUDGET",
+        "PARTIAL_TIME_BUDGET",
+        "PARTIAL_CANDIDATE_FAILURE",
+        "FAILED_DISCOVERY",
+        "NO_CANDIDATES"
+      ]
+    },
+    "candidate_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "processed_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "request_json_calls": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "research_priority_only": {
+      "const": true
+    },
+    "is_buy_signal": {
+      "const": false
+    },
+    "executes_transactions": {
+      "const": false
+    },
+    "ranked_watchlist": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "research_rank",
+          "mint",
+          "label",
+          "gate_status",
+          "inspectability_score",
+          "outstanding_checks"
+        ],
+        "properties": {
+          "research_rank": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "mint": {
+            "type": "string",
+            "minLength": 32,
+            "maxLength": 44
+          },
+          "label": {
+            "enum": [
+              "RESEARCH_QUEUE",
+              "RISK_REVIEW",
+              "NEEDS_DATA",
+              "BLOCKED_IDENTITY"
+            ]
+          },
+          "gate_status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "inspectability_score": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "outstanding_checks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "caveats": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "string"
+      }
+    },
+    "outstanding_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "resumable": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false
+}

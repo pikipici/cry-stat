@@ -1,6 +1,6 @@
 # Crypto Station → Personal AI Meme Trading Bot — Pivot Roadmap & Living Plan
 
-> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0 DONE, P1.1–P1.2 DONE, P1.3 NEXT
+> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0 DONE, P1.1–P1.3 DONE, P1.4 NEXT
 > Owner: user/owner Telegram `7254686681` + Hermes
 > Last updated: 2026-11-04
 > Pivot baseline: `503f5fb`; current implementation head: `385ad9e`
@@ -1323,7 +1323,7 @@ The pivot design is ready for implementation only when:
 
 **Evidence 2026-11-06:** strict RED membuktikan generated package/query belum ada. Migration `000001` + pgx/v5 sqlc queries sekarang membentuk enam tabel research pada disposable DB `crypto_station_trading_p12`, dengan immutable provenance/payload triggers, direct skill/config hashes, composite package+hash FK, cross-run evidence FK, unique artifact SHA, non-empty checks, dan indexes. Generator `scripts/generate-trading-sqlc.sh` dipin ke sqlc v1.29.0; generated schema/code tetap ignored. Goose up/down/up, integration test dua kali, full suite, vet, build, dan legacy no-token smoke hijau di `cbt-vps`; independent review final PASS. Legacy DB v14 dan runtime tidak disentuh.
 
-#### Task P1.3 — Implement skill schema compatibility layer
+#### Task P1.3 — Implement skill schema compatibility layer `[x]`
 
 **Objective:** preserve v1.1.0 contracts before creating bot-specific contracts.
 
@@ -1340,6 +1340,8 @@ The pivot design is ready for implementation only when:
 3. RED then minimal typed decoder/validator.
 4. Reject Phase 3 score conversion helper/API entirely; no `ToBuyConfidence` function.
 5. Commit: `feat(skill): preserve v1.1 compatibility contracts`.
+
+**Evidence 2026-11-06:** strict RED membuktikan empat decoder belum tersedia. Empat native schema v1.1.0 diaudit read-only dari ZIP, di-embed dan divalidasi sebelum typed decode; nested required fields/enums/patterns/bounds dipertahankan, provider blobs Phase 2 tetap open sesuai kontrak native, null/UNKNOWN tidak dikonversi, dan safety constants Phase 3/4 fail-closed. Parser dibatasi 1 MiB + menolak trailing document/unknown fields. Synthetic fixtures menyimpan provenance artifact dan tidak ada API score→buy-confidence. Targeted + full tests, vet, build, dan legacy no-token smoke hijau di `cbt-vps`; independent review final PASS.
 
 #### Task P1.4 — Build owner-only research shell
 
@@ -1454,12 +1456,12 @@ P0–P2 selesai hanya jika:
 
 ## 25. Current Next Step
 
-Roadmap v0.2 sedang dieksekusi. **P0 DONE 3/3; P1.1–P1.2 DONE; P0.1 belum runtime-activated.**
+Roadmap v0.2 sedang dieksekusi. **P0 DONE 3/3; P1.1–P1.3 DONE; P0.1 belum runtime-activated.**
 
 Urutan berikutnya:
 
-1. **P0 dan P1.1–P1.2 selesai:** config serta isolated research persistence sudah automated-verified.
-2. Lanjut **Task P1.3**: preserve empat kontrak native skill v1.1.0 sebelum membuat kontrak bot.
+1. **P0 dan P1.1–P1.3 selesai:** config, persistence, dan native skill compatibility sudah automated-verified.
+2. Lanjut **Task P1.4**: owner-only Telegram research shell yang jujur `RESEARCH ONLY`.
 3. Disposable DB `crypto_station_trading_p12` hanya test fixture; jangan arahkan runtime ke sana.
 4. Jangan mengaktifkan `meme_research` runtime sampai user memberi approval restart workspace.
 5. Jangan masukkan AI key, wallet key, signing, swap, atau real funds selama P0–P2.
@@ -1467,7 +1469,7 @@ Urutan berikutnya:
 
 Prompt lanjut yang valid:
 
-- `gas P1.3` — implement native skill schema compatibility layer dengan TDD.
+- `gas P1.4` — implement owner-only research shell dengan TDD.
 - `review P0-P2 dulu` — audit task plan tanpa coding.
 - `ubah task <ID>` — revisi scope sebelum coding.
 - `gap audit v0.2` — cari gap tambahan sebelum implementasi.

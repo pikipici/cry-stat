@@ -1,0 +1,159 @@
+{
+  "observation_schema": "phase2.observation.v1",
+  "synthetic": true,
+  "chain": "solana",
+  "mint": "5FBLXHBJvA8QmsjWFmozsSChsFdJwLZPfHHChqZ9ZMMj",
+  "started_at_utc": "2026-11-03T19:47:08Z",
+  "providers": {
+    "dex_pairs": {
+      "status": "ok",
+      "observed_at_utc": "2026-11-03T19:47:08Z",
+      "source": "https://api.dexscreener.com/token-pairs/v1/solana/5FBLXHBJvA8QmsjWFmozsSChsFdJwLZPfHHChqZ9ZMMj"
+    },
+    "rpc_mint": {
+      "status": "ok",
+      "observed_at_utc": "2026-11-03T19:47:08Z",
+      "source": "Solana RPC getAccountInfo"
+    },
+    "rpc_supply_and_largest": {
+      "status": "ok",
+      "observed_at_utc": "2026-11-03T19:47:08Z",
+      "source": "Solana RPC getTokenSupply + getTokenLargestAccounts"
+    },
+    "rpc_owner_mapping": {
+      "status": "ok",
+      "observed_at_utc": "2026-11-03T19:47:08Z",
+      "source": "Solana RPC getMultipleAccounts"
+    },
+    "normalize_token_accounts": {
+      "status": "ok",
+      "observed_at_utc": "2026-11-03T19:47:08Z",
+      "source": "Derived from Solana RPC, not independent provider"
+    }
+  },
+  "market": {
+    "mint": "5FBLXHBJvA8QmsjWFmozsSChsFdJwLZPfHHChqZ9ZMMj",
+    "pool_count": 2,
+    "pairs": [
+      {
+        "mint_role_in_pair": "base",
+        "dex": "raydium",
+        "pair_address": "CcWUVCu3Hcmnn2BngH1LCMGJT3dtArbB3xietctQiUFh",
+        "base_mint": "5FBLXHBJvA8QmsjWFmozsSChsFdJwLZPfHHChqZ9ZMMj",
+        "quote_mint": "So11111111111111111111111111111111111111112",
+        "price_usd_reported": 0.0002,
+        "price_unavailable_reason": null,
+        "liquidity_usd_reported": 44000.0,
+        "volume_h1_usd_reported": 5000.0,
+        "volume_h24_usd_reported": 70000.0,
+        "buys_h1_reported": 20,
+        "sells_h1_reported": 17,
+        "market_cap_usd_reported": 20000.0,
+        "fdv_usd_reported": 20000.0,
+        "pair_created_at_ms": 1780000000000,
+        "url": "https://dexscreener.com/solana/synthetic-demo"
+      },
+      {
+        "mint_role_in_pair": "base",
+        "dex": "orca",
+        "pair_address": "Efmn9APevTjKKr2N8CBGi7TM3rpw4rAv87o2zYJEDVCA",
+        "base_mint": "5FBLXHBJvA8QmsjWFmozsSChsFdJwLZPfHHChqZ9ZMMj",
+        "quote_mint": "So11111111111111111111111111111111111111112",
+        "price_usd_reported": 0.00021,
+        "price_unavailable_reason": null,
+        "liquidity_usd_reported": 2000.0,
+        "volume_h1_usd_reported": 1000.0,
+        "volume_h24_usd_reported": 3000.0,
+        "buys_h1_reported": null,
+        "sells_h1_reported": null,
+        "market_cap_usd_reported": null,
+        "fdv_usd_reported": null,
+        "pair_created_at_ms": null,
+        "url": null
+      }
+    ],
+    "reference_pair": {
+      "mint_role_in_pair": "base",
+      "dex": "raydium",
+      "pair_address": "CcWUVCu3Hcmnn2BngH1LCMGJT3dtArbB3xietctQiUFh",
+      "base_mint": "5FBLXHBJvA8QmsjWFmozsSChsFdJwLZPfHHChqZ9ZMMj",
+      "quote_mint": "So11111111111111111111111111111111111111112",
+      "price_usd_reported": 0.0002,
+      "price_unavailable_reason": null,
+      "liquidity_usd_reported": 44000.0,
+      "volume_h1_usd_reported": 5000.0,
+      "volume_h24_usd_reported": 70000.0,
+      "buys_h1_reported": 20,
+      "sells_h1_reported": 17,
+      "market_cap_usd_reported": 20000.0,
+      "fdv_usd_reported": 20000.0,
+      "pair_created_at_ms": 1780000000000,
+      "url": "https://dexscreener.com/solana/synthetic-demo"
+    },
+    "selection_reason": "Largest reported USD liquidity among returned pairs, not verified best execution",
+    "caveats": [
+      "Provider market cap and volume are estimates, not on-chain audit",
+      "Pool USD liquidity does not prove ability to sell a specific amount",
+      "Do not sum volumes across pools without checking duplication",
+      "DEX Screener priceUsd is the base token price; quote-side target price is deliberately UNKNOWN"
+    ]
+  },
+  "mint_state": {
+    "mint": "5FBLXHBJvA8QmsjWFmozsSChsFdJwLZPfHHChqZ9ZMMj",
+    "slot": 333333,
+    "token_program": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "token_program_type": "SPL Token",
+    "decimals": 6,
+    "mint_authority": null,
+    "freeze_authority": null,
+    "extensions": [],
+    "is_initialized": true
+  },
+  "token_accounts": {
+    "mint": "5FBLXHBJvA8QmsjWFmozsSChsFdJwLZPfHHChqZ9ZMMj",
+    "supply_raw": "100000000000000",
+    "supply_decimals": 6,
+    "supply_slot": 333333,
+    "largest_accounts_slot": 333334,
+    "owners_lookup_slot": 333335,
+    "top_token_account_count_returned": 3,
+    "top20_token_accounts_pct_supply": 40.0,
+    "top_token_accounts": [
+      {
+        "token_account": "6wFfpCKU1Wh2boh7QgvSJzbE4NxXZ8jGQYS5hdMqgxMw",
+        "raw_amount": "25000000000000",
+        "owner_wallet": "3Wga6r7yBhshmEnNwTScK1GsAyE5ZkoV6TiheQAhEs6D",
+        "fraction_of_supply_pct": 25.0
+      },
+      {
+        "token_account": "FbGic6y5JuXXMvvunUx77UBPjA1xhDc24f3TcWdZahHB",
+        "raw_amount": "10000000000000",
+        "owner_wallet": "3Wga6r7yBhshmEnNwTScK1GsAyE5ZkoV6TiheQAhEs6D",
+        "fraction_of_supply_pct": 10.0
+      },
+      {
+        "token_account": "8KdhweZ9UrtgQcURmzmFWfiXMdXYcg1yFqJKhe9Lw3Na",
+        "raw_amount": "5000000000000",
+        "owner_wallet": "2SKNEcAnVCiKtFwWhYvj3QjSLepR4eh8rDpHab3xPtRD",
+        "fraction_of_supply_pct": 5.0
+      }
+    ],
+    "identified_owner_wallets_among_top_accounts": 2,
+    "max_identified_owner_pct_supply_among_top20": 35.0,
+    "owner_mapping_completeness": 1.0,
+    "caveats": [
+      "Top token accounts are not top unique holders and can include DEX vaults, bridges and custodians",
+      "Mapped owner wallets can be program-owned, not beneficial owners",
+      "LargestAccounts returns up to 20 token accounts, not all holders",
+      "Different RPC context slots can cause slightly inconsistent snapshots"
+    ]
+  },
+  "flags": [],
+  "limits": [
+    "No sell quote, transfer simulation, or end-to-end exit verification",
+    "No verified social/X event feed or whale/insider identity clustering",
+    "Third-party market numbers are estimates, NOT execution prices",
+    "This is not an automated trading or rug-pull detection system"
+  ],
+  "completed_at_utc": "2026-11-03T19:47:08Z"
+}

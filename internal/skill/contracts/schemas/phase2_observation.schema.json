@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/meme-token-research/phase2_observation.schema.json",
+  "title": "Phase 2 Read-Only Solana Observation",
+  "description": "Market/RPC observations, no orders or recommendations. A completed record may have unavailable providers.",
+  "type": "object",
+  "required": [
+    "observation_schema",
+    "synthetic",
+    "chain",
+    "mint",
+    "started_at_utc",
+    "completed_at_utc",
+    "providers",
+    "market",
+    "mint_state",
+    "token_accounts",
+    "flags",
+    "limits"
+  ],
+  "properties": {
+    "observation_schema": {
+      "const": "phase2.observation.v1"
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "chain": {
+      "const": "solana"
+    },
+    "mint": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 44
+    },
+    "started_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "providers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "status",
+          "observed_at_utc",
+          "source"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "ok",
+              "unavailable"
+            ]
+          },
+          "observed_at_utc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "source": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "market": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "mint_state": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "token_accounts": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "flags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "severity",
+          "code",
+          "message"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "severity": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "limits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

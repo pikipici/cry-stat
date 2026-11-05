@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/meme-token-research/research_snapshot.schema.json",
+  "title": "Meme Token Research Snapshot — Phase 1",
+  "description": "Structured research evidence; NOT a real-time price feed and NOT a trade instruction.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "snapshot_id",
+    "mode",
+    "synthetic",
+    "as_of_utc",
+    "chain",
+    "mint",
+    "pool",
+    "evidence",
+    "gates"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "snapshot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "enum": [
+        "ANALYZE_TOKEN",
+        "COMPARE_CANDIDATES",
+        "AUDIT_WALLET",
+        "DESIGN_EXPERIMENT",
+        "LEARN_VIDEO"
+      ]
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "as_of_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "chain": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mint": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pool": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "venue": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "quote_size": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "quote_unit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "claim",
+          "kind",
+          "source",
+          "observed_at_utc"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "VIDEO_TERVERIFIKASI_VISUAL",
+              "VIDEO_TERVERIFIKASI_AUDIO",
+              "SUMBER_EKSTERNAL_TERVERIFIKASI",
+              "SINTESIS_AI",
+              "HIPOTESIS_BELUM_DIUJI",
+              "DATA_TIDAK_TERSEDIA"
+            ]
+          },
+          "source": {
+            "type": "string"
+          },
+          "observed_at_utc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "event_at_utc": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "tx_or_slot": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "confidence": {
+            "enum": [
+              "VERIFIED",
+              "CORROBORATED",
+              "WEAK",
+              "UNKNOWN"
+            ]
+          }
+        }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "g0",
+        "g1",
+        "g2",
+        "g3",
+        "g4",
+        "g5"
+      ],
+      "properties": {
+        "g0": {
+          "$ref": "#/$defs/gate"
+        },
+        "g1": {
+          "$ref": "#/$defs/gate"
+        },
+        "g2": {
+          "$ref": "#/$defs/gate"
+        },
+        "g3": {
+          "$ref": "#/$defs/gate"
+        },
+        "g4": {
+          "$ref": "#/$defs/gate"
+        },
+        "g5": {
+          "$ref": "#/$defs/gate"
+        }
+      }
+    },
+    "analyst_notes": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "evidence_ids",
+        "reason"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "PASS",
+            "UNKNOWN",
+            "FAIL_CRITICAL"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
