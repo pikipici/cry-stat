@@ -1,0 +1,17 @@
+{
+  "schema_version": "skill.artifact.v1",
+  "name": "meme-token-research",
+  "version": "1.1.0",
+  "artifact_sha256": "07e506260e11ad0d4f9346f39cd0dbce47f6f56e87953c92d6a5d8dcccd10bd8",
+  "strategy_contract_version": "meme-research.v1",
+  "capabilities": {
+    "research_only": true,
+    "offline_simulation": true,
+    "live_read_only_connectors": true
+  },
+  "prohibitions": {
+    "executes_transactions": false,
+    "is_buy_signal": false,
+    "stores_private_keys": false
+  }
+}

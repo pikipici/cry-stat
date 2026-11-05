@@ -1,6 +1,6 @@
 # Crypto Station → Personal AI Meme Trading Bot — Pivot Roadmap & Living Plan
 
-> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0.1–P0.2 DONE, P0.3 NEXT
+> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0 DONE 3/3, P1.1 NEXT
 > Owner: user/owner Telegram `7254686681` + Hermes
 > Last updated: 2026-11-04
 > Pivot baseline: `503f5fb`; current implementation head: `385ad9e`
@@ -1212,7 +1212,7 @@ The pivot design is ready for implementation only when:
 
 ### P0 — Pivot freeze & immutable baseline
 
-**Progress:** 2/3 tasks done. P0.1 implemented and automated-verified; P0.2 consolidated this roadmap as the sole active source of truth. Runtime activation remains pending explicit restart approval.
+**Progress:** 3/3 tasks done. P0.1 implemented and automated-verified; P0.2 consolidated this roadmap as the sole active source of truth; P0.3 added the immutable artifact manifest contract. Runtime activation remains pending explicit restart approval.
 
 #### Task P0.1 — Freeze legacy product routes `[x]`
 
@@ -1252,7 +1252,7 @@ The pivot design is ready for implementation only when:
 
 **Evidence 2026-11-05:** unique legacy runtime, verification, migration, backup/restore, CF-08, restart, and commit-history facts were merged into §3.5–§3.9 and §20.4–§20.7. Repository references were checked; the legacy current-state document was retired. Untracked validation runbook and skill ZIP were intentionally left untouched.
 
-#### Task P0.3 — Register immutable skill artifact manifest
+#### Task P0.3 — Register immutable skill artifact manifest `[x]`
 
 **Objective:** mencatat artifact v1.1.0 tanpa menjalankan isi ZIP.
 
@@ -1270,6 +1270,8 @@ The pivot design is ready for implementation only when:
 5. Commit: `feat(skill): add immutable artifact manifest contract`.
 
 **Acceptance:** manifest membedakan `research_only=true`, `executes_transactions=false`, `is_buy_signal=false`.
+
+**Evidence 2026-11-05:** strict TDD RED terbukti karena `ParseManifest` belum ada. Implementasi menambah manifest baseline SHA-256, schema/contract allowlist, capability/prohibition presence checks, bounded 1 MiB parser, single-document enforcement, unknown/duplicate/case-variant key rejection, dan streaming artifact hash verification. ZIP tidak diekstrak/dijalankan dan tetap external/untracked. Targeted + full tests, vet, build, no-token DB smoke hijau di `cbt-vps`; independent review PASS setelah tiga hardening loops.
 
 ### P1 — Clean trading DB + schema compatibility + owner shell
 
@@ -1448,20 +1450,19 @@ P0–P2 selesai hanya jika:
 
 ## 25. Current Next Step
 
-Roadmap v0.2 sedang dieksekusi. **P0.1–P0.2 DONE; P0.1 belum runtime-activated.**
+Roadmap v0.2 sedang dieksekusi. **P0 DONE 3/3; P0.1 belum runtime-activated.**
 
 Urutan berikutnya:
 
-1. **Task P0.1 selesai otomatis tetapi belum diaktifkan di runtime.**
-2. **Task P0.2 selesai:** roadmap ini sekarang satu-satunya source of truth aktif.
-3. Lanjut **Task P0.3**: register immutable skill artifact manifest tanpa mengekstrak/menjalankan ZIP.
-4. Jangan mengaktifkan `meme_research` runtime sampai user memberi approval restart workspace.
-5. Jangan masukkan AI key, wallet key, signing, swap, atau real funds selama P0–P2.
-6. BSC provider, historical vendor, social source, dan Robinhood Chain identity tetap discovery backlog, bukan blocker P0–P2.
+1. **P0 selesai:** product freeze, single source of truth, dan immutable artifact manifest sudah automated-verified.
+2. Lanjut **Task P1.1**: bootstrap clean trading database config dengan TDD.
+3. Jangan mengaktifkan `meme_research` runtime sampai user memberi approval restart workspace.
+4. Jangan masukkan AI key, wallet key, signing, swap, atau real funds selama P0–P2.
+5. BSC provider, historical vendor, social source, dan Robinhood Chain identity tetap discovery backlog, bukan blocker P0–P2.
 
 Prompt lanjut yang valid:
 
-- `gas P0.3` — buat immutable artifact manifest contract dengan TDD.
+- `gas P1.1` — implement isolated trading database configuration dengan TDD.
 - `review P0-P2 dulu` — audit task plan tanpa coding.
 - `ubah task <ID>` — revisi scope sebelum coding.
 - `gap audit v0.2` — cari gap tambahan sebelum implementasi.
