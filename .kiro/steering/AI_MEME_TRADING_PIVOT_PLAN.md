@@ -1,6 +1,6 @@
 # Crypto Station → Personal AI Meme Trading Bot — Pivot Roadmap & Living Plan
 
-> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0.1 DONE, P0.2 NEXT
+> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0.1–P0.2 DONE, P0.3 NEXT
 > Owner: user/owner Telegram `7254686681` + Hermes
 > Last updated: 2026-11-04
 > Pivot baseline: `503f5fb`; current implementation head: `385ad9e`
@@ -10,7 +10,7 @@
 > Runtime policy: coding + Git lokal; generate/test/build/runtime di `cbt-vps`
 > Safety: belum ada real wallet signing, real broker order, atau auto-trading yang disetujui
 
-Dokumen ini adalah **approved design direction untuk pivot** setelah user mengikuti rekomendasi audit skill. `CRYPTO_STATION_CURRENT_STATE.md` tetap menjadi sumber fakta implementasi legacy sampai Task P0.2 mengonsolidasikan statusnya; dokumen ini menjadi sumber desain target dan urutan implementasi. ACK v0.2 tidak mengizinkan real execution.
+Dokumen ini adalah **satu-satunya source of truth aktif** setelah user mengikuti rekomendasi audit skill. Fakta implementasi legacy yang masih relevan sudah dikonsolidasikan pada §3.5–§3.9 dan §20.4–§20.7; dokumen legacy terpisah dipensiunkan pada Task P0.2. ACK v0.2 tidak mengizinkan real execution.
 
 ---
 
@@ -183,6 +183,45 @@ Owner dapat:
 ### 3.4 Migration rule
 
 Legacy tables are not dropped in the first pivot phases. Mark/read-only first, export backup, prove new system independently, then decide archive/drop in a dedicated migration with rollback.
+
+### 3.5 Legacy implementation baseline (frozen)
+
+- Legacy correctness code head: `fe1d906`; documentation consolidation baseline: `3cb2838`.
+- Legacy workspace database: PostgreSQL schema v14 (`000014_payout_correctness.sql`).
+- Runtime/build/test/migration environment: `cbt-vps`; local machine remains coding + Git only.
+- Last verified legacy sandbox runtime used binary from `fe1d906`, Telegram bot `@cryptostationonly_bot`, empty webhook, and DB v14.
+- Automated verification was green: targeted chain/bot tests, `go test -count=1 ./...`, `go vet ./...`, bot build, `scripts/verify.sh --no-db`, and no-token DB smoke.
+- Manual Telegram acceptance was never completed and must not be reported as PASS.
+
+### 3.6 Legacy safety invariants retained as historical facts
+
+- Legacy model was transit/non-custodial toward users; asset payout/deposit lifecycle used durable claims, idempotency, and reconciliation.
+- Money/quantity paths used `BIGINT`/`NUMERIC` plus `shopspring/decimal`, not `float64`.
+- Legacy ledger mutations used balanced journals; wallet balances were derived caches.
+- Callback structural/private-chat guards ran before limiter, Telegram I/O, and dispatch.
+- Runtime recovery scanned queued and stale-broadcasting payouts with atomic claim tokens; timeout/unknown did not imply safe refund.
+- These facts are reusable engineering evidence, not authorization to continue the public exchange product.
+
+### 3.7 Legacy migration history retained
+
+| Version | Scope |
+|---|---|
+| v1–v5 | users/settings, ledger/wallet/price, quote/trade/risk, admin security, exposure snapshots |
+| v6–v10 | wallet/payout/deposit, deposit journal types, hot addresses/stock, admin stock deposits |
+| v11–v14 | quote cancellation, payout lifecycle, ledger/domain hardening, refund identity + durable claim metadata |
+
+### 3.8 Historical CF-08 discrepancy — frozen, no mutation
+
+Read-only evidence dated 2026-11-04 found BNB/ETH/IDR globally balanced and historical SOL imbalance `-54.693206730894899100`; the last known imbalanced journal was ID 1433 and newer writes showed no new imbalance. The former adjustment proposal is **parked** during the pivot:
+
+- do not update/delete historical journals;
+- do not post an adjustment without separate explicit user approval;
+- if ever approved, use a new auditable adjustment journal and reverse it only with another journal;
+- legacy DB remains read-only/archive during P0–P2.
+
+### 3.9 Legacy commit evidence retained
+
+Key historical checkpoints: `8cd6ec3` (Fase 0), `8561ffb` (price/ledger), `fbc4456` (quote/trade/risk), `7899e07` (admin/security), `5ed66f7` (transit/deposit), `8c60ce1` (Admin Wallet hardening), `e8961fe` (atomic refund), `9914240` (durable claim), `c78b51b` (guarded transitions), `2ceaefa` (callback guard), `84095c8` (correctness closure), and `fe1d906` (runtime recovery follow-up). Full history remains in Git.
 
 ---
 
@@ -1065,6 +1104,45 @@ Each venue needs separate key/account, test, tiny cap, incident runbook, and app
 - Mode rollback always permits safer direction (`AUTO → CONFIRM → ADVISORY → PAPER`).
 - Never rollback by deleting fills/order events/audit.
 
+### 20.4 Workspace sync and verification
+
+```bash
+cd /home/ubuntu/crypto-station
+git fetch origin main
+git reset --hard FETCH_HEAD
+export PATH=$PATH:/usr/local/go/bin:/home/ubuntu/go/bin
+sqlc generate
+bash scripts/verify.sh --no-db
+```
+
+Full DB verification is workspace/test-only and requires explicit `VERIFY_ALLOW_DB_MIGRATION=YES`. Generated `internal/db/`, `db/schema/`, and binaries may be untracked on the VPS and must not be committed.
+
+### 20.5 Git delivery workflow
+
+```bash
+git push origin main
+GIT_SSH_COMMAND="ssh -o ClearAllForwardings=yes" git push server main
+ssh -o ClearAllForwardings=yes cbt-vps \
+  'cd /home/ubuntu/crypto-station && git fetch origin main && git reset --hard FETCH_HEAD'
+```
+
+`ClearAllForwardings=yes` avoids the configured local-forward conflict. Source sync is distinct from runtime activation.
+
+### 20.6 Legacy backup and restore policy
+
+- Backup format: PostgreSQL custom format via `pg_dump --format=custom --no-owner --no-privileges`.
+- Validate backup with `pg_restore --list`.
+- Restore drills target a disposable database only, require explicit approval plus maintenance window, and must verify schema v14, journal linkages, refund uniqueness, and claim metadata.
+- Never restore into the primary DB without a verified backup, stopped runtime, successful drill, and explicit approval.
+
+### 20.7 Restart policy
+
+- Workspace restart requires user approval.
+- Live restart/deploy requires a separate explicit approval.
+- Before restart: record old PID/head and create a risk-appropriate backup.
+- After restart: verify startup, Telegram `getMe`, webhook state, runtime head, DB version, and relevant health checks.
+- P0.1 source sync did **not** activate `meme_research`; default/fallback remains `legacy_sandbox`.
+
 ---
 
 ## 21. Risks & Non-goals
@@ -1134,7 +1212,7 @@ The pivot design is ready for implementation only when:
 
 ### P0 — Pivot freeze & immutable baseline
 
-**Progress:** 1/3 tasks done. P0.1 implemented and automated-verified; runtime activation remains pending explicit restart approval.
+**Progress:** 2/3 tasks done. P0.1 implemented and automated-verified; P0.2 consolidated this roadmap as the sole active source of truth. Runtime activation remains pending explicit restart approval.
 
 #### Task P0.1 — Freeze legacy product routes `[x]`
 
@@ -1144,7 +1222,7 @@ The pivot design is ready for implementation only when:
 - Modify: `internal/bot/bot.go`
 - Modify: `internal/bot/keyboard.go`
 - Test: `internal/bot/session_test.go`
-- Docs: `.kiro/steering/CRYPTO_STATION_CURRENT_STATE.md`
+- Docs: legacy current-state source (retired by P0.2; history remains in Git)
 
 **Steps (TDD):**
 1. Tulis test bahwa owner hanya melihat pivot/frozen notice dan entry owner shell; public user route lama tidak dipromosikan.
@@ -1157,13 +1235,13 @@ The pivot design is ready for implementation only when:
 
 **Evidence 2026-11-04 (`385ad9e`):** RED terbukti (`MainMenuForMode`/product-mode API belum ada); GREEN targeted; full `go test -count=1 -p=1 ./...`, `go vet ./...`, build, dan no-token DB smoke hijau di `cbt-vps`. `PRODUCT_MODE` default/fallback tetap `legacy_sandbox`; `meme_research` membekukan message + callback legacy dan hanya memberi owner tombol `Research` dengan label `RESEARCH ONLY`. Source local/origin/server/workspace sinkron di `385ad9e`; runtime process masih binary lama dan belum restart/aktif `meme_research`.
 
-#### Task P0.2 — Consolidate project source of truth
+#### Task P0.2 — Consolidate project source of truth `[x]`
 
 **Objective:** satu dokumen aktif menyatakan legacy frozen + pivot v0.2 tanpa menghilangkan runbook historis.
 
 **Files:**
 - Modify/merge: `.kiro/steering/AI_MEME_TRADING_PIVOT_PLAN.md`
-- Retire after merge: `.kiro/steering/CRYPTO_STATION_CURRENT_STATE.md`
+- Retire after merge: legacy current-state source (completed; history remains in Git)
 
 **Steps:**
 1. Salin fakta runtime, migration/backup/restore, commit history, dan known CF-08 discrepancy.
@@ -1171,6 +1249,8 @@ The pivot design is ready for implementation only when:
 3. Hapus dokumen lama hanya setelah seluruh unique operational content masuk.
 4. Verify `git ls-files '*.md'`, `git diff --check`, heading/line counts.
 5. Commit: `docs: make AI meme trading roadmap the single source of truth`.
+
+**Evidence 2026-11-05:** unique legacy runtime, verification, migration, backup/restore, CF-08, restart, and commit-history facts were merged into §3.5–§3.9 and §20.4–§20.7. Repository references were checked; the legacy current-state document was retired. Untracked validation runbook and skill ZIP were intentionally left untouched.
 
 #### Task P0.3 — Register immutable skill artifact manifest
 
@@ -1368,19 +1448,20 @@ P0–P2 selesai hanya jika:
 
 ## 25. Current Next Step
 
-Roadmap v0.2 sedang dieksekusi. **P0.1 DONE secara code + automated verification; belum runtime-activated.**
+Roadmap v0.2 sedang dieksekusi. **P0.1–P0.2 DONE; P0.1 belum runtime-activated.**
 
 Urutan berikutnya:
 
 1. **Task P0.1 selesai otomatis tetapi belum diaktifkan di runtime.**
-2. Lanjut **Task P0.2**: konsolidasi source of truth.
-3. Jangan mengaktifkan `meme_research` runtime sampai user memberi approval restart workspace.
-4. Jangan masukkan AI key, wallet key, signing, swap, atau real funds selama P0–P2.
-5. BSC provider, historical vendor, social source, dan Robinhood Chain identity tetap discovery backlog, bukan blocker P0–P2.
+2. **Task P0.2 selesai:** roadmap ini sekarang satu-satunya source of truth aktif.
+3. Lanjut **Task P0.3**: register immutable skill artifact manifest tanpa mengekstrak/menjalankan ZIP.
+4. Jangan mengaktifkan `meme_research` runtime sampai user memberi approval restart workspace.
+5. Jangan masukkan AI key, wallet key, signing, swap, atau real funds selama P0–P2.
+6. BSC provider, historical vendor, social source, dan Robinhood Chain identity tetap discovery backlog, bukan blocker P0–P2.
 
 Prompt lanjut yang valid:
 
-- `gas P0.2` — konsolidasi dokumentasi menjadi satu source of truth.
+- `gas P0.3` — buat immutable artifact manifest contract dengan TDD.
 - `review P0-P2 dulu` — audit task plan tanpa coding.
 - `ubah task <ID>` — revisi scope sebelum coding.
 - `gap audit v0.2` — cari gap tambahan sebelum implementasi.
