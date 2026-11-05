@@ -1,6 +1,6 @@
 # Crypto Station → Personal AI Meme Trading Bot — Pivot Roadmap & Living Plan
 
-> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0 DONE, P1.1 DONE, P1.2 NEXT
+> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0 DONE, P1.1–P1.2 DONE, P1.3 NEXT
 > Owner: user/owner Telegram `7254686681` + Hermes
 > Last updated: 2026-11-04
 > Pivot baseline: `503f5fb`; current implementation head: `385ad9e`
@@ -1294,7 +1294,7 @@ The pivot design is ready for implementation only when:
 
 **Evidence 2026-11-05:** strict TDD RED membuktikan `Load` belum tersedia. Implementasi menambah `internal/tradingconfig`, `.env.trading.example`, dan startup validation. Effective `meme_research` (case/whitespace normalized) wajib punya PostgreSQL `TRADING_DATABASE_URL`; legacy/default/unknown mode tidak. Error selalu generik tanpa DSN/secret, dan startup belum membuka/migrate trading DB. Targeted + full tests, vet, build, legacy no-token DB smoke hijau di `cbt-vps`; independent review PASS setelah normalization hardening.
 
-#### Task P1.2 — Create migration 000001 research foundation
+#### Task P1.2 — Create migration 000001 research foundation `[x]`
 
 **Objective:** persist immutable skill/evidence/run metadata di DB trading baru.
 
@@ -1320,6 +1320,8 @@ The pivot design is ready for implementation only when:
 **Verify:** migrate up/down only against disposable trading test DB; `go test -count=1 ./internal/research/...`.
 
 **Commit:** `feat(research): add isolated research persistence`.
+
+**Evidence 2026-11-06:** strict RED membuktikan generated package/query belum ada. Migration `000001` + pgx/v5 sqlc queries sekarang membentuk enam tabel research pada disposable DB `crypto_station_trading_p12`, dengan immutable provenance/payload triggers, direct skill/config hashes, composite package+hash FK, cross-run evidence FK, unique artifact SHA, non-empty checks, dan indexes. Generator `scripts/generate-trading-sqlc.sh` dipin ke sqlc v1.29.0; generated schema/code tetap ignored. Goose up/down/up, integration test dua kali, full suite, vet, build, dan legacy no-token smoke hijau di `cbt-vps`; independent review final PASS. Legacy DB v14 dan runtime tidak disentuh.
 
 #### Task P1.3 — Implement skill schema compatibility layer
 
@@ -1452,20 +1454,20 @@ P0–P2 selesai hanya jika:
 
 ## 25. Current Next Step
 
-Roadmap v0.2 sedang dieksekusi. **P0 DONE 3/3; P1.1 DONE; P0.1 belum runtime-activated.**
+Roadmap v0.2 sedang dieksekusi. **P0 DONE 3/3; P1.1–P1.2 DONE; P0.1 belum runtime-activated.**
 
 Urutan berikutnya:
 
-1. **P0 selesai** dan **P1.1 selesai:** isolated trading DB config sudah automated-verified tanpa membuka/migrate DB trading.
-2. Lanjut **Task P1.2**: migration `000001_research_foundation` + sqlc persistence pada clean trading DB.
-3. P1.2 membutuhkan disposable trading DB/DSN di `cbt-vps`; jangan gunakan legacy DB v14 sebagai target migration.
+1. **P0 dan P1.1–P1.2 selesai:** config serta isolated research persistence sudah automated-verified.
+2. Lanjut **Task P1.3**: preserve empat kontrak native skill v1.1.0 sebelum membuat kontrak bot.
+3. Disposable DB `crypto_station_trading_p12` hanya test fixture; jangan arahkan runtime ke sana.
 4. Jangan mengaktifkan `meme_research` runtime sampai user memberi approval restart workspace.
 5. Jangan masukkan AI key, wallet key, signing, swap, atau real funds selama P0–P2.
 6. BSC provider, historical vendor, social source, dan Robinhood Chain identity tetap discovery backlog, bukan blocker P0–P2.
 
 Prompt lanjut yang valid:
 
-- `gas P1.2` — buat clean research foundation migration + repository dengan TDD.
+- `gas P1.3` — implement native skill schema compatibility layer dengan TDD.
 - `review P0-P2 dulu` — audit task plan tanpa coding.
 - `ubah task <ID>` — revisi scope sebelum coding.
 - `gap audit v0.2` — cari gap tambahan sebelum implementasi.

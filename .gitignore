@@ -2,4 +2,6 @@
 *.exe
 /bin/
 /tmp/
+/internal/tradingdb/
+/trading/schema/
 .DS_Store
