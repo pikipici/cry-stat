@@ -1,6 +1,6 @@
 # Crypto Station → Personal AI Meme Trading Bot — Pivot Roadmap & Living Plan
 
-> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0–P1 + P2.1 DONE, P2.2 NEXT
+> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0–P1 + P2.1–P2.2 DONE, P2.3 NEXT
 > Owner: user/owner Telegram `7254686681` + Hermes
 > Last updated: 2026-11-04
 > Pivot baseline: `503f5fb`; current implementation head: `385ad9e`
@@ -1381,7 +1381,7 @@ The pivot design is ready for implementation only when:
 
 **Evidence 2026-11-07:** security-first RED membuktikan API quarantine/registry belum tersedia. Implementasi memverifikasi artifact SHA sebelum ekstraksi, membatasi compressed/per-file/total bytes + file count, menolak zip-slip/absolute/backslash/drive path, duplicate normalized path, symlink/non-regular entry, missing `SKILL.md`, dan nested archive berdasarkan extension serta full capped content signatures (termasuk self-extracting ZIP/RAR/7z). Ekstraksi memakai mode 0600 ke temporary quarantine, publish setelah sukses dengan O_EXCL lock, dan failure tidak meninggalkan destination parsial. Tidak ada Python, network, subprocess, atau eksekusi isi ZIP. Targeted + full tests, vet, build, dan legacy no-token smoke hijau di `cbt-vps`; independent security review final PASS.
 
-#### Task P2.2 — Register baseline v1.1.0
+#### Task P2.2 — Register baseline v1.1.0 `[x]`
 
 **Objective:** import user artifact as inactive/validated metadata baseline.
 
@@ -1394,6 +1394,8 @@ The pivot design is ready for implementation only when:
 **Acceptance:** SHA exactly `07e506260e11ad0d4f9346f39cd0dbce47f6f56e87953c92d6a5d8dcccd10bd8`; scripts remain unexecuted; audit row exists.
 
 **Commit:** `feat(skill): register meme research v1.1.0 baseline`.
+
+**Evidence 2026-11-07:** strict RED membuktikan registration service belum tersedia. Migration v2 menambah state `pending|validated|rejected`, invariant `active=false`, dan unique non-empty quarantine path. Registrar memvalidasi manifest+SHA, quarantine tanpa eksekusi, lalu menyimpan package inactive/validated dan immutable audit dalam satu transaction. Retry SHA+path identik idempotent; SHA sama di path berbeda ditolak. Failure DB membersihkan quarantine dan surfacing cleanup error; ambiguous commit direkonsiliasi via immutable SHA/path, sementara lookup failure mempertahankan artifact untuk manual reconciliation. Integration test memastikan quarantine ada setelah commit, audit tepat satu, dan rerun tidak menggandakan row. Goose down/up, targeted dua kali, full tests, vet, build, dan legacy no-token smoke hijau di `cbt-vps`; independent review final PASS.
 
 #### Task P2.3 — Build bounded research job state machine
 
@@ -1460,12 +1462,12 @@ P0–P2 selesai hanya jika:
 
 ## 25. Current Next Step
 
-Roadmap v0.2 sedang dieksekusi. **P0–P1 + P2.1 DONE; runtime pivot belum diaktifkan.**
+Roadmap v0.2 sedang dieksekusi. **P0–P1 + P2.1–P2.2 DONE; runtime pivot belum diaktifkan.**
 
 Urutan berikutnya:
 
-1. **P0–P1 + P2.1 selesai:** foundation dan safe ZIP quarantine sudah automated-verified.
-2. Lanjut **Task P2.2**: register baseline artifact v1.1.0 sebagai metadata inactive/validated tanpa menjalankan script.
+1. **P0–P1 + P2.1–P2.2 selesai:** safe quarantine dan inactive baseline registration sudah automated-verified.
+2. Lanjut **Task P2.3**: durable bounded research job state machine tanpa klaim realtime autonomy.
 3. Disposable DB `crypto_station_trading_p12` hanya test fixture; jangan arahkan runtime ke sana.
 4. Jangan mengaktifkan `meme_research` runtime sampai user memberi approval restart workspace.
 5. Jangan masukkan AI key, wallet key, signing, swap, atau real funds selama P0–P2.
@@ -1473,7 +1475,7 @@ Urutan berikutnya:
 
 Prompt lanjut yang valid:
 
-- `gas P2.2` — register baseline v1.1.0 inactive dengan audit metadata.
+- `gas P2.3` — implement bounded durable research runs dengan TDD.
 - `review P0-P2 dulu` — audit task plan tanpa coding.
 - `ubah task <ID>` — revisi scope sebelum coding.
 - `gap audit v0.2` — cari gap tambahan sebelum implementasi.
