@@ -1,6 +1,6 @@
 # Crypto Station → Personal AI Meme Trading Bot — Pivot Roadmap & Living Plan
 
-> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0 DONE, P1.1–P1.3 DONE, P1.4 NEXT
+> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0–P1 DONE, P2.1 NEXT
 > Owner: user/owner Telegram `7254686681` + Hermes
 > Last updated: 2026-11-04
 > Pivot baseline: `503f5fb`; current implementation head: `385ad9e`
@@ -1343,7 +1343,7 @@ The pivot design is ready for implementation only when:
 
 **Evidence 2026-11-06:** strict RED membuktikan empat decoder belum tersedia. Empat native schema v1.1.0 diaudit read-only dari ZIP, di-embed dan divalidasi sebelum typed decode; nested required fields/enums/patterns/bounds dipertahankan, provider blobs Phase 2 tetap open sesuai kontrak native, null/UNKNOWN tidak dikonversi, dan safety constants Phase 3/4 fail-closed. Parser dibatasi 1 MiB + menolak trailing document/unknown fields. Synthetic fixtures menyimpan provenance artifact dan tidak ada API score→buy-confidence. Targeted + full tests, vet, build, dan legacy no-token smoke hijau di `cbt-vps`; independent review final PASS.
 
-#### Task P1.4 — Build owner-only research shell
+#### Task P1.4 — Build owner-only research shell `[x]`
 
 **Objective:** Telegram menu mencerminkan kemampuan skill aktual, bukan trading yang belum ada.
 
@@ -1359,6 +1359,8 @@ The pivot design is ready for implementation only when:
 **Steps (TDD):** owner sees menu; non-owner denied; group denied; screens label `RESEARCH ONLY`; no Buy/Sell/Auto buttons.
 
 **Commit:** `feat(ownerui): add research-only control shell`.
+
+**Evidence 2026-11-06:** strict RED membuktikan package `ownerui`, decision router, dan keyboard belum tersedia. Implementasi menambah owner-only private-chat research shell dengan menu `Research | Watchlist`, `Skill | Runs`, `System | Pause`; seluruh screen jujur `RESEARCH ONLY`, unknown/legacy trading command tetap frozen, non-owner ditolak, dan group message/callback diabaikan sebelum Telegram I/O. Meme-research rate limiting tidak menulis risk event/DB; callback legacy tidak pernah didispatch. Targeted + full tests, vet, build, dan legacy no-token smoke hijau di `cbt-vps`; independent review final PASS. Runtime belum direstart/diaktifkan.
 
 ### P2 — Safe skill registry + bounded research runner
 
@@ -1456,12 +1458,12 @@ P0–P2 selesai hanya jika:
 
 ## 25. Current Next Step
 
-Roadmap v0.2 sedang dieksekusi. **P0 DONE 3/3; P1.1–P1.3 DONE; P0.1 belum runtime-activated.**
+Roadmap v0.2 sedang dieksekusi. **P0–P1 DONE; P0.1/P1.4 belum runtime-activated.**
 
 Urutan berikutnya:
 
-1. **P0 dan P1.1–P1.3 selesai:** config, persistence, dan native skill compatibility sudah automated-verified.
-2. Lanjut **Task P1.4**: owner-only Telegram research shell yang jujur `RESEARCH ONLY`.
+1. **P0–P1 selesai:** freeze, source of truth, artifact manifest, isolated persistence, native compatibility, dan owner research shell sudah automated-verified.
+2. Lanjut **Task P2.1**: safe ZIP intake + quarantine tanpa mengeksekusi isi artifact.
 3. Disposable DB `crypto_station_trading_p12` hanya test fixture; jangan arahkan runtime ke sana.
 4. Jangan mengaktifkan `meme_research` runtime sampai user memberi approval restart workspace.
 5. Jangan masukkan AI key, wallet key, signing, swap, atau real funds selama P0–P2.
@@ -1469,7 +1471,7 @@ Urutan berikutnya:
 
 Prompt lanjut yang valid:
 
-- `gas P1.4` — implement owner-only research shell dengan TDD.
+- `gas P2.1` — implement safe ZIP quarantine dengan security-first TDD.
 - `review P0-P2 dulu` — audit task plan tanpa coding.
 - `ubah task <ID>` — revisi scope sebelum coding.
 - `gap audit v0.2` — cari gap tambahan sebelum implementasi.

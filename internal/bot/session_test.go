@@ -3,6 +3,8 @@ package bot
 import (
 	"testing"
 	"time"
+
+	"github.com/go-telegram/bot/models"
 )
 
 func TestParseNominal(t *testing.T) {
@@ -74,12 +76,23 @@ func TestSessionsTimeout(t *testing.T) {
 
 func TestPivotFreezeMenuForOwner(t *testing.T) {
 	kb := MainMenuForMode(true, ProductModeMemeResearch)
-	if len(kb.Keyboard) != 1 || len(kb.Keyboard[0]) != 1 || kb.Keyboard[0][0].Text != BtnResearch {
-		t.Fatalf("menu meme_research owner harus hanya Research: %+v", kb.Keyboard)
+	if len(kb.Keyboard) != 3 || len(kb.Keyboard[0]) != 2 || kb.Keyboard[0][0].Text != BtnResearch || kb.Keyboard[2][1].Text != "Pause" {
+		t.Fatalf("menu meme_research owner harus research-only shell: %+v", kb.Keyboard)
 	}
 	copy, allowed := ProductModeAccess(true, ProductModeMemeResearch)
 	if !allowed || copy != MemeResearchFrozenCopy {
 		t.Fatalf("owner access = (%q,%v), mau frozen copy + allowed", copy, allowed)
+	}
+}
+
+func TestResearchCallbackPrivateRejectsGroup(t *testing.T) {
+	private := &models.CallbackQuery{Message: models.MaybeInaccessibleMessage{Message: &models.Message{Chat: models.Chat{Type: "private"}}}}
+	group := &models.CallbackQuery{Message: models.MaybeInaccessibleMessage{Message: &models.Message{Chat: models.Chat{Type: "group"}}}}
+	if !researchCallbackPrivate(private) {
+		t.Fatal("private callback harus diterima")
+	}
+	if researchCallbackPrivate(group) || researchCallbackPrivate(nil) {
+		t.Fatal("group/nil callback harus ditolak")
 	}
 }
 

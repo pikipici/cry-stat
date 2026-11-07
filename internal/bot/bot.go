@@ -17,6 +17,7 @@ import (
 	"github.com/pikipici/crypto-station/internal/chain"
 	"github.com/pikipici/crypto-station/internal/db"
 	"github.com/pikipici/crypto-station/internal/ledger"
+	"github.com/pikipici/crypto-station/internal/ownerui"
 	"github.com/pikipici/crypto-station/internal/price"
 	"github.com/pikipici/crypto-station/internal/risk"
 	"github.com/pikipici/crypto-station/internal/settings"
@@ -73,6 +74,10 @@ func ProductModeAccess(isOwner bool, productMode string) (string, bool) {
 	return MemeResearchFrozenCopy, true
 }
 
+func researchCallbackPrivate(cb *models.CallbackQuery) bool {
+	return cb != nil && cb.Message.Message != nil && cb.Message.Message.Chat.Type == "private"
+}
+
 // claimBroadcastSend: klaim sekali pakai per key dalam 60 detik.
 // Pure map+mutex — unit-testable tanpa DB/bot.
 func (d *Deps) claimBroadcastSend(key string) bool {
@@ -101,7 +106,11 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 		if !ValidateCallbackStructure(upd.CallbackQuery) {
 			return
 		}
-		if copy, _ := ProductModeAccess(d.Admin.IsAdmin(upd.CallbackQuery.From.ID), d.ProductMode); NormalizeProductMode(d.ProductMode) == ProductModeMemeResearch {
+		if NormalizeProductMode(d.ProductMode) == ProductModeMemeResearch {
+			if !researchCallbackPrivate(upd.CallbackQuery) {
+				return
+			}
+			copy, _ := ProductModeAccess(d.Admin.IsAdmin(upd.CallbackQuery.From.ID), d.ProductMode)
 			_, _ = b.AnswerCallbackQuery(ctx, &bot.AnswerCallbackQueryParams{CallbackQueryID: upd.CallbackQuery.ID, Text: copy})
 			return
 		}
@@ -120,24 +129,25 @@ func Handle(ctx context.Context, b *bot.Bot, upd *models.Update, d *Deps) {
 	if upd.Message.Chat.Type != "private" {
 		return
 	}
+	text := strings.TrimSpace(upd.Message.Text)
+	isOwner := d.Admin.IsAdmin(upd.Message.From.ID)
+	if NormalizeProductMode(d.ProductMode) == ProductModeMemeResearch {
+		if !d.Limiter.Allow(upd.Message.From.ID) {
+			reply(ctx, b, upd.Message.Chat.ID, "Kebanyakan perintah, tunggu sebentar.")
+			return
+		}
+		decision := ownerui.Decide(text, isOwner, true)
+		if !decision.Allowed {
+			reply(ctx, b, upd.Message.Chat.ID, decision.Text)
+			return
+		}
+		_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: upd.Message.Chat.ID, Text: decision.Text, ReplyMarkup: decision.Keyboard})
+		return
+	}
 	// Rate limit per akun (angka di settings rate_limit_per_min).
 	if !d.Limiter.Allow(upd.Message.From.ID) {
 		_ = d.Risk.RecordEvent(ctx, 0, false, upd.Message.From.ID, "rate_limited", upd.Message.Text)
 		reply(ctx, b, upd.Message.Chat.ID, "Kebanyakan perintah, tunggu sebentar.")
-		return
-	}
-	text := strings.TrimSpace(upd.Message.Text)
-	isOwner := d.Admin.IsAdmin(upd.Message.From.ID)
-	if copy, allowed := ProductModeAccess(isOwner, d.ProductMode); NormalizeProductMode(d.ProductMode) == ProductModeMemeResearch {
-		if !allowed {
-			reply(ctx, b, upd.Message.Chat.ID, copy)
-			return
-		}
-		if strings.EqualFold(text, "/start") || strings.EqualFold(text, BtnResearch) || strings.EqualFold(text, "/research") {
-			_, _ = b.SendMessage(ctx, &bot.SendMessageParams{ChatID: upd.Message.Chat.ID, Text: copy, ReplyMarkup: MainMenuForMode(true, d.ProductMode)})
-			return
-		}
-		reply(ctx, b, upd.Message.Chat.ID, copy)
 		return
 	}
 	// T2-button: session admin aktif = tangani dulu (allowlist di dalam).

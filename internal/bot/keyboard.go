@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/go-telegram/bot/models"
+	"github.com/pikipici/crypto-station/internal/ownerui"
 )
 
 // Teks tombol menu (tanpa slash — pesan masuk apa adanya).
@@ -239,15 +240,10 @@ func MainMenuForMode(isOwner bool, productMode string) *models.ReplyKeyboardMark
 	if NormalizeProductMode(productMode) != ProductModeMemeResearch {
 		return MainMenuFor(isOwner)
 	}
-	kb := [][]models.KeyboardButton{}
 	if isOwner {
-		kb = [][]models.KeyboardButton{{{Text: BtnResearch}}}
+		return ownerui.Keyboard()
 	}
-	return &models.ReplyKeyboardMarkup{
-		Keyboard:       kb,
-		ResizeKeyboard: true,
-		IsPersistent:   true,
-	}
+	return &models.ReplyKeyboardMarkup{Keyboard: [][]models.KeyboardButton{}, ResizeKeyboard: true, IsPersistent: true}
 }
 
 // AccountMenuFor: submenu Akun — Saldo Riwayat Status Alamat + Kembali (+ Admin).
