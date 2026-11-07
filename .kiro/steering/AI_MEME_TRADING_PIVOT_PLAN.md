@@ -1,6 +1,6 @@
 # Crypto Station → Personal AI Meme Trading Bot — Pivot Roadmap & Living Plan
 
-> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0–P1 DONE, P2.1 NEXT
+> Status: v0.2 — IMPLEMENTATION IN PROGRESS; P0–P1 + P2.1 DONE, P2.2 NEXT
 > Owner: user/owner Telegram `7254686681` + Hermes
 > Last updated: 2026-11-04
 > Pivot baseline: `503f5fb`; current implementation head: `385ad9e`
@@ -1364,7 +1364,7 @@ The pivot design is ready for implementation only when:
 
 ### P2 — Safe skill registry + bounded research runner
 
-#### Task P2.1 — Safe ZIP intake and quarantine
+#### Task P2.1 — Safe ZIP intake and quarantine `[x]`
 
 **Objective:** accept versioned skill package without executing it.
 
@@ -1378,6 +1378,8 @@ The pivot design is ready for implementation only when:
 **Implementation:** extract only to quarantine; static inventory; store metadata/validation result; no Python invocation/network.
 
 **Commit:** `feat(skill): quarantine and validate skill archives`.
+
+**Evidence 2026-11-07:** security-first RED membuktikan API quarantine/registry belum tersedia. Implementasi memverifikasi artifact SHA sebelum ekstraksi, membatasi compressed/per-file/total bytes + file count, menolak zip-slip/absolute/backslash/drive path, duplicate normalized path, symlink/non-regular entry, missing `SKILL.md`, dan nested archive berdasarkan extension serta full capped content signatures (termasuk self-extracting ZIP/RAR/7z). Ekstraksi memakai mode 0600 ke temporary quarantine, publish setelah sukses dengan O_EXCL lock, dan failure tidak meninggalkan destination parsial. Tidak ada Python, network, subprocess, atau eksekusi isi ZIP. Targeted + full tests, vet, build, dan legacy no-token smoke hijau di `cbt-vps`; independent security review final PASS.
 
 #### Task P2.2 — Register baseline v1.1.0
 
@@ -1458,12 +1460,12 @@ P0–P2 selesai hanya jika:
 
 ## 25. Current Next Step
 
-Roadmap v0.2 sedang dieksekusi. **P0–P1 DONE; P0.1/P1.4 belum runtime-activated.**
+Roadmap v0.2 sedang dieksekusi. **P0–P1 + P2.1 DONE; runtime pivot belum diaktifkan.**
 
 Urutan berikutnya:
 
-1. **P0–P1 selesai:** freeze, source of truth, artifact manifest, isolated persistence, native compatibility, dan owner research shell sudah automated-verified.
-2. Lanjut **Task P2.1**: safe ZIP intake + quarantine tanpa mengeksekusi isi artifact.
+1. **P0–P1 + P2.1 selesai:** foundation dan safe ZIP quarantine sudah automated-verified.
+2. Lanjut **Task P2.2**: register baseline artifact v1.1.0 sebagai metadata inactive/validated tanpa menjalankan script.
 3. Disposable DB `crypto_station_trading_p12` hanya test fixture; jangan arahkan runtime ke sana.
 4. Jangan mengaktifkan `meme_research` runtime sampai user memberi approval restart workspace.
 5. Jangan masukkan AI key, wallet key, signing, swap, atau real funds selama P0–P2.
@@ -1471,7 +1473,7 @@ Urutan berikutnya:
 
 Prompt lanjut yang valid:
 
-- `gas P2.1` — implement safe ZIP quarantine dengan security-first TDD.
+- `gas P2.2` — register baseline v1.1.0 inactive dengan audit metadata.
 - `review P0-P2 dulu` — audit task plan tanpa coding.
 - `ubah task <ID>` — revisi scope sebelum coding.
 - `gap audit v0.2` — cari gap tambahan sebelum implementasi.
