@@ -1,0 +1,79 @@
+test_bad_reference_rejected (test_phase1_gates.GateTests.test_bad_reference_rejected) ... ok
+test_complete_is_hypothetical_only (test_phase1_gates.GateTests.test_complete_is_hypothetical_only) ... ok
+test_identity_unknown_blocks (test_phase1_gates.GateTests.test_identity_unknown_blocks) ... ok
+test_incomplete_hypothesis_watchlist (test_phase1_gates.GateTests.test_incomplete_hypothesis_watchlist) ... ok
+test_known_exit_failure_blocks (test_phase1_gates.GateTests.test_known_exit_failure_blocks) ... ok
+test_non_synthetic_strong_metadata_not_verified_by_tool (test_phase1_gates.GateTests.test_non_synthetic_strong_metadata_not_verified_by_tool) ... ok
+test_non_synthetic_weak_evidence_blocks (test_phase1_gates.GateTests.test_non_synthetic_weak_evidence_blocks) ... ok
+test_unknown_contract_never_passes (test_phase1_gates.GateTests.test_unknown_contract_never_passes) ... ok
+test_authority_flags_never_claim_full_audit (test_phase2_integration.Phase2Tests.test_authority_flags_never_claim_full_audit) ... ok
+test_cli_writes_all_files (test_phase2_integration.Phase2Tests.test_cli_writes_all_files) ... ok
+test_holder_accounts_are_not_unique_holders (test_phase2_integration.Phase2Tests.test_holder_accounts_are_not_unique_holders) ... ok
+test_invalid_dex_response_partial_failure (test_phase2_integration.Phase2Tests.test_invalid_dex_response_partial_failure) ... ok
+test_invalid_mint_prevents_requests (test_phase2_integration.Phase2Tests.test_invalid_mint_prevents_requests) ... ok
+test_latest_profiles_not_launches (test_phase2_integration.Phase2Tests.test_latest_profiles_not_launches) ... ok
+test_one_provider_fails_and_data_not_imputed (test_phase2_integration.Phase2Tests.test_one_provider_fails_and_data_not_imputed) ... ok
+test_pipeline_all_providers_and_synthetic_gate (test_phase2_integration.Phase2Tests.test_pipeline_all_providers_and_synthetic_gate) ... ok
+test_quote_side_target_price_not_misread (test_phase2_integration.Phase2Tests.test_quote_side_target_price_not_misread) ... ok
+test_rpc_mint_parsing (test_phase2_integration.Phase2Tests.test_rpc_mint_parsing) ... ok
+test_scan_cli_fixture_injection_writes_watchlist (test_phase2_integration.Phase2Tests.test_scan_cli_fixture_injection_writes_watchlist) ... ok
+test_token2022_flagging (test_phase2_integration.Phase2Tests.test_token2022_flagging) ... ok
+test_token_pair_filter_blocks_wrong_mint_and_chain (test_phase2_integration.Phase2Tests.test_token_pair_filter_blocks_wrong_mint_and_chain) ... ok
+test_valid_public_key (test_phase2_integration.Phase2Tests.test_valid_public_key) ... ok
+test_wrong_rpc_mint_is_not_verified (test_phase2_integration.Phase2Tests.test_wrong_rpc_mint_is_not_verified) ... ok
+test_audit_db_has_events_and_records (test_phase3_agent.OfflinePhase3Tests.test_audit_db_has_events_and_records) ... ok
+test_cannot_overwrite_completed_or_resume_as_refresh (test_phase3_agent.OfflinePhase3Tests.test_cannot_overwrite_completed_or_resume_as_refresh) ... ok
+test_cli_demo_run (test_phase3_agent.OfflinePhase3Tests.test_cli_demo_run) ... ok
+test_demo_never_queries_internet (test_phase3_agent.OfflinePhase3Tests.test_demo_never_queries_internet) ... ok
+test_discovery_provider_failure_is_not_false_success (test_phase3_agent.OfflinePhase3Tests.test_discovery_provider_failure_is_not_false_success) ... ok
+test_duplicate_or_invalid_mints_filtered (test_phase3_agent.OfflinePhase3Tests.test_duplicate_or_invalid_mints_filtered) ... ok
+test_invalid_configuration_does_not_create_file (test_phase3_agent.OfflinePhase3Tests.test_invalid_configuration_does_not_create_file) ... ok
+test_live_code_path_with_offline_injected_transport_only (test_phase3_agent.OfflinePhase3Tests.test_live_code_path_with_offline_injected_transport_only) ... ok
+test_mint_authority_is_review_not_approval (test_phase3_agent.OfflinePhase3Tests.test_mint_authority_is_review_not_approval) ... ok
+test_multi_candidate_offline_run (test_phase3_agent.OfflinePhase3Tests.test_multi_candidate_offline_run) ... ok
+test_no_private_rpc_url_persisted (test_phase3_agent.OfflinePhase3Tests.test_no_private_rpc_url_persisted) ... ok
+test_non_https_rpc_rejected (test_phase3_agent.OfflinePhase3Tests.test_non_https_rpc_rejected) ... ok
+test_partial_resume_same_run (test_phase3_agent.OfflinePhase3Tests.test_partial_resume_same_run) ... ok
+test_quote_token_has_no_fake_usd_price (test_phase3_agent.OfflinePhase3Tests.test_quote_token_has_no_fake_usd_price) ... ok
+test_reviewer_rejects_gate_forgery (test_phase3_agent.OfflinePhase3Tests.test_reviewer_rejects_gate_forgery) ... ok
+test_rpc_missing_blocks_identity (test_phase3_agent.OfflinePhase3Tests.test_rpc_missing_blocks_identity) ... ok
+test_short_budget_prevents_extra_calls (test_phase3_agent.OfflinePhase3Tests.test_short_budget_prevents_extra_calls) ... ok
+test_unavailable_critical_gates_cannot_be_auto_passed (test_phase3_agent.OfflinePhase3Tests.test_unavailable_critical_gates_cannot_be_auto_passed) ... ok
+test_watchlist_no_buys (test_phase3_agent.OfflinePhase3Tests.test_watchlist_no_buys) ... ok
+test_cli_demo_output (test_phase4_engine.Phase4Tests.test_cli_demo_output) ... ok
+test_costs_reduce_results (test_phase4_engine.Phase4Tests.test_costs_reduce_results) ... ok
+test_dataset_manifest (test_phase4_engine.Phase4Tests.test_dataset_manifest) ... ok
+test_delay_is_positive (test_phase4_engine.Phase4Tests.test_delay_is_positive) ... ok
+test_demo_is_deterministic (test_phase4_engine.Phase4Tests.test_demo_is_deterministic) ... ok
+test_exit_blocked (test_phase4_engine.Phase4Tests.test_exit_blocked) ... ok
+test_has_trades (test_phase4_engine.Phase4Tests.test_has_trades) ... ok
+test_mark_not_realized (test_phase4_engine.Phase4Tests.test_mark_not_realized) ... ok
+test_metrics_denominators (test_phase4_engine.Phase4Tests.test_metrics_denominators) ... ok
+test_missing_bar_rejected (test_phase4_engine.Phase4Tests.test_missing_bar_rejected) ... ok
+test_no_execution_on_signal_candle (test_phase4_engine.Phase4Tests.test_no_execution_on_signal_candle) ... ok
+test_no_future_lookahead_prefix (test_phase4_engine.Phase4Tests.test_no_future_lookahead_prefix) ... ok
+test_no_liquidity_fill (test_phase4_engine.Phase4Tests.test_no_liquidity_fill) ... ok
+test_no_nan (test_phase4_engine.Phase4Tests.test_no_nan) ... ok
+test_nonsensical_cost_rejected (test_phase4_engine.Phase4Tests.test_nonsensical_cost_rejected) ... ok
+test_not_live (test_phase4_engine.Phase4Tests.test_not_live) ... ok
+test_paper_asof_monotonic (test_phase4_engine.Phase4Tests.test_paper_asof_monotonic) ... ok
+test_paper_detects_rewritten_history (test_phase4_engine.Phase4Tests.test_paper_detects_rewritten_history) ... ok
+test_paper_no_future_bar_visibility (test_phase4_engine.Phase4Tests.test_paper_no_future_bar_visibility) ... ok
+test_stress_assumptions_and_scenario_count (test_phase4_engine.Phase4Tests.test_stress_assumptions_and_scenario_count) ... ok
+test_stress_cli (test_phase4_engine.Phase4Tests.test_stress_cli) ... ok
+test_synthetic_manifest_must_be_honest (test_phase4_engine.Phase4Tests.test_synthetic_manifest_must_be_honest) ... ok
+test_timestamp_future_availability_does_not_fill (test_phase4_engine.Phase4Tests.test_timestamp_future_availability_does_not_fill) ... ok
+test_trade_start_prevents_training_trades (test_phase4_engine.Phase4Tests.test_trade_start_prevents_training_trades) ... ok
+test_walkforward_folds_dont_use_oos_for_training (test_phase4_engine.Phase4Tests.test_walkforward_folds_dont_use_oos_for_training) ... ok
+test_walkforward_no_overlap (test_phase4_engine.Phase4Tests.test_walkforward_no_overlap) ... ok
+
+----------------------------------------------------------------------
+Ran 68 tests in 1.288s
+
+OK
+Snapshot: C:\Users\pikip\AppData\Local\Temp\tmpk9w_4zfq\myreport | DATA_TIDAK_CUKUP | synthetic=True
+Processed 1 candidates into C:\Users\pikip\AppData\Local\Temp\tmpcq531lc2; research only, not buy signals
+Run phase3-0b76c335491d => COMPLETED | 1/1 inspected | synthetic=True
+Report: C:\Users\pikip\AppData\Local\Temp\tmp461o0_mz\run/watchlist.md  JSON: C:\Users\pikip\AppData\Local\Temp\tmp461o0_mz\run/run_summary.json
+DEMO | SYNTHETIC | SYNTH_MEME_A | 9 closed trades | C:\Users\pikip\AppData\Local\Temp\tmpbmf6_w9g\test/report.md
+STRESS SCENARIOS (assumed, not forecasts) | SYNTH_MEME_A | C:\Users\pikip\AppData\Local\Temp\tmpbdcz2eni\stress/stress.md

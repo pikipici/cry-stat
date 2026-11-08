@@ -5,3 +5,21 @@
 /internal/tradingdb/
 /trading/schema/
 .DS_Store
+
+# Pre-Phase-5 validation workspace (extracted skill copy, regenerable)
+/validation_work/
+
+# Validation evidence: raw/normalized/logs stay local, content-addressed
+/validation/raw/**
+/validation/normalized/**
+/validation/checkpoints/**
+/validation/logs/**
+/validation/exports/**
+!validation/raw/.gitkeep
+!validation/normalized/.gitkeep
+!validation/checkpoints/.gitkeep
+!validation/logs/.gitkeep
+!validation/exports/.gitkeep
+__pycache__/
+*.py[cod]
+.env

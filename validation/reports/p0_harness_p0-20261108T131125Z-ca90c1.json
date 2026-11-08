@@ -1,0 +1,58 @@
+{
+  "code_version": "meme-token-skill@1.1.0+build=2950b1126c3dfe4e",
+  "config_sha256": "34a613957e3655e4a537d08556d90ddc9f1d2a1cbab1cf7964be184bde8cd209",
+  "config_version": "thresholds-v1.0.0",
+  "environment": {
+    "archive_sha256": "not-present-in-workspace",
+    "code_version": "meme-token-skill@1.1.0+build=2950b1126c3dfe4e",
+    "config_sha256": "34a613957e3655e4a537d08556d90ddc9f1d2a1cbab1cf7964be184bde8cd209",
+    "config_version": "thresholds-v1.0.0",
+    "cwd": "D:\\Program\\project-1\\validation_work\\meme-token-skill",
+    "machine": "AMD64",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.2",
+    "python_implementation": "CPython",
+    "system": "Windows"
+  },
+  "observed_at_utc": "2026-11-08T13:11:27Z",
+  "payload": {
+    "all_passed": true,
+    "gates": [
+      {
+        "command": "python -m unittest discover -s tests",
+        "exit_code": 0,
+        "gate": "project unit tests",
+        "ok": true,
+        "tail": [
+          "Ran 68 tests in 1.089s",
+          "",
+          "OK"
+        ]
+      },
+      {
+        "command": "python scripts/validate_skill.py",
+        "exit_code": 0,
+        "gate": "skill validator",
+        "ok": true,
+        "tail": [
+          "Checked 70 Markdown and 16 JSON files",
+          "PASS: files, source video notes, local links, and fences look consistent"
+        ]
+      },
+      {
+        "command": "python -m unittest discover -s validation/tests",
+        "exit_code": 0,
+        "gate": "validation harness tests",
+        "ok": true,
+        "tail": [
+          "Ran 39 tests in 0.115s",
+          "",
+          "OK"
+        ]
+      }
+    ]
+  },
+  "run_id": "p0-20261108T131125Z-ca90c1",
+  "stage": "p0",
+  "synthetic": false
+}
