@@ -14,7 +14,7 @@
     "python_implementation": "CPython",
     "system": "Windows"
   },
-  "observed_at_utc": "2026-11-08T13:11:27Z",
+  "observed_at_utc": "2026-11-08T13:12:55Z",
   "payload": {
     "all_passed": true,
     "gates": [
@@ -24,7 +24,7 @@
         "gate": "project unit tests",
         "ok": true,
         "tail": [
-          "Ran 68 tests in 1.089s",
+          "Ran 68 tests in 1.489s",
           "",
           "OK"
         ]
@@ -35,7 +35,7 @@
         "gate": "skill validator",
         "ok": true,
         "tail": [
-          "Checked 70 Markdown and 16 JSON files",
+          "Checked 70 Markdown and 18 JSON files",
           "PASS: files, source video notes, local links, and fences look consistent"
         ]
       },
@@ -45,14 +45,14 @@
         "gate": "validation harness tests",
         "ok": true,
         "tail": [
-          "Ran 39 tests in 0.115s",
+          "Ran 39 tests in 0.152s",
           "",
           "OK"
         ]
       }
     ]
   },
-  "run_id": "p0-20261108T131125Z-ca90c1",
+  "run_id": "p0-20261108T131252Z-38e782",
   "stage": "p0",
   "synthetic": false
 }
