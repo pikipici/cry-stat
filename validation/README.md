@@ -45,6 +45,41 @@ python -m unittest discover -s validation/tests -v
 | `bin/redact.py` | Strip credentials from URLs, headers, text, and nested JSON before anything is written to disk |
 | `bin/provenance.py` | run_id, UTC stamps, code/config versions, atomic writes, content-addressed raw evidence, append-only manifests |
 | `bin/run_p0_harness.py` | Execute the P0 gates and emit a provenance-stamped report |
+| `bin/sample_and_audit.py` | P2 deterministic/offline or live read-only Solana RPC + DEX Screener audit; emits the required CSV and report |
+
+## Run the P2 data-accuracy audit
+
+Deterministic fixture run (no network):
+
+```bash
+python validation/bin/sample_and_audit.py --input validation/fixtures/p2_audit_100.json
+```
+
+Build a live, pre-labelled frame first (browser-like User-Agent, Jupiter's documented
+tokens with archived Solana token-list fallback, and batched DEX pair lookups):
+
+```bash
+python validation/bin/sample_and_audit.py --build-frame
+```
+
+A complete frame is written to `validation/normalized/p2_sampling_frame.json` only
+when all four strata have 25 distinct valid mints. Otherwise the command returns 2
+and writes `validation/reports/p2_sampling_shortfall.json`; it never pads strata.
+
+Live collection uses the same pre-labelled sampling frame and preserves every
+provider failure as a CSV row. Set `SOLANA_RPC_URL` if required; URL credentials
+are redacted from provenance. RPC calls have bounded retries and a configurable
+`--rpc-delay`. Only `getAccountInfo`, `getTokenSupply`, and
+`getTokenLargestAccounts` plus DEX Screener HTTP GET are used.
+
+```bash
+python validation/bin/sample_and_audit.py --input path/to/sampling-frame.json --live
+```
+
+Outputs are `validation/normalized/audit_100_tokens.csv`, `DATA_ACCURACY.md`, and
+an append-only `validation/manifests/p2_evidence.jsonl` record. A sampling frame
+must have at least 25 pre-labelled entries in each of the four P2 strata (100
+total); shortages return exit code 2 rather than fabricating samples.
 
 ## Rules that the harness enforces
 

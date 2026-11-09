@@ -1,0 +1,4568 @@
+[
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {},
+    "dex": {},
+    "collection_error": "fixture_timeout"
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "new_discovery",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "active_liquid",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "low_liquidity",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  },
+  {
+    "mint": "So11111111111111111111111111111111111111112",
+    "stratum": "risky_delisted_migrated",
+    "source": "fixture:list-v1",
+    "observed_at_utc": "2026-01-01T00:00:00Z",
+    "age_seconds": 10,
+    "expected_supply_raw": "1000",
+    "reviewer": "fixture-reviewer",
+    "rpc": {
+      "account_info": {
+        "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "data": {
+          "parsed": {
+            "info": {
+              "mintAuthority": null,
+              "freezeAuthority": null
+            }
+          }
+        }
+      },
+      "supply": {
+        "amount": "1000",
+        "decimals": 9,
+        "slot": 123
+      },
+      "largest_accounts": [
+        {
+          "address": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+          "amount": "10"
+        }
+      ]
+    },
+    "dex": {
+      "pair": {
+        "chainId": "solana",
+        "pairAddress": "9wFFmGph15h76UzGCrErN5nG3EqUr6xR3LLuW2hQ2Vj9",
+        "baseToken": {
+          "address": "So11111111111111111111111111111111111111112"
+        },
+        "quoteToken": {
+          "address": "Es9vMFrzaCERmJfrF4H2FYD5LKYsx6PjnQZpQCr7GGT"
+        },
+        "priceUsd": "1.25"
+      }
+    }
+  }
+]
