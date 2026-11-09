@@ -124,14 +124,25 @@ def assert_no_secrets(payload: str, *, forbidden: tuple[str, ...] = ()) -> None:
     """Raise if payload still contains a known secret or an obvious credential.
 
     Used as a last line of defence immediately before writing evidence to disk.
+    Hash-shaped values (sha256 digests of payloads, configs, or archives) are
+    legitimate and are excluded; a hash is not a credential.
     """
     for secret in forbidden:
         if secret and secret in payload:
             raise ValueError("evidence still contains a known secret value")
+    scrubbed = _HASH_FIELD.sub(lambda m: f"{m.group(1)}{REDACTED_HASH}", payload)
     for pattern in _VALUE_PATTERNS:
-        if pattern.search(payload):
+        if pattern.search(scrubbed):
             raise ValueError("evidence still contains a credential-shaped value")
     lowered = payload.lower()
     for key in SENSITIVE_QUERY_KEYS:
         if f"{key}=" in lowered and REDACTED.lower() not in lowered:
             raise ValueError(f"evidence still contains an unredacted {key}= parameter")
+
+
+# A 64-hex digest attached to a hash-ish key is provenance, not a secret.
+# Matches both JSON ("payload_sha256": "<64 hex>") and prose (sha256=<64 hex>).
+_HASH_FIELD = re.compile(
+    r"(?i)(\"?[\w.\-]*(?:sha256|sha-256|digest|hash|checksum)[\w.\-]*\"?\s*:\s*\"?)[0-9a-f]{64}"
+)
+REDACTED_HASH = "<sha256>"

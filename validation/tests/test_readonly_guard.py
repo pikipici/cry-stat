@@ -124,15 +124,30 @@ class ReadOnlyGuardTests(unittest.TestCase):
             self.assertIn("phase2_cli.py", names)
 
     def test_only_https_endpoints_are_constructed(self):
-        """No plain http:// endpoint may be hardcoded in pipeline code."""
+        """No plain http:// endpoint may be hardcoded in pipeline code.
+
+        The only permitted occurrence is the P1 negative control that proves the
+        transport rejects a plaintext scheme, so it is allowlisted by location
+        and asserted to still be present — deleting the control fails this test.
+        """
         offenders: list[str] = []
+        negative_control_seen = False
         pattern = re.compile(r"http://(?!localhost|127\.0\.0\.1|example\.invalid)")
         for path in python_files():
-            rel = path.relative_to(ROOT).as_posix()
-            for line_number, line in enumerate(path.read_text(encoding="utf-8", errors="replace").splitlines(), start=1):
-                if pattern.search(line):
-                    offenders.append(f"{rel}:{line_number}: {line.strip()}")
+            try:
+                rel = path.relative_to(skill_root()).as_posix()
+            except ValueError:
+                rel = path.relative_to(ROOT).as_posix()
+            text = path.read_text(encoding="utf-8", errors="replace")
+            for line_number, line in enumerate(text.splitlines(), start=1):
+                if not pattern.search(line):
+                    continue
+                if rel.endswith("validation/bin/connectivity.py") and "api.mainnet-beta.solana.com" in line:
+                    negative_control_seen = True
+                    continue
+                offenders.append(f"{rel}:{line_number}: {line.strip()}")
         self.assertEqual(offenders, [], "non-HTTPS endpoint found:\n" + "\n".join(offenders))
+        self.assertTrue(negative_control_seen, "the plaintext-scheme negative control is missing")
 
 
 if __name__ == "__main__":

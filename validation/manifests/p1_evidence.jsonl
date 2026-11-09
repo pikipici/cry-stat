@@ -1,0 +1,2 @@
+{"all_thresholds_met": false, "observed_at_utc": "2026-11-08T13:20:45Z", "report": "validation/reports/p1-connectivity/p1_connectivity_p1-20261108T132038Z-815cb5.json", "run_id": "p1-20261108T132038Z-815cb5", "stage": "p1", "successful": 14, "total": 15}
+{"all_thresholds_met": true, "observed_at_utc": "2026-11-08T13:21:32Z", "report": "validation/reports/p1-connectivity/p1_connectivity_p1-20261108T132124Z-720d57.json", "run_id": "p1-20261108T132124Z-720d57", "stage": "p1", "successful": 24, "total": 25}

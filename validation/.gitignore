@@ -1,0 +1,37 @@
+# Append-only evidence archive. NEVER commit raw responses or secrets.
+.env
+validation/.env
+validation/raw/**
+validation/normalized/**
+validation/checkpoints/**
+validation/logs/**
+validation/exports/**
+!validation/raw/.gitkeep
+!validation/normalized/.gitkeep
+!validation/checkpoints/.gitkeep
+!validation/logs/.gitkeep
+!validation/exports/.gitkeep
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.venv/
+venv/
+
+# Reports are tracked ONLY when they contain no secrets; keep the scaffold.
+!validation/reports/
+
+# Large or generated datasets
+*.csv.gz
+*.parquet
+*.sqlite
+*.db
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
