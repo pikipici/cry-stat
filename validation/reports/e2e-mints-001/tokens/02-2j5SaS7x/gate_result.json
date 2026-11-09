@@ -1,0 +1,17 @@
+{
+  "snapshot_id": "phase2-2j5SaS7x-2026-11-09T21:14:46Z",
+  "status": "TIDAK_BISA_DINILAI",
+  "reason": "Chain+mint+G0 identity must be verified.",
+  "unresolved_gates": [
+    "g0",
+    "g1",
+    "g2",
+    "g4",
+    "g5"
+  ],
+  "warnings": [
+    "Self-reported evidence has NOT been independently checked by this script."
+  ],
+  "is_buy_signal": false,
+  "executes_transactions": false
+}

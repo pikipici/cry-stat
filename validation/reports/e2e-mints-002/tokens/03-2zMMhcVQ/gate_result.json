@@ -1,0 +1,16 @@
+{
+  "snapshot_id": "phase2-2zMMhcVQ-2026-11-09T21:15:15Z",
+  "status": "DATA_TIDAK_CUKUP",
+  "reason": "At least one required evidence gate is missing, unknown, or adverse.",
+  "unresolved_gates": [
+    "g1",
+    "g2",
+    "g4",
+    "g5"
+  ],
+  "warnings": [
+    "Self-reported evidence has NOT been independently checked by this script."
+  ],
+  "is_buy_signal": false,
+  "executes_transactions": false
+}

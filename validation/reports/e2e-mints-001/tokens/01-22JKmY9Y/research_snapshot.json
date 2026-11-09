@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "phase2-22JKmY9Y-2026-11-09T21:14:43Z",
+  "mode": "ANALYZE_TOKEN",
+  "synthetic": false,
+  "as_of_utc": "2026-11-09T21:14:43Z",
+  "chain": "solana",
+  "mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+  "pool": "BFVfdYwBQxgReXaKfdSxohSP1GpXcEa1emRQuLe8w52h",
+  "evidence": [
+    {
+      "id": "rpc_mint",
+      "claim": "RPC parsed Solana mint account exists (not full security verification)",
+      "kind": "SUMBER_EKSTERNAL_TERVERIFIKASI",
+      "source": "Solana RPC getAccountInfo",
+      "observed_at_utc": "2026-11-09T21:14:40Z",
+      "confidence": "VERIFIED"
+    },
+    {
+      "id": "dex_pair",
+      "claim": "Provider returned exact mint Solana liquidity pool(s)",
+      "kind": "SUMBER_EKSTERNAL_TERVERIFIKASI",
+      "source": "https://api.dexscreener.com/token-pairs/v1/solana/22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+      "observed_at_utc": "2026-11-09T21:14:39Z",
+      "confidence": "VERIFIED"
+    },
+    {
+      "id": "rpc_token_accounts",
+      "claim": "RPC returned top token accounts and supply, not unique holders",
+      "kind": "SUMBER_EKSTERNAL_TERVERIFIKASI",
+      "source": "Solana RPC getTokenSupply + getTokenLargestAccounts",
+      "observed_at_utc": "2026-11-09T21:14:42Z",
+      "confidence": "VERIFIED"
+    }
+  ],
+  "gates": {
+    "g0": {
+      "state": "PASS",
+      "evidence_ids": [
+        "rpc_mint"
+      ],
+      "reason": "Mint address and token program parsed from RPC; not proof of token safety"
+    },
+    "g1": {
+      "state": "UNKNOWN",
+      "evidence_ids": [],
+      "reason": "Mint/freeze metadata alone does not establish complete contract safety"
+    },
+    "g2": {
+      "state": "UNKNOWN",
+      "evidence_ids": [],
+      "reason": "No signed/simulated sell, current executable route or effective quote"
+    },
+    "g3": {
+      "state": "PASS",
+      "evidence_ids": [
+        "dex_pair",
+        "rpc_token_accounts"
+      ],
+      "reason": "Market and account datasets present; value integrity and owner attribution remain limited"
+    },
+    "g4": {
+      "state": "UNKNOWN",
+      "evidence_ids": [],
+      "reason": "No direct verified X/social catalyst feed or chronology"
+    },
+    "g5": {
+      "state": "UNKNOWN",
+      "evidence_ids": [],
+      "reason": "No preregistered trading setup, backtest, or measured edge"
+    }
+  },
+  "analyst_notes": "Phase 2 read-only automated observations; do not interpret PASS as safe/buy. One failed provider must not be imputed from another. Flags: "
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "phase2-2j5SaS7x-2026-11-09T21:15:08Z",
+  "mode": "ANALYZE_TOKEN",
+  "synthetic": false,
+  "as_of_utc": "2026-11-09T21:15:08Z",
+  "chain": "solana",
+  "mint": "2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM",
+  "pool": "Fe7bpDYCs74GqiCUF14HwgUMToPKV1d9mDYVX5BTohFr",
+  "evidence": [
+    {
+      "id": "dex_pair",
+      "claim": "Provider returned exact mint Solana liquidity pool(s)",
+      "kind": "SUMBER_EKSTERNAL_TERVERIFIKASI",
+      "source": "https://api.dexscreener.com/token-pairs/v1/solana/2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM",
+      "observed_at_utc": "2026-11-09T21:15:04Z",
+      "confidence": "VERIFIED"
+    },
+    {
+      "id": "rpc_token_accounts",
+      "claim": "RPC returned top token accounts and supply, not unique holders",
+      "kind": "SUMBER_EKSTERNAL_TERVERIFIKASI",
+      "source": "Solana RPC getTokenSupply + getTokenLargestAccounts",
+      "observed_at_utc": "2026-11-09T21:15:07Z",
+      "confidence": "VERIFIED"
+    }
+  ],
+  "gates": {
+    "g0": {
+      "state": "UNKNOWN",
+      "evidence_ids": [],
+      "reason": "Could not independently verify mint on Solana RPC"
+    },
+    "g1": {
+      "state": "UNKNOWN",
+      "evidence_ids": [],
+      "reason": "Mint/freeze metadata alone does not establish complete contract safety"
+    },
+    "g2": {
+      "state": "UNKNOWN",
+      "evidence_ids": [],
+      "reason": "No signed/simulated sell, current executable route or effective quote"
+    },
+    "g3": {
+      "state": "PASS",
+      "evidence_ids": [
+        "dex_pair",
+        "rpc_token_accounts"
+      ],
+      "reason": "Market and account datasets present; value integrity and owner attribution remain limited"
+    },
+    "g4": {
+      "state": "UNKNOWN",
+      "evidence_ids": [],
+      "reason": "No direct verified X/social catalyst feed or chronology"
+    },
+    "g5": {
+      "state": "UNKNOWN",
+      "evidence_ids": [],
+      "reason": "No preregistered trading setup, backtest, or measured edge"
+    }
+  },
+  "analyst_notes": "Phase 2 read-only automated observations; do not interpret PASS as safe/buy. One failed provider must not be imputed from another. Flags: "
+}

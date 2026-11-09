@@ -1,0 +1,351 @@
+{
+  "observation_schema": "phase2.observation.v1",
+  "synthetic": false,
+  "chain": "solana",
+  "mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+  "started_at_utc": "2026-11-09T21:15:01Z",
+  "providers": {
+    "dex_pairs": {
+      "status": "ok",
+      "observed_at_utc": "2026-11-09T21:15:01Z",
+      "source": "https://api.dexscreener.com/token-pairs/v1/solana/22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp"
+    },
+    "rpc_mint": {
+      "status": "ok",
+      "observed_at_utc": "2026-11-09T21:15:02Z",
+      "source": "Solana RPC getAccountInfo"
+    },
+    "rpc_supply_and_largest": {
+      "status": "ok",
+      "observed_at_utc": "2026-11-09T21:15:03Z",
+      "source": "Solana RPC getTokenSupply + getTokenLargestAccounts"
+    },
+    "rpc_owner_mapping": {
+      "status": "ok",
+      "observed_at_utc": "2026-11-09T21:15:04Z",
+      "source": "Solana RPC getMultipleAccounts"
+    },
+    "normalize_token_accounts": {
+      "status": "ok",
+      "observed_at_utc": "2026-11-09T21:15:04Z",
+      "source": "Derived from Solana RPC, not independent provider"
+    }
+  },
+  "market": {
+    "mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+    "pool_count": 7,
+    "pairs": [
+      {
+        "mint_role_in_pair": "base",
+        "dex": "raydium",
+        "pair_address": "BFVfdYwBQxgReXaKfdSxohSP1GpXcEa1emRQuLe8w52h",
+        "base_mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+        "quote_mint": "PTNzAfFAB4LvoUQEUUGrFMyUoRLExMYjH6CcfyQfsVP",
+        "price_usd_reported": 0.0005736,
+        "price_unavailable_reason": null,
+        "liquidity_usd_reported": 184058.55,
+        "volume_h1_usd_reported": 51010.91,
+        "volume_h24_usd_reported": 2116915.97,
+        "buys_h1_reported": 363,
+        "sells_h1_reported": 337,
+        "market_cap_usd_reported": 573613.0,
+        "fdv_usd_reported": 573613.0,
+        "pair_created_at_ms": 1794212780000,
+        "url": "https://dexscreener.com/solana/bfvfdywbqxgrexakfdsxohsp1gpxcea1emrqule8w52h"
+      },
+      {
+        "mint_role_in_pair": "base",
+        "dex": "meteora",
+        "pair_address": "2uA94Y3X9dwDduojoj2NRcyZQaYtcoSsHZ4y1UX5P8Rs",
+        "base_mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+        "quote_mint": "So11111111111111111111111111111111111111112",
+        "price_usd_reported": 0.0005639,
+        "price_unavailable_reason": null,
+        "liquidity_usd_reported": 49443.5,
+        "volume_h1_usd_reported": 10719.83,
+        "volume_h24_usd_reported": 451382.05,
+        "buys_h1_reported": 67,
+        "sells_h1_reported": 80,
+        "market_cap_usd_reported": 563923.0,
+        "fdv_usd_reported": 563923.0,
+        "pair_created_at_ms": 1794096902000,
+        "url": "https://dexscreener.com/solana/2ua94y3x9dwdduojoj2nrcyzqaytcosshz4y1ux5p8rs"
+      },
+      {
+        "mint_role_in_pair": "base",
+        "dex": "meteora",
+        "pair_address": "HqWBZd2VjrSMiWjdX7nTv1cCEu8jWMqXAepRc7raUVr1",
+        "base_mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+        "quote_mint": "So11111111111111111111111111111111111111112",
+        "price_usd_reported": 0.0006024,
+        "price_unavailable_reason": null,
+        "liquidity_usd_reported": 1138.85,
+        "volume_h1_usd_reported": 56.86,
+        "volume_h24_usd_reported": 7267.7,
+        "buys_h1_reported": 15,
+        "sells_h1_reported": 14,
+        "market_cap_usd_reported": 602418.0,
+        "fdv_usd_reported": 602418.0,
+        "pair_created_at_ms": 1794097442000,
+        "url": "https://dexscreener.com/solana/hqwbzd2vjrsmiwjdx7ntv1cceu8jwmqxaeprc7rauvr1"
+      },
+      {
+        "mint_role_in_pair": "base",
+        "dex": "meteora",
+        "pair_address": "Ghwv1CtEcnVqfpM7DK3msiQvFemMqw54AzP2ndQQ4uzb",
+        "base_mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+        "quote_mint": "So11111111111111111111111111111111111111112",
+        "price_usd_reported": 0.0005659,
+        "price_unavailable_reason": null,
+        "liquidity_usd_reported": 848.49,
+        "volume_h1_usd_reported": 6.19,
+        "volume_h24_usd_reported": 10149.23,
+        "buys_h1_reported": 12,
+        "sells_h1_reported": 19,
+        "market_cap_usd_reported": 565928.0,
+        "fdv_usd_reported": 565928.0,
+        "pair_created_at_ms": 1794096092000,
+        "url": "https://dexscreener.com/solana/ghwv1ctecnvqfpm7dk3msiqvfemmqw54azp2ndqq4uzb"
+      },
+      {
+        "mint_role_in_pair": "base",
+        "dex": "meteora",
+        "pair_address": "G24LDynpBYNQ3JcxbLfwfzZfDCSp5i1e5xjCmTk4mpqj",
+        "base_mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+        "quote_mint": "So11111111111111111111111111111111111111112",
+        "price_usd_reported": 0.0005762,
+        "price_unavailable_reason": null,
+        "liquidity_usd_reported": 1.72,
+        "volume_h1_usd_reported": 0.1,
+        "volume_h24_usd_reported": 5.39,
+        "buys_h1_reported": 3,
+        "sells_h1_reported": 4,
+        "market_cap_usd_reported": 576208.0,
+        "fdv_usd_reported": 576208.0,
+        "pair_created_at_ms": 1794213526000,
+        "url": "https://dexscreener.com/solana/g24ldynpbynq3jcxblfwfzzfdcsp5i1e5xjcmtk4mpqj"
+      },
+      {
+        "mint_role_in_pair": "base",
+        "dex": "meteora",
+        "pair_address": "JBP61SUjcm6dSDc8nmgGaKnU8U4xZAWkxovCNXGuH94i",
+        "base_mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+        "quote_mint": "So11111111111111111111111111111111111111112",
+        "price_usd_reported": 0.0005757,
+        "price_unavailable_reason": null,
+        "liquidity_usd_reported": 0.09,
+        "volume_h1_usd_reported": 0.0,
+        "volume_h24_usd_reported": 0.51,
+        "buys_h1_reported": 0,
+        "sells_h1_reported": 0,
+        "market_cap_usd_reported": 575772.0,
+        "fdv_usd_reported": 575772.0,
+        "pair_created_at_ms": 1794096720000,
+        "url": "https://dexscreener.com/solana/jbp61sujcm6dsdc8nmggaknu8u4xzawkxovcnxguh94i"
+      },
+      {
+        "mint_role_in_pair": "base",
+        "dex": "meteora",
+        "pair_address": "Epj12jcSnu7yWE3ZmL2g6NxH7UZQHaWpMGDmQt9vN7YS",
+        "base_mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+        "quote_mint": "So11111111111111111111111111111111111111112",
+        "price_usd_reported": 0.0005255,
+        "price_unavailable_reason": null,
+        "liquidity_usd_reported": 0.03,
+        "volume_h1_usd_reported": 0.0,
+        "volume_h24_usd_reported": 9.97,
+        "buys_h1_reported": 0,
+        "sells_h1_reported": 0,
+        "market_cap_usd_reported": 525573.0,
+        "fdv_usd_reported": 525573.0,
+        "pair_created_at_ms": 1794234462000,
+        "url": "https://dexscreener.com/solana/epj12jcsnu7ywe3zml2g6nxh7uzqhawpmgdmqt9vn7ys"
+      }
+    ],
+    "reference_pair": {
+      "mint_role_in_pair": "base",
+      "dex": "raydium",
+      "pair_address": "BFVfdYwBQxgReXaKfdSxohSP1GpXcEa1emRQuLe8w52h",
+      "base_mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+      "quote_mint": "PTNzAfFAB4LvoUQEUUGrFMyUoRLExMYjH6CcfyQfsVP",
+      "price_usd_reported": 0.0005736,
+      "price_unavailable_reason": null,
+      "liquidity_usd_reported": 184058.55,
+      "volume_h1_usd_reported": 51010.91,
+      "volume_h24_usd_reported": 2116915.97,
+      "buys_h1_reported": 363,
+      "sells_h1_reported": 337,
+      "market_cap_usd_reported": 573613.0,
+      "fdv_usd_reported": 573613.0,
+      "pair_created_at_ms": 1794212780000,
+      "url": "https://dexscreener.com/solana/bfvfdywbqxgrexakfdsxohsp1gpxcea1emrqule8w52h"
+    },
+    "selection_reason": "Largest reported USD liquidity among returned pairs, not verified best execution",
+    "caveats": [
+      "Provider market cap and volume are estimates, not on-chain audit",
+      "Pool USD liquidity does not prove ability to sell a specific amount",
+      "Do not sum volumes across pools without checking duplication",
+      "DEX Screener priceUsd is the base token price; quote-side target price is deliberately UNKNOWN"
+    ]
+  },
+  "mint_state": {
+    "mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+    "slot": 467464758,
+    "token_program": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "token_program_type": "SPL Token",
+    "decimals": 6,
+    "mint_authority": null,
+    "freeze_authority": null,
+    "extensions": [],
+    "is_initialized": true
+  },
+  "token_accounts": {
+    "mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+    "supply_raw": "999961862925634",
+    "supply_decimals": 6,
+    "supply_slot": 467464763,
+    "largest_accounts_slot": 467464766,
+    "owners_lookup_slot": 467464771,
+    "top_token_account_count_returned": 20,
+    "top20_token_accounts_pct_supply": 47.165426,
+    "top_token_accounts": [
+      {
+        "token_account": "HbtfAEFy2BmgupuKBwmopJqBJe5etTTtJ9A5sfyyiL2s",
+        "raw_amount": "160535180953484",
+        "owner_wallet": "GpMZbSM2GgvTKHJirzeGfMFoaZ8UR2X7F4v8vHTvxFbL",
+        "fraction_of_supply_pct": 16.05413
+      },
+      {
+        "token_account": "4nMJF2Knbny5JtrDNaGu7v97vpGskvv9RR1nXawMvwTb",
+        "raw_amount": "29462627598520",
+        "owner_wallet": "HTeCsRM6UQ5RoDgh7ZpqWsnHf83rSAs5xZs42yk7bG4R",
+        "fraction_of_supply_pct": 2.946375
+      },
+      {
+        "token_account": "rmCFYXDdPvptRnsGo36P5hxnhFLAV6LCsvFkBKv73rE",
+        "raw_amount": "27308873444313",
+        "owner_wallet": "Fvkc2thk1YcAASdR2gi8uf9n67JW9Dqqr9iRd99MDhoB",
+        "fraction_of_supply_pct": 2.730991
+      },
+      {
+        "token_account": "B2TYLwrnqspSw3tw3cSYXi6ViUpSEy5ErU8YibsJ2dky",
+        "raw_amount": "24201115897916",
+        "owner_wallet": "99M1WZdbL77kC5wBVCuvzt6xsxFUTvTUqiFewp7wXwB",
+        "fraction_of_supply_pct": 2.420204
+      },
+      {
+        "token_account": "BYKYZUspXTivcTiTpNpN5ALKWqaoy5yjvBcecdU7Jijo",
+        "raw_amount": "24143819966966",
+        "owner_wallet": "Ga2ZXt1veKxLKGKoLyt5sg3HwkFeY3PjvGmGSwjidVVW",
+        "fraction_of_supply_pct": 2.414474
+      },
+      {
+        "token_account": "Dxd3ELjgbtKLthRMbJNPLUQZgc2UafYpzGTGSAxkc45R",
+        "raw_amount": "24102428205308",
+        "owner_wallet": "6zMVSeukMUMKu5tDsECh4QMqrCRZqTbTvuawztFfwNti",
+        "fraction_of_supply_pct": 2.410335
+      },
+      {
+        "token_account": "39p4guZ3Wa7KnaDbMYBCLEybNi7cjvq3MhRDRLDnPXzT",
+        "raw_amount": "19962951714750",
+        "owner_wallet": "5EJ5KakdQpESGkXNtB8BrcY7UyUViCkkWFe1S1ZNPJn5",
+        "fraction_of_supply_pct": 1.996371
+      },
+      {
+        "token_account": "3wu49dB5g94rFsPpridq2sf6QYFa4CZFqvVYHqFRzq25",
+        "raw_amount": "17504619611720",
+        "owner_wallet": "6SHqkzJfZYiNqmz4xDiwndEAqbubuAVt44LwJ9GF3obS",
+        "fraction_of_supply_pct": 1.750529
+      },
+      {
+        "token_account": "CpnRsJaxZDe48ARG8Y2sDbWFg3RGYN2RHfinqTDt5jes",
+        "raw_amount": "16140251862308",
+        "owner_wallet": "6fVGL6nHJpHUQUpisp8tB4LobcC1xMrLEZFJwpZwt8bn",
+        "fraction_of_supply_pct": 1.614087
+      },
+      {
+        "token_account": "A7hyUuxDeiuCNqeF7KZNYZ84BbQR8brKTSKA7nwBtCA9",
+        "raw_amount": "13399868688104",
+        "owner_wallet": "GooabfPAN3qF6RTiz72xfCxDLJ3xPfcu1MwTzg4gViC4",
+        "fraction_of_supply_pct": 1.340038
+      },
+      {
+        "token_account": "7HfeC8B1Mo6kQeqRqycTHb29h5x78HJUbUNgDUQ7EVYQ",
+        "raw_amount": "12858257968605",
+        "owner_wallet": "2uA94Y3X9dwDduojoj2NRcyZQaYtcoSsHZ4y1UX5P8Rs",
+        "fraction_of_supply_pct": 1.285875
+      },
+      {
+        "token_account": "98NGsCKLej6SngBsBkP4nhN8JwVXFMXkJymBaByKozCX",
+        "raw_amount": "12107376030812",
+        "owner_wallet": "G1ZnMGf3NE7rMt8SPYECxqE9shb8osAEYJCoZbR9rwW2",
+        "fraction_of_supply_pct": 1.210784
+      },
+      {
+        "token_account": "4eHnmqdf4A5sdMUwPBBPmjoLu5uCNFUEdCgHH455NNdx",
+        "raw_amount": "12024652324386",
+        "owner_wallet": "AEtL29wgARtujVynpgoDtUMLvM7NmZ6WALcjD2NjU8Dk",
+        "fraction_of_supply_pct": 1.202511
+      },
+      {
+        "token_account": "BCvtoodKzbsYKcfJ7f5KLxGBvUJbHMUrc8aZrHYNrz5n",
+        "raw_amount": "11740212730235",
+        "owner_wallet": "5y5e5E6QgnLnhhkanVjLSTuBsDNkaUMJofyCDCjKXrX3",
+        "fraction_of_supply_pct": 1.174066
+      },
+      {
+        "token_account": "A4fy1sdfRJyqvmQHedZ79NQaGgMjejXWebGHLM6CuGck",
+        "raw_amount": "11394999962084",
+        "owner_wallet": "9Sqg5P3Gtc9hjt3yYj1Pm4ri6GvezNouGzafcQX7pgye",
+        "fraction_of_supply_pct": 1.139543
+      },
+      {
+        "token_account": "9yEuCMxi3tPSsJx5tD74nCZ41ZJbQn17vBC5ae4WNRp4",
+        "raw_amount": "11275050017490",
+        "owner_wallet": "4E8ddWVYRdyE3WLtpR2EeEB3d6r64ozt5pYd3vwABBuD",
+        "fraction_of_supply_pct": 1.127548
+      },
+      {
+        "token_account": "9nR38nUeDDzq62x5JJXYUT1aN2CUDQ7jfAiceptSHtm5",
+        "raw_amount": "11131136567915",
+        "owner_wallet": "HNwmr8L4saZfiXbqkvCccVYqCsadhFVVHs8jCn4sYTud",
+        "fraction_of_supply_pct": 1.113156
+      },
+      {
+        "token_account": "5BznfiuZwR43hKZBfAzJWpk9fGEK5dzWgrhavcgUD2mg",
+        "raw_amount": "10915378553301",
+        "owner_wallet": "3Sn9V2L4GBSZJwri3B8cqjM8gASGzZBVUvzKBm9eH8vr",
+        "fraction_of_supply_pct": 1.091579
+      },
+      {
+        "token_account": "G8JRgcRPjqrKDiPeHGmFrSt98J8sVg7JGDgtEux7Tzbh",
+        "raw_amount": "10887806617577",
+        "owner_wallet": "Ev1AaPu4c6L1QEXZiLv9DkNBa3ZigddiXYFTk9tN2DoK",
+        "fraction_of_supply_pct": 1.088822
+      },
+      {
+        "token_account": "EALNtwmNy8xmPL98trW9aT12trHyRmsfK87tU7YJu9hw",
+        "raw_amount": "10539660582406",
+        "owner_wallet": "8iTUpGpzY7EUvznxzV6micBVqxvWbL5WWR4iaQHpWtM5",
+        "fraction_of_supply_pct": 1.054006
+      }
+    ],
+    "identified_owner_wallets_among_top_accounts": 20,
+    "max_identified_owner_pct_supply_among_top20": 16.05413,
+    "owner_mapping_completeness": 1.0,
+    "caveats": [
+      "Top token accounts are not top unique holders and can include DEX vaults, bridges and custodians",
+      "Mapped owner wallets can be program-owned, not beneficial owners",
+      "LargestAccounts returns up to 20 token accounts, not all holders",
+      "Different RPC context slots can cause slightly inconsistent snapshots"
+    ]
+  },
+  "flags": [],
+  "limits": [
+    "No sell quote, transfer simulation, or end-to-end exit verification",
+    "No verified social/X event feed or whale/insider identity clustering",
+    "Third-party market numbers are estimates, NOT execution prices",
+    "This is not an automated trading or rug-pull detection system"
+  ],
+  "completed_at_utc": "2026-11-09T21:15:04Z"
+}

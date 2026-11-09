@@ -1,0 +1,21 @@
+{
+  "label": "RESEARCH_QUEUE",
+  "score": 100,
+  "review_ok": true,
+  "reasons": [
+    "Mint parsed by Solana RPC (identity evidence only)",
+    "At least one exact-mint DEX pool reported",
+    "Supply and top token-account distribution available",
+    "Provider volume h1 available; may be inflated/manipulated",
+    "Target is base token in reference pair; price field usable as estimate"
+  ],
+  "errors": [],
+  "next_steps": [
+    "Audit token authorities, extensions, and mutable controls",
+    "Check executable sell quote, effective depth, fees, and restrictions",
+    "Verify original X/social narrative and event chronology",
+    "Pre-register hypothesis and test on out-of-sample data"
+  ],
+  "not_trade_signal": true,
+  "meaning": "Research inspection priority based on available evidence; NOT risk-adjusted alpha, security, or buy advice"
+}

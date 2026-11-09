@@ -1,0 +1,151 @@
+{
+  "criteria": {
+    "fault_cases_16_of_16": true,
+    "live_artifacts_and_repeat_consistency": true,
+    "required_metrics_present": true,
+    "resume_invariants": true,
+    "zero_evidence_loss_for_handled_errors": true,
+    "zero_provider_failure_to_buy": true
+  },
+  "failed_count_definition": "Count of processed candidates with any provider unavailable or identity/data-blocking label; gaps remain failures even though processing completed.",
+  "fault_injection": {
+    "detected": 16,
+    "evidence_loss_count": 0,
+    "provider_failure_to_buy_count": 0,
+    "resume_invariants": true,
+    "total": 16
+  },
+  "repeat": {
+    "consistent_identity_schema_decision_unknown_and_evidence": true,
+    "same_mints": true
+  },
+  "runs": [
+    {
+      "checks": {
+        "no_buy_recommendation": true,
+        "no_secret_leakage": true,
+        "no_transaction": true,
+        "output_tree": true,
+        "secret_hits": 0,
+        "sqlite_records_events": true
+      },
+      "directory": "e2e-mints-001",
+      "metrics": {
+        "candidate_count": 3,
+        "duration": 12.928,
+        "error_class": "ProviderOrIdentityGap",
+        "failed_count": 1,
+        "processed_count": 3,
+        "provider_requests": 15
+      },
+      "mints": [
+        "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+        "2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM",
+        "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv"
+      ],
+      "quality_verdict": "NOT_PASS",
+      "results": {
+        "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp": {
+          "gate_status": "DATA_TIDAK_CUKUP",
+          "label": "RESEARCH_QUEUE",
+          "providers": {
+            "dex_pairs": "ok",
+            "normalize_token_accounts": "ok",
+            "rpc_mint": "ok",
+            "rpc_owner_mapping": "ok",
+            "rpc_supply_and_largest": "ok"
+          }
+        },
+        "2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM": {
+          "gate_status": "TIDAK_BISA_DINILAI",
+          "label": "BLOCKED_IDENTITY",
+          "providers": {
+            "dex_pairs": "ok",
+            "normalize_token_accounts": "ok",
+            "rpc_mint": "unavailable",
+            "rpc_owner_mapping": "ok",
+            "rpc_supply_and_largest": "ok"
+          }
+        },
+        "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv": {
+          "gate_status": "DATA_TIDAK_CUKUP",
+          "label": "RESEARCH_QUEUE",
+          "providers": {
+            "dex_pairs": "ok",
+            "normalize_token_accounts": "ok",
+            "rpc_mint": "ok",
+            "rpc_owner_mapping": "ok",
+            "rpc_supply_and_largest": "ok"
+          }
+        }
+      },
+      "run_id": "phase3-e20755c6d6d3",
+      "runtime_status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "checks": {
+        "no_buy_recommendation": true,
+        "no_secret_leakage": true,
+        "no_transaction": true,
+        "output_tree": true,
+        "secret_hits": 0,
+        "sqlite_records_events": true
+      },
+      "directory": "e2e-mints-002",
+      "metrics": {
+        "candidate_count": 3,
+        "duration": 14.217,
+        "error_class": "ProviderOrIdentityGap",
+        "failed_count": 1,
+        "processed_count": 3,
+        "provider_requests": 15
+      },
+      "mints": [
+        "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+        "2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM",
+        "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv"
+      ],
+      "quality_verdict": "NOT_PASS",
+      "results": {
+        "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp": {
+          "gate_status": "DATA_TIDAK_CUKUP",
+          "label": "RESEARCH_QUEUE",
+          "providers": {
+            "dex_pairs": "ok",
+            "normalize_token_accounts": "ok",
+            "rpc_mint": "ok",
+            "rpc_owner_mapping": "ok",
+            "rpc_supply_and_largest": "ok"
+          }
+        },
+        "2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM": {
+          "gate_status": "TIDAK_BISA_DINILAI",
+          "label": "BLOCKED_IDENTITY",
+          "providers": {
+            "dex_pairs": "ok",
+            "normalize_token_accounts": "ok",
+            "rpc_mint": "unavailable",
+            "rpc_owner_mapping": "ok",
+            "rpc_supply_and_largest": "ok"
+          }
+        },
+        "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv": {
+          "gate_status": "DATA_TIDAK_CUKUP",
+          "label": "RESEARCH_QUEUE",
+          "providers": {
+            "dex_pairs": "ok",
+            "normalize_token_accounts": "ok",
+            "rpc_mint": "ok",
+            "rpc_owner_mapping": "ok",
+            "rpc_supply_and_largest": "ok"
+          }
+        }
+      },
+      "run_id": "phase3-09d87506b97c",
+      "runtime_status": "COMPLETED_WITH_GAPS"
+    }
+  ],
+  "schema_version": "p3.agent-e2e.v1",
+  "scope": "P3 resilience harness; not a data-quality PASS or investment verdict",
+  "verdict": "PASS"
+}

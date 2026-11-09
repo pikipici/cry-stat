@@ -1,0 +1,102 @@
+{
+  "schema_version": "phase3.run.v1",
+  "run_id": "phase3-09d87506b97c",
+  "created_at_utc": "2026-11-09T21:15:01Z",
+  "mode": "live",
+  "synthetic": false,
+  "status": "COMPLETED_WITH_GAPS",
+  "source_description": "DEX Screener RECENT TOKEN PROFILES or manually supplied mints; NOT launches",
+  "candidate_count": 3,
+  "processed_count": 3,
+  "request_json_calls": 15,
+  "elapsed_seconds": 14.217,
+  "research_priority_only": true,
+  "is_buy_signal": false,
+  "executes_transactions": false,
+  "review_counts": {
+    "RESEARCH_QUEUE": 2,
+    "RISK_REVIEW": 0,
+    "NEEDS_DATA": 0,
+    "BLOCKED_IDENTITY": 1
+  },
+  "ranked_watchlist": [
+    {
+      "research_rank": 1,
+      "mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+      "gate_status": "DATA_TIDAK_CUKUP",
+      "label": "RESEARCH_QUEUE",
+      "inspectability_score": 100,
+      "research_review_ok": true,
+      "flags": [],
+      "providers": {
+        "dex_pairs": "ok",
+        "rpc_mint": "ok",
+        "rpc_supply_and_largest": "ok",
+        "rpc_owner_mapping": "ok",
+        "normalize_token_accounts": "ok"
+      },
+      "source": "USER_MINT_LIST",
+      "outstanding_checks": [
+        "Audit token authorities, extensions, and mutable controls",
+        "Check executable sell quote, effective depth, fees, and restrictions",
+        "Verify original X/social narrative and event chronology",
+        "Pre-register hypothesis and test on out-of-sample data"
+      ]
+    },
+    {
+      "research_rank": 2,
+      "mint": "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv",
+      "gate_status": "DATA_TIDAK_CUKUP",
+      "label": "RESEARCH_QUEUE",
+      "inspectability_score": 100,
+      "research_review_ok": true,
+      "flags": [],
+      "providers": {
+        "dex_pairs": "ok",
+        "rpc_mint": "ok",
+        "rpc_supply_and_largest": "ok",
+        "rpc_owner_mapping": "ok",
+        "normalize_token_accounts": "ok"
+      },
+      "source": "USER_MINT_LIST",
+      "outstanding_checks": [
+        "Audit token authorities, extensions, and mutable controls",
+        "Check executable sell quote, effective depth, fees, and restrictions",
+        "Verify original X/social narrative and event chronology",
+        "Pre-register hypothesis and test on out-of-sample data"
+      ]
+    },
+    {
+      "research_rank": 3,
+      "mint": "2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM",
+      "gate_status": "TIDAK_BISA_DINILAI",
+      "label": "BLOCKED_IDENTITY",
+      "inspectability_score": 0,
+      "research_review_ok": true,
+      "flags": [],
+      "providers": {
+        "dex_pairs": "ok",
+        "rpc_mint": "unavailable",
+        "rpc_supply_and_largest": "ok",
+        "rpc_owner_mapping": "ok",
+        "normalize_token_accounts": "ok"
+      },
+      "source": "USER_MINT_LIST",
+      "outstanding_checks": [
+        "Verify mint on independent Solana RPC / explorer",
+        "Audit token authorities, extensions, and mutable controls",
+        "Check executable sell quote, effective depth, fees, and restrictions",
+        "Verify original X/social narrative and event chronology",
+        "Pre-register hypothesis and test on out-of-sample data"
+      ]
+    }
+  ],
+  "caveats": [
+    "Inspectability score measures evidence availability only; it is NOT investment attractiveness, predicted profit, or safety.",
+    "Automated checks do not verify sellability, Token-2022 extensions, social narratives, or manipulation.",
+    "No output can be interpreted as a buy signal. No wallet access, swaps, or orders.",
+    "Synthetic demo data are invented and MUST NOT be treated as market evidence."
+  ],
+  "outstanding_count": 0,
+  "resumable": false
+}

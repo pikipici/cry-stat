@@ -1,0 +1,424 @@
+{
+  "cases": [
+    {
+      "case": 1,
+      "evidence": {
+        "detection": "all provider evidence unavailable",
+        "is_buy_signal": false,
+        "providers": {
+          "dex_pairs": "unavailable",
+          "rpc_mint": "unavailable",
+          "rpc_supply_and_largest": "unavailable"
+        },
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.00038,
+        "error_class": "InjectedProviderFault",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 3
+      },
+      "name": "All providers down",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "case": 2,
+      "evidence": {
+        "detection": "DEX retained while RPC is UNKNOWN",
+        "is_buy_signal": false,
+        "providers": {
+          "dex_pairs": "ok",
+          "rpc_mint": "unavailable",
+          "rpc_supply_and_largest": "unavailable"
+        },
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.000277,
+        "error_class": "InjectedProviderFault",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 3
+      },
+      "name": "RPC down; DEX available",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "case": 3,
+      "evidence": {
+        "detection": "RPC retained while DEX is UNKNOWN",
+        "is_buy_signal": false,
+        "providers": {
+          "dex_pairs": "unavailable",
+          "normalize_token_accounts": "ok",
+          "rpc_mint": "ok",
+          "rpc_owner_mapping": "ok",
+          "rpc_supply_and_largest": "ok"
+        },
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.000326,
+        "error_class": "InjectedProviderFault",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 5
+      },
+      "name": "DEX down; RPC available",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "case": 4,
+      "evidence": {
+        "detection": "transport/protocol error retained as unavailable",
+        "is_buy_signal": false,
+        "providers": {
+          "dex_pairs": "ok",
+          "normalize_token_accounts": "ok",
+          "rpc_mint": "unavailable",
+          "rpc_owner_mapping": "ok",
+          "rpc_supply_and_largest": "ok"
+        },
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.000342,
+        "error_class": "InjectedProviderFault",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 5
+      },
+      "name": "HTTP 429 with Retry-After",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "case": 5,
+      "evidence": {
+        "detection": "transport/protocol error retained as unavailable",
+        "is_buy_signal": false,
+        "providers": {
+          "dex_pairs": "unavailable",
+          "normalize_token_accounts": "ok",
+          "rpc_mint": "unavailable",
+          "rpc_owner_mapping": "ok",
+          "rpc_supply_and_largest": "ok"
+        },
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.000257,
+        "error_class": "InjectedProviderFault",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 5
+      },
+      "name": "HTTP 500 followed by timeout",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "case": 6,
+      "evidence": {
+        "detection": "transport/protocol error retained as unavailable",
+        "is_buy_signal": false,
+        "providers": {
+          "dex_pairs": "ok",
+          "normalize_token_accounts": "ok",
+          "rpc_mint": "unavailable",
+          "rpc_owner_mapping": "ok",
+          "rpc_supply_and_largest": "ok"
+        },
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.00031,
+        "error_class": "InjectedProviderFault",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 5
+      },
+      "name": "Invalid JSON and changed response shape",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "case": 7,
+      "evidence": {
+        "detection": "unknown token program blocks identity",
+        "is_buy_signal": false,
+        "providers": {
+          "dex_pairs": "ok",
+          "normalize_token_accounts": "ok",
+          "rpc_mint": "unavailable",
+          "rpc_owner_mapping": "ok",
+          "rpc_supply_and_largest": "ok"
+        },
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.000431,
+        "error_class": "InjectedProviderFault",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 5
+      },
+      "name": "Invalid/non-SPL/unknown mint program",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "case": 8,
+      "evidence": {
+        "detection": "unsupported extension review flag",
+        "is_buy_signal": false,
+        "providers": {
+          "dex_pairs": "ok",
+          "normalize_token_accounts": "ok",
+          "rpc_mint": "ok",
+          "rpc_owner_mapping": "ok",
+          "rpc_supply_and_largest": "ok"
+        },
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.00049,
+        "error_class": "SemanticValidation",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 5
+      },
+      "name": "Token-2022 unsupported extension",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "case": 9,
+      "evidence": {
+        "detection": "account evidence retained; owners not imputed",
+        "is_buy_signal": false,
+        "providers": {
+          "dex_pairs": "ok",
+          "normalize_token_accounts": "ok",
+          "rpc_mint": "ok",
+          "rpc_owner_mapping": "unavailable",
+          "rpc_supply_and_largest": "ok"
+        },
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.000449,
+        "error_class": "InjectedProviderFault",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 5
+      },
+      "name": "Largest accounts work; owner mapping fails",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "case": 10,
+      "evidence": {
+        "detection": "quote-side target price rejected",
+        "is_buy_signal": false,
+        "providers": {
+          "dex_pairs": "ok",
+          "normalize_token_accounts": "ok",
+          "rpc_mint": "ok",
+          "rpc_owner_mapping": "ok",
+          "rpc_supply_and_largest": "ok"
+        },
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.00074,
+        "error_class": "SemanticValidation",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 5
+      },
+      "name": "Reversed base/quote and base-only price",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "case": 11,
+      "evidence": {
+        "detection": "null liquidity and future timestamp preserved, not promoted to quality PASS",
+        "is_buy_signal": false,
+        "providers": {
+          "dex_pairs": "ok",
+          "normalize_token_accounts": "ok",
+          "rpc_mint": "ok",
+          "rpc_owner_mapping": "ok",
+          "rpc_supply_and_largest": "ok"
+        },
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.000561,
+        "error_class": "SemanticValidation",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 5
+      },
+      "name": "Zero/null/stale/future pool snapshot",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "case": 12,
+      "evidence": {
+        "checkpoint_created": false,
+        "errors": [
+          "OSError",
+          "OperationalError",
+          "KeyboardInterrupt"
+        ],
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 1.2e-05,
+        "error_class": "StorageError",
+        "failed_count": 1,
+        "processed_count": 0,
+        "provider_requests": 0
+      },
+      "name": "Disk full / SQLite locked / interruption before checkpoint",
+      "passed": true,
+      "quality_verdict": "PASS",
+      "status": "PARTIAL_STORAGE_FAILURE"
+    },
+    {
+      "case": 13,
+      "evidence": {
+        "attempted": 2,
+        "limit": 2,
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.000142,
+        "error_class": "BudgetExceeded",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 2
+      },
+      "name": "max-calls reached mid-batch",
+      "passed": true,
+      "quality_verdict": "PASS",
+      "status": "PARTIAL_CALL_BUDGET"
+    },
+    {
+      "case": 14,
+      "evidence": {
+        "duplicate_records": 0,
+        "failure_after": "ProviderError",
+        "failure_before": "ProviderError",
+        "records_after": 2,
+        "records_after_second_resume": 2,
+        "records_before": 1,
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.058223,
+        "error_class": "ProviderError",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 0
+      },
+      "name": "Resume partial run without duplicate or whitening",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "case": 15,
+      "evidence": {
+        "detection": "active authorities require review",
+        "is_buy_signal": false,
+        "providers": {
+          "dex_pairs": "ok",
+          "normalize_token_accounts": "ok",
+          "rpc_mint": "ok",
+          "rpc_owner_mapping": "ok",
+          "rpc_supply_and_largest": "ok"
+        },
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.000617,
+        "error_class": "SemanticValidation",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 5
+      },
+      "name": "Active mint/freeze authority review flag",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "case": 16,
+      "evidence": {
+        "detection": "cross-field supply contradiction detected",
+        "is_buy_signal": false,
+        "providers": {
+          "dex_pairs": "ok",
+          "normalize_token_accounts": "ok",
+          "rpc_mint": "ok",
+          "rpc_owner_mapping": "ok",
+          "rpc_supply_and_largest": "ok"
+        },
+        "write_actions": 0
+      },
+      "metrics": {
+        "candidate_count": 1,
+        "duration": 0.000455,
+        "error_class": "SemanticValidation",
+        "failed_count": 1,
+        "processed_count": 1,
+        "provider_requests": 5
+      },
+      "name": "Valid JSON with contradictory semantics",
+      "passed": true,
+      "quality_verdict": "NOT_PASS",
+      "status": "COMPLETED_WITH_GAPS"
+    }
+  ],
+  "live_network_used": false,
+  "offline": true,
+  "schema_version": "p3.failure-injection.v1",
+  "synthetic": true,
+  "transaction_actions": 0
+}
