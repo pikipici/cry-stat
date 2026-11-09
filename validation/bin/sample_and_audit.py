@@ -96,7 +96,12 @@ def normalize(sample: dict[str, Any]) -> dict[str, str]:
     # DEX priceUsd is usable only when target is exactly the base token.
     price_ok = (base == mint and pair.get("priceUsd") is not None) if pair else None
     rpc_supply = supply.get("amount")
+    # The parsed mint account and getTokenSupply are independent RPC views of
+    # the same raw integer supply. An explicit fixture expectation takes
+    # precedence, otherwise compare those exact raw values without float casts.
     expected_supply = sample.get("expected_supply_raw")
+    if expected_supply is None:
+        expected_supply = parsed_info.get("supply")
     supply_match = None if rpc_supply is None or expected_supply is None else str(rpc_supply) == str(expected_supply)
     holder_ok = None if largest is None else isinstance(largest, list) and all("address" in x for x in largest) and not sample.get("holders_are_unique_owners", False)
     critical = [address_ok, program_ok, authorities_observed, mint_match, price_ok, holder_ok]
@@ -110,8 +115,23 @@ def normalize(sample: dict[str, Any]) -> dict[str, str]:
     if any(x is None for x in critical) or authorities_observed is False: codes.append("DATA_TIDAK_CUKUP")
     observed = sample.get("observed_at_utc")
     age = sample.get("age_seconds")
-    fresh = None if observed is None or age is None else float(age) <= float(sample.get("freshness_limit_seconds", 300))
+    if age is None and observed is not None and sample.get("received_at_utc") is not None:
+        try:
+            start = datetime.fromisoformat(str(observed).replace("Z", "+00:00"))
+            end = datetime.fromisoformat(str(sample["received_at_utc"]).replace("Z", "+00:00"))
+            age = (end - start).total_seconds()
+            if age < 0: age = None
+        except (TypeError, ValueError, OverflowError):
+            age = None
+    try:
+        fresh = None if observed is None or age is None else float(age) <= float(sample.get("freshness_limit_seconds", 300))
+    except (TypeError, ValueError, OverflowError):
+        fresh = None
     if fresh is False: codes.append("STALE")
+    if any(x is None for x in (mint_match, price_ok, supply_match, holder_ok, fresh)) and "DATA_TIDAK_CUKUP" not in codes:
+        codes.append("DATA_TIDAK_CUKUP")
+    if not pair and "no Solana DEX pair observed" in str(sample.get("selection_rationale", "")):
+        codes.append("DOCUMENTED_NO_PAIR")
     if sample.get("collection_error"): codes.append("COLLECTION_FAILED")
     raw_hash = hashlib.sha256(canonical_bytes(sample)).hexdigest()
     explanation = "; ".join(codes) if codes else "No discrepancy detected for verifiable fields"
@@ -339,10 +359,38 @@ def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
         w=csv.DictWriter(f, fieldnames=COLUMNS); w.writeheader(); w.writerows(rows)
 
 
+def evaluate_acceptance(sampling: dict[str, Any], rows: list[dict[str, str]]) -> dict[str, Any]:
+    """Evaluate the explicit runbook P2 gates; UNKNOWN is never counted as a match."""
+    fields=("mint_match","price_basis_match","supply_match","holder_semantics_valid","freshness_ok")
+    verifiable=[r[f] for r in rows for f in fields if r[f] != UNKNOWN]
+    matching=sum(v == "TRUE" for v in verifiable)
+    unknown=sum(r[f] == UNKNOWN for r in rows for f in fields)
+    critical_unknown_rows=sum(any(r[f] == UNKNOWN for f in fields) for r in rows)
+    marked_unknown_rows=sum(any(r[f] == UNKNOWN for f in fields) and "DATA_TIDAK_CUKUP" in r["discrepancy_code"] for r in rows)
+    silent_mint_mismatch=sum(r["mint_match"] == "FALSE" and "TARGET_NOT_DEX_BASE" not in r["discrepancy_code"] and "CHAIN_MISMATCH" not in r["discrepancy_code"] for r in rows)
+    invalid_price_or_holder=sum(r["price_basis_match"] == "FALSE" or r["holder_semantics_valid"] == "FALSE" for r in rows)
+    documented_no_pair=sum("DOCUMENTED_NO_PAIR" in r["discrepancy_code"] and r["mint_match"] == UNKNOWN and r["price_basis_match"] == UNKNOWN for r in rows)
+    silent_no_pair=sum(r["dex_pair"] == UNKNOWN and r["discrepancy_code"] == "NONE" for r in rows)
+    rate=matching/len(verifiable) if verifiable else 0.0
+    gates={"distinct_balanced_100":sampling["total"] == 100 and sampling["distinct_valid_mints"] == 100 and all(v == 25 for v in sampling["counts"].values()),
+           "zero_silent_mint_mismatch":silent_mint_mismatch == 0,
+           "zero_invalid_price_holder_semantics":invalid_price_or_holder == 0,
+           "all_critical_missing_marked_unknown":critical_unknown_rows == marked_unknown_rows,
+           "verifiable_match_rate_at_least_98pct":rate >= .98,
+           "zero_silent_no_pair":silent_no_pair == 0}
+    return {"verdict":"PASS" if all(gates.values()) else "FAIL", "gates":gates,
+            "verifiable_fields":len(verifiable), "verifiable_matches":matching, "verifiable_match_rate":rate,
+            "unverifiable_fields":unknown, "critical_unknown_rows":critical_unknown_rows,
+            "critical_unknown_rows_marked":marked_unknown_rows, "silent_mint_mismatch":silent_mint_mismatch,
+            "invalid_price_or_holder_semantics":invalid_price_or_holder,
+            "documented_unverifiable_no_pair":documented_no_pair, "silent_success_no_pair":silent_no_pair}
+
+
 def write_report(path: Path, run_id: str, sampling: dict[str, Any], rows: list[dict[str,str]], synthetic: bool) -> None:
     failures=sum(r["discrepancy_code"] != "NONE" for r in rows); unknown=sum("UNKNOWN" in (r[c] for c in ("mint_match","price_basis_match","supply_match","holder_semantics_valid","freshness_ok")) for r in rows)
+    acceptance=evaluate_acceptance(sampling,rows)
     examples=rows[:10]
-    text=f"""# DATA_ACCURACY\n\n## Run provenance\n- run_id: `{run_id}`\n- observed_at_utc: `{prov.utc_now()}`\n- synthetic: `{str(synthetic).lower()}`\n- code_version: `{prov.code_version()}`\n- denominator: {len(rows)} (collection failures retained: {sampling['failed_in_denominator']})\n\n## Sampling frame\n- required strata: {', '.join(STRATA)}\n- counts: `{json.dumps(sampling['counts'], sort_keys=True)}`\n- minimum_100: {sampling['minimum_100']}\n- each_stratum_minimum_25: {sampling['strata_minimum_25']}\n\n## Accuracy summary\n- rows_with_discrepancy_or_insufficient_data: {failures}\n- rows_with_unknown_verifiability: {unknown}\n- UNKNOWN and DATA_TIDAK_CUKUP are never interpreted as safe or valid.\n\n## Confusion / error taxonomy\n| Code | Meaning | Treatment |\n|---|---|---|\n| INVALID_MINT | Not base58 32-byte mint | Invalid |\n| WRONG_TOKEN_PROGRAM | Account owner is not SPL/Token-2022 | Invalid |\n| CHAIN_MISMATCH | DEX chain is not Solana | Invalid |\n| TARGET_NOT_DEX_BASE | Target is quote/other token | Reject priceUsd and mint match |\n| PRICE_MISSING | Base-token USD price absent | UNKNOWN, not zero |\n| HOLDER_SEMANTICS_INVALID | Token accounts represented as unique owners | Invalid |
+    text=f"""# DATA_ACCURACY\n\n## Run provenance\n- run_id: `{run_id}`\n- observed_at_utc: `{prov.utc_now()}`\n- synthetic: `{str(synthetic).lower()}`\n- code_version: `{prov.code_version()}`\n- denominator: {len(rows)} (collection failures retained: {sampling['failed_in_denominator']})\n\n## Sampling frame\n- required strata: {', '.join(STRATA)}\n- counts: `{json.dumps(sampling['counts'], sort_keys=True)}`\n- minimum_100: {sampling['minimum_100']}\n- each_stratum_minimum_25: {sampling['strata_minimum_25']}\n\n## Accuracy summary\n- rows_with_discrepancy_or_insufficient_data: {failures}\n- rows_with_unknown_verifiability: {unknown}\n- UNKNOWN and DATA_TIDAK_CUKUP are never interpreted as safe or valid.\n\n## P2 acceptance verdict\n- verdict: **{acceptance['verdict']}**\n- distinct_balanced_100: {acceptance['gates']['distinct_balanced_100']}\n- silent_mint_mismatch: {acceptance['silent_mint_mismatch']} (required: 0)\n- invalid_price_or_holder_semantics: {acceptance['invalid_price_or_holder_semantics']} (required: 0)\n- critical_unknown_rows_marked: {acceptance['critical_unknown_rows_marked']}/{acceptance['critical_unknown_rows']} (required: 100%)\n- verifiable_normalized_fields_matching: {acceptance['verifiable_matches']}/{acceptance['verifiable_fields']} ({acceptance['verifiable_match_rate']:.2%}; required: >=98%)\n- unverifiable_fields: {acceptance['unverifiable_fields']} (reported separately, not counted as matches)\n- documented_unverifiable_no_pair: {acceptance['documented_unverifiable_no_pair']}\n- silent_success_no_pair: {acceptance['silent_success_no_pair']} (required: 0)\n\n## Confusion / error taxonomy\n| Code | Meaning | Treatment |\n|---|---|---|\n| INVALID_MINT | Not base58 32-byte mint | Invalid |\n| WRONG_TOKEN_PROGRAM | Account owner is not SPL/Token-2022 | Invalid |\n| CHAIN_MISMATCH | DEX chain is not Solana | Invalid |\n| TARGET_NOT_DEX_BASE | Target is quote/other token | Reject priceUsd and mint match |\n| PRICE_MISSING | Base-token USD price absent | UNKNOWN, not zero |\n| HOLDER_SEMANTICS_INVALID | Token accounts represented as unique owners | Invalid |
 | AUTHORITY_DATA_MISSING | Mint/freeze authority was not observed (null values are valid observations) | UNKNOWN, never safe |\n| STALE | Observation exceeds freshness limit | Review |\n| COLLECTION_FAILED | Provider request failed | Retain in denominator |\n| DATA_TIDAK_CUKUP | Critical field missing | UNKNOWN, never safe |\n\n## Ten manual audit examples\n| # | mint | pair | mint | price basis | holders | discrepancy |\n|---:|---|---|---|---|---|---|\n"""
     for i,r in enumerate(examples,1): text += f"| {i} | {r['mint']} | {r['dex_pair']} | {r['mint_match']} | {r['price_basis_match']} | {r['holder_semantics_valid']} | {r['discrepancy_code']} |\n"
     text += "\n## Interpretation constraints\nDEX Screener `priceUsd` is accepted only for an exact Solana pair whose base-token mint equals the sampled mint. Largest accounts remain token accounts; owner and beneficial-owner concentration are separate and UNKNOWN unless independently proven. Null authority alone never establishes safety.\n"

@@ -13,6 +13,19 @@ def sample(i=0,stratum="active_liquid"):
  return {"mint":MINT,"stratum":stratum,"source":"fixture:list-v1","observed_at_utc":"2026-01-01T00:00:00Z","age_seconds":10,"expected_supply_raw":"1000","reviewer":"fixture-reviewer","rpc":{"account_info":{"owner":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","data":{"parsed":{"info":{"mintAuthority":None,"freezeAuthority":None}}}},"supply":{"amount":"1000","decimals":9,"slot":123},"largest_accounts":[{"address":PAIR,"amount":"10"}]},"dex":{"pair":{"chainId":"solana","pairAddress":PAIR,"baseToken":{"address":MINT},"quoteToken":{"address":QUOTE},"priceUsd":"1.25"}}}
 
 class Semantics(unittest.TestCase):
+ def test_supply_falls_back_to_parsed_mint_raw_supply(self):
+  s=sample(); del s["expected_supply_raw"]
+  s["rpc"]["account_info"]["data"]["parsed"]["info"]["supply"]="1000"
+  self.assertEqual(audit.normalize(s)["supply_match"],"TRUE")
+  s["rpc"]["supply"]["amount"]="1001"
+  self.assertEqual(audit.normalize(s)["supply_match"],"FALSE")
+ def test_freshness_derived_from_timestamps_and_invalid_is_unknown(self):
+  s=sample(); del s["age_seconds"]; s["received_at_utc"]="2026-01-01T00:04:59Z"
+  self.assertEqual(audit.normalize(s)["freshness_ok"],"TRUE")
+  s["received_at_utc"]="2026-01-01T00:05:01Z"
+  self.assertEqual(audit.normalize(s)["freshness_ok"],"FALSE")
+  s["received_at_utc"]="not-a-time"
+  self.assertEqual(audit.normalize(s)["freshness_ok"],"UNKNOWN")
  def test_exact_base_mint_and_price_pass(self):
   r=audit.normalize(sample()); self.assertEqual((r["mint_match"],r["price_basis_match"],r["holder_semantics_valid"]),("TRUE","TRUE","TRUE"))
  def test_target_in_quote_rejects_price(self):
@@ -47,6 +60,18 @@ class SamplingAndArtifacts(unittest.TestCase):
    for heading in ("## Run provenance","## Sampling frame","## Accuracy summary","## Confusion / error taxonomy","## Ten manual audit examples","## Interpretation constraints"): self.assertIn(heading,text)
  def test_stratum_shortfall_fails_gate_without_fabrication(self):
   q=audit.validate_sampling(self.samples[:-1]); self.assertEqual(q["total"],99); self.assertFalse(q["minimum_100"]); self.assertFalse(q["strata_minimum_25"])
+ def test_acceptance_verdict_uses_explicit_p2_gates(self):
+  rows=[audit.normalize(x) for x in self.samples]
+  sampling=audit.validate_sampling(self.samples); sampling["distinct_valid_mints"]=100
+  verdict=audit.evaluate_acceptance(sampling,rows)
+  self.assertEqual(verdict["verdict"],"PASS"); self.assertEqual(verdict["verifiable_match_rate"],1.0)
+  for row in rows[:11]: row["supply_match"]="FALSE"
+  self.assertEqual(audit.evaluate_acceptance(sampling,rows)["verdict"],"FAIL")
+ def test_documented_no_pair_is_unknown_not_silent_success(self):
+  s=sample(stratum="risky_delisted_migrated"); s["dex"]={}; s["selection_rationale"]="documented mint; no Solana DEX pair observed at sampling time"
+  row=audit.normalize(s); self.assertEqual((row["mint_match"],row["price_basis_match"]),("UNKNOWN","UNKNOWN"))
+  verdict=audit.evaluate_acceptance(audit.validate_sampling([s]),[row])
+  self.assertEqual(verdict["documented_unverifiable_no_pair"],1); self.assertEqual(verdict["silent_success_no_pair"],0)
 
 class SamplingFrameBuilder(unittest.TestCase):
  def test_gecko_trending_parser_uses_included_base_token_defensively(self):
