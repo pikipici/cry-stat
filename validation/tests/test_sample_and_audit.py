@@ -49,6 +49,45 @@ class SamplingAndArtifacts(unittest.TestCase):
   q=audit.validate_sampling(self.samples[:-1]); self.assertEqual(q["total"],99); self.assertFalse(q["minimum_100"]); self.assertFalse(q["strata_minimum_25"])
 
 class SamplingFrameBuilder(unittest.TestCase):
+ def test_gecko_trending_parser_uses_included_base_token_defensively(self):
+  def mint(n): return audit._b58encode(n.to_bytes(32,"big"))
+  payload={"data":[
+   {"relationships":{"base_token":{"data":{"type":"token","id":"solana_"+mint(1)}}}},
+   {"relationships":{"base_token":{"data":{"type":"token","id":"resource-2"}}}},
+   {"relationships":{"base_token":{"data":None}}}, {"relationships":None}],
+   "included":[
+    {"type":"token","id":"solana_"+mint(1),"attributes":{"address":mint(1)}},
+    {"type":"token","id":"resource-2","attributes":{"address":mint(2)}},
+    {"type":"token","id":"unused","attributes":{"address":mint(3)}}]}
+  got=audit.parse_gecko_base_tokens(payload,"https://gecko/page=1")
+  self.assertEqual([x["address"] for x in got],[mint(1),mint(2)])
+  self.assertTrue(all(x["_candidate_source_urls"]==["https://gecko/page=1"] for x in got))
+ def test_gecko_candidate_requires_exact_base_and_active_thresholds(self):
+  def mint(n): return audit._b58encode(n.to_bytes(32,"big"))
+  gecko=[{"address":mint(i),"_candidate_sources":["GeckoTerminal Solana trending pools"],"_candidate_source_urls":[f"https://g?page={i}"]} for i in range(1,5)]
+  pairs={
+   mint(1):[{"chainId":"solana","baseToken":{"address":mint(1)},"liquidity":{"usd":100000},"txns":{"h24":{"buys":50,"sells":50}}}],
+   mint(2):[{"chainId":"solana","baseToken":{"address":mint(2)},"liquidity":{"usd":99999},"txns":{"h24":{"buys":5}}}],
+   mint(3):[{"chainId":"solana","baseToken":{"address":mint(3)},"liquidity":{"usd":200000},"txns":{"h24":{"buys":99}}}],
+   mint(4):[{"chainId":"solana","baseToken":{"address":mint(99)},"liquidity":{"usd":200000},"txns":{"h24":{"buys":200}}}]}
+  frame=audit.build_sampling_frame([],gecko,lambda ms:{m:pairs.get(m,[]) for m in ms},"now")
+  self.assertEqual([(x["mint"],x["stratum"]) for x in frame],[(mint(1),"active_liquid"),(mint(2),"low_liquidity"),(mint(4),"risky_delisted_migrated")])
+  self.assertNotIn(mint(3),[x["mint"] for x in frame])
+  active=frame[0]; self.assertIn("GeckoTerminal",active["source"]); self.assertEqual(active["provenance"]["candidate_source_urls"],["https://g?page=1"])
+ def test_candidate_selection_prioritizes_documented_identity_then_spans_list(self):
+  def mint(n): return audit._b58encode(n.to_bytes(32,"big"))
+  tokens=[{"address":mint(i),"extensions":{"coingeckoId":f"coin-{i:02d}"}} if i in (3,7,12) else {"address":mint(i),"tags":["old-registry"]} for i in range(1,20)]
+  got=audit.select_documented_candidates(tokens,5)
+  self.assertEqual([x["extensions"]["coingeckoId"] for x in got[:3]],["coin-03","coin-07","coin-12"])
+  self.assertEqual(len({x["address"] for x in got}),5)
+ def test_three_discovery_feeds_are_combined_and_provenance_records_each_url(self):
+  def mint(n): return audit._b58encode(n.to_bytes(32,"big"))
+  feeds={"profiles":[{"chainId":"solana","tokenAddress":mint(1)}],"latest_boosts":[{"chainId":"solana","tokenAddress":mint(2)}],"top_boosts":[{"chainId":"solana","tokenAddress":mint(3)}]}
+  urls={"profiles_url":"https://p","latest_boosts_url":"https://l","top_boosts_url":"https://t","tokens_url":"https://j"}
+  frame=audit.build_sampling_frame(feeds,[],lambda ms:{m:[] for m in ms},"now",urls)
+  self.assertEqual({x["mint"] for x in frame},{mint(1),mint(2),mint(3)})
+  self.assertTrue(all("launch age not assumed" in x["selection_rationale"] for x in frame))
+  self.assertTrue(all(x["provenance"]["discovery_feed_urls"]==["https://p","https://l","https://t"] for x in frame))
  def test_observable_rules_produce_distinct_balanced_frame_with_provenance(self):
   def mint(n): return audit._b58encode(n.to_bytes(32,"big"))
   profiles=[{"chainId":"solana","tokenAddress":mint(i),"url":"https://dexscreener.com/solana/x"} for i in range(1,31)]
@@ -79,6 +118,45 @@ class LiveSafety(unittest.TestCase):
   with mock.patch.object(audit.urllib.request,"urlopen",side_effect=[err,response]) as opened, mock.patch.object(audit.time,"sleep") as slept:
    self.assertEqual(audit._request("https://x",None,1,retries=1),{})
    self.assertIn("Mozilla/5.0",opened.call_args_list[-1].args[0].headers["User-agent"]); slept.assert_called_once()
+ def test_largest_accounts_429_preserves_account_supply_and_dex(self):
+  account={"result":{"value":{"owner":"token-program"}}}; supply={"result":{"context":{"slot":77},"value":{"amount":"12"}}}
+  rate=audit.urllib.error.HTTPError("https://rpc.example/?api-key=SECRET",429,"rate",{},None)
+  pairs=[{"chainId":"solana","baseToken":{"address":MINT},"liquidity":{"usd":1}}]
+  with mock.patch.object(audit,"_request",side_effect=[account,supply,rate,pairs]), mock.patch.object(audit.time,"sleep"):
+   got=audit.collect_live({"mint":MINT},"https://rpc.example/?api-key=SECRET",1,0)
+  self.assertEqual(got["rpc"]["account_info"],account["result"]["value"]); self.assertEqual(got["rpc"]["supply"]["amount"],"12")
+  self.assertIsNone(got["rpc"]["largest_accounts"]); self.assertTrue(got["dex"]["pair"]); self.assertNotIn("collection_error",got)
+  failure=got["collection_status"]["getTokenLargestAccounts"]
+  self.assertEqual((failure["status"],failure["error"]["type"],failure["error"]["http_status"]),("error","HTTPError",429)); self.assertNotIn("SECRET",json.dumps(got))
+ def test_every_request_is_independent_and_total_failure_sets_top_level_error(self):
+  errors=[TimeoutError("secret one"),ValueError("secret two"),OSError("secret three"),RuntimeError("secret four")]
+  with mock.patch.object(audit,"_request",side_effect=errors), mock.patch.object(audit.time,"sleep"):
+   got=audit.collect_live({"mint":MINT},"https://rpc.example",1,0)
+  self.assertEqual(set(got["collection_status"]),{"getAccountInfo","getTokenSupply","getTokenLargestAccounts","dex_pairs"})
+  self.assertTrue(all(x["status"]=="error" for x in got["collection_status"].values())); self.assertEqual(got["collection_error"],"all_requests_failed"); self.assertNotIn("secret",json.dumps(got).lower())
+ def test_json_rpc_error_is_structured_and_does_not_stop_later_methods(self):
+  responses=[{"error":{"code":-32000,"message":"sensitive provider detail"}}, {"result":{"context":{"slot":2},"value":{"amount":"3"}}}, {"result":{"value":[]}}, []]
+  with mock.patch.object(audit,"_request",side_effect=responses), mock.patch.object(audit.time,"sleep"):
+   got=audit.collect_live({"mint":MINT},"https://rpc.example",1,0)
+  self.assertEqual(got["collection_status"]["getAccountInfo"]["error"],{"type":"JSONRPCError","code":-32000}); self.assertEqual(got["rpc"]["supply"]["amount"],"3")
+  self.assertNotIn("sensitive",json.dumps(got)); self.assertNotIn("collection_error",got)
+
+class Checkpoint(unittest.TestCase):
+ def test_resume_preserves_completed_failures(self):
+  with tempfile.TemporaryDirectory() as d:
+   path=pathlib.Path(d)/"checkpoint.jsonl"; items=[{"mint":MINT},{"mint":PAIR}]; calls=[]
+   def collect(x,*_): calls.append(x["mint"]); return dict(x,collection_error="TimeoutError")
+   first=audit.collect_with_checkpoint(items,path,collect,"https://rpc",1,0)
+   second=audit.collect_with_checkpoint(items,path,collect,"https://rpc",1,0)
+   self.assertEqual((len(first),len(second)),(2,2)); self.assertEqual(calls,[MINT,PAIR])
+   self.assertTrue(all("collection_error" in x for x in second))
+ def test_new_checkpoint_retries_without_mutating_failed_checkpoint(self):
+  with tempfile.TemporaryDirectory() as d:
+   old=pathlib.Path(d)/"failed.jsonl"; new=pathlib.Path(d)/"retry.jsonl"
+   old.write_text(json.dumps({"mint":MINT,"collection_error":"all_requests_failed"})+"\n"); before=old.read_bytes(); calls=[]
+   def collect(x,*_): calls.append(x["mint"]); return dict(x,rpc={"supply":{"amount":"1"}})
+   got=audit.collect_with_checkpoint([{"mint":MINT}],new,collect,"https://rpc",1,0)
+   self.assertEqual(calls,[MINT]); self.assertEqual(old.read_bytes(),before); self.assertNotIn("collection_error",got[0])
 
 class FrameCLI(unittest.TestCase):
  def test_shortfall_artifact_is_written_without_frame_fabrication(self):

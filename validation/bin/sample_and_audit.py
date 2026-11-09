@@ -18,8 +18,11 @@ from redact import assert_no_secrets, redact_secrets, redact_url  # noqa: E402
 DEFAULT_RPC = "https://api.mainnet-beta.solana.com"
 DEX_BASE = "https://api.dexscreener.com"
 DEX_PROFILES_URL = f"{DEX_BASE}/token-profiles/latest/v1"
+DEX_LATEST_BOOSTS_URL = f"{DEX_BASE}/token-boosts/latest/v1"
+DEX_TOP_BOOSTS_URL = f"{DEX_BASE}/token-boosts/top/v1"
 JUPITER_TOKENS_URL = "https://cache.jup.ag/tokens"
 ARCHIVED_TOKENS_URL = "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json"
+GECKO_TRENDING_URLS = tuple(f"https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page={page}&include=base_token" for page in range(1, 6))
 BROWSER_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0 Safari/537.36 P2ReadOnly/1.0"
 TOKEN_PROGRAMS = {"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA": "SPL", "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb": "TOKEN_2022"}
 STRATA = ("new_discovery", "active_liquid", "low_liquidity", "risky_delisted_migrated")
@@ -115,25 +118,35 @@ def validate_sampling(samples: list[dict[str, Any]]) -> dict[str, Any]:
             "strata_minimum_25": all(v >= 25 for v in counts.values()), "failed_in_denominator": sum(bool(x.get("collection_error")) for x in samples)}
 
 
-def build_sampling_frame(profiles: list[dict[str, Any]], documented: list[dict[str, Any]], pair_lookup: Any, observed_at: str, source_urls: dict[str, str] | None = None) -> list[dict[str, Any]]:
+def build_sampling_frame(profiles: Any, documented: list[dict[str, Any]], pair_lookup: Any, observed_at: str, source_urls: dict[str, str] | None = None) -> list[dict[str, Any]]:
     """Apply observable, predeclared rules; labels make no claim of launch age or misconduct."""
-    pm = [x.get("tokenAddress") for x in profiles if x.get("chainId") == "solana"]
+    feeds = profiles if isinstance(profiles, dict) else {"profiles": profiles, "latest_boosts": [], "top_boosts": []}
+    feed_labels = {"profiles":"DEX Screener latest token profiles", "latest_boosts":"DEX Screener latest token boosts", "top_boosts":"DEX Screener top token boosts"}
+    discovery = [(x.get("tokenAddress"), name) for name, records in feeds.items() for x in records if x.get("chainId") == "solana"]
+    pm = [mint for mint, _ in discovery]
     dm = [x.get("address") for x in documented]
     candidates = list(dict.fromkeys(x for x in pm + dm if valid_mint(x)))
     pair_map = pair_lookup(candidates); selected: list[dict[str, Any]] = []; used: set[str] = set(); source_urls = source_urls or {}
     def add(mint: str, stratum: str, rationale: str, source: str) -> None:
         if mint not in used and sum(x["stratum"] == stratum for x in selected) < 25:
+            candidate = next((x for x in documented if x.get("address") == mint), {})
             used.add(mint); selected.append({"mint":mint,"stratum":stratum,"source":source,"selection_rationale":rationale,
-                "provenance":{"observed_at_utc":observed_at,"profiles_url":source_urls.get("profiles_url"),"tokens_url":source_urls.get("tokens_url"),
-                "pair_source_url":next((p.get("_source_url") for p in pair_map.get(mint,[]) if p.get("_source_url")),f"{DEX_BASE}/token-pairs/v1/solana/{mint}"),"rule_version":"p2-frame-v1"}})
-    for mint in pm: add(mint,"new_discovery","present in DEX Screener latest token profiles; launch age not assumed","DEX Screener latest token profiles")
+                "provenance":{"observed_at_utc":observed_at,"discovery_feed_urls":[source_urls.get(k) for k in ("profiles_url","latest_boosts_url","top_boosts_url") if source_urls.get(k)],"tokens_url":source_urls.get("tokens_url"),
+                "candidate_source_urls":candidate.get("_candidate_source_urls", []),"pair_source_url":next((p.get("_source_url") for p in pair_map.get(mint,[]) if p.get("_source_url")),f"{DEX_BASE}/token-pairs/v1/solana/{mint}"),"rule_version":"p2-frame-v1"}})
     metrics: dict[str, tuple[list[Any],float,int]] = {}
     for mint in dm:
         pairs=[p for p in pair_map.get(mint,[]) if p.get("chainId")=="solana" and (p.get("baseToken") or {}).get("address")==mint]
         liq=max((float((p.get("liquidity") or {}).get("usd") or 0) for p in pairs),default=0)
         tx=max((sum(int(v or 0) for v in ((p.get("txns") or {}).get("h24") or {}).values()) for p in pairs),default=0); metrics[mint]=(pairs,liq,tx)
     for mint,(pairs,liq,tx) in metrics.items():
-        if pairs and liq>=100000 and tx>=100: add(mint,"active_liquid",f"observable max liquidity_usd={liq:g} and h24_txns={tx}","Jupiter verified token list + DEX Screener pairs")
+        if pairs and liq>=100000 and tx>=100:
+            candidate=next((x for x in documented if x.get("address")==mint), {})
+            origins=candidate.get("_candidate_sources") or ["Jupiter documented token list"]
+            add(mint,"active_liquid",f"observable max liquidity_usd={liq:g} and h24_txns={tx}"," + ".join(origins+["DEX Screener pairs"]))
+    # Allocate active tokens first so discovery feeds cannot consume the scarce
+    # active stratum. Discovery semantics remain feed-based and launch age is not
+    # inferred; cross-stratum mint uniqueness is preserved.
+    for mint, feed in discovery: add(mint,"new_discovery",f"present in {feed_labels[feed]}; launch age not assumed",feed_labels[feed])
     for mint,(pairs,liq,tx) in metrics.items():
         if pairs and (liq<=5000 or tx<=5): add(mint,"low_liquidity",f"observable max liquidity_usd={liq:g} or h24_txns={tx} meets low-activity rule","Jupiter verified token list + DEX Screener pairs")
     for mint,(pairs,liq,tx) in metrics.items():
@@ -153,9 +166,33 @@ def _request(url: str, payload: dict[str, Any] | None, timeout: float, retries: 
             time.sleep(min(8.0, 0.75 * (2 ** attempt)))
 
 
-def fetch_sampling_sources(timeout: float) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, str]]:
+def parse_gecko_base_tokens(payload: Any, source_url: str) -> list[dict[str, Any]]:
+    """Resolve pool base-token relationships through JSON:API included resources."""
+    if not isinstance(payload, dict): return []
+    included = payload.get("included") if isinstance(payload.get("included"), list) else []
+    resources = {x.get("id"): x for x in included if isinstance(x, dict) and x.get("type") == "token" and isinstance(x.get("id"), str)}
+    result: list[dict[str, Any]] = []; seen: set[str] = set()
+    for pool in payload.get("data") if isinstance(payload.get("data"), list) else []:
+        if not isinstance(pool, dict): continue
+        relationships = pool.get("relationships") if isinstance(pool.get("relationships"), dict) else {}
+        base = relationships.get("base_token") if isinstance(relationships.get("base_token"), dict) else {}
+        ref = base.get("data") if isinstance(base.get("data"), dict) else {}
+        resource = resources.get(ref.get("id"), {})
+        attributes = resource.get("attributes") if isinstance(resource.get("attributes"), dict) else {}
+        resource_id = resource.get("id") if isinstance(resource.get("id"), str) else ""
+        mint = attributes.get("address")
+        # Gecko JSON:API token resources commonly encode network_address in id;
+        # accept it only after resolving the relationship to an included token.
+        if not valid_mint(mint) and resource_id.startswith("solana_"):
+            mint = resource_id.removeprefix("solana_")
+        if valid_mint(mint) and mint not in seen:
+            seen.add(mint); result.append({"address":mint,"_candidate_sources":["GeckoTerminal Solana trending pools"],"_candidate_source_urls":[source_url]})
+    return result
+
+
+def fetch_sampling_sources(timeout: float) -> tuple[dict[str, list[dict[str, Any]]], list[dict[str, Any]], dict[str, Any]]:
     """Fetch discovery and documented lists, falling back only when Jupiter fails."""
-    profiles = _request(DEX_PROFILES_URL, None, timeout)
+    feeds = {"profiles": _request(DEX_PROFILES_URL, None, timeout), "latest_boosts": _request(DEX_LATEST_BOOSTS_URL, None, timeout), "top_boosts": _request(DEX_TOP_BOOSTS_URL, None, timeout)}
     token_url = JUPITER_TOKENS_URL
     try:
         documented = _request(token_url, None, timeout)
@@ -163,8 +200,40 @@ def fetch_sampling_sources(timeout: float) -> tuple[list[dict[str, Any]], list[d
         token_url = ARCHIVED_TOKENS_URL
         raw = _request(token_url, None, timeout)
         documented = raw.get("tokens", []) if isinstance(raw, dict) else raw
-    return (profiles if isinstance(profiles, list) else [], documented if isinstance(documented, list) else [],
-            {"profiles_url": DEX_PROFILES_URL, "tokens_url": token_url})
+    gecko: list[dict[str, Any]] = []
+    for page, url in enumerate(GECKO_TRENDING_URLS):
+        try: gecko.extend(parse_gecko_base_tokens(_request(url, None, timeout), url))
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError): pass
+        if page + 1 < len(GECKO_TRENDING_URLS): time.sleep(1.0)
+    by_mint: dict[str, dict[str, Any]] = {}
+    for token in gecko:
+        mint=token["address"]
+        if mint not in by_mint: by_mint[mint]=token
+        else: by_mint[mint]["_candidate_source_urls"].extend(u for u in token["_candidate_source_urls"] if u not in by_mint[mint]["_candidate_source_urls"])
+    documented = (documented if isinstance(documented, list) else []) + list(by_mint.values())
+    return ({k: v if isinstance(v, list) else [] for k,v in feeds.items()}, documented,
+            {"profiles_url": DEX_PROFILES_URL, "latest_boosts_url":DEX_LATEST_BOOSTS_URL, "top_boosts_url":DEX_TOP_BOOSTS_URL, "tokens_url": token_url, "gecko_trending_urls":list(GECKO_TRENDING_URLS)})
+
+
+def select_documented_candidates(tokens: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+    """Deterministically span the full Jupiter list, preferring observable tags without relying on source order."""
+    valid = [x for x in tokens if valid_mint(x.get("address"))]
+    # A documented CoinGecko identity is a reproducible candidate-priority signal,
+    # not proof of liquidity. Final active classification still requires live DEX
+    # liquidity and transaction thresholds below.
+    gecko = sorted((x for x in valid if x.get("_candidate_source_urls")), key=lambda x: x["address"])
+    identified = sorted(
+        (x for x in valid if (x.get("extensions") or {}).get("coingeckoId")),
+        key=lambda x: (str((x.get("extensions") or {}).get("coingeckoId")), x["address"]),
+    )
+    tagged = sorted((x for x in valid if x.get("tags")), key=lambda x: hashlib.sha256(x["address"].encode()).digest())
+    ordered = sorted(valid, key=lambda x: hashlib.sha256(x["address"].encode()).digest())
+    chosen = gecko[:limit]
+    seen = {x["address"] for x in chosen}
+    for pool in (identified, tagged, ordered):
+        additions=[x for x in pool if x["address"] not in seen][:max(0,limit-len(chosen))]
+        chosen.extend(additions); seen.update(x["address"] for x in additions)
+    return chosen
 
 
 def fetch_pair_map(mints: list[str], timeout: float, delay: float = 0.25) -> dict[str, list[dict[str, Any]]]:
@@ -183,22 +252,69 @@ def fetch_pair_map(mints: list[str], timeout: float, delay: float = 0.25) -> dic
 
 
 def collect_live(item: dict[str, Any], rpc_url: str, timeout: float, rpc_delay: float = 0.35) -> dict[str, Any]:
-    mint = item["mint"]; observed = prov.utc_now(); rpc: dict[str, Any] = {}
+    """Collect independent evidence; one throttled provider method cannot discard another."""
+    mint = item["mint"]; observed = prov.utc_now()
+    rpc: dict[str, Any] = {"account_info": {}, "supply": {}, "largest_accounts": None}
+    dex: dict[str, Any] = {}; status: dict[str, Any] = {}
+
+    def safe_error(exc: Exception) -> dict[str, Any]:
+        # Never persist exception text or URLs: either may contain provider secrets.
+        error: dict[str, Any] = {"type": type(exc).__name__}
+        if isinstance(exc, urllib.error.HTTPError): error["http_status"] = exc.code
+        return error
+
+    def call(method: str, params: list[Any]) -> dict[str, Any] | None:
+        try:
+            # One bounded attempt per method. Cross-run retries are handled by a
+            # new immutable checkpoint; long in-call retries amplify public-RPC
+            # 403/429 bursts and destroy snapshot consistency.
+            response = _request(rpc_url, {"jsonrpc":"2.0","id":1,"method":method,"params":params}, timeout, retries=0)
+            if not isinstance(response, dict): raise TypeError("invalid response")
+            if response.get("error"):
+                error = response["error"] if isinstance(response["error"], dict) else {}
+                detail: dict[str, Any] = {"type":"JSONRPCError"}
+                if isinstance(error.get("code"), int): detail["code"] = error["code"]
+                status[method] = {"status":"error", "error":detail}; return None
+            status[method] = {"status":"ok"}; return response
+        except Exception as exc:
+            status[method] = {"status":"error", "error":safe_error(exc)}; return None
+
+    ai = call("getAccountInfo", [mint, {"encoding":"jsonParsed","commitment":"confirmed"}])
+    if ai is not None: rpc["account_info"] = (ai.get("result") or {}).get("value") or {}
+    time.sleep(rpc_delay)
+    sp = call("getTokenSupply", [mint, {"commitment":"confirmed"}])
+    if sp is not None:
+        result=sp.get("result") or {}; rpc["supply"] = dict(result.get("value") or {}, slot=(result.get("context") or {}).get("slot"))
+    time.sleep(rpc_delay)
+    la = call("getTokenLargestAccounts", [mint, {"commitment":"confirmed"}])
+    if la is not None: rpc["largest_accounts"] = (la.get("result") or {}).get("value")
     try:
-        def call(method: str, params: list[Any]) -> dict[str, Any]:
-            return _request(rpc_url, {"jsonrpc":"2.0","id":1,"method":method,"params":params}, timeout)
-        ai = call("getAccountInfo", [mint, {"encoding":"jsonParsed","commitment":"confirmed"}]); time.sleep(rpc_delay)
-        sp = call("getTokenSupply", [mint, {"commitment":"confirmed"}])
-        time.sleep(rpc_delay)
-        la = call("getTokenLargestAccounts", [mint, {"commitment":"confirmed"}])
-        rpc = {"account_info": (ai.get("result") or {}).get("value") or {}, "supply": dict((sp.get("result") or {}).get("value") or {}, slot=(sp.get("result") or {}).get("context",{}).get("slot")), "largest_accounts": (la.get("result") or {}).get("value")}
         pairs = _request(f"{DEX_BASE}/token-pairs/v1/solana/{mint}", None, timeout)
         exact = [p for p in (pairs or []) if p.get("chainId") == "solana" and (p.get("baseToken") or {}).get("address") == mint]
         pair = max(exact, key=lambda p: float((p.get("liquidity") or {}).get("usd") or 0), default=None)
-        out = dict(item, observed_at_utc=observed, received_at_utc=prov.utc_now(), rpc=rpc, dex={"pair": pair} if pair else {})
+        if pair: dex["pair"] = pair
+        status["dex_pairs"] = {"status":"ok"}
     except Exception as exc:
-        out = dict(item, observed_at_utc=observed, rpc=rpc, dex={}, collection_error=type(exc).__name__)
+        status["dex_pairs"] = {"status":"error", "error":safe_error(exc)}
+    out = dict(item, observed_at_utc=observed, received_at_utc=prov.utc_now(), rpc=rpc, dex=dex, collection_status=status)
+    if all(record["status"] == "error" for record in status.values()): out["collection_error"] = "all_requests_failed"
     return out
+
+
+def collect_with_checkpoint(items: list[dict[str, Any]], path: Path, collector: Any, rpc_url: str, timeout: float, rpc_delay: float) -> list[dict[str, Any]]:
+    """Resume by mint; every completed observation, including failures, is durable."""
+    path.parent.mkdir(parents=True, exist_ok=True); done: dict[str, dict[str, Any]] = {}
+    if path.exists():
+        for line in path.read_text(encoding="utf-8").splitlines():
+            try:
+                row=json.loads(line); done[row["mint"]]=row
+            except (json.JSONDecodeError, KeyError): pass
+    with path.open("a",encoding="utf-8",newline="\n") as f:
+        for item in items:
+            if item["mint"] not in done:
+                row=collector(item,rpc_url,timeout,rpc_delay); done[item["mint"]]=row
+                f.write(json.dumps(row,sort_keys=True)+"\n"); f.flush(); os.fsync(f.fileno())
+    return [done[x["mint"]] for x in items]
 
 
 def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
@@ -218,11 +334,11 @@ def write_report(path: Path, run_id: str, sampling: dict[str, Any], rows: list[d
 
 
 def main(argv: list[str] | None=None) -> int:
-    p=argparse.ArgumentParser(); p.add_argument("--input"); p.add_argument("--build-frame",action="store_true"); p.add_argument("--frame-output",default="validation/normalized/p2_sampling_frame.json"); p.add_argument("--shortfall-output",default="validation/reports/p2_sampling_shortfall.json"); p.add_argument("--candidate-limit",type=int,default=750); p.add_argument("--live", action="store_true"); p.add_argument("--rpc-delay",type=float,default=.35); p.add_argument("--rpc-url", default=os.environ.get("SOLANA_RPC_URL") or DEFAULT_RPC); p.add_argument("--timeout",type=float,default=12); p.add_argument("--csv",default="validation/normalized/audit_100_tokens.csv"); p.add_argument("--report",default="validation/reports/DATA_ACCURACY.md"); args=p.parse_args(argv)
+    p=argparse.ArgumentParser(); p.add_argument("--input"); p.add_argument("--build-frame",action="store_true"); p.add_argument("--frame-output",default="validation/normalized/p2_sampling_frame.json"); p.add_argument("--shortfall-output",default="validation/reports/p2_sampling_shortfall.json"); p.add_argument("--candidate-limit",type=int,default=6000); p.add_argument("--live", action="store_true"); p.add_argument("--checkpoint",default="validation/checkpoints/p2_live_audit.jsonl"); p.add_argument("--rpc-delay",type=float,default=.35); p.add_argument("--rpc-url", default=os.environ.get("SOLANA_RPC_URL") or DEFAULT_RPC); p.add_argument("--timeout",type=float,default=12); p.add_argument("--csv",default="validation/normalized/audit_100_tokens.csv"); p.add_argument("--report",default="validation/reports/DATA_ACCURACY.md"); args=p.parse_args(argv)
     if args.build_frame:
         observed=prov.utc_now(); profiles,documented,urls=fetch_sampling_sources(args.timeout)
-        # Bound pair requests while retaining source order; profiles are always included.
-        documented=documented[:max(100,args.candidate_limit)]
+        # Hash ordering spans the complete Jupiter list and avoids provider source-order bias.
+        documented=select_documented_candidates(documented,max(100,args.candidate_limit))
         frame=build_sampling_frame(profiles,documented,lambda m:fetch_pair_map(m,args.timeout),observed,urls)
         sampling=validate_sampling(frame); complete=sampling["minimum_100"] and sampling["strata_minimum_25"]
         output=ROOT/(args.frame_output if complete else args.shortfall_output); output.parent.mkdir(parents=True,exist_ok=True)
@@ -236,7 +352,7 @@ def main(argv: list[str] | None=None) -> int:
         return 0 if complete else 2
     if not args.input: p.error("--input is required unless --build-frame is used")
     samples=json.loads((ROOT/args.input).read_text(encoding="utf-8")); run_id=prov.new_run_id("p2")
-    if args.live: samples=[collect_live(x,args.rpc_url,args.timeout,args.rpc_delay) for x in samples]
+    if args.live: samples=collect_with_checkpoint(samples,ROOT/args.checkpoint,collect_live,args.rpc_url,args.timeout,args.rpc_delay)
     sampling=validate_sampling(samples); rows=[normalize(x) for x in samples]
     write_csv(ROOT/args.csv,rows); write_report(ROOT/args.report,run_id,sampling,rows,not args.live)
     manifest={"run_id":run_id,"stage":"p2","observed_at_utc":prov.utc_now(),"synthetic":not args.live,"input":args.input,"csv":args.csv,"report":args.report,"sampling":sampling,"rpc_endpoint":redact_url(args.rpc_url) if args.live else None}

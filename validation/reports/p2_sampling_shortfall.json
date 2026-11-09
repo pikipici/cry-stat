@@ -1,12 +1,12 @@
 {
   "status": "SHORTFALL",
-  "observed_at_utc": "2026-11-09T19:06:54Z",
+  "observed_at_utc": "2026-11-09T19:51:37Z",
   "synthetic": false,
   "sampling": {
-    "total": 79,
-    "distinct_valid_mints": 79,
+    "total": 91,
+    "distinct_valid_mints": 91,
     "counts": {
-      "new_discovery": 13,
+      "new_discovery": 25,
       "active_liquid": 16,
       "low_liquidity": 25,
       "risky_delisted_migrated": 25
@@ -17,8 +17,17 @@
   },
   "sources": {
     "profiles_url": "https://api.dexscreener.com/token-profiles/latest/v1",
-    "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json"
+    "latest_boosts_url": "https://api.dexscreener.com/token-boosts/latest/v1",
+    "top_boosts_url": "https://api.dexscreener.com/token-boosts/top/v1",
+    "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+    "gecko_trending_urls": [
+      "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=1",
+      "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=2",
+      "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=3",
+      "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=4",
+      "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=5"
+    ]
   },
-  "candidate_limit": 3000,
+  "candidate_limit": 1200,
   "message": "No frame emitted: 100 distinct valid mints and 25 per stratum were not observed"
 }

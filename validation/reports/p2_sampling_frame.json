@@ -1,0 +1,1860 @@
+[
+  {
+    "mint": "22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=199133 and h24_txns=27871",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=3&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/npz2FhoufQ7pKqhGpaipYWacrAkidyW2yDpVWSvpump,G1ij1UjWBcUFtVHz5GVDAopPNMQcbwtdegH94LU6Jray,Ffy3EDzKqP9vrgvL2WGygM1DvvFnkMR8YzxLPPyRpump,DDDfDJGreM6pYbKEiB8NqkZ3RhgG9Q1zKK58SvcHpump,H2ZViwA4dwxHd3bctARCUDUqTwTqfVrbmKQMrwBmpump,HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump,DtcicPCKTKeAh7TDEzTym3hXeoHAoMiBdYJhMYxZpump,8ctbRatrLwS6m35mNajbDimiaM4x7bmfGTprBmZnpump,5JHHcudrqibzuc4S9tGgthmfLNoRof4E3KWWGQsrpump,22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp,2StNe98imN7M6K341a7a4xvc8eNTvLCde5EugAKfLoat,2cdswcuZfeRgdTeKheCUQWMqz2NiQkDeb635smkZpump,2gTbp2gwH46rqExzabSyrdR3294SLwCp2rSqWDS6Sim1,2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM,2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv,33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump,4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R,4kjruqGHDsSqkMdFfCjV7Vb62HPFhtXyWc2t6JpQzDnz,5BeD1Uc3Rz2Eha5FqGEnVUpGRNRk8khkXLXQNxynPyTx,5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2,5tCju6YNxHq5zrA6tGndr6F7TK42mpUFmeE31cSFpump,5wQn3vMRohsB5ep6jRnu6MoHFGEsmy9oXP8WRJz4pump,5wsjHxT5nW5jQuVupXUNnYszF3WoWCfGGk9LMcsCJzY8,6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx,6mXFCoZ515w37YfmwXGJMPfQfiK5tr9WkihW3oN9pump,6nGocDUtGSJoSz1gUPgFGTpHtUSK3s7FN6zhB6AfLoat,6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN,7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs,87CQtouHSb6YCXaPZ1pp8jD56VudRMXBVqU3oDMD1UJT,8Mi9E1V2bdPeAaRkR5yxUsAvpzP6UBUEEUrYmgKNpump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=337628 and h24_txns=14266",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=1&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/npz2FhoufQ7pKqhGpaipYWacrAkidyW2yDpVWSvpump,G1ij1UjWBcUFtVHz5GVDAopPNMQcbwtdegH94LU6Jray,Ffy3EDzKqP9vrgvL2WGygM1DvvFnkMR8YzxLPPyRpump,DDDfDJGreM6pYbKEiB8NqkZ3RhgG9Q1zKK58SvcHpump,H2ZViwA4dwxHd3bctARCUDUqTwTqfVrbmKQMrwBmpump,HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump,DtcicPCKTKeAh7TDEzTym3hXeoHAoMiBdYJhMYxZpump,8ctbRatrLwS6m35mNajbDimiaM4x7bmfGTprBmZnpump,5JHHcudrqibzuc4S9tGgthmfLNoRof4E3KWWGQsrpump,22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp,2StNe98imN7M6K341a7a4xvc8eNTvLCde5EugAKfLoat,2cdswcuZfeRgdTeKheCUQWMqz2NiQkDeb635smkZpump,2gTbp2gwH46rqExzabSyrdR3294SLwCp2rSqWDS6Sim1,2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM,2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv,33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump,4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R,4kjruqGHDsSqkMdFfCjV7Vb62HPFhtXyWc2t6JpQzDnz,5BeD1Uc3Rz2Eha5FqGEnVUpGRNRk8khkXLXQNxynPyTx,5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2,5tCju6YNxHq5zrA6tGndr6F7TK42mpUFmeE31cSFpump,5wQn3vMRohsB5ep6jRnu6MoHFGEsmy9oXP8WRJz4pump,5wsjHxT5nW5jQuVupXUNnYszF3WoWCfGGk9LMcsCJzY8,6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx,6mXFCoZ515w37YfmwXGJMPfQfiK5tr9WkihW3oN9pump,6nGocDUtGSJoSz1gUPgFGTpHtUSK3s7FN6zhB6AfLoat,6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN,7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs,87CQtouHSb6YCXaPZ1pp8jD56VudRMXBVqU3oDMD1UJT,8Mi9E1V2bdPeAaRkR5yxUsAvpzP6UBUEEUrYmgKNpump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=2.9131e+06 and h24_txns=1756",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=1&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/npz2FhoufQ7pKqhGpaipYWacrAkidyW2yDpVWSvpump,G1ij1UjWBcUFtVHz5GVDAopPNMQcbwtdegH94LU6Jray,Ffy3EDzKqP9vrgvL2WGygM1DvvFnkMR8YzxLPPyRpump,DDDfDJGreM6pYbKEiB8NqkZ3RhgG9Q1zKK58SvcHpump,H2ZViwA4dwxHd3bctARCUDUqTwTqfVrbmKQMrwBmpump,HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump,DtcicPCKTKeAh7TDEzTym3hXeoHAoMiBdYJhMYxZpump,8ctbRatrLwS6m35mNajbDimiaM4x7bmfGTprBmZnpump,5JHHcudrqibzuc4S9tGgthmfLNoRof4E3KWWGQsrpump,22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp,2StNe98imN7M6K341a7a4xvc8eNTvLCde5EugAKfLoat,2cdswcuZfeRgdTeKheCUQWMqz2NiQkDeb635smkZpump,2gTbp2gwH46rqExzabSyrdR3294SLwCp2rSqWDS6Sim1,2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM,2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv,33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump,4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R,4kjruqGHDsSqkMdFfCjV7Vb62HPFhtXyWc2t6JpQzDnz,5BeD1Uc3Rz2Eha5FqGEnVUpGRNRk8khkXLXQNxynPyTx,5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2,5tCju6YNxHq5zrA6tGndr6F7TK42mpUFmeE31cSFpump,5wQn3vMRohsB5ep6jRnu6MoHFGEsmy9oXP8WRJz4pump,5wsjHxT5nW5jQuVupXUNnYszF3WoWCfGGk9LMcsCJzY8,6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx,6mXFCoZ515w37YfmwXGJMPfQfiK5tr9WkihW3oN9pump,6nGocDUtGSJoSz1gUPgFGTpHtUSK3s7FN6zhB6AfLoat,6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN,7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs,87CQtouHSb6YCXaPZ1pp8jD56VudRMXBVqU3oDMD1UJT,8Mi9E1V2bdPeAaRkR5yxUsAvpzP6UBUEEUrYmgKNpump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=106841 and h24_txns=8470",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=3&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/npz2FhoufQ7pKqhGpaipYWacrAkidyW2yDpVWSvpump,G1ij1UjWBcUFtVHz5GVDAopPNMQcbwtdegH94LU6Jray,Ffy3EDzKqP9vrgvL2WGygM1DvvFnkMR8YzxLPPyRpump,DDDfDJGreM6pYbKEiB8NqkZ3RhgG9Q1zKK58SvcHpump,H2ZViwA4dwxHd3bctARCUDUqTwTqfVrbmKQMrwBmpump,HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump,DtcicPCKTKeAh7TDEzTym3hXeoHAoMiBdYJhMYxZpump,8ctbRatrLwS6m35mNajbDimiaM4x7bmfGTprBmZnpump,5JHHcudrqibzuc4S9tGgthmfLNoRof4E3KWWGQsrpump,22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp,2StNe98imN7M6K341a7a4xvc8eNTvLCde5EugAKfLoat,2cdswcuZfeRgdTeKheCUQWMqz2NiQkDeb635smkZpump,2gTbp2gwH46rqExzabSyrdR3294SLwCp2rSqWDS6Sim1,2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM,2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv,33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump,4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R,4kjruqGHDsSqkMdFfCjV7Vb62HPFhtXyWc2t6JpQzDnz,5BeD1Uc3Rz2Eha5FqGEnVUpGRNRk8khkXLXQNxynPyTx,5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2,5tCju6YNxHq5zrA6tGndr6F7TK42mpUFmeE31cSFpump,5wQn3vMRohsB5ep6jRnu6MoHFGEsmy9oXP8WRJz4pump,5wsjHxT5nW5jQuVupXUNnYszF3WoWCfGGk9LMcsCJzY8,6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx,6mXFCoZ515w37YfmwXGJMPfQfiK5tr9WkihW3oN9pump,6nGocDUtGSJoSz1gUPgFGTpHtUSK3s7FN6zhB6AfLoat,6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN,7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs,87CQtouHSb6YCXaPZ1pp8jD56VudRMXBVqU3oDMD1UJT,8Mi9E1V2bdPeAaRkR5yxUsAvpzP6UBUEEUrYmgKNpump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=1.96932e+06 and h24_txns=41886",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=2&include=base_token",
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=4&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/npz2FhoufQ7pKqhGpaipYWacrAkidyW2yDpVWSvpump,G1ij1UjWBcUFtVHz5GVDAopPNMQcbwtdegH94LU6Jray,Ffy3EDzKqP9vrgvL2WGygM1DvvFnkMR8YzxLPPyRpump,DDDfDJGreM6pYbKEiB8NqkZ3RhgG9Q1zKK58SvcHpump,H2ZViwA4dwxHd3bctARCUDUqTwTqfVrbmKQMrwBmpump,HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump,DtcicPCKTKeAh7TDEzTym3hXeoHAoMiBdYJhMYxZpump,8ctbRatrLwS6m35mNajbDimiaM4x7bmfGTprBmZnpump,5JHHcudrqibzuc4S9tGgthmfLNoRof4E3KWWGQsrpump,22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp,2StNe98imN7M6K341a7a4xvc8eNTvLCde5EugAKfLoat,2cdswcuZfeRgdTeKheCUQWMqz2NiQkDeb635smkZpump,2gTbp2gwH46rqExzabSyrdR3294SLwCp2rSqWDS6Sim1,2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM,2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv,33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump,4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R,4kjruqGHDsSqkMdFfCjV7Vb62HPFhtXyWc2t6JpQzDnz,5BeD1Uc3Rz2Eha5FqGEnVUpGRNRk8khkXLXQNxynPyTx,5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2,5tCju6YNxHq5zrA6tGndr6F7TK42mpUFmeE31cSFpump,5wQn3vMRohsB5ep6jRnu6MoHFGEsmy9oXP8WRJz4pump,5wsjHxT5nW5jQuVupXUNnYszF3WoWCfGGk9LMcsCJzY8,6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx,6mXFCoZ515w37YfmwXGJMPfQfiK5tr9WkihW3oN9pump,6nGocDUtGSJoSz1gUPgFGTpHtUSK3s7FN6zhB6AfLoat,6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN,7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs,87CQtouHSb6YCXaPZ1pp8jD56VudRMXBVqU3oDMD1UJT,8Mi9E1V2bdPeAaRkR5yxUsAvpzP6UBUEEUrYmgKNpump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=2.331e+06 and h24_txns=1406",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=2&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/npz2FhoufQ7pKqhGpaipYWacrAkidyW2yDpVWSvpump,G1ij1UjWBcUFtVHz5GVDAopPNMQcbwtdegH94LU6Jray,Ffy3EDzKqP9vrgvL2WGygM1DvvFnkMR8YzxLPPyRpump,DDDfDJGreM6pYbKEiB8NqkZ3RhgG9Q1zKK58SvcHpump,H2ZViwA4dwxHd3bctARCUDUqTwTqfVrbmKQMrwBmpump,HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump,DtcicPCKTKeAh7TDEzTym3hXeoHAoMiBdYJhMYxZpump,8ctbRatrLwS6m35mNajbDimiaM4x7bmfGTprBmZnpump,5JHHcudrqibzuc4S9tGgthmfLNoRof4E3KWWGQsrpump,22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp,2StNe98imN7M6K341a7a4xvc8eNTvLCde5EugAKfLoat,2cdswcuZfeRgdTeKheCUQWMqz2NiQkDeb635smkZpump,2gTbp2gwH46rqExzabSyrdR3294SLwCp2rSqWDS6Sim1,2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM,2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv,33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump,4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R,4kjruqGHDsSqkMdFfCjV7Vb62HPFhtXyWc2t6JpQzDnz,5BeD1Uc3Rz2Eha5FqGEnVUpGRNRk8khkXLXQNxynPyTx,5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2,5tCju6YNxHq5zrA6tGndr6F7TK42mpUFmeE31cSFpump,5wQn3vMRohsB5ep6jRnu6MoHFGEsmy9oXP8WRJz4pump,5wsjHxT5nW5jQuVupXUNnYszF3WoWCfGGk9LMcsCJzY8,6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx,6mXFCoZ515w37YfmwXGJMPfQfiK5tr9WkihW3oN9pump,6nGocDUtGSJoSz1gUPgFGTpHtUSK3s7FN6zhB6AfLoat,6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN,7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs,87CQtouHSb6YCXaPZ1pp8jD56VudRMXBVqU3oDMD1UJT,8Mi9E1V2bdPeAaRkR5yxUsAvpzP6UBUEEUrYmgKNpump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "5tCju6YNxHq5zrA6tGndr6F7TK42mpUFmeE31cSFpump",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=140165 and h24_txns=1401",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=3&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/npz2FhoufQ7pKqhGpaipYWacrAkidyW2yDpVWSvpump,G1ij1UjWBcUFtVHz5GVDAopPNMQcbwtdegH94LU6Jray,Ffy3EDzKqP9vrgvL2WGygM1DvvFnkMR8YzxLPPyRpump,DDDfDJGreM6pYbKEiB8NqkZ3RhgG9Q1zKK58SvcHpump,H2ZViwA4dwxHd3bctARCUDUqTwTqfVrbmKQMrwBmpump,HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump,DtcicPCKTKeAh7TDEzTym3hXeoHAoMiBdYJhMYxZpump,8ctbRatrLwS6m35mNajbDimiaM4x7bmfGTprBmZnpump,5JHHcudrqibzuc4S9tGgthmfLNoRof4E3KWWGQsrpump,22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp,2StNe98imN7M6K341a7a4xvc8eNTvLCde5EugAKfLoat,2cdswcuZfeRgdTeKheCUQWMqz2NiQkDeb635smkZpump,2gTbp2gwH46rqExzabSyrdR3294SLwCp2rSqWDS6Sim1,2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM,2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv,33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump,4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R,4kjruqGHDsSqkMdFfCjV7Vb62HPFhtXyWc2t6JpQzDnz,5BeD1Uc3Rz2Eha5FqGEnVUpGRNRk8khkXLXQNxynPyTx,5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2,5tCju6YNxHq5zrA6tGndr6F7TK42mpUFmeE31cSFpump,5wQn3vMRohsB5ep6jRnu6MoHFGEsmy9oXP8WRJz4pump,5wsjHxT5nW5jQuVupXUNnYszF3WoWCfGGk9LMcsCJzY8,6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx,6mXFCoZ515w37YfmwXGJMPfQfiK5tr9WkihW3oN9pump,6nGocDUtGSJoSz1gUPgFGTpHtUSK3s7FN6zhB6AfLoat,6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN,7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs,87CQtouHSb6YCXaPZ1pp8jD56VudRMXBVqU3oDMD1UJT,8Mi9E1V2bdPeAaRkR5yxUsAvpzP6UBUEEUrYmgKNpump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=2.12793e+06 and h24_txns=28196",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=1&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/npz2FhoufQ7pKqhGpaipYWacrAkidyW2yDpVWSvpump,G1ij1UjWBcUFtVHz5GVDAopPNMQcbwtdegH94LU6Jray,Ffy3EDzKqP9vrgvL2WGygM1DvvFnkMR8YzxLPPyRpump,DDDfDJGreM6pYbKEiB8NqkZ3RhgG9Q1zKK58SvcHpump,H2ZViwA4dwxHd3bctARCUDUqTwTqfVrbmKQMrwBmpump,HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump,DtcicPCKTKeAh7TDEzTym3hXeoHAoMiBdYJhMYxZpump,8ctbRatrLwS6m35mNajbDimiaM4x7bmfGTprBmZnpump,5JHHcudrqibzuc4S9tGgthmfLNoRof4E3KWWGQsrpump,22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp,2StNe98imN7M6K341a7a4xvc8eNTvLCde5EugAKfLoat,2cdswcuZfeRgdTeKheCUQWMqz2NiQkDeb635smkZpump,2gTbp2gwH46rqExzabSyrdR3294SLwCp2rSqWDS6Sim1,2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM,2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv,33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump,4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R,4kjruqGHDsSqkMdFfCjV7Vb62HPFhtXyWc2t6JpQzDnz,5BeD1Uc3Rz2Eha5FqGEnVUpGRNRk8khkXLXQNxynPyTx,5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2,5tCju6YNxHq5zrA6tGndr6F7TK42mpUFmeE31cSFpump,5wQn3vMRohsB5ep6jRnu6MoHFGEsmy9oXP8WRJz4pump,5wsjHxT5nW5jQuVupXUNnYszF3WoWCfGGk9LMcsCJzY8,6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx,6mXFCoZ515w37YfmwXGJMPfQfiK5tr9WkihW3oN9pump,6nGocDUtGSJoSz1gUPgFGTpHtUSK3s7FN6zhB6AfLoat,6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN,7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs,87CQtouHSb6YCXaPZ1pp8jD56VudRMXBVqU3oDMD1UJT,8Mi9E1V2bdPeAaRkR5yxUsAvpzP6UBUEEUrYmgKNpump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=150906 and h24_txns=13801",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=2&include=base_token",
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=4&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/npz2FhoufQ7pKqhGpaipYWacrAkidyW2yDpVWSvpump,G1ij1UjWBcUFtVHz5GVDAopPNMQcbwtdegH94LU6Jray,Ffy3EDzKqP9vrgvL2WGygM1DvvFnkMR8YzxLPPyRpump,DDDfDJGreM6pYbKEiB8NqkZ3RhgG9Q1zKK58SvcHpump,H2ZViwA4dwxHd3bctARCUDUqTwTqfVrbmKQMrwBmpump,HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump,DtcicPCKTKeAh7TDEzTym3hXeoHAoMiBdYJhMYxZpump,8ctbRatrLwS6m35mNajbDimiaM4x7bmfGTprBmZnpump,5JHHcudrqibzuc4S9tGgthmfLNoRof4E3KWWGQsrpump,22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp,2StNe98imN7M6K341a7a4xvc8eNTvLCde5EugAKfLoat,2cdswcuZfeRgdTeKheCUQWMqz2NiQkDeb635smkZpump,2gTbp2gwH46rqExzabSyrdR3294SLwCp2rSqWDS6Sim1,2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM,2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv,33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump,4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R,4kjruqGHDsSqkMdFfCjV7Vb62HPFhtXyWc2t6JpQzDnz,5BeD1Uc3Rz2Eha5FqGEnVUpGRNRk8khkXLXQNxynPyTx,5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2,5tCju6YNxHq5zrA6tGndr6F7TK42mpUFmeE31cSFpump,5wQn3vMRohsB5ep6jRnu6MoHFGEsmy9oXP8WRJz4pump,5wsjHxT5nW5jQuVupXUNnYszF3WoWCfGGk9LMcsCJzY8,6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx,6mXFCoZ515w37YfmwXGJMPfQfiK5tr9WkihW3oN9pump,6nGocDUtGSJoSz1gUPgFGTpHtUSK3s7FN6zhB6AfLoat,6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN,7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs,87CQtouHSb6YCXaPZ1pp8jD56VudRMXBVqU3oDMD1UJT,8Mi9E1V2bdPeAaRkR5yxUsAvpzP6UBUEEUrYmgKNpump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=5.58103e+06 and h24_txns=35516",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=2&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/npz2FhoufQ7pKqhGpaipYWacrAkidyW2yDpVWSvpump,G1ij1UjWBcUFtVHz5GVDAopPNMQcbwtdegH94LU6Jray,Ffy3EDzKqP9vrgvL2WGygM1DvvFnkMR8YzxLPPyRpump,DDDfDJGreM6pYbKEiB8NqkZ3RhgG9Q1zKK58SvcHpump,H2ZViwA4dwxHd3bctARCUDUqTwTqfVrbmKQMrwBmpump,HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump,DtcicPCKTKeAh7TDEzTym3hXeoHAoMiBdYJhMYxZpump,8ctbRatrLwS6m35mNajbDimiaM4x7bmfGTprBmZnpump,5JHHcudrqibzuc4S9tGgthmfLNoRof4E3KWWGQsrpump,22JKmY9YZfnQfb3pGYb6hctL5Jyvv3zhL3nQ8oyNuoYp,2StNe98imN7M6K341a7a4xvc8eNTvLCde5EugAKfLoat,2cdswcuZfeRgdTeKheCUQWMqz2NiQkDeb635smkZpump,2gTbp2gwH46rqExzabSyrdR3294SLwCp2rSqWDS6Sim1,2j5SaS7xy776qCBpyPQbZjyQSAtKiFgrwjfErthnW2ZM,2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv,33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump,4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R,4kjruqGHDsSqkMdFfCjV7Vb62HPFhtXyWc2t6JpQzDnz,5BeD1Uc3Rz2Eha5FqGEnVUpGRNRk8khkXLXQNxynPyTx,5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2,5tCju6YNxHq5zrA6tGndr6F7TK42mpUFmeE31cSFpump,5wQn3vMRohsB5ep6jRnu6MoHFGEsmy9oXP8WRJz4pump,5wsjHxT5nW5jQuVupXUNnYszF3WoWCfGGk9LMcsCJzY8,6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx,6mXFCoZ515w37YfmwXGJMPfQfiK5tr9WkihW3oN9pump,6nGocDUtGSJoSz1gUPgFGTpHtUSK3s7FN6zhB6AfLoat,6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN,7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs,87CQtouHSb6YCXaPZ1pp8jD56VudRMXBVqU3oDMD1UJT,8Mi9E1V2bdPeAaRkR5yxUsAvpzP6UBUEEUrYmgKNpump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=118469 and h24_txns=1962",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=3&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=677710 and h24_txns=26830",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=3&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=6.24504e+06 and h24_txns=7344",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=2&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=1.3206e+06 and h24_txns=15837",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=1&include=base_token",
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=2&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=3.84636e+06 and h24_txns=20658",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=3&include=base_token",
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=4&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=1.89092e+06 and h24_txns=4607",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=1&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=5.74016e+06 and h24_txns=2894",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=3&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=712312 and h24_txns=10984",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=1&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=167098 and h24_txns=18653",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=1&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=3.45508e+06 and h24_txns=4248",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=3&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=257332 and h24_txns=1173",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=3&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=1.43692e+07 and h24_txns=10241",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=4&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=546673 and h24_txns=3107",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=4&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=302600 and h24_txns=1037",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=3&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+    "stratum": "active_liquid",
+    "source": "GeckoTerminal Solana trending pools + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=277971 and h24_txns=11925",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=4&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8MuTFfgeFCYa7BKMkKzRbxPLjgdEZFfHtNM2XWSfdtH2,8PzFWyLpCVEmbZmVJcaRTU5r69XKJx1rd7YGpWvnpump,8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump,98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g,9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump,9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump,A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS,ARGGnM1zK12eYCzRYbULJECFsMh4DM7hKgxNk97Pearn,Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump,B32gQ1hRs6ZHG2Tv6N8PLtESBa1rcKufatp8gb38pump,BEd8GoJccoDA9gpfYdxqGupVFZwKrMWWMHnJYqnrpump,BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy,BYPPfvV8xdFeTS43nPFRZeLdJ8STPVELg7rvagtqpump,BdouwEr3mwXkT6S6EmHNCjn9oEtykRKCKiUSTRF9pump,Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr,C5xph2yL6gMdxmuLGxJBkGpmuDFfyi5fqkBNhvL6pump,CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp,CJE1ayid5jogwAP7Z42VR4H6buQsPkhkbDws7DCWpump,CTPoyCwkjMvoJwU4xvZZqoD8tiYk6yDchySiN5gGpump,CWZ6BsdnjkDVTGkmL6bGbJXXig6ceef12KvyGQW14cMt,CZRtwCDJy4cKNvtVwtgGqeEGzLnCDJdTkexgpEsMpump,Cm6fNnMk7NfzStP9CZpsQA2v3jjzbcYGAxdJySmHpump,DDmGnuvroxVrb7CSyjYcezFU8gnAfhKasg4ZZezmpump,DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP,DNYRJmZuD7cx3rXjaoosQyDx5QBV8ZS3eBWWnUFbpump,DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263,Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk,EFYdWBh6hQJLduR4QYnLNKLMq93PLqjjU5WwhNPgpump,EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm,FZxHLUGiGchY5uvvoeqh1EKiXTrGdN67WUBhUc1fLoat",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token profiles",
+    "selection_rationale": "present in DEX Screener latest token profiles; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token boosts",
+    "selection_rationale": "present in DEX Screener latest token boosts; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token boosts",
+    "selection_rationale": "present in DEX Screener latest token boosts; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=4&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token boosts",
+    "selection_rationale": "present in DEX Screener latest token boosts; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [
+        "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=2&include=base_token"
+      ],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token boosts",
+    "selection_rationale": "present in DEX Screener latest token boosts; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token boosts",
+    "selection_rationale": "present in DEX Screener latest token boosts; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token boosts",
+    "selection_rationale": "present in DEX Screener latest token boosts; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token boosts",
+    "selection_rationale": "present in DEX Screener latest token boosts; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token boosts",
+    "selection_rationale": "present in DEX Screener latest token boosts; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token boosts",
+    "selection_rationale": "present in DEX Screener latest token boosts; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token boosts",
+    "selection_rationale": "present in DEX Screener latest token boosts; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump",
+    "stratum": "new_discovery",
+    "source": "DEX Screener latest token boosts",
+    "selection_rationale": "present in DEX Screener latest token boosts; launch age not assumed",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/8pfaw78t9r7yECpeXKi6JZDiv2tdczseXxCMKg89pump,F6ygYdr6ZeCvkKpChVcjzZmbGGL15JvghV2fLZ43pump,6USthxiSZFoCJWhd5bUTcStagAJ2rFd8q8SiF2kupump,GLvwL7Ktn7YdTjhfGJLxJGWGkEXYt91JgrBGU96oLBmg,59tKHU17fe31NHw7AabcK7s6Jhb7DvNNxEtigu8upump,5Mgk87F8EPnbTw92C2vNepjGDKEy8HK3tpzeiGXipump,GhgGZiqphHoFDagvsvggu6AcR3G9mR9xLmYcpjzbh8qf,FZcbX6uBkeACEg38cFBqvQgTJiL98aKovQT23AfCpump,2Dvc6iRGATWZe2S4QXKCcbefmFkvu9nNkyjEi4oNpump,Hc6295k1Cu9emcLYzMZNZHoqg87CqKXkpPvBMjramk9q,HD9yWHcxpLtMK6R1QLWJVmnMTVno9KDYu6TMz6Ajpump,H5CPUyFcLWRsNKmxnqGBboXErgPv43MUkfTft7nA5BzE,AgFH5Nbr8AkmJFayLoCAuZaRszv9kW1GkEVizB8tpump,23oAPknpn7kyURwb85dHM1qUBj624WJrp5vF2Xgspump,2eGd3wkgzzwnwpGXKYwXGVdFYCpY5wXH5AHicBXvpump,HAsTKXYvv65zM7J6Cu5o5PcZsiKMQYo5oz4WPjgqwP6k,TiMSdJrkVwUpeEWJpuqRvHt4wVS7uH77LbNPGGVJXNw,G5TD3gFxE2mLQXofC16DpXAQHXssdRWXgWpH87GFpump,HySY1ArycFvc3AZUy4VW6xcB9aciN4AnHcVE3Ve7pump,CXz596uKfWb5tkyz5Vh5a9QCKKh38io6hdgGrKKcpump,EJv8TgQfN6gtYN8Z6KGyBeNPbVYmogmudfxiRA2Fpump,Bs51KdTWAipkjkzAAwbaZrx3WJuVGwgFQpiY5PPELiWH,GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump,5yC9BM8KUsJTPbWPLfA2N8qH1s9V8DQ3Vcw1G6Jdpump,2HhH7LwfNHrxqMrSoXZ6Ri7GdmRYSJ4e8qSra9Krpump,AKotzk1dhcNangAJBtvNKtT9bhbSVZc2mMhRFgkFpump,AmoPNK8bzo6Aj1U49bDBEjyrY59rGejuXHTmXbtGyfHx,7v8LoULtAhg3hT43YYQvKdF3LD3stdudBZAv5oTqpump,AA5U5hNETgeqVouYMefdLVvF5edP5jmNujqdSRjtpump,9rj8gESodSHTT6hS65RsBNqrKcCyL8m1ehSNxY2spump",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "E5ndSkaB17Dm7CsD22dvcjfrYSDLCxFcMd6z8ddCk5wp",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=1434.5 or h24_txns=7 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/4QV4wzDdy7S1EV6y2r9DkmaDsHeoKz6HUvFLVtAsu6dV,12uHjozDVgyGWeLqQ8DMCRbig8amW5VmvZu3FdMMdcaG,6WNVCuxCGJzNjmMZoKyhZJwvJ5tYpsLyAtagzYASqBoF,E5ndSkaB17Dm7CsD22dvcjfrYSDLCxFcMd6z8ddCk5wp,CsZ5LZkDS7h9TDKjrbL7VAwQZ9nsRu8vJLhRYfmGaN8K,3UCMiSnkcnkPE1pgQ5ggPCBv6dXgVUy16TmMUe1WpG9x,HtKKipqmgxMQJUob9XCgZBG6zSCZx4nA433ZfDuLyUTg,a11bdAAuV8iB2fu7X6AxAvDTo1QZ8FXB3kk5eecdasp,6k7mrqiAqEWnABVN8FhfuNUrmrnaMh44nNWydNXctbpV,ALMmmmbt5KNrPPUBFE4dAKUKSPWTop5s3kUGCdF69gmw,D559HwgjYGDYsXpmFUKxhFTEwutvS9sya1kXiyCVogCV,Egrv6hURf5o68xJ1AGYeRv8RNj2nXJVuSoA5wwiSALcN,BV5tm1uCRWQCQKNgQVFnkseqAjxpmbJkRCXvzFWBdgMp,EHKQvJGu48ydKA4d3RivrkNyTJTkSdoS32UafxSX1yak,31GpPxe1SW8pn7GXimM73paD8PZyCsmVSGTLkwUAJvZ8,Gq2norJ1kBemBp3mPfkgAUMhMMmnFmY4zEyi26tRcxFB,7kkkoa1MB93ELm3vjvyC8GJ65G7eEgLhfaHU58riJUCx,64Hw4Hm4WLC1Ty6p8g5vLZNCS37msb9Qq8ZFJE6UConN,51tMb3zBKDiQhNwGqpgwbavaGH54mk8fXFzxTc1xnasg,APTtJyaRX5yGTsJU522N4VYWg3vCvSb65eam5GrPT5Rt,EJKqF4p7xVhXkcDNCrVQJE4osow76226bc6u3AtsGXaG,5JnZ667P3VcjDinkJFysWh2K2KtViy63FZ3oL5YghEhW,EjBpnWzWZeW1PKzfCszLdHgENZLZDoTNaEmz8BddpWJx,7zsKqN7Fg2s9VsqAq6XBoiShCVohpGshSUvoWBc6jKYh,4wfCtMp8KQ7r61V4qH2VtHxFjVjUdsWhgAmZgQi33UkT,H3UMboX4tnjba1Xw1a2VhUtkdgnrbmPvmDm6jaouQDN9,Cw26Yz3rAN42mM5WpKriuGvbXnvRYmFA9sbBWH49KyqL,6Dujewcxn1qCd6rcj448SXQL9YYqTcqZCNQdCn3xJAKS,FY6XDSCubMhpkU9FAsUjB7jmN8YHYZGezHTWo9RHBSyX,AMp8Jo18ZjK2tuQGfjKAkkWnVP4NWX5sav4NJH6pXF2D",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "a11bdAAuV8iB2fu7X6AxAvDTo1QZ8FXB3kk5eecdasp",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=1731.6 or h24_txns=46 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/4QV4wzDdy7S1EV6y2r9DkmaDsHeoKz6HUvFLVtAsu6dV,12uHjozDVgyGWeLqQ8DMCRbig8amW5VmvZu3FdMMdcaG,6WNVCuxCGJzNjmMZoKyhZJwvJ5tYpsLyAtagzYASqBoF,E5ndSkaB17Dm7CsD22dvcjfrYSDLCxFcMd6z8ddCk5wp,CsZ5LZkDS7h9TDKjrbL7VAwQZ9nsRu8vJLhRYfmGaN8K,3UCMiSnkcnkPE1pgQ5ggPCBv6dXgVUy16TmMUe1WpG9x,HtKKipqmgxMQJUob9XCgZBG6zSCZx4nA433ZfDuLyUTg,a11bdAAuV8iB2fu7X6AxAvDTo1QZ8FXB3kk5eecdasp,6k7mrqiAqEWnABVN8FhfuNUrmrnaMh44nNWydNXctbpV,ALMmmmbt5KNrPPUBFE4dAKUKSPWTop5s3kUGCdF69gmw,D559HwgjYGDYsXpmFUKxhFTEwutvS9sya1kXiyCVogCV,Egrv6hURf5o68xJ1AGYeRv8RNj2nXJVuSoA5wwiSALcN,BV5tm1uCRWQCQKNgQVFnkseqAjxpmbJkRCXvzFWBdgMp,EHKQvJGu48ydKA4d3RivrkNyTJTkSdoS32UafxSX1yak,31GpPxe1SW8pn7GXimM73paD8PZyCsmVSGTLkwUAJvZ8,Gq2norJ1kBemBp3mPfkgAUMhMMmnFmY4zEyi26tRcxFB,7kkkoa1MB93ELm3vjvyC8GJ65G7eEgLhfaHU58riJUCx,64Hw4Hm4WLC1Ty6p8g5vLZNCS37msb9Qq8ZFJE6UConN,51tMb3zBKDiQhNwGqpgwbavaGH54mk8fXFzxTc1xnasg,APTtJyaRX5yGTsJU522N4VYWg3vCvSb65eam5GrPT5Rt,EJKqF4p7xVhXkcDNCrVQJE4osow76226bc6u3AtsGXaG,5JnZ667P3VcjDinkJFysWh2K2KtViy63FZ3oL5YghEhW,EjBpnWzWZeW1PKzfCszLdHgENZLZDoTNaEmz8BddpWJx,7zsKqN7Fg2s9VsqAq6XBoiShCVohpGshSUvoWBc6jKYh,4wfCtMp8KQ7r61V4qH2VtHxFjVjUdsWhgAmZgQi33UkT,H3UMboX4tnjba1Xw1a2VhUtkdgnrbmPvmDm6jaouQDN9,Cw26Yz3rAN42mM5WpKriuGvbXnvRYmFA9sbBWH49KyqL,6Dujewcxn1qCd6rcj448SXQL9YYqTcqZCNQdCn3xJAKS,FY6XDSCubMhpkU9FAsUjB7jmN8YHYZGezHTWo9RHBSyX,AMp8Jo18ZjK2tuQGfjKAkkWnVP4NWX5sav4NJH6pXF2D",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "51tMb3zBKDiQhNwGqpgwbavaGH54mk8fXFzxTc1xnasg",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=1549.56 or h24_txns=1 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/4QV4wzDdy7S1EV6y2r9DkmaDsHeoKz6HUvFLVtAsu6dV,12uHjozDVgyGWeLqQ8DMCRbig8amW5VmvZu3FdMMdcaG,6WNVCuxCGJzNjmMZoKyhZJwvJ5tYpsLyAtagzYASqBoF,E5ndSkaB17Dm7CsD22dvcjfrYSDLCxFcMd6z8ddCk5wp,CsZ5LZkDS7h9TDKjrbL7VAwQZ9nsRu8vJLhRYfmGaN8K,3UCMiSnkcnkPE1pgQ5ggPCBv6dXgVUy16TmMUe1WpG9x,HtKKipqmgxMQJUob9XCgZBG6zSCZx4nA433ZfDuLyUTg,a11bdAAuV8iB2fu7X6AxAvDTo1QZ8FXB3kk5eecdasp,6k7mrqiAqEWnABVN8FhfuNUrmrnaMh44nNWydNXctbpV,ALMmmmbt5KNrPPUBFE4dAKUKSPWTop5s3kUGCdF69gmw,D559HwgjYGDYsXpmFUKxhFTEwutvS9sya1kXiyCVogCV,Egrv6hURf5o68xJ1AGYeRv8RNj2nXJVuSoA5wwiSALcN,BV5tm1uCRWQCQKNgQVFnkseqAjxpmbJkRCXvzFWBdgMp,EHKQvJGu48ydKA4d3RivrkNyTJTkSdoS32UafxSX1yak,31GpPxe1SW8pn7GXimM73paD8PZyCsmVSGTLkwUAJvZ8,Gq2norJ1kBemBp3mPfkgAUMhMMmnFmY4zEyi26tRcxFB,7kkkoa1MB93ELm3vjvyC8GJ65G7eEgLhfaHU58riJUCx,64Hw4Hm4WLC1Ty6p8g5vLZNCS37msb9Qq8ZFJE6UConN,51tMb3zBKDiQhNwGqpgwbavaGH54mk8fXFzxTc1xnasg,APTtJyaRX5yGTsJU522N4VYWg3vCvSb65eam5GrPT5Rt,EJKqF4p7xVhXkcDNCrVQJE4osow76226bc6u3AtsGXaG,5JnZ667P3VcjDinkJFysWh2K2KtViy63FZ3oL5YghEhW,EjBpnWzWZeW1PKzfCszLdHgENZLZDoTNaEmz8BddpWJx,7zsKqN7Fg2s9VsqAq6XBoiShCVohpGshSUvoWBc6jKYh,4wfCtMp8KQ7r61V4qH2VtHxFjVjUdsWhgAmZgQi33UkT,H3UMboX4tnjba1Xw1a2VhUtkdgnrbmPvmDm6jaouQDN9,Cw26Yz3rAN42mM5WpKriuGvbXnvRYmFA9sbBWH49KyqL,6Dujewcxn1qCd6rcj448SXQL9YYqTcqZCNQdCn3xJAKS,FY6XDSCubMhpkU9FAsUjB7jmN8YHYZGezHTWo9RHBSyX,AMp8Jo18ZjK2tuQGfjKAkkWnVP4NWX5sav4NJH6pXF2D",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "5JnZ667P3VcjDinkJFysWh2K2KtViy63FZ3oL5YghEhW",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=22694 or h24_txns=2 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/4QV4wzDdy7S1EV6y2r9DkmaDsHeoKz6HUvFLVtAsu6dV,12uHjozDVgyGWeLqQ8DMCRbig8amW5VmvZu3FdMMdcaG,6WNVCuxCGJzNjmMZoKyhZJwvJ5tYpsLyAtagzYASqBoF,E5ndSkaB17Dm7CsD22dvcjfrYSDLCxFcMd6z8ddCk5wp,CsZ5LZkDS7h9TDKjrbL7VAwQZ9nsRu8vJLhRYfmGaN8K,3UCMiSnkcnkPE1pgQ5ggPCBv6dXgVUy16TmMUe1WpG9x,HtKKipqmgxMQJUob9XCgZBG6zSCZx4nA433ZfDuLyUTg,a11bdAAuV8iB2fu7X6AxAvDTo1QZ8FXB3kk5eecdasp,6k7mrqiAqEWnABVN8FhfuNUrmrnaMh44nNWydNXctbpV,ALMmmmbt5KNrPPUBFE4dAKUKSPWTop5s3kUGCdF69gmw,D559HwgjYGDYsXpmFUKxhFTEwutvS9sya1kXiyCVogCV,Egrv6hURf5o68xJ1AGYeRv8RNj2nXJVuSoA5wwiSALcN,BV5tm1uCRWQCQKNgQVFnkseqAjxpmbJkRCXvzFWBdgMp,EHKQvJGu48ydKA4d3RivrkNyTJTkSdoS32UafxSX1yak,31GpPxe1SW8pn7GXimM73paD8PZyCsmVSGTLkwUAJvZ8,Gq2norJ1kBemBp3mPfkgAUMhMMmnFmY4zEyi26tRcxFB,7kkkoa1MB93ELm3vjvyC8GJ65G7eEgLhfaHU58riJUCx,64Hw4Hm4WLC1Ty6p8g5vLZNCS37msb9Qq8ZFJE6UConN,51tMb3zBKDiQhNwGqpgwbavaGH54mk8fXFzxTc1xnasg,APTtJyaRX5yGTsJU522N4VYWg3vCvSb65eam5GrPT5Rt,EJKqF4p7xVhXkcDNCrVQJE4osow76226bc6u3AtsGXaG,5JnZ667P3VcjDinkJFysWh2K2KtViy63FZ3oL5YghEhW,EjBpnWzWZeW1PKzfCszLdHgENZLZDoTNaEmz8BddpWJx,7zsKqN7Fg2s9VsqAq6XBoiShCVohpGshSUvoWBc6jKYh,4wfCtMp8KQ7r61V4qH2VtHxFjVjUdsWhgAmZgQi33UkT,H3UMboX4tnjba1Xw1a2VhUtkdgnrbmPvmDm6jaouQDN9,Cw26Yz3rAN42mM5WpKriuGvbXnvRYmFA9sbBWH49KyqL,6Dujewcxn1qCd6rcj448SXQL9YYqTcqZCNQdCn3xJAKS,FY6XDSCubMhpkU9FAsUjB7jmN8YHYZGezHTWo9RHBSyX,AMp8Jo18ZjK2tuQGfjKAkkWnVP4NWX5sav4NJH6pXF2D",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "9LzCMqDgTKYz9Drzqnpgee3SGa89up3a247ypMj2xrqM",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=2054.66 or h24_txns=549 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/HJbNXx2YMRxgfUJ6K4qeWtjatMK5KYQT1QnsCdDWywNv,bATSLdvufuY3vQYv18HAEN3sJTLPodtiq2FtUismJd1,9LzCMqDgTKYz9Drzqnpgee3SGa89up3a247ypMj2xrqM,AURYydfxJib1ZkTir1Jn1J9ECYUtjb6rKQVmtYaixWPP,AUrMpCDYYcPuHhyNX8gEEqbmDPFUpBpHrNW3vPeCFn5Z,HtxznfExBatdX28kMFDvmvU1rXVwiG3JSWcNPdFQ4PLh,KgV1GvrHQmRBY8sHQQeUKwTm2r2h8t4C8qt12Cw1HVE,EE5L8cMU4itTsCSuor7NLK6RZx6JhsBe8GGV3oaAHm3P,HysWcbHiYY9888pHbaqhwLYZQeZrcQMXKQWRqS7zcPK5,ZWGxcTgJCNGQqZn6vFdknwj4AFFsYRZ4SDJuhRn3J1T,QVDE6rhcGPSB3ex5T7vWBzvoSRUXULjuSGpVuKwu5XH,EE58FVYG1UoY6Givy3K3GSRde9sHMj6X1BnocHBtd3sz,Uuc6hiKT9Y6ASoqs2phonGGw2LAtecfJu9yEohppzWH,8JjBJdV73zPPmZvkgC91ni8RsbXWTkhpuSdxeZgaw6hD,HPYXGSdAwyK5GwmuivL8gDdUVRChtgXq6SRat44k4Pat,EYDEQW4xQzLqHcFwHTgGvpdjsa5EFn74KzuqLX5emjD2,5sM9xxcBTM9rWza6nEgq2cShA87JjTBx1Cu82LjgmaEg,EDVVEYW4fPJ6vKw5LZXRGUSPzxoHrv6eWvTqhCr8oShs,AV7NgJV2BsgEukzUTrcUMz3LD37xLcLtygFig5WJ3kQN,CTtKth9uW7froBA6xCd2MP7BXjGFESdT1SyxUmbHovSw,EPeUFDgHRxs9xxEPVaL6kfGQvCon7jmAWKVUHuux1Tpz,Basis9oJw9j8cw53oMV7iqsgo6ihi9ALw4QR31rcjUJa,6kr8q1SXXNRLy3imzDsecWkcRtzJiXqiXx1N7LtpMPTe,6ry4WBDvAwAnrYJVv6MCog4J8zx6S3cPgSqnTsDZ73AR,A94X2fRy3wydNShU4dRaDyap2UuoeWJGWyATtyp61WZf,9gP2kCy3wA1ctvYWQk75guqXuHfrEomqydHLtcTCqiLa,33fsBLA8djQm82RpHmE3SuVrPGtZBWNYExsEUeKX1HXX,5RpUwQ8wtdPCZHhu6MERp2RGrpobsbZ6MH5dDHkUjs2,6nuaX3ogrr2CaoAPjtaKHAoBNWok32BMcRozuf32s2QF,AJ1W9A9N9dEMdVyoDiam2rV44gnBm2csrPDP7xqcapgX",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "AUrMpCDYYcPuHhyNX8gEEqbmDPFUpBpHrNW3vPeCFn5Z",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=2468.49 or h24_txns=10 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/HJbNXx2YMRxgfUJ6K4qeWtjatMK5KYQT1QnsCdDWywNv,bATSLdvufuY3vQYv18HAEN3sJTLPodtiq2FtUismJd1,9LzCMqDgTKYz9Drzqnpgee3SGa89up3a247ypMj2xrqM,AURYydfxJib1ZkTir1Jn1J9ECYUtjb6rKQVmtYaixWPP,AUrMpCDYYcPuHhyNX8gEEqbmDPFUpBpHrNW3vPeCFn5Z,HtxznfExBatdX28kMFDvmvU1rXVwiG3JSWcNPdFQ4PLh,KgV1GvrHQmRBY8sHQQeUKwTm2r2h8t4C8qt12Cw1HVE,EE5L8cMU4itTsCSuor7NLK6RZx6JhsBe8GGV3oaAHm3P,HysWcbHiYY9888pHbaqhwLYZQeZrcQMXKQWRqS7zcPK5,ZWGxcTgJCNGQqZn6vFdknwj4AFFsYRZ4SDJuhRn3J1T,QVDE6rhcGPSB3ex5T7vWBzvoSRUXULjuSGpVuKwu5XH,EE58FVYG1UoY6Givy3K3GSRde9sHMj6X1BnocHBtd3sz,Uuc6hiKT9Y6ASoqs2phonGGw2LAtecfJu9yEohppzWH,8JjBJdV73zPPmZvkgC91ni8RsbXWTkhpuSdxeZgaw6hD,HPYXGSdAwyK5GwmuivL8gDdUVRChtgXq6SRat44k4Pat,EYDEQW4xQzLqHcFwHTgGvpdjsa5EFn74KzuqLX5emjD2,5sM9xxcBTM9rWza6nEgq2cShA87JjTBx1Cu82LjgmaEg,EDVVEYW4fPJ6vKw5LZXRGUSPzxoHrv6eWvTqhCr8oShs,AV7NgJV2BsgEukzUTrcUMz3LD37xLcLtygFig5WJ3kQN,CTtKth9uW7froBA6xCd2MP7BXjGFESdT1SyxUmbHovSw,EPeUFDgHRxs9xxEPVaL6kfGQvCon7jmAWKVUHuux1Tpz,Basis9oJw9j8cw53oMV7iqsgo6ihi9ALw4QR31rcjUJa,6kr8q1SXXNRLy3imzDsecWkcRtzJiXqiXx1N7LtpMPTe,6ry4WBDvAwAnrYJVv6MCog4J8zx6S3cPgSqnTsDZ73AR,A94X2fRy3wydNShU4dRaDyap2UuoeWJGWyATtyp61WZf,9gP2kCy3wA1ctvYWQk75guqXuHfrEomqydHLtcTCqiLa,33fsBLA8djQm82RpHmE3SuVrPGtZBWNYExsEUeKX1HXX,5RpUwQ8wtdPCZHhu6MERp2RGrpobsbZ6MH5dDHkUjs2,6nuaX3ogrr2CaoAPjtaKHAoBNWok32BMcRozuf32s2QF,AJ1W9A9N9dEMdVyoDiam2rV44gnBm2csrPDP7xqcapgX",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "Uuc6hiKT9Y6ASoqs2phonGGw2LAtecfJu9yEohppzWH",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=691.26 or h24_txns=68 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/HJbNXx2YMRxgfUJ6K4qeWtjatMK5KYQT1QnsCdDWywNv,bATSLdvufuY3vQYv18HAEN3sJTLPodtiq2FtUismJd1,9LzCMqDgTKYz9Drzqnpgee3SGa89up3a247ypMj2xrqM,AURYydfxJib1ZkTir1Jn1J9ECYUtjb6rKQVmtYaixWPP,AUrMpCDYYcPuHhyNX8gEEqbmDPFUpBpHrNW3vPeCFn5Z,HtxznfExBatdX28kMFDvmvU1rXVwiG3JSWcNPdFQ4PLh,KgV1GvrHQmRBY8sHQQeUKwTm2r2h8t4C8qt12Cw1HVE,EE5L8cMU4itTsCSuor7NLK6RZx6JhsBe8GGV3oaAHm3P,HysWcbHiYY9888pHbaqhwLYZQeZrcQMXKQWRqS7zcPK5,ZWGxcTgJCNGQqZn6vFdknwj4AFFsYRZ4SDJuhRn3J1T,QVDE6rhcGPSB3ex5T7vWBzvoSRUXULjuSGpVuKwu5XH,EE58FVYG1UoY6Givy3K3GSRde9sHMj6X1BnocHBtd3sz,Uuc6hiKT9Y6ASoqs2phonGGw2LAtecfJu9yEohppzWH,8JjBJdV73zPPmZvkgC91ni8RsbXWTkhpuSdxeZgaw6hD,HPYXGSdAwyK5GwmuivL8gDdUVRChtgXq6SRat44k4Pat,EYDEQW4xQzLqHcFwHTgGvpdjsa5EFn74KzuqLX5emjD2,5sM9xxcBTM9rWza6nEgq2cShA87JjTBx1Cu82LjgmaEg,EDVVEYW4fPJ6vKw5LZXRGUSPzxoHrv6eWvTqhCr8oShs,AV7NgJV2BsgEukzUTrcUMz3LD37xLcLtygFig5WJ3kQN,CTtKth9uW7froBA6xCd2MP7BXjGFESdT1SyxUmbHovSw,EPeUFDgHRxs9xxEPVaL6kfGQvCon7jmAWKVUHuux1Tpz,Basis9oJw9j8cw53oMV7iqsgo6ihi9ALw4QR31rcjUJa,6kr8q1SXXNRLy3imzDsecWkcRtzJiXqiXx1N7LtpMPTe,6ry4WBDvAwAnrYJVv6MCog4J8zx6S3cPgSqnTsDZ73AR,A94X2fRy3wydNShU4dRaDyap2UuoeWJGWyATtyp61WZf,9gP2kCy3wA1ctvYWQk75guqXuHfrEomqydHLtcTCqiLa,33fsBLA8djQm82RpHmE3SuVrPGtZBWNYExsEUeKX1HXX,5RpUwQ8wtdPCZHhu6MERp2RGrpobsbZ6MH5dDHkUjs2,6nuaX3ogrr2CaoAPjtaKHAoBNWok32BMcRozuf32s2QF,AJ1W9A9N9dEMdVyoDiam2rV44gnBm2csrPDP7xqcapgX",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "5sM9xxcBTM9rWza6nEgq2cShA87JjTBx1Cu82LjgmaEg",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=10801.2 or h24_txns=1 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/HJbNXx2YMRxgfUJ6K4qeWtjatMK5KYQT1QnsCdDWywNv,bATSLdvufuY3vQYv18HAEN3sJTLPodtiq2FtUismJd1,9LzCMqDgTKYz9Drzqnpgee3SGa89up3a247ypMj2xrqM,AURYydfxJib1ZkTir1Jn1J9ECYUtjb6rKQVmtYaixWPP,AUrMpCDYYcPuHhyNX8gEEqbmDPFUpBpHrNW3vPeCFn5Z,HtxznfExBatdX28kMFDvmvU1rXVwiG3JSWcNPdFQ4PLh,KgV1GvrHQmRBY8sHQQeUKwTm2r2h8t4C8qt12Cw1HVE,EE5L8cMU4itTsCSuor7NLK6RZx6JhsBe8GGV3oaAHm3P,HysWcbHiYY9888pHbaqhwLYZQeZrcQMXKQWRqS7zcPK5,ZWGxcTgJCNGQqZn6vFdknwj4AFFsYRZ4SDJuhRn3J1T,QVDE6rhcGPSB3ex5T7vWBzvoSRUXULjuSGpVuKwu5XH,EE58FVYG1UoY6Givy3K3GSRde9sHMj6X1BnocHBtd3sz,Uuc6hiKT9Y6ASoqs2phonGGw2LAtecfJu9yEohppzWH,8JjBJdV73zPPmZvkgC91ni8RsbXWTkhpuSdxeZgaw6hD,HPYXGSdAwyK5GwmuivL8gDdUVRChtgXq6SRat44k4Pat,EYDEQW4xQzLqHcFwHTgGvpdjsa5EFn74KzuqLX5emjD2,5sM9xxcBTM9rWza6nEgq2cShA87JjTBx1Cu82LjgmaEg,EDVVEYW4fPJ6vKw5LZXRGUSPzxoHrv6eWvTqhCr8oShs,AV7NgJV2BsgEukzUTrcUMz3LD37xLcLtygFig5WJ3kQN,CTtKth9uW7froBA6xCd2MP7BXjGFESdT1SyxUmbHovSw,EPeUFDgHRxs9xxEPVaL6kfGQvCon7jmAWKVUHuux1Tpz,Basis9oJw9j8cw53oMV7iqsgo6ihi9ALw4QR31rcjUJa,6kr8q1SXXNRLy3imzDsecWkcRtzJiXqiXx1N7LtpMPTe,6ry4WBDvAwAnrYJVv6MCog4J8zx6S3cPgSqnTsDZ73AR,A94X2fRy3wydNShU4dRaDyap2UuoeWJGWyATtyp61WZf,9gP2kCy3wA1ctvYWQk75guqXuHfrEomqydHLtcTCqiLa,33fsBLA8djQm82RpHmE3SuVrPGtZBWNYExsEUeKX1HXX,5RpUwQ8wtdPCZHhu6MERp2RGrpobsbZ6MH5dDHkUjs2,6nuaX3ogrr2CaoAPjtaKHAoBNWok32BMcRozuf32s2QF,AJ1W9A9N9dEMdVyoDiam2rV44gnBm2csrPDP7xqcapgX",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=3879.82 or h24_txns=180 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/3UeKTABxz9XexDtyKq646rSQvx8GVpKNwfMoKKfxsTsF,FTPnEQ3NfRRZ9tvmpDW6JFrvweBE5sanxnXSpJL1dvbB,Fe5fWjCLDMJoi4sTmfR2VW4BT1LwsbR1n6QAjzJQvhhf,9999j2A8sXUtHtDoQdk528oVzhaKBsXyRGZ67FKGoi7H,9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E,BTCG2sUyE8qtfLNuk73cdEET2YQVbgrc7VzdW5B4RZ3b,BTCG4EGjivgfgnfKfkqgZkDXuj5KdTeWuJsEGFFzkjai,CZERo1zERhXQqGbMvWb9rJEsqNSujymo4UkJuUrkSR86,CZero7niHAHbW29oVf2XoCwDWznBaDbd2NxRq9zXfGW4,HWxpSV3QAGzLQzGAtvhSYAEr7sTQugQygnni1gnUGh1D,SBTCB6pWqeDo6zGi9WVRMLCsKsN6JiR1RMUqvLtgSRv,nchrLQC3YT6kepn9JvepyDDwRMQDyZXqQ29P85Q22qf,BDxWSxkMLW1nJ3VggamUKkEKrtCaVqzFxoDApM8HdBks,5U9QqCPhqXAJcEv9uyzFJd5zhN93vuPk1aNNkXnUfPnt,4NPzwMK2gfgQ6rTv8x4EE1ZvKW6MYyYTSrAZCx7zxyaX,NFTUkR4u7wKxy9QLaX2TGvd9oZSWoMo4jqSJqdMb7Nk,7uv3ZvZcQLd95bUp5WMioxG7tyAZVXFfr8JYkwhMYrnt,5Ro6JxJ4NjSTEppdX2iXUYgWkAEF1dcs9gqMX99E2vkL,EchesyfXePKdLtoiZSL8pBe8Myagyy8ZRqsACNCFGnvp,BgeRyFWWGHeVouqfHfcXUxmvfkgekhrXYVqQWf63kpJB,BLwTnYKqf7u4qjgZrrsKeNs2EzWkMLqVCu6j8iHyrNA3,CN7qFa5iYkHz99PTctvT4xXUHnxwjQ5MHxCuTJtPN5uS,EbmZ9fE3XxMUr1vEcjvrRqLJv3p9Zjs5fXeZBUGFgC7y,J6AbGG62yo9UJ2T9r9GM7pnoRNui5DsZDnPbiNAPqbVd,FtgGSFADXBtroxq8VCausXRr2of47QBf5AS1NtZCu4GD,2XSuy8RSESbtYRBbVHxGWuoikn3B6iXKVKzN4i3owTCf,CASHVDm2wsJXfhj6VWxb7GiMdoLc17Du7paH4bNr5woT,21vatMcwZz53Eu2EUDCS9xoZUXdJ9ABMTQYNMKKkzoNW,5p2zjqCd1WJzAVgcEnjhb9zWDU7b9XVhFhx4usiyN7jB,4SZjjNABoqhbd4hnapbvoEPEqT8mnNkfbEoAwALf1V8t",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "7uv3ZvZcQLd95bUp5WMioxG7tyAZVXFfr8JYkwhMYrnt",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=62.99 or h24_txns=1 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/3UeKTABxz9XexDtyKq646rSQvx8GVpKNwfMoKKfxsTsF,FTPnEQ3NfRRZ9tvmpDW6JFrvweBE5sanxnXSpJL1dvbB,Fe5fWjCLDMJoi4sTmfR2VW4BT1LwsbR1n6QAjzJQvhhf,9999j2A8sXUtHtDoQdk528oVzhaKBsXyRGZ67FKGoi7H,9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E,BTCG2sUyE8qtfLNuk73cdEET2YQVbgrc7VzdW5B4RZ3b,BTCG4EGjivgfgnfKfkqgZkDXuj5KdTeWuJsEGFFzkjai,CZERo1zERhXQqGbMvWb9rJEsqNSujymo4UkJuUrkSR86,CZero7niHAHbW29oVf2XoCwDWznBaDbd2NxRq9zXfGW4,HWxpSV3QAGzLQzGAtvhSYAEr7sTQugQygnni1gnUGh1D,SBTCB6pWqeDo6zGi9WVRMLCsKsN6JiR1RMUqvLtgSRv,nchrLQC3YT6kepn9JvepyDDwRMQDyZXqQ29P85Q22qf,BDxWSxkMLW1nJ3VggamUKkEKrtCaVqzFxoDApM8HdBks,5U9QqCPhqXAJcEv9uyzFJd5zhN93vuPk1aNNkXnUfPnt,4NPzwMK2gfgQ6rTv8x4EE1ZvKW6MYyYTSrAZCx7zxyaX,NFTUkR4u7wKxy9QLaX2TGvd9oZSWoMo4jqSJqdMb7Nk,7uv3ZvZcQLd95bUp5WMioxG7tyAZVXFfr8JYkwhMYrnt,5Ro6JxJ4NjSTEppdX2iXUYgWkAEF1dcs9gqMX99E2vkL,EchesyfXePKdLtoiZSL8pBe8Myagyy8ZRqsACNCFGnvp,BgeRyFWWGHeVouqfHfcXUxmvfkgekhrXYVqQWf63kpJB,BLwTnYKqf7u4qjgZrrsKeNs2EzWkMLqVCu6j8iHyrNA3,CN7qFa5iYkHz99PTctvT4xXUHnxwjQ5MHxCuTJtPN5uS,EbmZ9fE3XxMUr1vEcjvrRqLJv3p9Zjs5fXeZBUGFgC7y,J6AbGG62yo9UJ2T9r9GM7pnoRNui5DsZDnPbiNAPqbVd,FtgGSFADXBtroxq8VCausXRr2of47QBf5AS1NtZCu4GD,2XSuy8RSESbtYRBbVHxGWuoikn3B6iXKVKzN4i3owTCf,CASHVDm2wsJXfhj6VWxb7GiMdoLc17Du7paH4bNr5woT,21vatMcwZz53Eu2EUDCS9xoZUXdJ9ABMTQYNMKKkzoNW,5p2zjqCd1WJzAVgcEnjhb9zWDU7b9XVhFhx4usiyN7jB,4SZjjNABoqhbd4hnapbvoEPEqT8mnNkfbEoAwALf1V8t",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "EchesyfXePKdLtoiZSL8pBe8Myagyy8ZRqsACNCFGnvp",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=4737.34 or h24_txns=165 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/3UeKTABxz9XexDtyKq646rSQvx8GVpKNwfMoKKfxsTsF,FTPnEQ3NfRRZ9tvmpDW6JFrvweBE5sanxnXSpJL1dvbB,Fe5fWjCLDMJoi4sTmfR2VW4BT1LwsbR1n6QAjzJQvhhf,9999j2A8sXUtHtDoQdk528oVzhaKBsXyRGZ67FKGoi7H,9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E,BTCG2sUyE8qtfLNuk73cdEET2YQVbgrc7VzdW5B4RZ3b,BTCG4EGjivgfgnfKfkqgZkDXuj5KdTeWuJsEGFFzkjai,CZERo1zERhXQqGbMvWb9rJEsqNSujymo4UkJuUrkSR86,CZero7niHAHbW29oVf2XoCwDWznBaDbd2NxRq9zXfGW4,HWxpSV3QAGzLQzGAtvhSYAEr7sTQugQygnni1gnUGh1D,SBTCB6pWqeDo6zGi9WVRMLCsKsN6JiR1RMUqvLtgSRv,nchrLQC3YT6kepn9JvepyDDwRMQDyZXqQ29P85Q22qf,BDxWSxkMLW1nJ3VggamUKkEKrtCaVqzFxoDApM8HdBks,5U9QqCPhqXAJcEv9uyzFJd5zhN93vuPk1aNNkXnUfPnt,4NPzwMK2gfgQ6rTv8x4EE1ZvKW6MYyYTSrAZCx7zxyaX,NFTUkR4u7wKxy9QLaX2TGvd9oZSWoMo4jqSJqdMb7Nk,7uv3ZvZcQLd95bUp5WMioxG7tyAZVXFfr8JYkwhMYrnt,5Ro6JxJ4NjSTEppdX2iXUYgWkAEF1dcs9gqMX99E2vkL,EchesyfXePKdLtoiZSL8pBe8Myagyy8ZRqsACNCFGnvp,BgeRyFWWGHeVouqfHfcXUxmvfkgekhrXYVqQWf63kpJB,BLwTnYKqf7u4qjgZrrsKeNs2EzWkMLqVCu6j8iHyrNA3,CN7qFa5iYkHz99PTctvT4xXUHnxwjQ5MHxCuTJtPN5uS,EbmZ9fE3XxMUr1vEcjvrRqLJv3p9Zjs5fXeZBUGFgC7y,J6AbGG62yo9UJ2T9r9GM7pnoRNui5DsZDnPbiNAPqbVd,FtgGSFADXBtroxq8VCausXRr2of47QBf5AS1NtZCu4GD,2XSuy8RSESbtYRBbVHxGWuoikn3B6iXKVKzN4i3owTCf,CASHVDm2wsJXfhj6VWxb7GiMdoLc17Du7paH4bNr5woT,21vatMcwZz53Eu2EUDCS9xoZUXdJ9ABMTQYNMKKkzoNW,5p2zjqCd1WJzAVgcEnjhb9zWDU7b9XVhFhx4usiyN7jB,4SZjjNABoqhbd4hnapbvoEPEqT8mnNkfbEoAwALf1V8t",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "BLwTnYKqf7u4qjgZrrsKeNs2EzWkMLqVCu6j8iHyrNA3",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=2509.81 or h24_txns=133 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/3UeKTABxz9XexDtyKq646rSQvx8GVpKNwfMoKKfxsTsF,FTPnEQ3NfRRZ9tvmpDW6JFrvweBE5sanxnXSpJL1dvbB,Fe5fWjCLDMJoi4sTmfR2VW4BT1LwsbR1n6QAjzJQvhhf,9999j2A8sXUtHtDoQdk528oVzhaKBsXyRGZ67FKGoi7H,9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E,BTCG2sUyE8qtfLNuk73cdEET2YQVbgrc7VzdW5B4RZ3b,BTCG4EGjivgfgnfKfkqgZkDXuj5KdTeWuJsEGFFzkjai,CZERo1zERhXQqGbMvWb9rJEsqNSujymo4UkJuUrkSR86,CZero7niHAHbW29oVf2XoCwDWznBaDbd2NxRq9zXfGW4,HWxpSV3QAGzLQzGAtvhSYAEr7sTQugQygnni1gnUGh1D,SBTCB6pWqeDo6zGi9WVRMLCsKsN6JiR1RMUqvLtgSRv,nchrLQC3YT6kepn9JvepyDDwRMQDyZXqQ29P85Q22qf,BDxWSxkMLW1nJ3VggamUKkEKrtCaVqzFxoDApM8HdBks,5U9QqCPhqXAJcEv9uyzFJd5zhN93vuPk1aNNkXnUfPnt,4NPzwMK2gfgQ6rTv8x4EE1ZvKW6MYyYTSrAZCx7zxyaX,NFTUkR4u7wKxy9QLaX2TGvd9oZSWoMo4jqSJqdMb7Nk,7uv3ZvZcQLd95bUp5WMioxG7tyAZVXFfr8JYkwhMYrnt,5Ro6JxJ4NjSTEppdX2iXUYgWkAEF1dcs9gqMX99E2vkL,EchesyfXePKdLtoiZSL8pBe8Myagyy8ZRqsACNCFGnvp,BgeRyFWWGHeVouqfHfcXUxmvfkgekhrXYVqQWf63kpJB,BLwTnYKqf7u4qjgZrrsKeNs2EzWkMLqVCu6j8iHyrNA3,CN7qFa5iYkHz99PTctvT4xXUHnxwjQ5MHxCuTJtPN5uS,EbmZ9fE3XxMUr1vEcjvrRqLJv3p9Zjs5fXeZBUGFgC7y,J6AbGG62yo9UJ2T9r9GM7pnoRNui5DsZDnPbiNAPqbVd,FtgGSFADXBtroxq8VCausXRr2of47QBf5AS1NtZCu4GD,2XSuy8RSESbtYRBbVHxGWuoikn3B6iXKVKzN4i3owTCf,CASHVDm2wsJXfhj6VWxb7GiMdoLc17Du7paH4bNr5woT,21vatMcwZz53Eu2EUDCS9xoZUXdJ9ABMTQYNMKKkzoNW,5p2zjqCd1WJzAVgcEnjhb9zWDU7b9XVhFhx4usiyN7jB,4SZjjNABoqhbd4hnapbvoEPEqT8mnNkfbEoAwALf1V8t",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "CWE8jPTUYhdCTZYWPTe1o5DFqfdjzWKc9WKz6rSjQUdG",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=1892.5 or h24_txns=39 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/GNCjk3FmPPgZTkbQRSxr6nCvLtYMbXKMnRxg8BgJs62e,EwxNF8g9UfmsJVcZFTpL9Hx5MCkoQFoJi6XNWzKf1j8e,DTQStP2z4DRqbNHRxtwThAujr9aPFPsv4y2kkXTVLVvb,DgHK9mfhMtUwwv54GChRrU54T2Em5cuszq2uMuen1ZVE,nRtfwU9G82CSHhHGJNxFhtn7FLvWP2rqvQvje1WtL69,9PwPi3DAf9Dy4Y6qJmUzF6fX9CjNwScBidsYqJmcApF8,2wpTofQ8SkACrkZWrZDjXPitYa8AwWgX8AfxdeBRRVLX,6msNYXzSVtjinqapq2xcvBb5NRq4YTPAi7wc5Jx8M8TS,CWE8jPTUYhdCTZYWPTe1o5DFqfdjzWKc9WKz6rSjQUdG,3FoUAsGDbvTD6YZ4wVKJgTB76onJUKz7GPEBNiR5b8wc,sodaNXUbtjMvHe9c5Uw7o7VAcVpXPHAvtaRaiPVJQuE,6xtyNYX6Rf4Kp3629X11m1jqUmkV89mf9xQakUtUQfHq,5TtSKAamFq88grN1QGrEaZ1AjjyciqnCya1aiMhAgFvG,6uZ7MRGGf3FJhzk9TUk3QRMR2fz83WY9BEVBukRvMRVX,DQP2edsDc4bApMaQ4pRim6AE18yCjHpohFLhnWbxc4um,3aAYh35n81F8HPG2QBdE48aYdzGFj2fsLccg91X4AcRc,yvbrxE6zjrA8SxxSpL7oojDBB5QDmF5CVqJWea8JcQE,FeLoyXk8ac2AYVmDhAWEKNWWT63Z9TczeidYbpDvxF3T,C98A4nkJXhpVZNAZdHUA95RpTF3T4whtQubL3YobiUX9,FXe7K4EtThAzsu7dphLBKtbjFwE3AeMaFC7kwVd3ifhS,5Wsd311hY8NXQhkt9cWHwTnqafk7BGEbLu8Py3DSnPAr,3XnhArdJydrpbr9Nbj8wNUaozPL9WAo9YDyNWakhTm9X,Avz2fmevhhu87WYtWQCFj9UjKRjF9Z9QWwN2ih9yF95G,AwEauVaTMQRB71WeDnwf1DWSBxaMKjEPuxyLr1uixFom,G27M8w6G4hwatMNFi46DPAUR1YkxSmRNFKus7SgYLoDy,CobcsUrt3p91FwvULYKorQejgsm5HoQdv5T8RUZ6PnLA,B98YTvnDdVQ9NKT3pdbFwJn2TMTDitz1xzfxgA1zXCDC,BLvmrccP4g1B6SpiVvmQrLUDya1nZ4B2D1nm9jzKF7sz,3K6rftdAaQYMPunrtNRHgnK2UAtjm2JwyT2oCiTDouYE,8HGyAAB1yoM1ttS7pXjHMa3dukTFGQggnFFH3hJZgzQh",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "C98A4nkJXhpVZNAZdHUA95RpTF3T4whtQubL3YobiUX9",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=5959.24 or h24_txns=4 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/GNCjk3FmPPgZTkbQRSxr6nCvLtYMbXKMnRxg8BgJs62e,EwxNF8g9UfmsJVcZFTpL9Hx5MCkoQFoJi6XNWzKf1j8e,DTQStP2z4DRqbNHRxtwThAujr9aPFPsv4y2kkXTVLVvb,DgHK9mfhMtUwwv54GChRrU54T2Em5cuszq2uMuen1ZVE,nRtfwU9G82CSHhHGJNxFhtn7FLvWP2rqvQvje1WtL69,9PwPi3DAf9Dy4Y6qJmUzF6fX9CjNwScBidsYqJmcApF8,2wpTofQ8SkACrkZWrZDjXPitYa8AwWgX8AfxdeBRRVLX,6msNYXzSVtjinqapq2xcvBb5NRq4YTPAi7wc5Jx8M8TS,CWE8jPTUYhdCTZYWPTe1o5DFqfdjzWKc9WKz6rSjQUdG,3FoUAsGDbvTD6YZ4wVKJgTB76onJUKz7GPEBNiR5b8wc,sodaNXUbtjMvHe9c5Uw7o7VAcVpXPHAvtaRaiPVJQuE,6xtyNYX6Rf4Kp3629X11m1jqUmkV89mf9xQakUtUQfHq,5TtSKAamFq88grN1QGrEaZ1AjjyciqnCya1aiMhAgFvG,6uZ7MRGGf3FJhzk9TUk3QRMR2fz83WY9BEVBukRvMRVX,DQP2edsDc4bApMaQ4pRim6AE18yCjHpohFLhnWbxc4um,3aAYh35n81F8HPG2QBdE48aYdzGFj2fsLccg91X4AcRc,yvbrxE6zjrA8SxxSpL7oojDBB5QDmF5CVqJWea8JcQE,FeLoyXk8ac2AYVmDhAWEKNWWT63Z9TczeidYbpDvxF3T,C98A4nkJXhpVZNAZdHUA95RpTF3T4whtQubL3YobiUX9,FXe7K4EtThAzsu7dphLBKtbjFwE3AeMaFC7kwVd3ifhS,5Wsd311hY8NXQhkt9cWHwTnqafk7BGEbLu8Py3DSnPAr,3XnhArdJydrpbr9Nbj8wNUaozPL9WAo9YDyNWakhTm9X,Avz2fmevhhu87WYtWQCFj9UjKRjF9Z9QWwN2ih9yF95G,AwEauVaTMQRB71WeDnwf1DWSBxaMKjEPuxyLr1uixFom,G27M8w6G4hwatMNFi46DPAUR1YkxSmRNFKus7SgYLoDy,CobcsUrt3p91FwvULYKorQejgsm5HoQdv5T8RUZ6PnLA,B98YTvnDdVQ9NKT3pdbFwJn2TMTDitz1xzfxgA1zXCDC,BLvmrccP4g1B6SpiVvmQrLUDya1nZ4B2D1nm9jzKF7sz,3K6rftdAaQYMPunrtNRHgnK2UAtjm2JwyT2oCiTDouYE,8HGyAAB1yoM1ttS7pXjHMa3dukTFGQggnFFH3hJZgzQh",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "5Wsd311hY8NXQhkt9cWHwTnqafk7BGEbLu8Py3DSnPAr",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=3082.24 or h24_txns=59 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/GNCjk3FmPPgZTkbQRSxr6nCvLtYMbXKMnRxg8BgJs62e,EwxNF8g9UfmsJVcZFTpL9Hx5MCkoQFoJi6XNWzKf1j8e,DTQStP2z4DRqbNHRxtwThAujr9aPFPsv4y2kkXTVLVvb,DgHK9mfhMtUwwv54GChRrU54T2Em5cuszq2uMuen1ZVE,nRtfwU9G82CSHhHGJNxFhtn7FLvWP2rqvQvje1WtL69,9PwPi3DAf9Dy4Y6qJmUzF6fX9CjNwScBidsYqJmcApF8,2wpTofQ8SkACrkZWrZDjXPitYa8AwWgX8AfxdeBRRVLX,6msNYXzSVtjinqapq2xcvBb5NRq4YTPAi7wc5Jx8M8TS,CWE8jPTUYhdCTZYWPTe1o5DFqfdjzWKc9WKz6rSjQUdG,3FoUAsGDbvTD6YZ4wVKJgTB76onJUKz7GPEBNiR5b8wc,sodaNXUbtjMvHe9c5Uw7o7VAcVpXPHAvtaRaiPVJQuE,6xtyNYX6Rf4Kp3629X11m1jqUmkV89mf9xQakUtUQfHq,5TtSKAamFq88grN1QGrEaZ1AjjyciqnCya1aiMhAgFvG,6uZ7MRGGf3FJhzk9TUk3QRMR2fz83WY9BEVBukRvMRVX,DQP2edsDc4bApMaQ4pRim6AE18yCjHpohFLhnWbxc4um,3aAYh35n81F8HPG2QBdE48aYdzGFj2fsLccg91X4AcRc,yvbrxE6zjrA8SxxSpL7oojDBB5QDmF5CVqJWea8JcQE,FeLoyXk8ac2AYVmDhAWEKNWWT63Z9TczeidYbpDvxF3T,C98A4nkJXhpVZNAZdHUA95RpTF3T4whtQubL3YobiUX9,FXe7K4EtThAzsu7dphLBKtbjFwE3AeMaFC7kwVd3ifhS,5Wsd311hY8NXQhkt9cWHwTnqafk7BGEbLu8Py3DSnPAr,3XnhArdJydrpbr9Nbj8wNUaozPL9WAo9YDyNWakhTm9X,Avz2fmevhhu87WYtWQCFj9UjKRjF9Z9QWwN2ih9yF95G,AwEauVaTMQRB71WeDnwf1DWSBxaMKjEPuxyLr1uixFom,G27M8w6G4hwatMNFi46DPAUR1YkxSmRNFKus7SgYLoDy,CobcsUrt3p91FwvULYKorQejgsm5HoQdv5T8RUZ6PnLA,B98YTvnDdVQ9NKT3pdbFwJn2TMTDitz1xzfxgA1zXCDC,BLvmrccP4g1B6SpiVvmQrLUDya1nZ4B2D1nm9jzKF7sz,3K6rftdAaQYMPunrtNRHgnK2UAtjm2JwyT2oCiTDouYE,8HGyAAB1yoM1ttS7pXjHMa3dukTFGQggnFFH3hJZgzQh",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "CobcsUrt3p91FwvULYKorQejgsm5HoQdv5T8RUZ6PnLA",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=3427.32 or h24_txns=3 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/GNCjk3FmPPgZTkbQRSxr6nCvLtYMbXKMnRxg8BgJs62e,EwxNF8g9UfmsJVcZFTpL9Hx5MCkoQFoJi6XNWzKf1j8e,DTQStP2z4DRqbNHRxtwThAujr9aPFPsv4y2kkXTVLVvb,DgHK9mfhMtUwwv54GChRrU54T2Em5cuszq2uMuen1ZVE,nRtfwU9G82CSHhHGJNxFhtn7FLvWP2rqvQvje1WtL69,9PwPi3DAf9Dy4Y6qJmUzF6fX9CjNwScBidsYqJmcApF8,2wpTofQ8SkACrkZWrZDjXPitYa8AwWgX8AfxdeBRRVLX,6msNYXzSVtjinqapq2xcvBb5NRq4YTPAi7wc5Jx8M8TS,CWE8jPTUYhdCTZYWPTe1o5DFqfdjzWKc9WKz6rSjQUdG,3FoUAsGDbvTD6YZ4wVKJgTB76onJUKz7GPEBNiR5b8wc,sodaNXUbtjMvHe9c5Uw7o7VAcVpXPHAvtaRaiPVJQuE,6xtyNYX6Rf4Kp3629X11m1jqUmkV89mf9xQakUtUQfHq,5TtSKAamFq88grN1QGrEaZ1AjjyciqnCya1aiMhAgFvG,6uZ7MRGGf3FJhzk9TUk3QRMR2fz83WY9BEVBukRvMRVX,DQP2edsDc4bApMaQ4pRim6AE18yCjHpohFLhnWbxc4um,3aAYh35n81F8HPG2QBdE48aYdzGFj2fsLccg91X4AcRc,yvbrxE6zjrA8SxxSpL7oojDBB5QDmF5CVqJWea8JcQE,FeLoyXk8ac2AYVmDhAWEKNWWT63Z9TczeidYbpDvxF3T,C98A4nkJXhpVZNAZdHUA95RpTF3T4whtQubL3YobiUX9,FXe7K4EtThAzsu7dphLBKtbjFwE3AeMaFC7kwVd3ifhS,5Wsd311hY8NXQhkt9cWHwTnqafk7BGEbLu8Py3DSnPAr,3XnhArdJydrpbr9Nbj8wNUaozPL9WAo9YDyNWakhTm9X,Avz2fmevhhu87WYtWQCFj9UjKRjF9Z9QWwN2ih9yF95G,AwEauVaTMQRB71WeDnwf1DWSBxaMKjEPuxyLr1uixFom,G27M8w6G4hwatMNFi46DPAUR1YkxSmRNFKus7SgYLoDy,CobcsUrt3p91FwvULYKorQejgsm5HoQdv5T8RUZ6PnLA,B98YTvnDdVQ9NKT3pdbFwJn2TMTDitz1xzfxgA1zXCDC,BLvmrccP4g1B6SpiVvmQrLUDya1nZ4B2D1nm9jzKF7sz,3K6rftdAaQYMPunrtNRHgnK2UAtjm2JwyT2oCiTDouYE,8HGyAAB1yoM1ttS7pXjHMa3dukTFGQggnFFH3hJZgzQh",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "3K6rftdAaQYMPunrtNRHgnK2UAtjm2JwyT2oCiTDouYE",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=60814.7 or h24_txns=1 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/GNCjk3FmPPgZTkbQRSxr6nCvLtYMbXKMnRxg8BgJs62e,EwxNF8g9UfmsJVcZFTpL9Hx5MCkoQFoJi6XNWzKf1j8e,DTQStP2z4DRqbNHRxtwThAujr9aPFPsv4y2kkXTVLVvb,DgHK9mfhMtUwwv54GChRrU54T2Em5cuszq2uMuen1ZVE,nRtfwU9G82CSHhHGJNxFhtn7FLvWP2rqvQvje1WtL69,9PwPi3DAf9Dy4Y6qJmUzF6fX9CjNwScBidsYqJmcApF8,2wpTofQ8SkACrkZWrZDjXPitYa8AwWgX8AfxdeBRRVLX,6msNYXzSVtjinqapq2xcvBb5NRq4YTPAi7wc5Jx8M8TS,CWE8jPTUYhdCTZYWPTe1o5DFqfdjzWKc9WKz6rSjQUdG,3FoUAsGDbvTD6YZ4wVKJgTB76onJUKz7GPEBNiR5b8wc,sodaNXUbtjMvHe9c5Uw7o7VAcVpXPHAvtaRaiPVJQuE,6xtyNYX6Rf4Kp3629X11m1jqUmkV89mf9xQakUtUQfHq,5TtSKAamFq88grN1QGrEaZ1AjjyciqnCya1aiMhAgFvG,6uZ7MRGGf3FJhzk9TUk3QRMR2fz83WY9BEVBukRvMRVX,DQP2edsDc4bApMaQ4pRim6AE18yCjHpohFLhnWbxc4um,3aAYh35n81F8HPG2QBdE48aYdzGFj2fsLccg91X4AcRc,yvbrxE6zjrA8SxxSpL7oojDBB5QDmF5CVqJWea8JcQE,FeLoyXk8ac2AYVmDhAWEKNWWT63Z9TczeidYbpDvxF3T,C98A4nkJXhpVZNAZdHUA95RpTF3T4whtQubL3YobiUX9,FXe7K4EtThAzsu7dphLBKtbjFwE3AeMaFC7kwVd3ifhS,5Wsd311hY8NXQhkt9cWHwTnqafk7BGEbLu8Py3DSnPAr,3XnhArdJydrpbr9Nbj8wNUaozPL9WAo9YDyNWakhTm9X,Avz2fmevhhu87WYtWQCFj9UjKRjF9Z9QWwN2ih9yF95G,AwEauVaTMQRB71WeDnwf1DWSBxaMKjEPuxyLr1uixFom,G27M8w6G4hwatMNFi46DPAUR1YkxSmRNFKus7SgYLoDy,CobcsUrt3p91FwvULYKorQejgsm5HoQdv5T8RUZ6PnLA,B98YTvnDdVQ9NKT3pdbFwJn2TMTDitz1xzfxgA1zXCDC,BLvmrccP4g1B6SpiVvmQrLUDya1nZ4B2D1nm9jzKF7sz,3K6rftdAaQYMPunrtNRHgnK2UAtjm2JwyT2oCiTDouYE,8HGyAAB1yoM1ttS7pXjHMa3dukTFGQggnFFH3hJZgzQh",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "DubwWZNWiNGMMeeQHPnMATNj77YZPZSAz2WVR5WjLJqz",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=278.34 or h24_txns=5 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/E1s2muWwiLT2n3EQUL27hgviaPRRXWkpXD7ShpfgRvVz,HHoHTtntq2kiBPENyVM1DTP7pNrkBXX2Jye29PSyz3qf,HihxL2iM6L6P1oqoSeiixdJ3PhPYNxvSKH9A2dDqLVDH,5Fu5UUgbjpUvdBveb3a1JTNirL8rXtiYeSMWvKjtUNQv,9iwfHhE7BJKNo4Eb1wX3p4uyJjEN9RoGLt4BvMdzZoiN,DubwWZNWiNGMMeeQHPnMATNj77YZPZSAz2WVR5WjLJqz,59NPV18vAbTgwC9aeEGikrmX3EbZHMEMkZfvcsHBNFr9,CRWNYkqdgvhGGae9CKfNka58j6QQkaD5bLhKXvUYqnc1,56tNQ29XBrbovm5K5SThuQatjCy92w2wKUaUeQ8WCD9g,DvjMYMVeXgKxaixGKpzQThLoG98nc7HSU7eanzsdCboA,2vRgBSJEVPXxayrhXoazQyCKSGFYQG3ZdfT2Gv5gZykL,EzeRaHuh1Xu1nDUypv1VWXcGsNJ71ncCJ8HeWuyg8atJ,7gjNiPun3AzEazTZoFEjZgcBMeuaXdpjHq2raZTmTrfs,ApmXkxXCASdxRf3Ln6Ni7oAZ7E6CX1CcJAD8A5qBdhSm,AqLKDJiGL4wXKPAfzNom3xEdQwgj2LTCE4k34gzvZsE6,BRLsMczKuaR5w9vSubF4j8HwEGGprVAyyVgS4EX7DKEg,4Fo67MYQpVhZj9R7jQTd63FPAnWbPpaafAUxsMGX2geP,8LyHLBW4VXDziGRmsH9694TRYsf66BH4HemnnrN29tyZ,EjmyN6qEC1Tf1JxiG1ae7UTJhUxSwk1TCWNWqxWV4J6o,FYpdBuyAHSbdaAyD1sKkxyLWbAP8uUW9h6uvdhK74ij1,HjUhUzi6fVkY1BndaSc4Dcg2mCzvnqzXjVJtXsj78ver,CpFE715P5DnDoJj9FbCRcuyHHeTXNdRnvzNkHvq1o23U,3DHPqxdMXogNNnpqBMF8N4Zs4dn1WR31H7UjWq6FExwG,7dgHoN8wBZCc5wbnQ2C47TDnBMAxG4Q5L3KjP67z8kNi,DrL2D4qCRCeNkQz3AJikLjBc3cS6fqqcQ3W7T9vbshCu,DFL1zNkaGPWm1BqAVqRjCZvHmwTFrEaJtbzJWgseoNJh,3GVAecXsFP8xLFuAMMpg5NU4g5JK6h2NZWsQJ45wiw6b,DWECGzR56MruYJyo5g5QpoxZbFoydt3oWUkkDsVhxXzs,AC4BK5yoEKn5hw6WpH3iWu56pEwigQdR48CiiqJ3R1pd,GsNzxJfFn6zQdJGeYsupJWzUAm57Ba7335mfhWvFiE9Z",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "BRLsMczKuaR5w9vSubF4j8HwEGGprVAyyVgS4EX7DKEg",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=15.15 or h24_txns=5 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/E1s2muWwiLT2n3EQUL27hgviaPRRXWkpXD7ShpfgRvVz,HHoHTtntq2kiBPENyVM1DTP7pNrkBXX2Jye29PSyz3qf,HihxL2iM6L6P1oqoSeiixdJ3PhPYNxvSKH9A2dDqLVDH,5Fu5UUgbjpUvdBveb3a1JTNirL8rXtiYeSMWvKjtUNQv,9iwfHhE7BJKNo4Eb1wX3p4uyJjEN9RoGLt4BvMdzZoiN,DubwWZNWiNGMMeeQHPnMATNj77YZPZSAz2WVR5WjLJqz,59NPV18vAbTgwC9aeEGikrmX3EbZHMEMkZfvcsHBNFr9,CRWNYkqdgvhGGae9CKfNka58j6QQkaD5bLhKXvUYqnc1,56tNQ29XBrbovm5K5SThuQatjCy92w2wKUaUeQ8WCD9g,DvjMYMVeXgKxaixGKpzQThLoG98nc7HSU7eanzsdCboA,2vRgBSJEVPXxayrhXoazQyCKSGFYQG3ZdfT2Gv5gZykL,EzeRaHuh1Xu1nDUypv1VWXcGsNJ71ncCJ8HeWuyg8atJ,7gjNiPun3AzEazTZoFEjZgcBMeuaXdpjHq2raZTmTrfs,ApmXkxXCASdxRf3Ln6Ni7oAZ7E6CX1CcJAD8A5qBdhSm,AqLKDJiGL4wXKPAfzNom3xEdQwgj2LTCE4k34gzvZsE6,BRLsMczKuaR5w9vSubF4j8HwEGGprVAyyVgS4EX7DKEg,4Fo67MYQpVhZj9R7jQTd63FPAnWbPpaafAUxsMGX2geP,8LyHLBW4VXDziGRmsH9694TRYsf66BH4HemnnrN29tyZ,EjmyN6qEC1Tf1JxiG1ae7UTJhUxSwk1TCWNWqxWV4J6o,FYpdBuyAHSbdaAyD1sKkxyLWbAP8uUW9h6uvdhK74ij1,HjUhUzi6fVkY1BndaSc4Dcg2mCzvnqzXjVJtXsj78ver,CpFE715P5DnDoJj9FbCRcuyHHeTXNdRnvzNkHvq1o23U,3DHPqxdMXogNNnpqBMF8N4Zs4dn1WR31H7UjWq6FExwG,7dgHoN8wBZCc5wbnQ2C47TDnBMAxG4Q5L3KjP67z8kNi,DrL2D4qCRCeNkQz3AJikLjBc3cS6fqqcQ3W7T9vbshCu,DFL1zNkaGPWm1BqAVqRjCZvHmwTFrEaJtbzJWgseoNJh,3GVAecXsFP8xLFuAMMpg5NU4g5JK6h2NZWsQJ45wiw6b,DWECGzR56MruYJyo5g5QpoxZbFoydt3oWUkkDsVhxXzs,AC4BK5yoEKn5hw6WpH3iWu56pEwigQdR48CiiqJ3R1pd,GsNzxJfFn6zQdJGeYsupJWzUAm57Ba7335mfhWvFiE9Z",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "EjmyN6qEC1Tf1JxiG1ae7UTJhUxSwk1TCWNWqxWV4J6o",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=90.7 or h24_txns=26 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/E1s2muWwiLT2n3EQUL27hgviaPRRXWkpXD7ShpfgRvVz,HHoHTtntq2kiBPENyVM1DTP7pNrkBXX2Jye29PSyz3qf,HihxL2iM6L6P1oqoSeiixdJ3PhPYNxvSKH9A2dDqLVDH,5Fu5UUgbjpUvdBveb3a1JTNirL8rXtiYeSMWvKjtUNQv,9iwfHhE7BJKNo4Eb1wX3p4uyJjEN9RoGLt4BvMdzZoiN,DubwWZNWiNGMMeeQHPnMATNj77YZPZSAz2WVR5WjLJqz,59NPV18vAbTgwC9aeEGikrmX3EbZHMEMkZfvcsHBNFr9,CRWNYkqdgvhGGae9CKfNka58j6QQkaD5bLhKXvUYqnc1,56tNQ29XBrbovm5K5SThuQatjCy92w2wKUaUeQ8WCD9g,DvjMYMVeXgKxaixGKpzQThLoG98nc7HSU7eanzsdCboA,2vRgBSJEVPXxayrhXoazQyCKSGFYQG3ZdfT2Gv5gZykL,EzeRaHuh1Xu1nDUypv1VWXcGsNJ71ncCJ8HeWuyg8atJ,7gjNiPun3AzEazTZoFEjZgcBMeuaXdpjHq2raZTmTrfs,ApmXkxXCASdxRf3Ln6Ni7oAZ7E6CX1CcJAD8A5qBdhSm,AqLKDJiGL4wXKPAfzNom3xEdQwgj2LTCE4k34gzvZsE6,BRLsMczKuaR5w9vSubF4j8HwEGGprVAyyVgS4EX7DKEg,4Fo67MYQpVhZj9R7jQTd63FPAnWbPpaafAUxsMGX2geP,8LyHLBW4VXDziGRmsH9694TRYsf66BH4HemnnrN29tyZ,EjmyN6qEC1Tf1JxiG1ae7UTJhUxSwk1TCWNWqxWV4J6o,FYpdBuyAHSbdaAyD1sKkxyLWbAP8uUW9h6uvdhK74ij1,HjUhUzi6fVkY1BndaSc4Dcg2mCzvnqzXjVJtXsj78ver,CpFE715P5DnDoJj9FbCRcuyHHeTXNdRnvzNkHvq1o23U,3DHPqxdMXogNNnpqBMF8N4Zs4dn1WR31H7UjWq6FExwG,7dgHoN8wBZCc5wbnQ2C47TDnBMAxG4Q5L3KjP67z8kNi,DrL2D4qCRCeNkQz3AJikLjBc3cS6fqqcQ3W7T9vbshCu,DFL1zNkaGPWm1BqAVqRjCZvHmwTFrEaJtbzJWgseoNJh,3GVAecXsFP8xLFuAMMpg5NU4g5JK6h2NZWsQJ45wiw6b,DWECGzR56MruYJyo5g5QpoxZbFoydt3oWUkkDsVhxXzs,AC4BK5yoEKn5hw6WpH3iWu56pEwigQdR48CiiqJ3R1pd,GsNzxJfFn6zQdJGeYsupJWzUAm57Ba7335mfhWvFiE9Z",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "3DHPqxdMXogNNnpqBMF8N4Zs4dn1WR31H7UjWq6FExwG",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=265.16 or h24_txns=18 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/E1s2muWwiLT2n3EQUL27hgviaPRRXWkpXD7ShpfgRvVz,HHoHTtntq2kiBPENyVM1DTP7pNrkBXX2Jye29PSyz3qf,HihxL2iM6L6P1oqoSeiixdJ3PhPYNxvSKH9A2dDqLVDH,5Fu5UUgbjpUvdBveb3a1JTNirL8rXtiYeSMWvKjtUNQv,9iwfHhE7BJKNo4Eb1wX3p4uyJjEN9RoGLt4BvMdzZoiN,DubwWZNWiNGMMeeQHPnMATNj77YZPZSAz2WVR5WjLJqz,59NPV18vAbTgwC9aeEGikrmX3EbZHMEMkZfvcsHBNFr9,CRWNYkqdgvhGGae9CKfNka58j6QQkaD5bLhKXvUYqnc1,56tNQ29XBrbovm5K5SThuQatjCy92w2wKUaUeQ8WCD9g,DvjMYMVeXgKxaixGKpzQThLoG98nc7HSU7eanzsdCboA,2vRgBSJEVPXxayrhXoazQyCKSGFYQG3ZdfT2Gv5gZykL,EzeRaHuh1Xu1nDUypv1VWXcGsNJ71ncCJ8HeWuyg8atJ,7gjNiPun3AzEazTZoFEjZgcBMeuaXdpjHq2raZTmTrfs,ApmXkxXCASdxRf3Ln6Ni7oAZ7E6CX1CcJAD8A5qBdhSm,AqLKDJiGL4wXKPAfzNom3xEdQwgj2LTCE4k34gzvZsE6,BRLsMczKuaR5w9vSubF4j8HwEGGprVAyyVgS4EX7DKEg,4Fo67MYQpVhZj9R7jQTd63FPAnWbPpaafAUxsMGX2geP,8LyHLBW4VXDziGRmsH9694TRYsf66BH4HemnnrN29tyZ,EjmyN6qEC1Tf1JxiG1ae7UTJhUxSwk1TCWNWqxWV4J6o,FYpdBuyAHSbdaAyD1sKkxyLWbAP8uUW9h6uvdhK74ij1,HjUhUzi6fVkY1BndaSc4Dcg2mCzvnqzXjVJtXsj78ver,CpFE715P5DnDoJj9FbCRcuyHHeTXNdRnvzNkHvq1o23U,3DHPqxdMXogNNnpqBMF8N4Zs4dn1WR31H7UjWq6FExwG,7dgHoN8wBZCc5wbnQ2C47TDnBMAxG4Q5L3KjP67z8kNi,DrL2D4qCRCeNkQz3AJikLjBc3cS6fqqcQ3W7T9vbshCu,DFL1zNkaGPWm1BqAVqRjCZvHmwTFrEaJtbzJWgseoNJh,3GVAecXsFP8xLFuAMMpg5NU4g5JK6h2NZWsQJ45wiw6b,DWECGzR56MruYJyo5g5QpoxZbFoydt3oWUkkDsVhxXzs,AC4BK5yoEKn5hw6WpH3iWu56pEwigQdR48CiiqJ3R1pd,GsNzxJfFn6zQdJGeYsupJWzUAm57Ba7335mfhWvFiE9Z",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "7dgHoN8wBZCc5wbnQ2C47TDnBMAxG4Q5L3KjP67z8kNi",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=3434.29 or h24_txns=28 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/E1s2muWwiLT2n3EQUL27hgviaPRRXWkpXD7ShpfgRvVz,HHoHTtntq2kiBPENyVM1DTP7pNrkBXX2Jye29PSyz3qf,HihxL2iM6L6P1oqoSeiixdJ3PhPYNxvSKH9A2dDqLVDH,5Fu5UUgbjpUvdBveb3a1JTNirL8rXtiYeSMWvKjtUNQv,9iwfHhE7BJKNo4Eb1wX3p4uyJjEN9RoGLt4BvMdzZoiN,DubwWZNWiNGMMeeQHPnMATNj77YZPZSAz2WVR5WjLJqz,59NPV18vAbTgwC9aeEGikrmX3EbZHMEMkZfvcsHBNFr9,CRWNYkqdgvhGGae9CKfNka58j6QQkaD5bLhKXvUYqnc1,56tNQ29XBrbovm5K5SThuQatjCy92w2wKUaUeQ8WCD9g,DvjMYMVeXgKxaixGKpzQThLoG98nc7HSU7eanzsdCboA,2vRgBSJEVPXxayrhXoazQyCKSGFYQG3ZdfT2Gv5gZykL,EzeRaHuh1Xu1nDUypv1VWXcGsNJ71ncCJ8HeWuyg8atJ,7gjNiPun3AzEazTZoFEjZgcBMeuaXdpjHq2raZTmTrfs,ApmXkxXCASdxRf3Ln6Ni7oAZ7E6CX1CcJAD8A5qBdhSm,AqLKDJiGL4wXKPAfzNom3xEdQwgj2LTCE4k34gzvZsE6,BRLsMczKuaR5w9vSubF4j8HwEGGprVAyyVgS4EX7DKEg,4Fo67MYQpVhZj9R7jQTd63FPAnWbPpaafAUxsMGX2geP,8LyHLBW4VXDziGRmsH9694TRYsf66BH4HemnnrN29tyZ,EjmyN6qEC1Tf1JxiG1ae7UTJhUxSwk1TCWNWqxWV4J6o,FYpdBuyAHSbdaAyD1sKkxyLWbAP8uUW9h6uvdhK74ij1,HjUhUzi6fVkY1BndaSc4Dcg2mCzvnqzXjVJtXsj78ver,CpFE715P5DnDoJj9FbCRcuyHHeTXNdRnvzNkHvq1o23U,3DHPqxdMXogNNnpqBMF8N4Zs4dn1WR31H7UjWq6FExwG,7dgHoN8wBZCc5wbnQ2C47TDnBMAxG4Q5L3KjP67z8kNi,DrL2D4qCRCeNkQz3AJikLjBc3cS6fqqcQ3W7T9vbshCu,DFL1zNkaGPWm1BqAVqRjCZvHmwTFrEaJtbzJWgseoNJh,3GVAecXsFP8xLFuAMMpg5NU4g5JK6h2NZWsQJ45wiw6b,DWECGzR56MruYJyo5g5QpoxZbFoydt3oWUkkDsVhxXzs,AC4BK5yoEKn5hw6WpH3iWu56pEwigQdR48CiiqJ3R1pd,GsNzxJfFn6zQdJGeYsupJWzUAm57Ba7335mfhWvFiE9Z",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "DFL1zNkaGPWm1BqAVqRjCZvHmwTFrEaJtbzJWgseoNJh",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=68.5 or h24_txns=9 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/E1s2muWwiLT2n3EQUL27hgviaPRRXWkpXD7ShpfgRvVz,HHoHTtntq2kiBPENyVM1DTP7pNrkBXX2Jye29PSyz3qf,HihxL2iM6L6P1oqoSeiixdJ3PhPYNxvSKH9A2dDqLVDH,5Fu5UUgbjpUvdBveb3a1JTNirL8rXtiYeSMWvKjtUNQv,9iwfHhE7BJKNo4Eb1wX3p4uyJjEN9RoGLt4BvMdzZoiN,DubwWZNWiNGMMeeQHPnMATNj77YZPZSAz2WVR5WjLJqz,59NPV18vAbTgwC9aeEGikrmX3EbZHMEMkZfvcsHBNFr9,CRWNYkqdgvhGGae9CKfNka58j6QQkaD5bLhKXvUYqnc1,56tNQ29XBrbovm5K5SThuQatjCy92w2wKUaUeQ8WCD9g,DvjMYMVeXgKxaixGKpzQThLoG98nc7HSU7eanzsdCboA,2vRgBSJEVPXxayrhXoazQyCKSGFYQG3ZdfT2Gv5gZykL,EzeRaHuh1Xu1nDUypv1VWXcGsNJ71ncCJ8HeWuyg8atJ,7gjNiPun3AzEazTZoFEjZgcBMeuaXdpjHq2raZTmTrfs,ApmXkxXCASdxRf3Ln6Ni7oAZ7E6CX1CcJAD8A5qBdhSm,AqLKDJiGL4wXKPAfzNom3xEdQwgj2LTCE4k34gzvZsE6,BRLsMczKuaR5w9vSubF4j8HwEGGprVAyyVgS4EX7DKEg,4Fo67MYQpVhZj9R7jQTd63FPAnWbPpaafAUxsMGX2geP,8LyHLBW4VXDziGRmsH9694TRYsf66BH4HemnnrN29tyZ,EjmyN6qEC1Tf1JxiG1ae7UTJhUxSwk1TCWNWqxWV4J6o,FYpdBuyAHSbdaAyD1sKkxyLWbAP8uUW9h6uvdhK74ij1,HjUhUzi6fVkY1BndaSc4Dcg2mCzvnqzXjVJtXsj78ver,CpFE715P5DnDoJj9FbCRcuyHHeTXNdRnvzNkHvq1o23U,3DHPqxdMXogNNnpqBMF8N4Zs4dn1WR31H7UjWq6FExwG,7dgHoN8wBZCc5wbnQ2C47TDnBMAxG4Q5L3KjP67z8kNi,DrL2D4qCRCeNkQz3AJikLjBc3cS6fqqcQ3W7T9vbshCu,DFL1zNkaGPWm1BqAVqRjCZvHmwTFrEaJtbzJWgseoNJh,3GVAecXsFP8xLFuAMMpg5NU4g5JK6h2NZWsQJ45wiw6b,DWECGzR56MruYJyo5g5QpoxZbFoydt3oWUkkDsVhxXzs,AC4BK5yoEKn5hw6WpH3iWu56pEwigQdR48CiiqJ3R1pd,GsNzxJfFn6zQdJGeYsupJWzUAm57Ba7335mfhWvFiE9Z",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "GsNzxJfFn6zQdJGeYsupJWzUAm57Ba7335mfhWvFiE9Z",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=1409.92 or h24_txns=43 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/E1s2muWwiLT2n3EQUL27hgviaPRRXWkpXD7ShpfgRvVz,HHoHTtntq2kiBPENyVM1DTP7pNrkBXX2Jye29PSyz3qf,HihxL2iM6L6P1oqoSeiixdJ3PhPYNxvSKH9A2dDqLVDH,5Fu5UUgbjpUvdBveb3a1JTNirL8rXtiYeSMWvKjtUNQv,9iwfHhE7BJKNo4Eb1wX3p4uyJjEN9RoGLt4BvMdzZoiN,DubwWZNWiNGMMeeQHPnMATNj77YZPZSAz2WVR5WjLJqz,59NPV18vAbTgwC9aeEGikrmX3EbZHMEMkZfvcsHBNFr9,CRWNYkqdgvhGGae9CKfNka58j6QQkaD5bLhKXvUYqnc1,56tNQ29XBrbovm5K5SThuQatjCy92w2wKUaUeQ8WCD9g,DvjMYMVeXgKxaixGKpzQThLoG98nc7HSU7eanzsdCboA,2vRgBSJEVPXxayrhXoazQyCKSGFYQG3ZdfT2Gv5gZykL,EzeRaHuh1Xu1nDUypv1VWXcGsNJ71ncCJ8HeWuyg8atJ,7gjNiPun3AzEazTZoFEjZgcBMeuaXdpjHq2raZTmTrfs,ApmXkxXCASdxRf3Ln6Ni7oAZ7E6CX1CcJAD8A5qBdhSm,AqLKDJiGL4wXKPAfzNom3xEdQwgj2LTCE4k34gzvZsE6,BRLsMczKuaR5w9vSubF4j8HwEGGprVAyyVgS4EX7DKEg,4Fo67MYQpVhZj9R7jQTd63FPAnWbPpaafAUxsMGX2geP,8LyHLBW4VXDziGRmsH9694TRYsf66BH4HemnnrN29tyZ,EjmyN6qEC1Tf1JxiG1ae7UTJhUxSwk1TCWNWqxWV4J6o,FYpdBuyAHSbdaAyD1sKkxyLWbAP8uUW9h6uvdhK74ij1,HjUhUzi6fVkY1BndaSc4Dcg2mCzvnqzXjVJtXsj78ver,CpFE715P5DnDoJj9FbCRcuyHHeTXNdRnvzNkHvq1o23U,3DHPqxdMXogNNnpqBMF8N4Zs4dn1WR31H7UjWq6FExwG,7dgHoN8wBZCc5wbnQ2C47TDnBMAxG4Q5L3KjP67z8kNi,DrL2D4qCRCeNkQz3AJikLjBc3cS6fqqcQ3W7T9vbshCu,DFL1zNkaGPWm1BqAVqRjCZvHmwTFrEaJtbzJWgseoNJh,3GVAecXsFP8xLFuAMMpg5NU4g5JK6h2NZWsQJ45wiw6b,DWECGzR56MruYJyo5g5QpoxZbFoydt3oWUkkDsVhxXzs,AC4BK5yoEKn5hw6WpH3iWu56pEwigQdR48CiiqJ3R1pd,GsNzxJfFn6zQdJGeYsupJWzUAm57Ba7335mfhWvFiE9Z",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "E6UU5M1z4CvSAAF99d9wRoXsasWMEXsvHrz3JQRXtm2X",
+    "stratum": "low_liquidity",
+    "source": "Jupiter verified token list + DEX Screener pairs",
+    "selection_rationale": "observable max liquidity_usd=35945.8 or h24_txns=1 meets low-activity rule",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/tokens/v1/solana/6c4U9yxGzVjejSJJXrdX8wtt532Et6MrBUZc2oK5j6w5,5jFzUEqWLnvGvKWb1Pji9nWVYy5vLG2saoXCyVNWEdEi,4LLAYXVmT3U8Sew6k3tk66zk3btT91QRzQzxcNX8XhzV,D6eVKSfLdioqo2zG8LbQYFU2gf66FrjKA7afCYNo1GHt,B2m4B527oLo5WFWLgy2MitP66azhEW2puaazUAuvNgqZ,7TEcMnoVJtZgpWCdnLu8X15bTtnt4J2zZyBxfV7i2uw7,D56dMWuvAEGq4WmbWxNKBJREkXYVfER98Tb5RNCmF84o,E6UU5M1z4CvSAAF99d9wRoXsasWMEXsvHrz3JQRXtm2X,6nKUU36URHkewHg5GGGAgxs6szkE4VTioGUT5txQqJFU,FR5qPX4gbKHPyKMK7Cey6dHZ7wtqmqRogYPJo6bpd5Uw,4Hx6Bj56eGyw8EJrrheM6LBQAvVYRikYCWsALeTrwyRU,4wvHoaxxZxFeNrMTP8bLVRh1ziSBV7crN665WX4rRMqe,5uC8Gj96sK6UG44AYLpbX3DUjKtBUxBrhHcM8JDtyYum,EXExWvT6VyYxEjFzF5BrUxt5GZMPVZnd48y3iWrRefMq,PEjUEMHFRtfajio8YHKZdUruW1vTzGmz6F7NngjYuou,2FPyTwcZLUg1MDrwsyoP4D6s1tM7hAkHYRjkNb5w6Pxk,8bqjz8DeSuim1sEAsQatjJN4zseyxSPdhHQcuuhL8PCK,FeGn77dhg1KXRRFeSwwMiykZnZPw5JXW6naf2aQgZDQf,KNVfdSJyq1pRQk9AKKv1g5uyGuk6wpm4WG16Bjuwdma,SL819j8K9FuFPL84UepVcFkEZqDUUvVzwDmJjCHySYj,CLQsDGoGibdNPnVCFp8BAsN2unvyvb41Jd5USYwAnzAg,Arc2ZVKNCdDU4vB8Ubud5QayDtjo2oJF9xVrUPQ6TWxF,Co2FP2AdUaKmUMLg4aGRTTNqKAQEwgAgAh5RVFXJhzar,5HHv6HAyBtaihyHEapCJvjE6iRbGLRmm3F5EZjz6EzHV,6oYoyFahkKxyvjsdt8JtRr4AQHvvwHEJthwqxQjei2gi,3Y2wTtM4kCX8uUSLrKJ8wpajCu1C9LaWWAd7b7Nb2BDw,EdAhkbj5nF9sRM7XN7ewuW8C9XEUMs8P7cnoQ57SYE96,6c4L5nTH2sBKkfeuP3WhGp6Vq1tE4Suh4ezRp5KSu8Z7,8gC27rQF4NEDYfyf5aS8ZmQJUum5gufowKGYRRba4ENN,EsPKhGTMf3bGoy4Qm7pCv3UCcWqAmbC1UGHBTDxRjjD4",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "G2jrxYSoCSzmohxERa2JzSJMuRM4kiNvRA3DnCv7Lzcz",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/G2jrxYSoCSzmohxERa2JzSJMuRM4kiNvRA3DnCv7Lzcz",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "GJa1VeEYLTRoHbaeqcxfzHmjGCGtZGF3CUqxv9znZZAY",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/GJa1VeEYLTRoHbaeqcxfzHmjGCGtZGF3CUqxv9znZZAY",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "5wihEYGca7X4gSe97C5mVcqNsfxBzhdTwpv72HKs25US",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/5wihEYGca7X4gSe97C5mVcqNsfxBzhdTwpv72HKs25US",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "8F3kZd9XEpFgNZ4fZnEAC5CJZLewnkNE8QCjdvorGWuW",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/8F3kZd9XEpFgNZ4fZnEAC5CJZLewnkNE8QCjdvorGWuW",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "AjkPkq3nsyDe1yKcbyZT7N4aK4Evv9om9tzhQD3wsRC",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/AjkPkq3nsyDe1yKcbyZT7N4aK4Evv9om9tzhQD3wsRC",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "GWgwUUrgai3BFeEJZp7bdsBSYiuDqNmHf9uRusWsf3Yi",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/GWgwUUrgai3BFeEJZp7bdsBSYiuDqNmHf9uRusWsf3Yi",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "91z91RukFM16hyEUCXuwMQwp2BW3vanNG5Jh5yj6auiJ",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/91z91RukFM16hyEUCXuwMQwp2BW3vanNG5Jh5yj6auiJ",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "5TY71D29Cyuk9UrsSxLXw2quJBpS7xDDFuFu2K9W7Wf9",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/5TY71D29Cyuk9UrsSxLXw2quJBpS7xDDFuFu2K9W7Wf9",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "HRhaNssoyv5tKFRcbPg69ULEbcD8DPv99GdXLcdkgc1A",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/HRhaNssoyv5tKFRcbPg69ULEbcD8DPv99GdXLcdkgc1A",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "22xoSp66BDt4x4Q5xqxjaSnirdEyharoBziSFChkLFLy",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/22xoSp66BDt4x4Q5xqxjaSnirdEyharoBziSFChkLFLy",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "8kA1WJKoLTxtACNPkvW6UNufsrpxUY57tXZ9KmG9123t",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/8kA1WJKoLTxtACNPkvW6UNufsrpxUY57tXZ9KmG9123t",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "GkSPaHdY2raetuYzsJYacHtrAtQUfWt64bpd1VzxJgSD",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/GkSPaHdY2raetuYzsJYacHtrAtQUfWt64bpd1VzxJgSD",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "AfjHjdLibuXyvmz7PyTSc5KEcGBh43Kcu8Sr2tyDaJyt",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/AfjHjdLibuXyvmz7PyTSc5KEcGBh43Kcu8Sr2tyDaJyt",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "EsUoZMbACNMppdqdmuLCFLet8VXxt2h47N9jHCKwyaPz",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/EsUoZMbACNMppdqdmuLCFLet8VXxt2h47N9jHCKwyaPz",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "ASboaJPFtJeCS5eG4gL3Lg95xrTz2UZSLE9sdJtY93kE",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/ASboaJPFtJeCS5eG4gL3Lg95xrTz2UZSLE9sdJtY93kE",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "qxxF6S62hmZF5bo46mS7C2qbBa87qRossAM78VzsDqi",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/qxxF6S62hmZF5bo46mS7C2qbBa87qRossAM78VzsDqi",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "CwChm6p9Q3yFrjzVeiLTTbsoJkooscof5SJYZc2CrNqG",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/CwChm6p9Q3yFrjzVeiLTTbsoJkooscof5SJYZc2CrNqG",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "863ZRjf1J8AaVuCqypAdm5ktVyGYDiBTvD1MNHKrwyjp",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/863ZRjf1J8AaVuCqypAdm5ktVyGYDiBTvD1MNHKrwyjp",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "EL1aDTnLKjf4SaGpqtxJPyK94imSBr8fWDbcXjXQrsmj",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/EL1aDTnLKjf4SaGpqtxJPyK94imSBr8fWDbcXjXQrsmj",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "AYL1adismZ1U9pTuN33ahG4aYc5XTZQL4vKFx9ofsGWD",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/AYL1adismZ1U9pTuN33ahG4aYc5XTZQL4vKFx9ofsGWD",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "262cQHT3soHwzuo2oVSy5kAfHcFZ1Jjn8C1GRLcQNKA3",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/262cQHT3soHwzuo2oVSy5kAfHcFZ1Jjn8C1GRLcQNKA3",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "9Mu1KmjBKTUWgpDoeTJ5oD7XFQmEiZxzspEd3TZGkavx",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/9Mu1KmjBKTUWgpDoeTJ5oD7XFQmEiZxzspEd3TZGkavx",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "2VTAVf1YCwamD3ALMdYHRMV5vPUCXdnatJH5f1khbmx6",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/2VTAVf1YCwamD3ALMdYHRMV5vPUCXdnatJH5f1khbmx6",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "2FGW8BVMu1EHsz2ZS9rZummDaq6o2DVrZZPw4KaAvDWh",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/2FGW8BVMu1EHsz2ZS9rZummDaq6o2DVrZZPw4KaAvDWh",
+      "rule_version": "p2-frame-v1"
+    }
+  },
+  {
+    "mint": "45vwTZSDFBiqCMRdtK4xiLCHEov8LJRW8GwnofG8HYyH",
+    "stratum": "risky_delisted_migrated",
+    "source": "Jupiter verified token list + DEX Screener no-pair observation",
+    "selection_rationale": "documented mint; no Solana DEX pair observed at sampling time",
+    "provenance": {
+      "observed_at_utc": "2026-11-09T19:52:34Z",
+      "discovery_feed_urls": [
+        "https://api.dexscreener.com/token-profiles/latest/v1",
+        "https://api.dexscreener.com/token-boosts/latest/v1",
+        "https://api.dexscreener.com/token-boosts/top/v1"
+      ],
+      "tokens_url": "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json",
+      "candidate_source_urls": [],
+      "pair_source_url": "https://api.dexscreener.com/token-pairs/v1/solana/45vwTZSDFBiqCMRdtK4xiLCHEov8LJRW8GwnofG8HYyH",
+      "rule_version": "p2-frame-v1"
+    }
+  }
+]
