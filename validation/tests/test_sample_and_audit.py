@@ -107,6 +107,13 @@ class SamplingFrameBuilder(unittest.TestCase):
   self.assertEqual(audit.build_sampling_frame([],[],lambda _: {},"2026-01-01T00:00:00Z"),[])
 
 class LiveSafety(unittest.TestCase):
+ def test_local_env_loads_without_overriding_process_environment(self):
+  with tempfile.TemporaryDirectory() as d:
+   env=pathlib.Path(d)/".env"; env.write_text("SOLANA_RPC_URL=https://dedicated.example/?api-key=secret\nOTHER=value\n",encoding="utf-8")
+   with mock.patch.dict(audit.os.environ,{"SOLANA_RPC_URL":"https://already-set.example"},clear=True):
+    audit.load_local_env(env)
+    self.assertEqual(audit.os.environ["SOLANA_RPC_URL"],"https://already-set.example")
+    self.assertEqual(audit.os.environ["OTHER"],"value")
  def test_only_read_rpc_methods_exist(self):
   source=pathlib.Path(audit.__file__).read_text(encoding="utf-8")
   for forbidden in ("sendTransaction","signTransaction","simulateTransaction","getKeypair"): self.assertNotIn(forbidden,source)

@@ -30,6 +30,22 @@ COLUMNS = ("mint", "chain", "source", "observed_at_utc", "rpc_slot", "dex_pair",
 UNKNOWN = "UNKNOWN"
 
 
+def load_local_env(path: Path) -> None:
+    """Load simple KEY=VALUE entries without overriding the process environment."""
+    if not path.exists():
+        return
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key, value = key.strip(), value.strip()
+        if value[:1] == value[-1:] and value[:1] in {"\"", "'"}:
+            value = value[1:-1]
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
 def _b58decode(value: str) -> bytes:
     alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
     n = 0
@@ -334,6 +350,7 @@ def write_report(path: Path, run_id: str, sampling: dict[str, Any], rows: list[d
 
 
 def main(argv: list[str] | None=None) -> int:
+    load_local_env(ROOT / "validation" / ".env")
     p=argparse.ArgumentParser(); p.add_argument("--input"); p.add_argument("--build-frame",action="store_true"); p.add_argument("--frame-output",default="validation/normalized/p2_sampling_frame.json"); p.add_argument("--shortfall-output",default="validation/reports/p2_sampling_shortfall.json"); p.add_argument("--candidate-limit",type=int,default=6000); p.add_argument("--live", action="store_true"); p.add_argument("--checkpoint",default="validation/checkpoints/p2_live_audit.jsonl"); p.add_argument("--rpc-delay",type=float,default=.35); p.add_argument("--rpc-url", default=os.environ.get("SOLANA_RPC_URL") or DEFAULT_RPC); p.add_argument("--timeout",type=float,default=12); p.add_argument("--csv",default="validation/normalized/audit_100_tokens.csv"); p.add_argument("--report",default="validation/reports/DATA_ACCURACY.md"); args=p.parse_args(argv)
     if args.build_frame:
         observed=prov.utc_now(); profiles,documented,urls=fetch_sampling_sources(args.timeout)
